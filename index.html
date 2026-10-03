@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LEOZ Cucine | Premium Kitchens & Wardrobes</title>
+  <meta name="description"
+    content="LEOZ Cucine designs premium modular kitchens and wardrobes for modern homes, with clean design, thoughtful planning and refined finishes." />
+  <meta name="theme-color" content="#F7F5F1" />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="preload" href="/hero banner.webp" as="image" fetchpriority="high" />
+
+  <!-- Open Graph SEO -->
+  <meta property="og:title" content="LEOZ Cucine | Premium Kitchens & Wardrobes" />
+  <meta property="og:description"
+    content="Premium kitchens and wardrobes, thoughtfully designed for modern homes." />
+  <meta property="og:type" content="website" />
+
+  <!-- Typography: Cormorant Garamond (headings) + Manrope (body).
+       Loaded non-render-blocking: the stylesheet is fetched with preload
+       priority and swapped in once ready, instead of blocking first paint
+       on a round trip to fonts.googleapis.com. display=swap in the URL
+       still applies once the stylesheet is active, so no invisible-text
+       regression either way. -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    rel="preload"
+    as="style"
+    href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Manrope:wght@400;500;600&display=swap"
+    onload="this.onload=null;this.rel='stylesheet'" />
+  <noscript>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Manrope:wght@400;500;600&display=swap" />
+  </noscript>
+</head>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/src/main.tsx"></script>
+</body>
+
+</html>

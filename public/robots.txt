@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://leozcucine.com/sitemap.xml

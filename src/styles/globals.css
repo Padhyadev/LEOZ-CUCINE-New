@@ -1,0 +1,487 @@
+/* ==========================================================================
+   LEOZ CUCINE — GLOBAL STYLES & LUXURY NAVY BUTTON UTILITIES
+   ========================================================================== */
+
+@import './tokens.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  /* scroll-behavior: smooth — removed: Lenis handles all scroll smoothing */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--color-surface-dark);
+  color: var(--color-text-primary);
+  font-family: var(--font-family-sans);
+}
+
+body {
+  min-height: 100vh;
+  overflow-x: hidden;
+  line-height: var(--line-height-base);
+  background-color: var(--color-surface-dark);
+  color: var(--color-text-primary);
+}
+
+/* Accessibility Focus Rings */
+:focus-visible {
+  outline: 2px solid var(--color-accent-gold);
+  outline-offset: 4px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button {
+  background: none;
+  border: none;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Headings */
+h1,
+h2,
+h3,
+h4,
+.serif-heading {
+  font-family: var(--font-family-serif);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+}
+
+/* ==========================================================================
+   UNIFIED LUXURY TYPOGRAPHY SYSTEM (Cormorant Garamond + Manrope)
+   ========================================================================== */
+
+/* Universal Eyebrow Label */
+.rifra-eyebrow,
+.section-label {
+  font-family: var(--font-body) !important;
+  font-size: 11.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.22em !important;
+  text-transform: uppercase !important;
+  color: #B69A6B !important;
+  display: inline-block;
+  margin-bottom: 12px;
+}
+
+.section-label-on-light {
+  color: var(--color-accent-on-light);
+}
+
+/* Universal Hero Display Title (H1) */
+.rifra-hero-title,
+.hero-title {
+  font-family: var(--font-heading) !important;
+  font-size: clamp(32px, 4.5vw, 60px) !important;
+  font-weight: 300 !important;
+  line-height: 1.12 !important;
+  letter-spacing: -0.01em !important;
+  color: #FFFFFF !important;
+  margin-bottom: 18px !important;
+}
+
+/* Universal Section Heading (H2) */
+.rifra-section-title,
+.page-title,
+.section-title {
+  font-family: var(--font-heading) !important;
+  font-size: clamp(28px, 3.6vw, 46px) !important;
+  font-weight: 300 !important;
+  line-height: 1.15 !important;
+  letter-spacing: -0.01em !important;
+  color: #FFFFFF !important;
+  margin-bottom: 16px !important;
+}
+
+/* Universal Card Sub-Title (H3) */
+.rifra-card-title,
+.sub-title,
+.card-title {
+  font-family: var(--font-heading) !important;
+  font-size: clamp(20px, 2.2vw, 24px) !important;
+  font-weight: 400 !important;
+  line-height: 1.25 !important;
+  color: #FFFFFF !important;
+}
+
+/* Universal Paragraphs & Descriptions */
+.rifra-body-text,
+.description,
+.small-description,
+.hero-description {
+  font-family: var(--font-body) !important;
+  font-size: 14.5px !important;
+  line-height: 1.75 !important;
+  color: rgba(255, 255, 255, 0.72) !important;
+}
+
+/* Universal Primary Luxury Button */
+.rifra-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 13px 28px;
+  background-color: #FFFFFF;
+  color: #000000;
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 2px;
+  border: 1px solid #FFFFFF;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.rifra-btn-primary:hover {
+  background-color: #B69A6B !important;
+  border-color: #B69A6B !important;
+  color: #FFFFFF !important;
+  transform: translateY(-2px);
+}
+
+/* Universal Secondary Ghost Button */
+.rifra-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 13px 26px;
+  background-color: transparent;
+  color: #FFFFFF;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: 2px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.rifra-btn-secondary:hover {
+  border-color: #FFFFFF !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  transform: translateY(-2px);
+}
+
+@media (max-width: 767px) {
+  .description {
+    font-size: 15px;
+  }
+}
+
+.text-white {
+  color: #FFFFFF !important;
+}
+
+.text-light {
+  color: #EFEFEF !important;
+}
+
+/* ==========================================================================
+   BODY-COPY JUSTIFICATION — site-wide
+   ========================================================================== */
+#main-content p {
+  text-align: justify;
+}
+
+/* Hero intro paragraphs stay centered — justify reads awkwardly on a short,
+   large-type marketing line meant to sit as one centered block. */
+#main-content p.hero-description {
+  text-align: center;
+}
+
+/* ==========================================================================
+   COMMON BUTTON STYLE (Redesigne.md §9)
+   ========================================================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 48px;
+  padding: 12px 26px;
+
+  font-family: var(--font-body);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
+
+.btn-dark {
+  background: var(--color-dark-bg);
+  color: #FFFFFF;
+  border: 1px solid var(--color-dark-bg);
+}
+
+.btn-dark:hover,
+.btn-dark:focus-visible {
+  background: transparent;
+  color: var(--color-dark-bg);
+}
+
+.btn-light {
+  background: #FFFFFF;
+  color: var(--color-heading);
+  border: 1px solid #FFFFFF;
+}
+
+.btn-light:hover,
+.btn-light:focus-visible {
+  background: transparent;
+  color: #FFFFFF;
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--color-heading);
+  border: 1px solid var(--color-heading);
+}
+
+.btn-outline:hover,
+.btn-outline:focus-visible {
+  background: var(--color-heading);
+  color: #FFFFFF;
+}
+
+/* Custom Minimal Navy & Gold Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-surface-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(182, 154, 107, 0.3);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-accent-gold-hover);
+}
+
+/* Scroll Progress Bar */
+.scroll-progress-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--color-accent-gold);
+  z-index: 1000;
+  transform-origin: 0%;
+  will-change: transform;
+}
+
+/* --- LUXURY BUTTON STYLES --- */
+/* Primary Button (Champagne Gold, Dark Navy Text, Pill Shape, Lighter Gold Hover) */
+.btn-primary {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 14px 34px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-accent-gold);
+  color: var(--color-surface-dark);
+  border: 1px solid var(--color-accent-gold);
+  display: inline-block;
+  transition: transform 0.4s var(--motion-ease-luxury), background-color 0.4s var(--motion-ease-luxury), border-color 0.4s var(--motion-ease-luxury), box-shadow 0.4s var(--motion-ease-luxury);
+  box-shadow: var(--shadow-gold-glow);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-primary:hover,
+.btn-primary:focus-visible {
+  background-color: var(--color-accent-gold-hover);
+  border-color: var(--color-accent-gold-hover);
+  color: var(--color-surface-dark);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 14px 36px -6px rgba(182, 154, 107, 0.5);
+}
+
+.btn-primary:active {
+  transform: translateY(0px) scale(0.96);
+  transition: transform 0.15s var(--motion-ease-luxury);
+}
+
+/* Secondary Button (Transparent, Thin Gold Border, Dark Navy Background) */
+.btn-secondary {
+  font-family: var(--font-family-sans);
+  font-size: var(--font-size-xs);
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  padding: 14px 34px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-surface-dark);
+  color: var(--color-accent-gold);
+  border: 1px solid var(--color-accent-gold);
+  display: inline-block;
+  transition: transform 0.4s var(--motion-ease-luxury), background-color 0.4s var(--motion-ease-luxury), border-color 0.4s var(--motion-ease-luxury), color 0.4s var(--motion-ease-luxury);
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus-visible {
+  background-color: var(--color-accent-gold);
+  color: var(--color-surface-dark);
+  transform: translateY(-2px) scale(1.02);
+}
+
+.btn-secondary:active {
+  transform: translateY(0px) scale(0.96);
+  transition: transform 0.15s var(--motion-ease-luxury);
+}
+
+/* Reduced Motion Override */
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  ::before,
+  ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   MOBILE & TABLET RESPONSIVE OVERRIDES (< 1280px)
+   DESKTOP (>= 1280px) REMAINS 100% UNCHANGED AND PIXEL PERFECT
+   ========================================================================== */
+
+@media (max-width: 1279px) {
+
+  html,
+  body {
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
+  /* Prevent text clipping or breaking weirdly on smaller screens */
+  h1,
+  h2,
+  h3,
+  h4,
+  p {
+    overflow-wrap: break-word;
+    word-break: normal;
+  }
+}
+
+@media (max-width: 767px) {
+  /* Ensure luxury buttons look perfect on mobile screens with easy touch targets */
+  .rifra-btn-primary,
+  .rifra-btn-secondary,
+  .btn-primary,
+  .btn-secondary {
+    min-height: 46px;
+    padding: 12px 22px;
+    font-size: 11.5px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    max-width: 100%;
+    white-space: normal;
+  }
+
+  .rifra-body-text,
+  .description {
+    font-size: 14px !important;
+    line-height: 1.65 !important;
+  }
+
+  /* Touch friendly input sizing (prevents iOS auto-zoom) */
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+
+  /* Reserve space for the fixed mobile call/WhatsApp bar */
+  body {
+    padding-bottom: 56px;
+  }
+}
+
+/* Custom Cursor Trail Styles */
+.custom-cursor-dot {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-accent-gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 999999;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+  transition: width 0.3s var(--motion-ease-luxury), height 0.3s var(--motion-ease-luxury), background-color 0.3s var(--motion-ease-luxury);
+}
+
+.custom-cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--color-accent-gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 999998;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+  transition: width 0.3s var(--motion-ease-luxury), height 0.3s var(--motion-ease-luxury), border-color 0.3s var(--motion-ease-luxury), background-color 0.3s var(--motion-ease-luxury);
+}
+
+/* Hover active state for cursor */
+.custom-cursor-hovering .custom-cursor-dot {
+  background-color: #ffffff;
+  width: 4px;
+  height: 4px;
+}
+
+.custom-cursor-hovering .custom-cursor-ring {
+  width: 48px;
+  height: 48px;
+  background-color: rgba(182, 154, 107, 0.1);
+  border-color: #ffffff;
+}
