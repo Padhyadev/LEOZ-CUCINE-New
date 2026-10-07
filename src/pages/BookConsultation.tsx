@@ -52,8 +52,11 @@ export const BookConsultation: React.FC = () => {
     name: '',
     mobile: '',
     email: '',
+    projectLocation: '',
     consultationMode: 'In-Studio (Ahmedabad)',
-    projectType: 'Modular Kitchen',
+    projectType: 'Kitchen',
+    approximateBudget: '₹10 Lakhs - ₹20 Lakhs',
+    projectStage: 'Planning',
     message: '',
   });
 
@@ -91,6 +94,11 @@ export const BookConsultation: React.FC = () => {
       newErrors.email = 'Please enter a valid email address (e.g., name@domain.com).';
     } else if (formData.email.length > 80) {
       newErrors.email = 'Please keep your email address under 80 characters.';
+    }
+
+    // Location validation
+    if (!formData.projectLocation.trim()) {
+      newErrors.projectLocation = 'Please enter your project city or locality.';
     }
 
     // Message validation
@@ -567,8 +575,11 @@ export const BookConsultation: React.FC = () => {
                           name: '',
                           mobile: '',
                           email: '',
+                          projectLocation: '',
                           consultationMode: 'In-Studio (Ahmedabad)',
-                          projectType: 'Modular Kitchen',
+                          projectType: 'Kitchen',
+                          approximateBudget: '₹10 Lakhs - ₹20 Lakhs',
+                          projectStage: 'Planning',
                           message: '',
                         });
                         setErrors({});
@@ -685,8 +696,38 @@ export const BookConsultation: React.FC = () => {
                       </div>
                     </div>
 
-                    {/* Mode of Consultation & Project Scope */}
+                    {/* Project Location & Mode */}
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '16px' }}>
+                      <div>
+                        <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255, 255, 255, 0.6)', marginBottom: '8px' }}>
+                          Project Location (City / Locality) *
+                        </label>
+                        <input
+                          type="text"
+                          name="projectLocation"
+                          maxLength={60}
+                          value={formData.projectLocation}
+                          onChange={handleInputChange}
+                          placeholder="e.g. Ahmedabad, Surat, Rajkot"
+                          style={{
+                            width: '100%',
+                            height: '48px',
+                            padding: '0 16px',
+                            backgroundColor: '#0D0D0D',
+                            border: errors.projectLocation ? '1px solid #FF5C5C' : '1px solid rgba(255, 255, 255, 0.15)',
+                            borderRadius: '2px',
+                            color: '#FFFFFF',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '13.5px',
+                            outline: 'none',
+                          }}
+                        />
+                        {errors.projectLocation && (
+                          <span style={{ display: 'block', color: '#FF5C5C', fontSize: '12px', marginTop: '6px', fontFamily: 'var(--font-body)' }}>
+                            {errors.projectLocation}
+                          </span>
+                        )}
+                      </div>
                       <div>
                         <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255, 255, 255, 0.6)', marginBottom: '8px' }}>
                           Consultation Preference
@@ -714,9 +755,13 @@ export const BookConsultation: React.FC = () => {
                           <option value="Virtual Online (Pan-India)">Virtual 3D Video Lounge</option>
                         </select>
                       </div>
+                    </div>
+
+                    {/* Project Typology, Budget & Stage */}
+                    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '16px' }}>
                       <div>
                         <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255, 255, 255, 0.6)', marginBottom: '8px' }}>
-                          Project Typology
+                          Project Type
                         </label>
                         <select
                           name="projectType"
@@ -725,20 +770,79 @@ export const BookConsultation: React.FC = () => {
                           style={{
                             width: '100%',
                             height: '48px',
-                            padding: '0 16px',
+                            padding: '0 12px',
                             backgroundColor: '#0D0D0D',
                             border: '1px solid rgba(255, 255, 255, 0.15)',
                             borderRadius: '2px',
                             color: '#FFFFFF',
                             fontFamily: 'var(--font-body)',
-                            fontSize: '13.5px',
+                            fontSize: '12.5px',
                             outline: 'none',
                             cursor: 'pointer',
                           }}
                         >
-                          <option value="Modular Kitchen">Modular Kitchen</option>
-                          <option value="Modular Wardrobe">Modular Wardrobe</option>
-                          <option value="Full Residence">Full Residence Interior</option>
+                          <option value="Kitchen">Kitchen</option>
+                          <option value="Wardrobe">Wardrobe</option>
+                          <option value="Both">Both (Kitchen &amp; Wardrobe)</option>
+                          <option value="Architect or Developer Enquiry">Architect / Developer</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255, 255, 255, 0.6)', marginBottom: '8px' }}>
+                          Approximate Budget
+                        </label>
+                        <select
+                          name="approximateBudget"
+                          value={formData.approximateBudget}
+                          onChange={handleInputChange}
+                          style={{
+                            width: '100%',
+                            height: '48px',
+                            padding: '0 12px',
+                            backgroundColor: '#0D0D0D',
+                            border: '1px solid rgba(255, 255, 255, 0.15)',
+                            borderRadius: '2px',
+                            color: '#FFFFFF',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '12.5px',
+                            outline: 'none',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          <option value="₹5 Lakhs - ₹10 Lakhs">₹5L – ₹10 Lakhs</option>
+                          <option value="₹10 Lakhs - ₹20 Lakhs">₹10L – ₹20 Lakhs</option>
+                          <option value="₹20 Lakhs - ₹35 Lakhs">₹20L – ₹35 Lakhs</option>
+                          <option value="₹35 Lakhs+">₹35 Lakhs +</option>
+                        </select>
+                      </div>
+
+                      <div>
+                        <label style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: '11px', letterSpacing: '0.12em', textTransform: 'uppercase', color: 'rgba(255, 255, 255, 0.6)', marginBottom: '8px' }}>
+                          Project Stage
+                        </label>
+                        <select
+                          name="projectStage"
+                          value={formData.projectStage}
+                          onChange={handleInputChange}
+                          style={{
+                            width: '100%',
+                            height: '48px',
+                            padding: '0 12px',
+                            backgroundColor: '#0D0D0D',
+                            border: '1px solid rgba(255, 255, 255, 0.15)',
+                            borderRadius: '2px',
+                            color: '#FFFFFF',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '12.5px',
+                            outline: 'none',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          <option value="Planning">Planning</option>
+                          <option value="Construction">Under Construction</option>
+                          <option value="Renovation">Renovation</option>
+                          <option value="Ready for Measurement">Ready for Measurement</option>
                         </select>
                       </div>
                     </div>
@@ -754,7 +858,7 @@ export const BookConsultation: React.FC = () => {
                         maxLength={500}
                         value={formData.message}
                         onChange={handleInputChange}
-                        placeholder="Preferred appointment date, time, or specific queries..."
+                        placeholder="Tell us about your space, layout preferences, or specific questions..."
                         style={{
                           width: '100%',
                           padding: '12px 16px',
@@ -804,7 +908,7 @@ export const BookConsultation: React.FC = () => {
                         e.currentTarget.style.color = '#000000';
                       }}
                     >
-                      {submitStatus === 'submitting' ? 'Submitting Request…' : 'Confirm Design Session'}
+                      {submitStatus === 'submitting' ? 'Submitting Request…' : 'Book Your Consultation'}
                     </button>
                   </form>
                 )}

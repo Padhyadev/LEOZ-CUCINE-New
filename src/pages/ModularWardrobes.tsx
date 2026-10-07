@@ -3,9 +3,26 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Header } from '../components/common/Header';
 import { Footer } from '../components/common/Footer';
 import { useDocumentMeta } from '../hooks/useDocumentMeta';
-import { ChevronLeft, ChevronRight, Check, ArrowRight, ShieldCheck, Award, Wrench, Factory, Clock } from 'lucide-react';
+import {
+  ArrowRight,
+  ArrowUpRight,
+  Sparkles,
+  Layers,
+  Maximize2,
+  Sliders,
+  CheckCircle2,
+  Compass,
+  Cpu,
+  Factory,
+  ShieldCheck,
+  Award,
+  Scissors,
+  Settings,
+  Shield,
+  Box,
+} from 'lucide-react';
 
-/* Easing curve for Italian luxury smoothness */
+/* Easing curve for luxury architectural motion */
 const luxuryEase = [0.16, 1, 0.3, 1];
 
 export const ModularWardrobes: React.FC = () => {
@@ -14,119 +31,9 @@ export const ModularWardrobes: React.FC = () => {
   }, []);
 
   useDocumentMeta(
-    'Wardrobes | LEOZ Cucine — Italian Luxury Modular Dressing Suites',
-    'Explore LEOZ Cucine bespoke luxury walk-in wardrobes, floor-to-ceiling glass closets, smoked oak finishes, and integrated LED internal systems.'
+    'Wardrobes | LEOZ Cucine — Luxury Bespoke Wardrobe & Dressing Systems',
+    'Explore LEOZ bespoke luxury walk-in wardrobes, sliding systems, custom closet suites, smoked oak interiors, and precision storage engineering.'
   );
-
-  // RiFRA-style Wardrobe Collections Hero Slider Data
-  const wardrobeCollections = [
-    {
-      id: 'walkin-suite',
-      name: 'BOUDOIR WALK-IN SUITE',
-      tagline: 'Architectural Dressing Room & Integrated Ambient Illumination',
-      desc: 'An immersive private sanctuary. Open structural bays in smoked eucalyptus, fluted glass partitions, and seamless 3000K vertical LED light channels.',
-      image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=2000&q=90',
-      specs: ['Smoked Eucalyptus Veneer', 'Integrated Vertical LED 3000K', 'Island Jewelry Showcase', 'Soft-Close Velvet Drawers'],
-    },
-    {
-      id: 'glass-monolith',
-      name: 'AERO GLASS MONOLITH',
-      tagline: 'Floor-to-Ceiling Smoked Bronze Glass & Ultra-Slim Profiles',
-      desc: 'Transparent architectural elegance. 2.8m floor-to-ceiling tinted glass doors with concealed pivot hinges and leather-lined accessory trays.',
-      image: 'https://images.unsplash.com/photo-1558997519-83ea9252edf8?auto=format&fit=crop&w=2000&q=90',
-      specs: ['Bronze Reflective Tempered Glass', 'Micro-Slim Aluminum Framing', 'Concealed Heavy-Duty Pivots', 'Leather Lined Watch Trays'],
-    },
-    {
-      id: 'sliding-flush',
-      name: 'CO-PLANAR SLIDING MATRIX',
-      tagline: 'Flush Co-Planar Sliding Doors in Matte Nero Lacquer',
-      desc: 'Monolithic minimalism when closed, opening effortlessly with motorized co-planar damping systems into an organized luxury wardrobe.',
-      image: 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=2000&q=90',
-      specs: ['Co-Planar Flush Sliding Track', 'Thermal Matte Anti-Fingerprint', 'Integrated Pant Pull-Outs', 'Acoustic Soft Dampeners'],
-    },
-  ];
-
-  const [activeCollection, setActiveCollection] = useState(0);
-
-  const prevCollection = () => {
-    setActiveCollection((prev) => (prev > 0 ? prev - 1 : wardrobeCollections.length - 1));
-  };
-
-  const nextCollection = () => {
-    setActiveCollection((prev) => (prev < wardrobeCollections.length - 1 ? prev + 1 : 0));
-  };
-
-  // Wardrobe Typologies (5 Distinct Architectural Typologies)
-  const typologies = [
-    {
-      id: 'walk-in',
-      title: 'Walk-In Dressing Suites',
-      subtitle: 'SANCTUARY STORAGE',
-      image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1000&q=85',
-      desc: 'Dedicated open-concept dressing rooms with custom central island showcases, vanity desks, and complete accessory zoning.',
-    },
-    {
-      id: 'glass-doors',
-      title: 'Glass Door Closets',
-      subtitle: 'CONTEMPORARY TRANSPARENCY',
-      image: 'https://images.unsplash.com/photo-1558997519-83ea9252edf8?auto=format&fit=crop&w=1000&q=85',
-      desc: 'Smoked, fluted, and tinted glass doors framed with micro-anodized profiles and back-lit shelf illumination.',
-    },
-    {
-      id: 'hinged-full',
-      title: 'Hinged Monoliths',
-      subtitle: 'CLASSIC FULL ACCESS',
-      image: 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=1000&q=85',
-      desc: 'Floor-to-ceiling seamless hinged panels offering total 180° uninterrupted visibility and complete interior access.',
-    },
-    {
-      id: 'sliding-co-planar',
-      title: 'Sliding Systems',
-      subtitle: 'SPACE-OPTIMIZED FLOW',
-      image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1000&q=85',
-      desc: 'High-load concealed German sliding gear engineered for effortless silent gliding across wide bedroom layouts.',
-    },
-  ];
-
-  // Finishes Showcase
-  const finishes = [
-    {
-      name: 'Smoked Oak & Fluted Veneer',
-      category: 'Back Panels & Structural Uprights',
-      desc: 'Deep textured natural wood veneers treated for India’s climate, adding warmth and tactile richness to luxury dressing suites.',
-      image: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85',
-    },
-    {
-      name: 'Anti-Fingerprint Satin Lacquers',
-      category: 'Front Doors & Floating Drawers',
-      desc: 'Ultra-matte silky finishes cured under UV light to resist dust, oils, and scratches while maintaining deep color richness.',
-      image: 'https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?auto=format&fit=crop&w=1200&q=85',
-    },
-    {
-      name: 'Smoked Bronze Glass & Aluminum',
-      category: 'Transparent Facades & Vitrines',
-      desc: 'Italian engineered slimline profiles in champagne, nero, and bronze with safety tempered architectural glass.',
-      image: 'https://images.unsplash.com/photo-1558997519-83ea9252edf8?auto=format&fit=crop&w=1200&q=85',
-    },
-    {
-      name: 'Handcrafted Leather & Suede Trays',
-      category: 'Internal Organizers & Jewelry Drawers',
-      desc: 'Precision stitched leather compartments for timepieces, fine jewelry, sunglasses, and curated wardrobe accessories.',
-      image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1200&q=85',
-    },
-  ];
-
-  const [selectedFinish, setSelectedFinish] = useState(0);
-
-  // Process Steps
-  const processSteps = [
-    { step: '01', title: 'Wardrobe Audit & Space Planning', desc: 'Detailed cataloguing of your garments, shoes, and luxury accessories to map precise vertical dimensions.' },
-    { step: '02', title: '3D Photorealistic Dressing Suite Render', desc: 'Custom 3D CAD modeling with real interior lighting simulations and material accuracy.' },
-    { step: '03', title: 'Custom Organization Curation', desc: 'Selecting velvet jewelry trays, pull-out trouser racks, sensor lighting, and glass shelf tiers.' },
-    { step: '04', title: 'Precision In-House Manufacturing', desc: 'Direct CNC milling at our Ahmedabad factory utilizing 100% moisture-resistant carcasses.' },
-    { step: '05', title: 'Seamless White-Glove Installation', desc: 'Executed directly by certified LEOZ technicians with precise leveling and zero dust handover.' },
-    { step: '06', title: '10-Year Comprehensive Warranty', desc: 'Uncompromised long-term assurance covering sliding rollers, hinges, and structural panels.' },
-  ];
 
   const navigate = (e: React.MouseEvent, path: string) => {
     e.preventDefault();
@@ -134,129 +41,378 @@ export const ModularWardrobes: React.FC = () => {
     window.dispatchEvent(new Event('popstate'));
   };
 
+  /* =========================================================================
+     WARDROBE STYLES (6 CATEGORIES)
+     ========================================================================= */
+  const wardrobeStyles = [
+    {
+      id: 'walk-in-wardrobes',
+      title: 'Walk-In Wardrobes',
+      subtitle: 'SANCTUARY DRESSING SUITES',
+      desc: 'Open-concept architectural dressing rooms with central island showcases, illuminated glass bays, and bespoke accessory suites.',
+      image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1200&q=85',
+      focalPosition: 'center 45%',
+      specs: 'Central Island • 3000K LED • Smoked Eucalyptus',
+    },
+    {
+      id: 'sliding-wardrobes',
+      title: 'Sliding Wardrobes',
+      subtitle: 'FLUSH CO-PLANAR TRACKS',
+      desc: 'High-load German sliding gear engineered for effortless silent gliding across wide bedroom layouts with zero floor tracks.',
+      image: 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=1200&q=85',
+      focalPosition: 'center 50%',
+      specs: 'Co-Planar Flush • Soft Dampening • Anti-Warp Core',
+    },
+    {
+      id: 'walk-in-closets',
+      title: 'Walk-in Closets',
+      subtitle: 'MAXIMAL STORAGE ARCHITECTURE',
+      desc: 'Smart floor-to-ceiling organization maximizing every cubic centimetre with modular hanging, shoe tiers, and pull-down elevators.',
+      image: 'https://images.unsplash.com/photo-1558997519-83ea9252edf8?auto=format&fit=crop&w=1200&q=85',
+      focalPosition: 'center 42%',
+      specs: 'Full-Height Uprights • Modular Trays • Corner Optimizers',
+    },
+    {
+      id: 'luxury-wardrobes',
+      title: 'Luxury Wardrobes',
+      subtitle: 'EXOTIC VENEERS & BRONZE',
+      desc: 'Curated dressing suites featuring fluted smoked oak, bronze tinted glass vitrines, and velvet hand-stitched interior partitions.',
+      image: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85',
+      focalPosition: 'center 48%',
+      specs: 'Tinted Safety Glass • Velvet Inlays • Acoustic Dampeners',
+    },
+    {
+      id: 'minimal-wardrobes',
+      title: 'Minimal Wardrobes',
+      subtitle: 'SEAMLESS MONOLITHIC PANELS',
+      desc: 'Ultra-thin architectural handleless profiles and push-to-open flush doors that visually merge into wall architecture.',
+      image: 'https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?auto=format&fit=crop&w=1200&q=85',
+      focalPosition: 'center 40%',
+      specs: 'Zero Visible Hardware • Matte Lacquer • Shadow Gap Line',
+    },
+    {
+      id: 'custom-storage',
+      title: 'Custom Storage',
+      subtitle: 'INTELLIGENT HOME INTEGRATION',
+      desc: 'Bespoke bedroom entryway storage, vanity dressing consoles, and integrated safe compartments engineered for luxury lifestyles.',
+      image: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=85',
+      focalPosition: 'center 45%',
+      specs: 'Concealed Safes • Integrated Vanity • Sensor Illumination',
+    },
+  ];
+
+  /* =========================================================================
+     INSIDE THE WARDROBE (7 INTERACTIVE STORAGE SOLUTIONS)
+     ========================================================================= */
+  const storageSolutions = [
+    {
+      id: 'drawers',
+      title: 'Velvet-Lined Drawers',
+      category: 'DRAWER SYSTEMS',
+      desc: 'Full-extension soft-close drawers fitted with custom wood dividers and antibacterial velvet liners for folded knitwear and fine garments.',
+      image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=85',
+      metric: '70kg Load Rated • Blum Motion',
+    },
+    {
+      id: 'accessories',
+      title: 'Dedicated Accessories',
+      category: 'CURATED COMPARTMENTS',
+      desc: 'Individualized storage zones for designer handbags, cashmere scarves, belts, and ties with custom felt organizers.',
+      image: 'https://images.unsplash.com/photo-1558997519-83ea9252edf8?auto=format&fit=crop&w=800&q=85',
+      metric: 'Modular Sizing • Scratch-Free',
+    },
+    {
+      id: 'lighting',
+      title: 'Integrated Lighting',
+      category: '3000K SENSOR LED',
+      desc: 'Concealed vertical micro-LED channels and PIR motion sensors that bathe garments in true-color 95+ CRI architectural light.',
+      image: 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=800&q=85',
+      metric: 'Auto-Sensor On/Off • Zero Heat',
+    },
+    {
+      id: 'shoes',
+      title: 'Illuminated Shoe Storage',
+      category: 'ANGLED SLOPING SHELVES',
+      desc: 'Precision angled shelves with anodized brass retaining rails and integrated strip lighting for luxury footwear collections.',
+      image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=85',
+      metric: 'Heel-Stop Rails • Dust Protected',
+    },
+    {
+      id: 'hanging',
+      title: 'Engineered Hanging Systems',
+      category: 'DUAL HEIGHT & HYDRAULIC LIFTS',
+      desc: 'Hydraulic pull-down hanging elevators for high ceiling spaces alongside tailored long-coat and jacket drop zones.',
+      image: 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=800&q=85',
+      metric: 'Hydraulic Pull-Down • No Creasing',
+    },
+    {
+      id: 'jewellery',
+      title: 'Watch & Jewellery Trays',
+      category: 'ISLAND SHOWCASES',
+      desc: 'Lockable glass-topped display vitrines with leather-clad watch winders, ring slots, and sunglasses compartments.',
+      image: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=85',
+      metric: 'Tempered Glass Top • Biometric Lock',
+    },
+    {
+      id: 'pull-outs',
+      title: 'Pull-Out Trouser & Tie Racks',
+      category: 'CONCEALED HARDWARE',
+      desc: 'High-glide aluminum racks with anti-slip rubberized bars preventing fabric creasing and maximizing closet depth.',
+      image: 'https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?auto=format&fit=crop&w=800&q=85',
+      metric: 'Smooth Glide • 100% Extension',
+    },
+  ];
+
+  /* =========================================================================
+     MATERIALS & FINISHES (6 TYPES)
+     ========================================================================= */
+  const wardrobeMaterials = [
+    {
+      id: 'wood',
+      name: 'Natural Wood Veneer',
+      subtitle: 'Smoked European Oak, Walnut & Fluted Eucalyptus',
+      desc: 'Authentic timber panels treated with climate-stabilized marine cores and finished in silky matte open-pore lacquers.',
+      image: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1000&q=85',
+      swatch: '#8B6A47',
+    },
+    {
+      id: 'glass',
+      name: 'Smoked & Fluted Glass',
+      subtitle: 'Tinted Safety Glass & Ultra-Slim Aero Profiles',
+      desc: 'Reflective bronze and nero safety tempered glass doors providing partial interior mystique with ambient LED backlighting.',
+      image: 'https://images.unsplash.com/photo-1558997519-83ea9252edf8?auto=format&fit=crop&w=1000&q=85',
+      swatch: '#4A5568',
+    },
+    {
+      id: 'mirror',
+      name: 'Architectural Mirrors',
+      subtitle: 'Bronze, Grey & Clear Reflection Panels',
+      desc: 'Shatter-proof tinted mirror panels creating spatial depth and seamless full-height vanity dressing surfaces.',
+      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=85',
+      swatch: '#A0AEC0',
+    },
+    {
+      id: 'metal',
+      name: 'Anodized Luxury Metals',
+      subtitle: 'Champagne Bronze, Gunmetal & Brushed Nero',
+      desc: 'Micro-brushed aluminum extrusions engineered for structural uprights, door frames, and drawer pull handles.',
+      image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=85',
+      swatch: '#B69A6B',
+    },
+    {
+      id: 'fabric',
+      name: 'Textured Fabric & Leather',
+      subtitle: 'Hand-Stitched Italian Leather & Acoustic Linen',
+      desc: 'Tactile back panels and drawer linings offering sound-dampening luxury and gentle protection for delicate jewelry.',
+      image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1000&q=85',
+      swatch: '#D5CDBE',
+    },
+    {
+      id: 'laminate',
+      name: 'Anti-Fingerprint Laminate',
+      subtitle: 'Thermal-Healing Velvet Matte Finishes',
+      desc: 'Ultra-durable, scratch-resistant surface with zero reflection, engineered for high-frequency daily wardrobe usage.',
+      image: 'https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?auto=format&fit=crop&w=1000&q=85',
+      swatch: '#2D3748',
+    },
+  ];
+
+  const [activeMaterial, setActiveMaterial] = useState(0);
+
+  /* =========================================================================
+     PRECISION ENGINEERING PILLARS (5 CARDS)
+     ========================================================================= */
+  const precisionPillars = [
+    {
+      code: 'PRECISION / 01',
+      title: 'Accurate Dimensions',
+      desc: 'Laser-scanned millimeter survey ensuring every wardrobe bay fits flush floor-to-ceiling with zero clumsy filler panels.',
+      icon: Scissors,
+    },
+    {
+      code: 'PRECISION / 02',
+      title: 'German Running Gear',
+      desc: 'Heavy-duty Blum and Hettich concealed hinges and sliding carriages rated for 100,000 flawless motion cycles.',
+      icon: Settings,
+    },
+    {
+      code: 'PRECISION / 03',
+      title: 'Soft-Close Systems',
+      desc: 'Integrated hydraulic dampeners on all doors, drawers, and pull-outs for whisper-quiet acoustic serenity.',
+      icon: Shield,
+    },
+    {
+      code: 'PRECISION / 04',
+      title: 'Factory CNC Joinery',
+      desc: 'Manufactured on 5-axis CNC machines and automated edge banders at our 20,000 sq. ft. plant with 0.1mm tolerance.',
+      icon: Cpu,
+    },
+    {
+      code: 'PRECISION / 05',
+      title: 'White-Glove Installation',
+      desc: 'Installed directly by certified LEOZ master carpenters with dust-free handover and 10-year comprehensive warranty.',
+      icon: Award,
+    },
+  ];
+
+  /* =========================================================================
+     WARDROBE PROJECTS (CASE STUDIES)
+     ========================================================================= */
+  const wardrobeProjects = [
+    {
+      id: 'shantigram-penthouse',
+      title: 'Shantigram Sky Penthouse',
+      location: 'Ahmedabad, Gujarat',
+      style: 'Smoked Bronze Glass & Island Showcase',
+      year: '2026',
+      image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1000&q=85',
+      desc: 'A 450 sq. ft. master dressing suite featuring 3-metre floor-to-ceiling tinted glass vitrines, central leather jewelry island, and 3000K vertical sensor lighting.',
+    },
+    {
+      id: 'althan-villa',
+      title: 'Althan Luxury Villa Suite',
+      location: 'Surat, Gujarat',
+      style: 'Fluted Smoked Oak & Flush Co-Planar',
+      year: '2026',
+      image: 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=1000&q=85',
+      desc: 'Seamless co-planar sliding wardrobe with concealed pull-down hydraulic elevators, motorized trouser organizers, and hidden security vault.',
+    },
+    {
+      id: 'sindhubhavan-mansion',
+      title: 'Sindhu Bhavan Presidential Suite',
+      location: 'Ahmedabad, Gujarat',
+      style: 'Acoustic Fabric Panels & Champagne Metal',
+      year: '2025',
+      image: 'https://images.unsplash.com/photo-1558997519-83ea9252edf8?auto=format&fit=crop&w=1000&q=85',
+      desc: 'Walk-through his-and-hers dressing gallery with illuminated shoe vitrines, custom watch winders, and full-height architectural bronze mirrors.',
+    },
+    {
+      id: 'giftcity-residence',
+      title: 'GIFT City High-Rise Residence',
+      location: 'Gandhinagar, Gujarat',
+      style: 'Matte Nero Lacquer & Minimal Handleless',
+      year: '2025',
+      image: 'https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?auto=format&fit=crop&w=1000&q=85',
+      desc: 'Monolithic minimal bedroom wardrobe wall blending seamlessly into architectural drywall with push-to-open flush doors.',
+    },
+  ];
+
   return (
-    <div style={{ backgroundColor: '#000000', color: '#FFFFFF', minHeight: '100vh', overflowX: 'hidden' }}>
+    <div style={{ backgroundColor: '#FAF9F6', color: '#161514', minHeight: '100vh', overflowX: 'hidden' }}>
       <Header />
 
       <main id="main-content">
         {/* =========================================================================
-            SECTION 1: RiFRA FULL-BLEED EDITORIAL HERO SLIDER
+            HERO: "STORAGE, ELEVATED." (FULL-HEIGHT ARCHITECTURAL SUITE)
             ========================================================================= */}
         <section
-          aria-label="LEOZ Wardrobe Collections Hero"
+          aria-label="LEOZ Wardrobe Architecture Hero"
           style={{
             position: 'relative',
             width: '100%',
-            height: '100vh',
-            minHeight: '620px',
-            backgroundColor: '#000000',
+            minHeight: 'clamp(560px, 86vh, 760px)',
+            display: 'flex',
+            alignItems: 'flex-end',
+            backgroundColor: '#161514',
             overflow: 'hidden',
           }}
         >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={wardrobeCollections[activeCollection].id}
-              initial={{ opacity: 0, scale: 1.04 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.98 }}
-              transition={{ duration: 0.9, ease: luxuryEase }}
-              style={{
-                position: 'absolute',
-                inset: 0,
-                backgroundImage: `url("${encodeURI(wardrobeCollections[activeCollection].image)}")`,
-                backgroundPosition: 'center center',
-                backgroundSize: 'cover',
-              }}
-            >
-              {/* Dark Gradient Overlay for RiFRA readability */}
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: 'linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0.85) 100%)',
-                }}
-              />
-            </motion.div>
-          </AnimatePresence>
+          {/* Dedicated Architectural Wardrobe Image with Mobile Framing */}
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              backgroundImage: 'url(https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=2200&q=90)',
+              backgroundPosition: 'center 38%',
+              backgroundSize: 'cover',
+            }}
+          />
+
+          {/* Soft Luminous Scrim */}
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(180deg, rgba(22, 21, 20, 0.25) 0%, rgba(22, 21, 20, 0.3) 40%, rgba(22, 21, 20, 0.88) 95%)',
+            }}
+          />
 
           {/* Hero Content Overlay */}
           <div
             style={{
               position: 'relative',
               zIndex: 10,
-              maxWidth: '1440px',
-              height: '100%',
+              maxWidth: '1360px',
+              width: '100%',
               margin: '0 auto',
-              paddingLeft: '5.5vw',
-              paddingRight: '5.5vw',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'flex-end',
-              paddingBottom: 'clamp(40px, 6vh, 70px)',
+              paddingLeft: 'clamp(20px, 5.5vw, 80px)',
+              paddingRight: 'clamp(20px, 5.5vw, 80px)',
+              paddingBottom: 'clamp(44px, 7vw, 76px)',
             }}
           >
-            <div style={{ maxWidth: '800px' }}>
+            <div style={{ maxWidth: '820px' }}>
               <motion.span
-                key={`cat-${activeCollection}`}
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1, ease: luxuryEase }}
+                transition={{ duration: 0.6, ease: luxuryEase }}
                 style={{
                   display: 'inline-block',
                   fontFamily: 'var(--font-body)',
-                  fontSize: '11.5px',
-                  letterSpacing: '0.22em',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  letterSpacing: '0.24em',
                   textTransform: 'uppercase',
                   color: '#B69A6B',
-                  marginBottom: '12px',
-                  fontWeight: 600,
+                  marginBottom: '14px',
                 }}
               >
-                LEOZ CUCINE — WARDROBE SUITES
+                LEOZ CUCINE • BESPOKE WARDROBES &amp; DRESSING SUITES
               </motion.span>
 
               <motion.h1
-                key={`name-${activeCollection}`}
-                initial={{ opacity: 0, y: 25 }}
+                initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.2, ease: luxuryEase }}
+                transition={{ duration: 0.7, delay: 0.1, ease: luxuryEase }}
                 style={{
                   fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(32px, 5vw, 64px)',
+                  fontSize: 'clamp(36px, 5.8vw, 72px)',
                   fontWeight: 300,
-                  lineHeight: 1.08,
+                  lineHeight: 1.05,
                   letterSpacing: '-0.01em',
                   color: '#FFFFFF',
-                  margin: '0 0 16px 0',
+                  margin: '0 0 18px 0',
                 }}
               >
-                {wardrobeCollections[activeCollection].name}
+                Storage, Elevated.
               </motion.h1>
 
               <motion.p
-                key={`desc-${activeCollection}`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.3, ease: luxuryEase }}
+                transition={{ duration: 0.7, delay: 0.2, ease: luxuryEase }}
                 style={{
                   fontFamily: 'var(--font-body)',
-                  fontSize: 'clamp(14px, 1.2vw, 17px)',
+                  fontSize: 'clamp(14.5px, 1.3vw, 17.5px)',
                   color: 'rgba(255, 255, 255, 0.85)',
-                  lineHeight: 1.6,
+                  lineHeight: 1.65,
                   maxWidth: '640px',
-                  marginBottom: '28px',
+                  marginBottom: '32px',
                 }}
               >
-                {wardrobeCollections[activeCollection].desc}
+                Thoughtfully engineered wardrobes designed around your lifestyle. Where European motion hardware, ambient lighting, and bespoke organization harmonize.
               </motion.p>
 
               {/* Action Buttons */}
               <motion.div
-                key={`act-${activeCollection}`}
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4, ease: luxuryEase }}
-                style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}
+                transition={{ duration: 0.6, delay: 0.3, ease: luxuryEase }}
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '16px',
+                  flexWrap: 'wrap',
+                }}
               >
                 <a
                   href="/talk-to-us"
@@ -265,9 +421,9 @@ export const ModularWardrobes: React.FC = () => {
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '10px',
-                    padding: '14px 28px',
-                    backgroundColor: '#FFFFFF',
-                    color: '#000000',
+                    padding: '15px 30px',
+                    backgroundColor: '#B69A6B',
+                    color: '#FFFFFF',
                     fontFamily: 'var(--font-body)',
                     fontSize: '12px',
                     fontWeight: 600,
@@ -275,29 +431,25 @@ export const ModularWardrobes: React.FC = () => {
                     textTransform: 'uppercase',
                     textDecoration: 'none',
                     borderRadius: '2px',
+                    boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
                     transition: 'all 0.3s ease',
                   }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#B69A6B';
-                    e.currentTarget.style.color = '#FFFFFF';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#FFFFFF';
-                    e.currentTarget.style.color = '#000000';
-                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#9F8255')}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#B69A6B')}
                 >
-                  <span>Book Wardrobe Consultation</span>
+                  <span>Book a Consultation</span>
                   <ArrowRight size={14} />
                 </a>
 
                 <a
-                  href="#wardrobe-breakdown"
+                  href="#styles"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '8px',
-                    padding: '14px 24px',
-                    backgroundColor: 'transparent',
+                    padding: '14px 26px',
+                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                    backdropFilter: 'blur(12px)',
                     color: '#FFFFFF',
                     border: '1px solid rgba(255, 255, 255, 0.3)',
                     fontFamily: 'var(--font-body)',
@@ -311,389 +463,907 @@ export const ModularWardrobes: React.FC = () => {
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.borderColor = '#FFFFFF';
-                    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)';
+                    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-                    e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
                   }}
                 >
-                  Explore Typologies
+                  <span>Explore Wardrobe Styles</span>
                 </a>
               </motion.div>
-            </div>
-
-            {/* Slider Navigation Controls */}
-            <div
-              style={{
-                position: 'absolute',
-                right: '5.5vw',
-                bottom: 'clamp(40px, 6vh, 70px)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                zIndex: 20,
-              }}
-            >
-              <div style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)', marginRight: '8px' }}>
-                <span style={{ color: '#FFFFFF', fontWeight: 600 }}>0{activeCollection + 1}</span> / 0{wardrobeCollections.length}
-              </div>
-              <button
-                type="button"
-                onClick={prevCollection}
-                aria-label="Previous Slide"
-                style={{
-                  width: '42px',
-                  height: '42px',
-                  borderRadius: '50%',
-                  border: '1px solid rgba(255, 255, 255, 0.3)',
-                  backgroundColor: 'rgba(0,0,0,0.4)',
-                  backdropFilter: 'blur(8px)',
-                  color: '#FFFFFF',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                  transition: 'all 0.25s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#FFFFFF';
-                  e.currentTarget.style.color = '#000000';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.4)';
-                  e.currentTarget.style.color = '#FFFFFF';
-                }}
-              >
-                <ChevronLeft size={18} />
-              </button>
-              <button
-                type="button"
-                onClick={nextCollection}
-                aria-label="Next Slide"
-                style={{
-                  width: '42px',
-                  height: '42px',
-                  borderRadius: '50%',
-                  border: '1px solid rgba(255, 255, 255, 0.3)',
-                  backgroundColor: 'rgba(0,0,0,0.4)',
-                  backdropFilter: 'blur(8px)',
-                  color: '#FFFFFF',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                  transition: 'all 0.25s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#FFFFFF';
-                  e.currentTarget.style.color = '#000000';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.4)';
-                  e.currentTarget.style.color = '#FFFFFF';
-                }}
-              >
-                <ChevronRight size={18} />
-              </button>
             </div>
           </div>
         </section>
 
         {/* =========================================================================
-            SECTION 2: RiFRA PHILOSOPHY / ARCHITECTURAL DRESSING ROOMS
+            SECTION 01: WARDROBE STYLES (6 CATEGORIES)
             ========================================================================= */}
         <section
-          id="philosophy"
+          id="styles"
+          aria-label="Wardrobe Styles"
           style={{
-            backgroundColor: '#0A0A0A',
-            paddingTop: 'clamp(80px, 10vw, 130px)',
-            paddingBottom: 'clamp(80px, 10vw, 130px)',
-            paddingLeft: '5.5vw',
-            paddingRight: '5.5vw',
-            borderTop: '1px solid rgba(255, 255, 255, 0.06)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+            paddingTop: 'clamp(70px, 9vw, 120px)',
+            paddingBottom: 'clamp(70px, 9vw, 120px)',
+            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
+            paddingRight: 'clamp(20px, 5.5vw, 80px)',
+            backgroundColor: '#FAF9F6',
           }}
         >
-          <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
+          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
             <div
-              className="rifra-dual-grid"
               style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: 'clamp(40px, 7vw, 100px)',
-                alignItems: 'center',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-end',
+                marginBottom: 'clamp(36px, 5vw, 60px)',
+                flexWrap: 'wrap',
+                gap: '20px',
               }}
             >
-              {/* Left Column: Editorial Photo Frame */}
-              <motion.div
-                initial={{ opacity: 0, x: -40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.8, ease: luxuryEase }}
-                style={{
-                  position: 'relative',
-                  aspectRatio: '1 / 1.15',
-                  overflow: 'hidden',
-                  borderRadius: '3px',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                }}
-              >
-                <img
-                  src="https://images.unsplash.com/photo-1558997519-83ea9252edf8?auto=format&fit=crop&w=1200&q=85"
-                  alt="LEOZ Architectural Glass Wardrobe Suite"
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    display: 'block',
-                  }}
-                />
-                <div
-                  style={{
-                    position: 'absolute',
-                    bottom: '24px',
-                    left: '24px',
-                    padding: '12px 18px',
-                    backgroundColor: 'rgba(0, 0, 0, 0.75)',
-                    backdropFilter: 'blur(10px)',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
-                    color: '#FFFFFF',
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '11.5px',
-                    letterSpacing: '0.12em',
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  Floor-To-Ceiling Vitrine Integration
-                </div>
-              </motion.div>
-
-              {/* Right Column: Architectural Typography */}
-              <motion.div
-                initial={{ opacity: 0, x: 40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.8, ease: luxuryEase }}
-              >
+              <div>
                 <span
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontSize: '11px',
-                    letterSpacing: '0.25em',
+                    fontWeight: 600,
+                    letterSpacing: '0.22em',
                     textTransform: 'uppercase',
                     color: '#B69A6B',
                     display: 'block',
-                    marginBottom: '16px',
-                    fontWeight: 600,
+                    marginBottom: '12px',
                   }}
                 >
-                  BESPOKE DRESSING SANCTUARIES
+                  ARCHITECTURAL TYPOLOGIES
                 </span>
-
                 <h2
                   style={{
                     fontFamily: 'var(--font-heading)',
-                    fontSize: 'clamp(28px, 3.5vw, 44px)',
+                    fontSize: 'clamp(28px, 3.8vw, 46px)',
                     fontWeight: 300,
-                    lineHeight: 1.15,
-                    color: '#FFFFFF',
-                    margin: '0 0 24px 0',
+                    color: '#161514',
+                    margin: 0,
+                    letterSpacing: '0.01em',
                   }}
                 >
-                  More Than Storage — A Considered Part of Your Home.
+                  Wardrobe Styles &amp; Systems
                 </h2>
+              </div>
+              <p
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '14.5px',
+                  color: 'rgba(22, 21, 20, 0.7)',
+                  maxWidth: '480px',
+                  lineHeight: 1.6,
+                  margin: 0,
+                }}
+              >
+                From sweeping open walk-in dressing galleries to flush co-planar minimal walls, tailored for luxury bedrooms.
+              </p>
+            </div>
 
-                <p
+            {/* Styles Grid */}
+            <div
+              className="leoz-wardrobes-grid"
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                gap: '30px',
+              }}
+            >
+              {wardrobeStyles.map((style, idx) => (
+                <motion.div
+                  key={style.id}
+                  initial={{ opacity: 0, y: 25 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.15 }}
+                  transition={{ duration: 0.6, delay: idx * 0.08, ease: luxuryEase }}
+                  className="leoz-wardrobe-card"
                   style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '14.5px',
-                    color: 'rgba(255, 255, 255, 0.7)',
-                    lineHeight: 1.8,
-                    marginBottom: '20px',
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid rgba(22, 21, 20, 0.08)',
+                    borderRadius: '3px',
+                    overflow: 'hidden',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    cursor: 'pointer',
+                    transition: 'all 0.4s ease',
+                    boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
                   }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(182, 154, 107, 0.5)';
+                    e.currentTarget.style.transform = 'translateY(-6px)';
+                    e.currentTarget.style.boxShadow = '0 16px 36px rgba(0,0,0,0.08)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(22, 21, 20, 0.08)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.03)';
+                  }}
+                  onClick={(e) => navigate(e, '/talk-to-us')}
                 >
-                  A wardrobe should be conceived as an architectural experience that elevates your daily routine. At LEOZ Cucine, we craft dressing suites around the subtle nuances of your space and personal lifestyle.
-                </p>
+                  <div
+                    style={{
+                      position: 'relative',
+                      width: '100%',
+                      aspectRatio: '16 / 11',
+                      overflow: 'hidden',
+                      backgroundColor: '#EBE8E1',
+                    }}
+                  >
+                    <img
+                      src={style.image}
+                      alt={style.title}
+                      loading="lazy"
+                      className="wardrobe-zoom-img"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        objectPosition: style.focalPosition,
+                        display: 'block',
+                        transition: 'transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
+                      }}
+                    />
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '16px',
+                        left: '16px',
+                        padding: '6px 12px',
+                        backgroundColor: 'rgba(22, 21, 20, 0.75)',
+                        backdropFilter: 'blur(8px)',
+                        borderRadius: '2px',
+                        color: '#B69A6B',
+                        fontFamily: 'var(--font-body)',
+                        fontSize: '10px',
+                        fontWeight: 600,
+                        letterSpacing: '0.15em',
+                        textTransform: 'uppercase',
+                      }}
+                    >
+                      {style.subtitle}
+                    </div>
+                  </div>
 
-                <p
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '14.5px',
-                    color: 'rgba(255, 255, 255, 0.7)',
-                    lineHeight: 1.8,
-                    marginBottom: '36px',
-                  }}
-                >
-                  From concealed silent German running gear to velvet-lined watch displays and moisture-resistant internal cores, every element is manufactured directly in our factory.
-                </p>
-
-                {/* Key Attributes Grid */}
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: '1fr 1fr',
-                    gap: '18px',
-                  }}
-                >
-                  {[
-                    'Concealed German soft-dampeners',
-                    'Acoustic felt & velvet organization',
-                    'Floor-to-ceiling seamless heights',
-                    '3000K diffused LED profiles',
-                  ].map((feature) => (
-                    <div key={feature} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <div
+                  <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'baseline',
+                        marginBottom: '8px',
+                      }}
+                    >
+                      <h3
+                        className="wardrobe-title"
                         style={{
-                          width: '18px',
-                          height: '18px',
-                          borderRadius: '50%',
-                          backgroundColor: 'rgba(182, 154, 107, 0.15)',
-                          color: '#B69A6B',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          flexShrink: 0,
+                          fontFamily: 'var(--font-heading)',
+                          fontSize: '22px',
+                          fontWeight: 400,
+                          color: '#161514',
+                          margin: 0,
+                          transition: 'transform 0.3s ease, color 0.3s ease',
                         }}
                       >
-                        <Check size={11} strokeWidth={3} />
-                      </div>
-                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'rgba(255, 255, 255, 0.85)' }}>
-                        {feature}
-                      </span>
+                        {style.title}
+                      </h3>
+                      <ArrowUpRight
+                        size={18}
+                        className="wardrobe-arrow"
+                        style={{
+                          color: '#B69A6B',
+                          transition: 'transform 0.3s ease',
+                        }}
+                      />
                     </div>
-                  ))}
-                </div>
-              </motion.div>
+
+                    <p
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: '13.5px',
+                        color: 'rgba(22, 21, 20, 0.72)',
+                        lineHeight: 1.6,
+                        margin: '0 0 16px 0',
+                        flexGrow: 1,
+                      }}
+                    >
+                      {style.desc}
+                    </p>
+
+                    <div
+                      style={{
+                        paddingTop: '12px',
+                        borderTop: '1px solid rgba(22, 21, 20, 0.08)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        fontSize: '11px',
+                        fontFamily: 'var(--font-body)',
+                        color: '#8A8275',
+                        fontWeight: 500,
+                      }}
+                    >
+                      <span>{style.specs}</span>
+                      <span style={{ color: '#B69A6B', fontWeight: 600 }}>EXPLORE</span>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
             </div>
           </div>
         </section>
 
         {/* =========================================================================
-            SECTION 3: WARDROBE TYPOLOGIES (RiFRA 4-COLUMN CARDS)
+            SECTION 02: INSIDE THE WARDROBE (DETAILED STORAGE SOLUTIONS)
             ========================================================================= */}
         <section
-          id="wardrobe-breakdown"
+          aria-label="Inside The Wardrobe"
           style={{
-            backgroundColor: '#000000',
+            backgroundColor: '#161514',
+            color: '#FFFFFF',
             paddingTop: 'clamp(80px, 10vw, 130px)',
             paddingBottom: 'clamp(80px, 10vw, 130px)',
-            paddingLeft: '5.5vw',
-            paddingRight: '5.5vw',
+            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
+            paddingRight: 'clamp(20px, 5.5vw, 80px)',
+            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
           }}
         >
-          <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: 'clamp(48px, 6vw, 80px)' }}>
+          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
+            <div style={{ textAlign: 'center', marginBottom: 'clamp(40px, 5vw, 64px)' }}>
               <span
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '11px',
-                  letterSpacing: '0.25em',
+                  fontWeight: 600,
+                  letterSpacing: '0.24em',
                   textTransform: 'uppercase',
                   color: '#B69A6B',
                   display: 'block',
-                  marginBottom: '14px',
-                  fontWeight: 600,
+                  marginBottom: '12px',
                 }}
               >
-                ARCHITECTURAL CONFIGURATIONS
+                MICRO-ORGANIZATION ARCHITECTURE
               </span>
               <h2
                 style={{
                   fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(30px, 3.8vw, 48px)',
+                  fontSize: 'clamp(28px, 3.8vw, 46px)',
                   fontWeight: 300,
                   color: '#FFFFFF',
-                  margin: 0,
+                  margin: '0 0 14px 0',
                 }}
               >
-                Find Your Wardrobe Typology.
+                Inside the Wardrobe
               </h2>
+              <p
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '14.5px',
+                  color: 'rgba(255, 255, 255, 0.75)',
+                  maxWidth: '640px',
+                  margin: '0 auto',
+                  lineHeight: 1.65,
+                }}
+              >
+                Every drawer, tray, and hanging tier is precision-proportioned to protect delicate fabrics, timepieces, and accessories.
+              </p>
             </div>
 
+            {/* Storage Solutions Grid */}
             <div
-              className="rifra-4col-grid"
+              className="leoz-storage-grid"
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr)',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
                 gap: '24px',
               }}
             >
-              {typologies.map((card, idx) => (
+              {storageSolutions.map((sol, idx) => (
                 <motion.div
-                  key={card.title}
-                  initial={{ opacity: 0, y: 30 }}
+                  key={sol.id}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.7, delay: idx * 0.12, ease: luxuryEase }}
+                  viewport={{ once: true, amount: 0.15 }}
+                  transition={{ duration: 0.5, delay: idx * 0.07, ease: luxuryEase }}
                   style={{
-                    backgroundColor: '#0D0D0D',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                    borderRadius: '2px',
+                    backgroundColor: '#1E1D1B',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    borderRadius: '3px',
                     overflow: 'hidden',
                     display: 'flex',
                     flexDirection: 'column',
-                    transition: 'all 0.4s ease',
+                    transition: 'all 0.35s ease',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(182, 154, 107, 0.4)';
-                    e.currentTarget.style.transform = 'translateY(-6px)';
+                    e.currentTarget.style.borderColor = 'rgba(182, 154, 107, 0.5)';
+                    e.currentTarget.style.transform = 'translateY(-4px)';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
                     e.currentTarget.style.transform = 'translateY(0)';
                   }}
                 >
-                  <div style={{ position: 'relative', width: '100%', aspectRatio: '1 / 1.15', overflow: 'hidden' }}>
+                  <div
+                    style={{
+                      position: 'relative',
+                      width: '100%',
+                      aspectRatio: '1 / 0.85',
+                      overflow: 'hidden',
+                    }}
+                  >
                     <img
-                      src={card.image}
-                      alt={card.title}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      src={sol.image}
+                      alt={sol.title}
+                      loading="lazy"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        display: 'block',
+                      }}
                     />
                     <div
                       style={{
                         position: 'absolute',
-                        inset: 0,
-                        background: 'linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.85) 100%)',
+                        top: '12px',
+                        left: '12px',
+                        padding: '4px 10px',
+                        backgroundColor: 'rgba(15, 14, 13, 0.8)',
+                        backdropFilter: 'blur(8px)',
+                        color: '#B69A6B',
+                        fontFamily: 'var(--font-body)',
+                        fontSize: '9.5px',
+                        fontWeight: 600,
+                        letterSpacing: '0.15em',
+                        textTransform: 'uppercase',
+                        borderRadius: '2px',
+                      }}
+                    >
+                      {sol.category}
+                    </div>
+                  </div>
+
+                  <div style={{ padding: '20px', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                    <h3
+                      style={{
+                        fontFamily: 'var(--font-heading)',
+                        fontSize: '19px',
+                        fontWeight: 400,
+                        color: '#FFFFFF',
+                        margin: '0 0 6px 0',
+                      }}
+                    >
+                      {sol.title}
+                    </h3>
+                    <p
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: '12.5px',
+                        color: 'rgba(255, 255, 255, 0.65)',
+                        lineHeight: 1.55,
+                        margin: '0 0 14px 0',
+                        flexGrow: 1,
+                      }}
+                    >
+                      {sol.desc}
+                    </p>
+                    <div
+                      style={{
+                        paddingTop: '10px',
+                        borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+                        fontSize: '11px',
+                        fontFamily: 'var(--font-body)',
+                        color: '#B69A6B',
+                        fontWeight: 500,
+                      }}
+                    >
+                      ✓ {sol.metric}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            SECTION 03: MATERIALS & FINISHES (CLOSE-UP TACTILE GALLERY)
+            ========================================================================= */}
+        <section
+          id="materials"
+          aria-label="Wardrobe Materials & Finishes"
+          style={{
+            paddingTop: 'clamp(70px, 9vw, 120px)',
+            paddingBottom: 'clamp(70px, 9vw, 120px)',
+            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
+            paddingRight: 'clamp(20px, 5.5vw, 80px)',
+            backgroundColor: '#FAF9F6',
+          }}
+        >
+          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
+            <div style={{ textAlign: 'center', marginBottom: 'clamp(36px, 5vw, 56px)' }}>
+              <span
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  letterSpacing: '0.24em',
+                  textTransform: 'uppercase',
+                  color: '#B69A6B',
+                  display: 'block',
+                  marginBottom: '12px',
+                }}
+              >
+                CURATED TACTILE PALETTE
+              </span>
+              <h2
+                style={{
+                  fontFamily: 'var(--font-heading)',
+                  fontSize: 'clamp(28px, 3.8vw, 46px)',
+                  fontWeight: 300,
+                  color: '#161514',
+                  margin: '0 0 14px 0',
+                }}
+              >
+                Materials &amp; Finishes
+              </h2>
+              <p
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '14.5px',
+                  color: 'rgba(22, 21, 20, 0.7)',
+                  maxWidth: '600px',
+                  margin: '0 auto',
+                  lineHeight: 1.6,
+                }}
+              >
+                Close-up craftsmanship combining authentic European wood veneers, Italian leather, and safety tinted glass.
+              </p>
+            </div>
+
+            {/* Materials 3x2 Grid */}
+            <div
+              className="leoz-materials-grid"
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                gap: '28px',
+              }}
+            >
+              {wardrobeMaterials.map((m, idx) => (
+                <motion.div
+                  key={m.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.15 }}
+                  transition={{ duration: 0.5, delay: idx * 0.08, ease: luxuryEase }}
+                  style={{
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid rgba(22, 21, 20, 0.08)',
+                    borderRadius: '3px',
+                    overflow: 'hidden',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    transition: 'all 0.35s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(182, 154, 107, 0.5)';
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(22, 21, 20, 0.08)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                  }}
+                >
+                  <div
+                    style={{
+                      position: 'relative',
+                      width: '100%',
+                      aspectRatio: '16 / 10',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <img
+                      src={m.image}
+                      alt={m.name}
+                      loading="lazy"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        display: 'block',
+                      }}
+                    />
+                    <div
+                      style={{
+                        position: 'absolute',
+                        bottom: '12px',
+                        left: '12px',
+                        width: '20px',
+                        height: '20px',
+                        borderRadius: '50%',
+                        backgroundColor: m.swatch,
+                        border: '2px solid #FFFFFF',
+                        boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
                       }}
                     />
                   </div>
 
-                  <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                  <div style={{ padding: '22px' }}>
+                    <h3
+                      style={{
+                        fontFamily: 'var(--font-heading)',
+                        fontSize: '20px',
+                        fontWeight: 400,
+                        color: '#161514',
+                        margin: '0 0 4px 0',
+                      }}
+                    >
+                      {m.name}
+                    </h3>
                     <span
                       style={{
                         fontFamily: 'var(--font-body)',
-                        fontSize: '10px',
-                        letterSpacing: '0.2em',
+                        fontSize: '11px',
                         color: '#B69A6B',
-                        marginBottom: '8px',
                         fontWeight: 600,
+                        display: 'block',
+                        marginBottom: '10px',
                       }}
                     >
-                      {card.subtitle}
+                      {m.subtitle}
                     </span>
+                    <p
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: '13px',
+                        color: 'rgba(22, 21, 20, 0.7)',
+                        lineHeight: 1.6,
+                        margin: 0,
+                      }}
+                    >
+                      {m.desc}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            SECTION 04: PRECISION ENGINEERING SECTION
+            ========================================================================= */}
+        <section
+          aria-label="Precision Wardrobe Engineering"
+          style={{
+            backgroundColor: '#161514',
+            color: '#FFFFFF',
+            paddingTop: 'clamp(80px, 10vw, 130px)',
+            paddingBottom: 'clamp(80px, 10vw, 130px)',
+            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
+            paddingRight: 'clamp(20px, 5.5vw, 80px)',
+            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+          }}
+        >
+          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
+            <div style={{ textAlign: 'center', marginBottom: 'clamp(48px, 6vw, 76px)' }}>
+              <span
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  letterSpacing: '0.24em',
+                  textTransform: 'uppercase',
+                  color: '#B69A6B',
+                  display: 'block',
+                  marginBottom: '14px',
+                }}
+              >
+                THE LEOZ ENGINEERING STANDARD
+              </span>
+              <h2
+                style={{
+                  fontFamily: 'var(--font-heading)',
+                  fontSize: 'clamp(28px, 3.8vw, 46px)',
+                  fontWeight: 300,
+                  color: '#FFFFFF',
+                  margin: '0 0 16px 0',
+                }}
+              >
+                Precision in Every Millimetre
+              </h2>
+              <p
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '15px',
+                  color: 'rgba(255, 255, 255, 0.75)',
+                  maxWidth: '700px',
+                  margin: '0 auto',
+                  lineHeight: 1.7,
+                }}
+              >
+                Why our wardrobes glide silently and stay perfectly aligned for decades without door sagging or joint loosening.
+              </p>
+            </div>
+
+            {/* 5 Precision Pillars Bento Grid */}
+            <div
+              className="leoz-precision-grid"
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+                gap: '20px',
+                marginBottom: '40px',
+              }}
+            >
+              {precisionPillars.map((p) => {
+                const Icon = p.icon;
+                return (
+                  <div
+                    key={p.code}
+                    style={{
+                      backgroundColor: '#1E1D1B',
+                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      borderRadius: '3px',
+                      padding: '24px 20px',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      transition: 'all 0.3s ease',
+                    }}
+                  >
+                    <div
+                      style={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        marginBottom: '14px',
+                        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+                        paddingBottom: '8px',
+                      }}
+                    >
+                      <span
+                        style={{
+                          fontFamily: 'var(--font-body)',
+                          fontSize: '10px',
+                          fontWeight: 600,
+                          letterSpacing: '0.15em',
+                          color: '#B69A6B',
+                        }}
+                      >
+                        {p.code}
+                      </span>
+                      <div
+                        style={{
+                          width: '32px',
+                          height: '32px',
+                          borderRadius: '4px',
+                          backgroundColor: 'rgba(182, 154, 107, 0.12)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          color: '#B69A6B',
+                        }}
+                      >
+                        <Icon size={16} strokeWidth={1.75} />
+                      </div>
+                    </div>
+
                     <h3
                       style={{
                         fontFamily: 'var(--font-heading)',
                         fontSize: '20px',
                         fontWeight: 400,
                         color: '#FFFFFF',
+                        margin: '0 0 8px 0',
+                      }}
+                    >
+                      {p.title}
+                    </h3>
+
+                    <p
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: '12.5px',
+                        color: 'rgba(255, 255, 255, 0.65)',
+                        lineHeight: 1.6,
+                        margin: 0,
+                      }}
+                    >
+                      {p.desc}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            SECTION 05: EDITORIAL WARDROBE PROJECTS
+            ========================================================================= */}
+        <section
+          id="projects"
+          aria-label="Completed Wardrobe Projects"
+          style={{
+            paddingTop: 'clamp(70px, 9vw, 120px)',
+            paddingBottom: 'clamp(70px, 9vw, 120px)',
+            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
+            paddingRight: 'clamp(20px, 5.5vw, 80px)',
+            backgroundColor: '#FAF9F6',
+          }}
+        >
+          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'flex-end',
+                marginBottom: 'clamp(36px, 5vw, 60px)',
+                flexWrap: 'wrap',
+                gap: '20px',
+              }}
+            >
+              <div>
+                <span
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    letterSpacing: '0.22em',
+                    textTransform: 'uppercase',
+                    color: '#B69A6B',
+                    display: 'block',
+                    marginBottom: '12px',
+                  }}
+                >
+                  REALIZED DRESSING SUITES
+                </span>
+                <h2
+                  style={{
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: 'clamp(28px, 3.8vw, 46px)',
+                    fontWeight: 300,
+                    color: '#161514',
+                    margin: 0,
+                    letterSpacing: '0.01em',
+                  }}
+                >
+                  Wardrobe Case Studies
+                </h2>
+              </div>
+              <p
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '14.5px',
+                  color: 'rgba(22, 21, 20, 0.7)',
+                  maxWidth: '460px',
+                  lineHeight: 1.6,
+                  margin: 0,
+                }}
+              >
+                Custom residential dressing rooms engineered for luxury private residences across Gujarat.
+              </p>
+            </div>
+
+            {/* Case Studies 2x2 Grid */}
+            <div
+              className="leoz-wardrobe-projects-grid"
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                gap: '32px',
+              }}
+            >
+              {wardrobeProjects.map((p, idx) => (
+                <motion.div
+                  key={p.id}
+                  initial={{ opacity: 0, y: 25 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.15 }}
+                  transition={{ duration: 0.6, delay: idx * 0.1, ease: luxuryEase }}
+                  style={{
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid rgba(22, 21, 20, 0.08)',
+                    borderRadius: '3px',
+                    overflow: 'hidden',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    transition: 'all 0.35s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(182, 154, 107, 0.5)';
+                    e.currentTarget.style.transform = 'translateY(-5px)';
+                    e.currentTarget.style.boxShadow = '0 16px 36px rgba(0,0,0,0.08)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(22, 21, 20, 0.08)';
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = 'none';
+                  }}
+                >
+                  <div
+                    style={{
+                      position: 'relative',
+                      width: '100%',
+                      aspectRatio: '16 / 10',
+                      overflow: 'hidden',
+                    }}
+                  >
+                    <img
+                      src={p.image}
+                      alt={p.title}
+                      loading="lazy"
+                      style={{
+                        width: '100%',
+                        height: '100%',
+                        objectFit: 'cover',
+                        display: 'block',
+                      }}
+                    />
+                    <div
+                      style={{
+                        position: 'absolute',
+                        bottom: '14px',
+                        left: '14px',
+                        padding: '5px 12px',
+                        backgroundColor: 'rgba(22, 21, 20, 0.8)',
+                        backdropFilter: 'blur(8px)',
+                        color: '#FFFFFF',
+                        fontFamily: 'var(--font-body)',
+                        fontSize: '11px',
+                        fontWeight: 500,
+                        borderRadius: '2px',
+                      }}
+                    >
+                      📍 {p.location}
+                    </div>
+                  </div>
+
+                  <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                    <span
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: '11px',
+                        fontWeight: 600,
+                        color: '#B69A6B',
+                        letterSpacing: '0.15em',
+                        textTransform: 'uppercase',
+                        display: 'block',
+                        marginBottom: '6px',
+                      }}
+                    >
+                      {p.style}
+                    </span>
+
+                    <h3
+                      style={{
+                        fontFamily: 'var(--font-heading)',
+                        fontSize: '22px',
+                        fontWeight: 400,
+                        color: '#161514',
                         margin: '0 0 10px 0',
                       }}
                     >
-                      {card.title}
+                      {p.title}
                     </h3>
+
                     <p
                       style={{
                         fontFamily: 'var(--font-body)',
                         fontSize: '13px',
-                        color: 'rgba(255, 255, 255, 0.65)',
+                        color: 'rgba(22, 21, 20, 0.7)',
                         lineHeight: 1.6,
                         margin: '0 0 20px 0',
                         flexGrow: 1,
                       }}
                     >
-                      {card.desc}
+                      {p.desc}
                     </p>
 
                     <a
@@ -703,19 +1373,19 @@ export const ModularWardrobes: React.FC = () => {
                         display: 'inline-flex',
                         alignItems: 'center',
                         gap: '8px',
-                        color: '#FFFFFF',
+                        color: '#161514',
                         fontFamily: 'var(--font-body)',
-                        fontSize: '11.5px',
-                        letterSpacing: '0.1em',
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        letterSpacing: '0.12em',
                         textTransform: 'uppercase',
                         textDecoration: 'none',
-                        fontWeight: 500,
                         transition: 'color 0.25s ease',
                       }}
                       onMouseEnter={(e) => (e.currentTarget.style.color = '#B69A6B')}
-                      onMouseLeave={(e) => (e.currentTarget.style.color = '#FFFFFF')}
+                      onMouseLeave={(e) => (e.currentTarget.style.color = '#161514')}
                     >
-                      <span>Plan This Layout</span>
+                      <span>Inquire This Suite</span>
                       <ArrowRight size={13} />
                     </a>
                   </div>
@@ -726,447 +1396,17 @@ export const ModularWardrobes: React.FC = () => {
         </section>
 
         {/* =========================================================================
-            SECTION 4: RiFRA-STYLE MATERIALS & INTERNAL ACCESSORIES SELECTOR
+            SECTION 06: FINAL CTA ("YOUR SPACE. YOUR SYSTEM.")
             ========================================================================= */}
         <section
-          id="materials"
-          style={{
-            backgroundColor: '#0A0A0A',
-            paddingTop: 'clamp(80px, 10vw, 130px)',
-            paddingBottom: 'clamp(80px, 10vw, 130px)',
-            paddingLeft: '5.5vw',
-            paddingRight: '5.5vw',
-            borderTop: '1px solid rgba(255, 255, 255, 0.06)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
-          }}
-        >
-          <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: 'clamp(48px, 6vw, 72px)' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '11px',
-                  letterSpacing: '0.25em',
-                  textTransform: 'uppercase',
-                  color: '#B69A6B',
-                  display: 'block',
-                  marginBottom: '14px',
-                  fontWeight: 600,
-                }}
-              >
-                LUXURY TOUCHPOINTS
-              </span>
-              <h2
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(30px, 3.8vw, 48px)',
-                  fontWeight: 300,
-                  color: '#FFFFFF',
-                  margin: '0 0 16px 0',
-                }}
-              >
-                Finishes &amp; Internal Architecture.
-              </h2>
-              <p
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '14.5px',
-                  color: 'rgba(255, 255, 255, 0.65)',
-                  maxWidth: '600px',
-                  margin: '0 auto',
-                }}
-              >
-                From tactile fluted woods to suede accessory dividers, tailored to perfection.
-              </p>
-            </div>
-
-            {/* Material Tabs */}
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                flexWrap: 'wrap',
-                gap: '12px',
-                marginBottom: '40px',
-              }}
-            >
-              {finishes.map((mat, idx) => (
-                <button
-                  key={mat.name}
-                  type="button"
-                  onClick={() => setSelectedFinish(idx)}
-                  style={{
-                    padding: '10px 22px',
-                    backgroundColor: selectedFinish === idx ? '#FFFFFF' : 'transparent',
-                    color: selectedFinish === idx ? '#000000' : 'rgba(255, 255, 255, 0.6)',
-                    border: `1px solid ${selectedFinish === idx ? '#FFFFFF' : 'rgba(255, 255, 255, 0.15)'}`,
-                    borderRadius: '2px',
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '12px',
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
-                    cursor: 'pointer',
-                    transition: 'all 0.25s ease',
-                  }}
-                >
-                  {mat.name.split('&')[0]}
-                </button>
-              ))}
-            </div>
-
-            {/* Active Material Feature Frame */}
-            <div
-              className="rifra-dual-grid"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1.2fr 1fr',
-                gap: 'clamp(32px, 5vw, 64px)',
-                alignItems: 'center',
-                backgroundColor: '#000000',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                padding: 'clamp(24px, 4vw, 48px)',
-                borderRadius: '2px',
-              }}
-            >
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={`fin-img-${selectedFinish}`}
-                  initial={{ opacity: 0, scale: 0.98 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.02 }}
-                  transition={{ duration: 0.6, ease: luxuryEase }}
-                  style={{
-                    position: 'relative',
-                    aspectRatio: '16 / 10',
-                    overflow: 'hidden',
-                    borderRadius: '2px',
-                  }}
-                >
-                  <img
-                    src={finishes[selectedFinish].image}
-                    alt={finishes[selectedFinish].name}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
-                </motion.div>
-              </AnimatePresence>
-
-              <div>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '11px',
-                    letterSpacing: '0.2em',
-                    textTransform: 'uppercase',
-                    color: '#B69A6B',
-                    display: 'block',
-                    marginBottom: '10px',
-                    fontWeight: 600,
-                  }}
-                >
-                  {finishes[selectedFinish].category}
-                </span>
-
-                <h3
-                  style={{
-                    fontFamily: 'var(--font-heading)',
-                    fontSize: 'clamp(24px, 2.8vw, 36px)',
-                    fontWeight: 300,
-                    color: '#FFFFFF',
-                    margin: '0 0 16px 0',
-                  }}
-                >
-                  {finishes[selectedFinish].name}
-                </h3>
-
-                <p
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '14.5px',
-                    color: 'rgba(255, 255, 255, 0.7)',
-                    lineHeight: 1.75,
-                    marginBottom: '28px',
-                  }}
-                >
-                  {finishes[selectedFinish].desc}
-                </p>
-
-                <a
-                  href="/contact"
-                  onClick={(e) => navigate(e, '/contact')}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    padding: '12px 24px',
-                    backgroundColor: 'transparent',
-                    color: '#FFFFFF',
-                    border: '1px solid rgba(255, 255, 255, 0.3)',
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '11.5px',
-                    letterSpacing: '0.12em',
-                    textTransform: 'uppercase',
-                    textDecoration: 'none',
-                    transition: 'all 0.3s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#FFFFFF';
-                    e.currentTarget.style.backgroundColor = '#FFFFFF';
-                    e.currentTarget.style.color = '#000000';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                    e.currentTarget.style.color = '#FFFFFF';
-                  }}
-                >
-                  <span>Request Wardrobe Finish Swatches</span>
-                  <ArrowRight size={13} />
-                </a>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* =========================================================================
-            SECTION 5: THE LEOZ METHOD / WARDROBE PROCESS
-            ========================================================================= */}
-        <section
-          id="method"
-          style={{
-            backgroundColor: '#000000',
-            paddingTop: 'clamp(80px, 10vw, 130px)',
-            paddingBottom: 'clamp(80px, 10vw, 130px)',
-            paddingLeft: '5.5vw',
-            paddingRight: '5.5vw',
-          }}
-        >
-          <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: 'clamp(48px, 6vw, 80px)' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '11px',
-                  letterSpacing: '0.25em',
-                  textTransform: 'uppercase',
-                  color: '#B69A6B',
-                  display: 'block',
-                  marginBottom: '14px',
-                  fontWeight: 600,
-                }}
-              >
-                THE LEOZ METHOD
-              </span>
-              <h2
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(30px, 3.8vw, 48px)',
-                  fontWeight: 300,
-                  color: '#FFFFFF',
-                  margin: 0,
-                }}
-              >
-                Wardrobe Commissioning Timeline.
-              </h2>
-            </div>
-
-            <div
-              className="rifra-process-grid"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(3, 1fr)',
-                gap: '32px',
-              }}
-            >
-              {processSteps.map((step, idx) => (
-                <motion.div
-                  key={step.step}
-                  initial={{ opacity: 0, y: 25 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
-                  transition={{ duration: 0.6, delay: idx * 0.1, ease: luxuryEase }}
-                  style={{
-                    backgroundColor: '#0D0D0D',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                    padding: 'clamp(28px, 3.5vw, 40px)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    borderRadius: '2px',
-                    position: 'relative',
-                  }}
-                >
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: '36px',
-                      fontWeight: 300,
-                      color: 'rgba(182, 154, 107, 0.6)',
-                      display: 'block',
-                      marginBottom: '16px',
-                      lineHeight: 1,
-                    }}
-                  >
-                    {step.step}
-                  </span>
-                  <h3
-                    style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: '19px',
-                      fontWeight: 400,
-                      color: '#FFFFFF',
-                      margin: '0 0 12px 0',
-                    }}
-                  >
-                    {step.title}
-                  </h3>
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '13.5px',
-                      color: 'rgba(255, 255, 255, 0.65)',
-                      lineHeight: 1.65,
-                      margin: 0,
-                    }}
-                  >
-                    {step.desc}
-                  </p>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* =========================================================================
-            SECTION 6: WHY LEOZ WARDROBES STAND APART
-            ========================================================================= */}
-        <section
-          style={{
-            backgroundColor: '#0A0A0A',
-            paddingTop: 'clamp(80px, 10vw, 120px)',
-            paddingBottom: 'clamp(80px, 10vw, 120px)',
-            paddingLeft: '5.5vw',
-            paddingRight: '5.5vw',
-            borderTop: '1px solid rgba(255, 255, 255, 0.06)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
-          }}
-        >
-          <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: 'clamp(48px, 6vw, 70px)' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '11px',
-                  letterSpacing: '0.25em',
-                  textTransform: 'uppercase',
-                  color: '#B69A6B',
-                  display: 'block',
-                  marginBottom: '14px',
-                  fontWeight: 600,
-                }}
-              >
-                UNCOMPROMISED STANDARDS
-              </span>
-              <h2
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(28px, 3.5vw, 44px)',
-                  fontWeight: 300,
-                  color: '#FFFFFF',
-                  margin: 0,
-                }}
-              >
-                Why LEOZ Wardrobes Stand Apart.
-              </h2>
-            </div>
-
-            <div
-              className="rifra-5col-grid"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(5, 1fr)',
-                gap: '20px',
-              }}
-            >
-              {[
-                { icon: Factory, title: 'In-House Production', desc: 'Crafted entirely at our own factory — zero outsourced components.' },
-                { icon: Award, title: 'German Sliders', desc: 'Concealed heavy-duty rolling mechanisms with micro dampeners.' },
-                { icon: Clock, title: '20+ Years Legacy', desc: 'Decades of master bespoke residential carpentry.' },
-                { icon: ShieldCheck, title: '10-Yr Guarantee', desc: 'Complete warranty on runners, hinges, and carcass stability.' },
-                { icon: Wrench, title: 'Certified Installers', desc: 'White-glove installation by trained in-house craftsmen.' },
-              ].map((item, idx) => {
-                const Icon = item.icon;
-                return (
-                  <motion.div
-                    key={item.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.2 }}
-                    transition={{ duration: 0.5, delay: idx * 0.08, ease: luxuryEase }}
-                    style={{
-                      backgroundColor: '#000000',
-                      border: '1px solid rgba(255, 255, 255, 0.08)',
-                      padding: '28px 20px',
-                      textAlign: 'center',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      borderRadius: '2px',
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: '46px',
-                        height: '46px',
-                        borderRadius: '50%',
-                        backgroundColor: 'rgba(182, 154, 107, 0.1)',
-                        color: '#B69A6B',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        marginBottom: '16px',
-                      }}
-                    >
-                      <Icon size={20} strokeWidth={1.5} />
-                    </div>
-                    <h3
-                      style={{
-                        fontFamily: 'var(--font-heading)',
-                        fontSize: '17px',
-                        fontWeight: 400,
-                        color: '#FFFFFF',
-                        margin: '0 0 8px 0',
-                      }}
-                    >
-                      {item.title}
-                    </h3>
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '12.5px',
-                        color: 'rgba(255, 255, 255, 0.6)',
-                        lineHeight: 1.55,
-                        margin: 0,
-                      }}
-                    >
-                      {item.desc}
-                    </p>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* =========================================================================
-            SECTION 7: RiFRA CINEMATIC CTA / CONSULTATION INVITATION
-            ========================================================================= */}
-        <section
+          aria-label="Book Wardrobe Consultation"
           style={{
             position: 'relative',
-            backgroundColor: '#000000',
+            backgroundColor: '#0F0E0D',
             paddingTop: 'clamp(90px, 12vw, 150px)',
             paddingBottom: 'clamp(90px, 12vw, 150px)',
-            paddingLeft: '5.5vw',
-            paddingRight: '5.5vw',
+            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
+            paddingRight: 'clamp(20px, 5.5vw, 80px)',
             overflow: 'hidden',
             display: 'flex',
             alignItems: 'center',
@@ -1174,63 +1414,70 @@ export const ModularWardrobes: React.FC = () => {
             textAlign: 'center',
           }}
         >
+          {/* Ambient Background Image */}
           <div
             style={{
               position: 'absolute',
               inset: 0,
               backgroundImage: 'url(https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=2000&q=85)',
-              backgroundPosition: 'center',
+              backgroundPosition: 'center 40%',
               backgroundSize: 'cover',
-              opacity: 0.18,
+              opacity: 0.22,
             }}
           />
           <div
             style={{
               position: 'absolute',
               inset: 0,
-              background: 'radial-gradient(circle at center, rgba(0,0,0,0.6) 0%, #000000 90%)',
+              background: 'radial-gradient(circle at center, rgba(15, 14, 13, 0.7) 0%, #0F0E0D 95%)',
             }}
           />
 
-          <div style={{ position: 'relative', zIndex: 10, maxWidth: '760px', margin: '0 auto' }}>
+          <div style={{ position: 'relative', zIndex: 10, maxWidth: '780px', margin: '0 auto' }}>
             <span
               style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: '11px',
+                fontWeight: 600,
                 letterSpacing: '0.25em',
                 textTransform: 'uppercase',
                 color: '#B69A6B',
                 display: 'block',
                 marginBottom: '16px',
-                fontWeight: 600,
               }}
             >
-              BESPOKE BEDROOM SUITES
+              BESPOKE DRESSING ROOM COMMISSION
             </span>
 
             <h2
               style={{
                 fontFamily: 'var(--font-heading)',
-                fontSize: 'clamp(32px, 4.5vw, 56px)',
+                fontSize: 'clamp(32px, 5.5vw, 62px)',
                 fontWeight: 300,
                 color: '#FFFFFF',
-                lineHeight: 1.12,
+                lineHeight: 1.08,
                 margin: '0 0 20px 0',
+                letterSpacing: '0.02em',
               }}
             >
-              Ready to Design Your Dream Wardrobe?
+              Your Space.
+              <br />
+              Your System.
             </h2>
 
             <p
               style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: 'clamp(14px, 1.2vw, 17px)',
-                color: 'rgba(255, 255, 255, 0.75)',
+                fontSize: 'clamp(14.5px, 1.3vw, 17.5px)',
+                color: 'rgba(255, 255, 255, 0.8)',
                 lineHeight: 1.7,
                 marginBottom: '36px',
+                maxWidth: '620px',
+                marginLeft: 'auto',
+                marginRight: 'auto',
               }}
             >
-              Visit our Ahmedabad Flagship Experience Studio or schedule a personal wardrobe planning session with our architects.
+              Bring harmony, organization, and architectural calm to your master suite with a custom LEOZ wardrobe consultation.
             </p>
 
             <a
@@ -1239,10 +1486,10 @@ export const ModularWardrobes: React.FC = () => {
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '10px',
+                gap: '12px',
                 padding: '16px 36px',
-                backgroundColor: '#FFFFFF',
-                color: '#000000',
+                backgroundColor: '#B69A6B',
+                color: '#FFFFFF',
                 fontFamily: 'var(--font-body)',
                 fontSize: '12.5px',
                 fontWeight: 600,
@@ -1250,18 +1497,13 @@ export const ModularWardrobes: React.FC = () => {
                 textTransform: 'uppercase',
                 textDecoration: 'none',
                 borderRadius: '2px',
+                boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
                 transition: 'all 0.3s ease',
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#B69A6B';
-                e.currentTarget.style.color = '#FFFFFF';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#FFFFFF';
-                e.currentTarget.style.color = '#000000';
-              }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#9F8255')}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#B69A6B')}
             >
-              <span>Book Private Wardrobe Consultation</span>
+              <span>Book a Consultation</span>
               <ArrowRight size={15} />
             </a>
           </div>
@@ -1270,22 +1512,24 @@ export const ModularWardrobes: React.FC = () => {
 
       <Footer />
 
-      {/* Responsive Breakpoints CSS */}
+      {/* Responsive Styles */}
       <style>{`
-        @media (max-width: 1024px) {
-          .rifra-dual-grid {
-            grid-template-columns: 1fr !important;
-            gap: 40px !important;
-          }
-          .rifra-4col-grid, .rifra-process-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-          }
-          .rifra-5col-grid {
-            grid-template-columns: repeat(3, 1fr) !important;
-          }
+        .leoz-wardrobe-card:hover .wardrobe-zoom-img {
+          transform: scale(1.05);
         }
+        .leoz-wardrobe-card:hover .wardrobe-title {
+          transform: translateY(-2px);
+          color: #B69A6B;
+        }
+        .leoz-wardrobe-card:hover .wardrobe-arrow {
+          transform: translate(2px, -2px);
+        }
+
         @media (max-width: 768px) {
-          .rifra-4col-grid, .rifra-process-grid, .rifra-5col-grid {
+          .leoz-wardrobes-grid,
+          .leoz-storage-grid,
+          .leoz-materials-grid,
+          .leoz-wardrobe-projects-grid {
             grid-template-columns: 1fr !important;
           }
         }

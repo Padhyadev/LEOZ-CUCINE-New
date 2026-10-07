@@ -9,6 +9,13 @@ const Contact = lazy(() => import('./pages/Contact'));
 const FranchiseEnquiry = lazy(() => import('./pages/FranchiseEnquiry'));
 const FranchiseOpportunities = lazy(() => import('./pages/FranchiseOpportunities'));
 const PrivacyPolicy = lazy(() => import('./pages/PrivacyPolicy'));
+const Projects = lazy(() => import('./pages/Projects'));
+const ProjectCaseStudy = lazy(() => import('./pages/ProjectCaseStudy'));
+const OurMethod = lazy(() => import('./pages/OurMethod'));
+const FactoryInfrastructure = lazy(() => import('./pages/FactoryInfrastructure'));
+const Showrooms = lazy(() => import('./pages/Showrooms'));
+const MaterialsFinishes = lazy(() => import('./pages/MaterialsFinishes'));
+const NotFound = lazy(() => import('./pages/NotFound'));
 
 import { CinematicPageTransition } from './components/common/CinematicPageTransition';
 import { LenisProvider } from './providers/LenisProvider';
@@ -68,11 +75,43 @@ export const App: React.FC = () => {
       return <BookConsultation />;
     }
 
+    if (currentPath === '/projects' || currentPath === '/portfolio') {
+      return <Projects />;
+    }
+
+    if (currentPath === '/case-study' || currentPath === '/project-case-study' || currentPath.startsWith('/projects/')) {
+      return <ProjectCaseStudy />;
+    }
+
+    if (currentPath === '/our-method' || currentPath === '/method') {
+      return <OurMethod />;
+    }
+
+    if (currentPath === '/factory' || currentPath === '/infrastructure' || currentPath === '/factory-infrastructure') {
+      return <FactoryInfrastructure />;
+    }
+
+    if (currentPath === '/showrooms' || currentPath === '/experience-studios' || currentPath === '/studios') {
+      return <Showrooms />;
+    }
+
+    if (currentPath === '/materials' || currentPath === '/finishes' || currentPath === '/materials-finishes') {
+      return <MaterialsFinishes />;
+    }
+
     if (currentPath === '/privacy-policy') {
       return <PrivacyPolicy />;
     }
 
-    return <Home />;
+    if (currentPath === '/' || currentPath === '') {
+      return <Home />;
+    }
+
+    if (currentPath === '/404') {
+      return <NotFound />;
+    }
+
+    return <NotFound />;
   };
 
   return (

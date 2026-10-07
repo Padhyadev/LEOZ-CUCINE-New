@@ -1,5 +1,5 @@
 import React from 'react';
-import logoImg from '../../../LEOZ logo.webp';
+import logoImg from '../../assets/logo.webp';
 
 interface LogoProps {
   variant?: 'dark' | 'light';

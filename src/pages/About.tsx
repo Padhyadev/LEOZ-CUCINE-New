@@ -1,11 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { Header } from '../components/common/Header';
 import { Footer } from '../components/common/Footer';
 import { useDocumentMeta } from '../hooks/useDocumentMeta';
-import { ChevronLeft, ChevronRight, ArrowRight, Factory, Clock, ShieldCheck, Wrench, Handshake } from 'lucide-react';
+import {
+  ArrowRight,
+  MapPin,
+  Calendar,
+  Compass,
+  Cpu,
+  Award,
+  Sparkles,
+  Layers,
+  Factory,
+  CheckCircle2,
+} from 'lucide-react';
 
-/* Easing curve for Italian luxury smoothness */
+/* Easing curve for luxury architectural motion */
 const luxuryEase = [0.16, 1, 0.3, 1];
 
 export const About: React.FC = () => {
@@ -14,71 +25,9 @@ export const About: React.FC = () => {
   }, []);
 
   useDocumentMeta(
-    'Brand & Heritage | LEOZ Cucine — Italian Luxury & German Engineering',
-    'Discover the legacy of LEOZ Cucine. 20+ years of in-house manufacturing, German precision engineering, 20,000 sq. ft. factory in Gujarat.'
+    'About LEOZ | Emotional Brand Story & Architectural Heritage',
+    'Discover the story of LEOZ Cucine. Where German precision engineering, Indian architectural warmth, and in-house manufacturing unite to create spaces designed around you.'
   );
-
-  // RiFRA-style Brand Heritage Slider Data
-  const brandSlides = [
-    {
-      id: 'heritage',
-      name: 'TWO DECADES OF HERITAGE',
-      tagline: 'Where German Engineering Meets Gujarati Craftsmanship',
-      desc: 'Founded on the principles of direct in-house manufacturing, LEOZ Cucine transforms residential spaces with uncompromising architectural luxury.',
-      image: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=2000&q=90',
-    },
-    {
-      id: 'factory',
-      name: '20,000 SQ. FT. PRODUCTION LAB',
-      tagline: 'Precision CNC Machining & European Quality Systems',
-      desc: 'Our dedicated manufacturing facility in Gujarat produces state-of-the-art modular kitchens and bespoke wardrobes without outsourcing a single panel.',
-      image: 'https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=2000&q=90',
-    },
-    {
-      id: 'vision',
-      name: 'DIRECT CLIENT COLLABORATION',
-      tagline: 'From Concept to Installation with Zero Intermediaries',
-      desc: 'We are the only design and production brand collaborating directly with homeowners, architects, and developers to ensure flawless turnkey execution.',
-      image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2000&q=90',
-    },
-  ];
-
-  const [activeSlide, setActiveSlide] = useState(0);
-
-  const prevSlide = () => {
-    setActiveSlide((prev) => (prev > 0 ? prev - 1 : brandSlides.length - 1));
-  };
-
-  const nextSlide = () => {
-    setActiveSlide((prev) => (prev < brandSlides.length - 1 ? prev + 1 : 0));
-  };
-
-  // Factory Pillars (Bento Grid)
-  const factoryHighlights = [
-    {
-      title: 'Advanced European Machinery',
-      desc: 'High-precision automated CNC routing, diamond edge-banding, and robotic lacquer application guaranteeing micron-level tolerances.',
-      icon: Factory,
-    },
-    {
-      title: 'Dedicated Quality Control & R&D',
-      desc: 'Every carcass, drawer runner, and surface is rigorously tested for thermal resistance, anti-scratch durability, and moisture resistance.',
-      icon: ShieldCheck,
-    },
-    {
-      title: 'Short & Direct Supply Chain',
-      desc: 'By manufacturing 100% in-house, we eliminate third-party delays, middleman markups, and quality inconsistencies.',
-      icon: Clock,
-    },
-  ];
-
-  // Milestones Timeline
-  const milestones = [
-    { year: '2005', title: 'Factory Inception', desc: 'Established our precision carpentry and specialized joinery manufacturing unit in Gujarat.' },
-    { year: '2010', title: 'Modular Wardrobe Expansion', desc: 'Introduced customized walk-in dressing suites, glass doors, and sliding wardrobe systems.' },
-    { year: '2015', title: 'German Engineering Integration', desc: 'Full alignment with European hardware standards (Blum & Hettich) and luxury 45° mitered joinery.' },
-    { year: '2024+', title: '5,000+ Landmark Residences', desc: 'A celebrated portfolio of luxury villas, penthouses, and developer collaborations across India.' },
-  ];
 
   const navigate = (e: React.MouseEvent, path: string) => {
     e.preventDefault();
@@ -86,564 +35,356 @@ export const About: React.FC = () => {
     window.dispatchEvent(new Event('popstate'));
   };
 
+  /* =========================================================================
+     4 PILLARS: THE LEOZ DIFFERENCE
+     ========================================================================= */
+  const leozPillars = [
+    {
+      code: 'PILLAR / 01',
+      title: 'DESIGN',
+      desc: 'Architectural proportion, spatial harmony, and considered minimalism where every line serves an intentional purpose.',
+      icon: Compass,
+      highlights: 'Spatial Harmony • Monolithic Balance',
+    },
+    {
+      code: 'PILLAR / 02',
+      title: 'PRECISION',
+      desc: '0.1mm micro-tolerance automated machining and 5-axis CNC routing that eliminate manual carpentry deviations.',
+      icon: Cpu,
+      highlights: '0.1mm Tolerance • German Hardware',
+    },
+    {
+      code: 'PILLAR / 03',
+      title: 'CRAFT',
+      desc: 'Master hand-finishing, robotically cured Italian lacquers, and hand-stitched leather organizers tailored to perfection.',
+      icon: Award,
+      highlights: 'Hand-Rubbed Lacquers • Tactile Wood',
+    },
+    {
+      code: 'PILLAR / 04',
+      title: 'SERVICE',
+      desc: 'Direct white-glove turnkey installation by in-house master fitters backed by an uncompromised 10-year written warranty.',
+      icon: Sparkles,
+      highlights: 'Turnkey Handover • 10-Yr Guarantee',
+    },
+  ];
+
+  /* =========================================================================
+     SHOWROOMS DATA
+     ========================================================================= */
+  const showrooms = [
+    {
+      city: 'AHMEDABAD',
+      title: 'Ahmedabad Flagship Experience Studio',
+      address: 'Near Sindhu Bhavan Road & Bodakdev, Ahmedabad, Gujarat 380054',
+      phone: '+91 93131 51559',
+      hours: 'Mon – Sat: 10:00 AM – 7:30 PM (By Appointment)',
+      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85',
+      mapsUrl: 'https://maps.google.com/?q=LEOZ+Cucine+Ahmedabad',
+    },
+    {
+      city: 'SURAT',
+      title: 'Surat Architectural Experience Studio',
+      address: 'Dumas Road & VIP Road Junction, Vesu, Surat, Gujarat 395007',
+      phone: '+91 93131 51559',
+      hours: 'Mon – Sat: 10:00 AM – 7:30 PM (By Appointment)',
+      image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85',
+      mapsUrl: 'https://maps.google.com/?q=LEOZ+Cucine+Surat',
+    },
+  ];
+
   return (
-    <div style={{ backgroundColor: '#000000', color: '#FFFFFF', minHeight: '100vh', overflowX: 'hidden' }}>
+    <div style={{ backgroundColor: '#FAF9F6', color: '#161514', minHeight: '100vh', overflowX: 'hidden' }}>
       <Header />
 
       <main id="main-content">
         {/* =========================================================================
-            SECTION 1: RiFRA FULL-BLEED EDITORIAL HERO SLIDER
+            HERO: "WE BELIEVE A HOME SHOULD FEEL LIKE YOU."
             ========================================================================= */}
         <section
-          aria-label="About LEOZ Cucine Hero"
+          aria-label="About LEOZ Hero"
           style={{
             position: 'relative',
             width: '100%',
-            height: '100vh',
-            minHeight: '620px',
-            backgroundColor: '#000000',
+            minHeight: 'clamp(580px, 86vh, 760px)',
+            display: 'flex',
+            alignItems: 'flex-end',
+            backgroundColor: '#161514',
             overflow: 'hidden',
           }}
         >
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={brandSlides[activeSlide].id}
-              initial={{ opacity: 0, scale: 1.04 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.98 }}
-              transition={{ duration: 0.9, ease: luxuryEase }}
-              style={{
-                position: 'absolute',
-                inset: 0,
-                backgroundImage: `url("${encodeURI(brandSlides[activeSlide].image)}")`,
-                backgroundPosition: 'center center',
-                backgroundSize: 'cover',
-              }}
-            >
-              {/* Dark Gradient Overlay */}
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: 'linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,0.2) 40%, rgba(0,0,0,0.85) 100%)',
-                }}
-              />
-            </motion.div>
-          </AnimatePresence>
+          {/* Architectural Background */}
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              backgroundImage: 'url(https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=2200&q=90)',
+              backgroundPosition: 'center 42%',
+              backgroundSize: 'cover',
+            }}
+          />
 
-          {/* Hero Content Overlay */}
+          {/* Soft Scrim */}
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              background: 'linear-gradient(180deg, rgba(22, 21, 20, 0.25) 0%, rgba(22, 21, 20, 0.4) 40%, rgba(22, 21, 20, 0.9) 95%)',
+            }}
+          />
+
+          {/* Hero Typography */}
           <div
             style={{
               position: 'relative',
               zIndex: 10,
-              maxWidth: '1440px',
-              height: '100%',
+              maxWidth: '1360px',
+              width: '100%',
               margin: '0 auto',
-              paddingLeft: '5.5vw',
-              paddingRight: '5.5vw',
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'flex-end',
-              paddingBottom: 'clamp(40px, 6vh, 70px)',
+              paddingLeft: 'clamp(20px, 5.5vw, 80px)',
+              paddingRight: 'clamp(20px, 5.5vw, 80px)',
+              paddingBottom: 'clamp(44px, 7vw, 76px)',
             }}
           >
-            <div style={{ maxWidth: '820px' }}>
+            <div style={{ maxWidth: '880px' }}>
               <motion.span
-                key={`cat-${activeSlide}`}
-                initial={{ opacity: 0, y: 15 }}
+                initial={{ opacity: 0, y: 16 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.1, ease: luxuryEase }}
+                transition={{ duration: 0.6, ease: luxuryEase }}
                 style={{
                   display: 'inline-block',
                   fontFamily: 'var(--font-body)',
-                  fontSize: '11.5px',
-                  letterSpacing: '0.22em',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  letterSpacing: '0.24em',
                   textTransform: 'uppercase',
                   color: '#B69A6B',
-                  marginBottom: '12px',
-                  fontWeight: 600,
+                  marginBottom: '14px',
                 }}
               >
-                THE LEOZ BRAND &amp; HERITAGE
+                THE LEOZ STORY &amp; ETHOS
               </motion.span>
 
               <motion.h1
-                key={`name-${activeSlide}`}
-                initial={{ opacity: 0, y: 25 }}
+                initial={{ opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.2, ease: luxuryEase }}
+                transition={{ duration: 0.7, delay: 0.1, ease: luxuryEase }}
                 style={{
                   fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(32px, 5vw, 64px)',
+                  fontSize: 'clamp(36px, 6vw, 76px)',
                   fontWeight: 300,
-                  lineHeight: 1.08,
+                  lineHeight: 1.04,
                   letterSpacing: '-0.01em',
                   color: '#FFFFFF',
-                  margin: '0 0 16px 0',
+                  margin: '0 0 20px 0',
                 }}
               >
-                {brandSlides[activeSlide].name}
+                We Believe
+                <br />
+                A Home Should Feel
+                <br />
+                Like You.
               </motion.h1>
 
               <motion.p
-                key={`desc-${activeSlide}`}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.3, ease: luxuryEase }}
+                transition={{ duration: 0.7, delay: 0.2, ease: luxuryEase }}
                 style={{
                   fontFamily: 'var(--font-body)',
-                  fontSize: 'clamp(14px, 1.2vw, 17px)',
+                  fontSize: 'clamp(15px, 1.35vw, 18px)',
                   color: 'rgba(255, 255, 255, 0.85)',
-                  lineHeight: 1.6,
-                  maxWidth: '660px',
+                  lineHeight: 1.65,
+                  maxWidth: '680px',
                   marginBottom: '28px',
                 }}
               >
-                {brandSlides[activeSlide].desc}
+                LEOZ was founded on a simple truth: true luxury is personal. It is the effortless feeling of entering a kitchen or dressing suite where every surface, shadow gap, and drawer glide feels intuitively crafted for your way of living.
               </motion.p>
-
-              {/* Action Buttons */}
-              <motion.div
-                key={`act-${activeSlide}`}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.4, ease: luxuryEase }}
-                style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}
-              >
-                <a
-                  href="/talk-to-us"
-                  onClick={(e) => navigate(e, '/talk-to-us')}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    padding: '14px 28px',
-                    backgroundColor: '#FFFFFF',
-                    color: '#000000',
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    letterSpacing: '0.12em',
-                    textTransform: 'uppercase',
-                    textDecoration: 'none',
-                    borderRadius: '2px',
-                    transition: 'all 0.3s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#B69A6B';
-                    e.currentTarget.style.color = '#FFFFFF';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#FFFFFF';
-                    e.currentTarget.style.color = '#000000';
-                  }}
-                >
-                  <span>Connect With Our Team</span>
-                  <ArrowRight size={14} />
-                </a>
-
-                <a
-                  href="#philosophy-story"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    padding: '14px 24px',
-                    backgroundColor: 'transparent',
-                    color: '#FFFFFF',
-                    border: '1px solid rgba(255, 255, 255, 0.3)',
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '12px',
-                    fontWeight: 500,
-                    letterSpacing: '0.12em',
-                    textTransform: 'uppercase',
-                    textDecoration: 'none',
-                    borderRadius: '2px',
-                    transition: 'all 0.3s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#FFFFFF';
-                    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.08)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-                    e.currentTarget.style.backgroundColor = 'transparent';
-                  }}
-                >
-                  Read Our Story
-                </a>
-              </motion.div>
             </div>
+          </div>
+        </section>
 
-            {/* Slider Navigation Controls */}
+        {/* =========================================================================
+            SECTION 01: WHO LEOZ IS, WHAT WE CREATE & WHY WE EXIST
+            ========================================================================= */}
+        <section
+          style={{
+            paddingTop: 'clamp(80px, 10vw, 130px)',
+            paddingBottom: 'clamp(70px, 9vw, 120px)',
+            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
+            paddingRight: 'clamp(20px, 5.5vw, 80px)',
+            backgroundColor: '#FAF9F6',
+          }}
+        >
+          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
             <div
               style={{
-                position: 'absolute',
-                right: '5.5vw',
-                bottom: 'clamp(40px, 6vh, 70px)',
-                display: 'flex',
-                alignItems: 'center',
-                gap: '12px',
-                zIndex: 20,
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+                gap: 'clamp(32px, 5vw, 56px)',
               }}
             >
-              <div style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)', marginRight: '8px' }}>
-                <span style={{ color: '#FFFFFF', fontWeight: 600 }}>0{activeSlide + 1}</span> / 0{brandSlides.length}
+              <div>
+                <span style={{ fontSize: '10.5px', color: '#B69A6B', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', display: 'block', marginBottom: '12px' }}>
+                  WHO WE ARE
+                </span>
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '24px', fontWeight: 400, color: '#161514', margin: '0 0 12px 0' }}>
+                  Architectural Craftsmen
+                </h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: 'rgba(22, 21, 20, 0.72)', lineHeight: 1.7, margin: 0 }}>
+                  We are a specialist team of interior architects, technical engineers, and master woodworkers who combine European design restraint with two decades of in-house manufacturing experience.
+                </p>
               </div>
-              <button
-                type="button"
-                onClick={prevSlide}
-                aria-label="Previous Slide"
-                style={{
-                  width: '42px',
-                  height: '42px',
-                  borderRadius: '50%',
-                  border: '1px solid rgba(255, 255, 255, 0.3)',
-                  backgroundColor: 'rgba(0,0,0,0.4)',
-                  backdropFilter: 'blur(8px)',
-                  color: '#FFFFFF',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                  transition: 'all 0.25s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#FFFFFF';
-                  e.currentTarget.style.color = '#000000';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.4)';
-                  e.currentTarget.style.color = '#FFFFFF';
-                }}
-              >
-                <ChevronLeft size={18} />
-              </button>
-              <button
-                type="button"
-                onClick={nextSlide}
-                aria-label="Next Slide"
-                style={{
-                  width: '42px',
-                  height: '42px',
-                  borderRadius: '50%',
-                  border: '1px solid rgba(255, 255, 255, 0.3)',
-                  backgroundColor: 'rgba(0,0,0,0.4)',
-                  backdropFilter: 'blur(8px)',
-                  color: '#FFFFFF',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  cursor: 'pointer',
-                  transition: 'all 0.25s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = '#FFFFFF';
-                  e.currentTarget.style.color = '#000000';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.4)';
-                  e.currentTarget.style.color = '#FFFFFF';
-                }}
-              >
-                <ChevronRight size={18} />
-              </button>
+
+              <div>
+                <span style={{ fontSize: '10.5px', color: '#B69A6B', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', display: 'block', marginBottom: '12px' }}>
+                  WHAT WE CREATE
+                </span>
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '24px', fontWeight: 400, color: '#161514', margin: '0 0 12px 0' }}>
+                  Spaces of Living Calibre
+                </h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: 'rgba(22, 21, 20, 0.72)', lineHeight: 1.7, margin: 0 }}>
+                  We create bespoke modular kitchens, full-height walk-in wardrobes, and turnkey residential interiors where monolithic stone, authentic timber, and silent German hardware harmonize.
+                </p>
+              </div>
+
+              <div>
+                <span style={{ fontSize: '10.5px', color: '#B69A6B', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', display: 'block', marginBottom: '12px' }}>
+                  WHY WE EXIST
+                </span>
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '24px', fontWeight: 400, color: '#161514', margin: '0 0 12px 0' }}>
+                  To End Compromise
+                </h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: 'rgba(22, 21, 20, 0.72)', lineHeight: 1.7, margin: 0 }}>
+                  Homeowners were constantly forced to choose between generic imported brands with poor local support or unpredictable on-site carpenter work. LEOZ was built to deliver uncompromising factory certainty.
+                </p>
+              </div>
             </div>
           </div>
         </section>
 
         {/* =========================================================================
-            SECTION 2: OUR STORY & CRAFTSMANSHIP (RiFRA 2-COLUMN ARCHITECTURAL DIALOGUE)
+            SECTION 02: "DESIGN IS ONLY THE BEGINNING."
             ========================================================================= */}
         <section
-          id="philosophy-story"
+          aria-label="Design is only the beginning"
           style={{
-            backgroundColor: '#0A0A0A',
+            backgroundColor: '#161514',
+            color: '#FFFFFF',
             paddingTop: 'clamp(80px, 10vw, 130px)',
             paddingBottom: 'clamp(80px, 10vw, 130px)',
-            paddingLeft: '5.5vw',
-            paddingRight: '5.5vw',
-            borderTop: '1px solid rgba(255, 255, 255, 0.06)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
+            paddingRight: 'clamp(20px, 5.5vw, 80px)',
+            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
           }}
         >
-          <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
+          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
             <div
-              className="rifra-dual-grid"
               style={{
                 display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: 'clamp(40px, 7vw, 100px)',
+                gridTemplateColumns: '1fr 1.1fr',
+                gap: 'clamp(40px, 6vw, 80px)',
                 alignItems: 'center',
               }}
+              className="leoz-beginning-split"
             >
-              {/* Left Column: Image with Subtle Corner Detail */}
+              {/* Left Column Text */}
               <motion.div
-                initial={{ opacity: 0, x: -40 }}
+                initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.8, ease: luxuryEase }}
-                style={{
-                  position: 'relative',
-                  aspectRatio: '1 / 1.15',
-                  overflow: 'hidden',
-                  borderRadius: '3px',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                }}
-              >
-                <img
-                  src="/Metal Accents.webp"
-                  alt="LEOZ Cucine Brand Story & In-House Factory"
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    display: 'block',
-                  }}
-                />
-                <div
-                  style={{
-                    position: 'absolute',
-                    bottom: '24px',
-                    left: '24px',
-                    padding: '12px 18px',
-                    backgroundColor: 'rgba(0, 0, 0, 0.75)',
-                    backdropFilter: 'blur(10px)',
-                    border: '1px solid rgba(255, 255, 255, 0.12)',
-                    color: '#FFFFFF',
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '11.5px',
-                    letterSpacing: '0.12em',
-                    textTransform: 'uppercase',
-                  }}
-                >
-                  Direct Manufacturing Since 2005
-                </div>
-              </motion.div>
-
-              {/* Right Column: Architectural Narrative */}
-              <motion.div
-                initial={{ opacity: 0, x: 40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
+                viewport={{ once: true, amount: 0.25 }}
                 transition={{ duration: 0.8, ease: luxuryEase }}
               >
                 <span
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontSize: '11px',
-                    letterSpacing: '0.25em',
+                    fontWeight: 600,
+                    letterSpacing: '0.24em',
                     textTransform: 'uppercase',
                     color: '#B69A6B',
                     display: 'block',
-                    marginBottom: '16px',
-                    fontWeight: 600,
+                    marginBottom: '14px',
                   }}
                 >
-                  WHERE IT ALL BEGAN
+                  THE COMPLETE CHAIN
                 </span>
 
                 <h2
                   style={{
                     fontFamily: 'var(--font-heading)',
-                    fontSize: 'clamp(28px, 3.5vw, 44px)',
+                    fontSize: 'clamp(30px, 4vw, 50px)',
                     fontWeight: 300,
-                    lineHeight: 1.15,
+                    lineHeight: 1.12,
                     color: '#FFFFFF',
-                    margin: '0 0 24px 0',
+                    margin: '0 0 20px 0',
                   }}
                 >
-                  German Precision. Local Craftsmanship.
-                </h2>
-
-                <p
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '14.5px',
-                    color: 'rgba(255, 255, 255, 0.7)',
-                    lineHeight: 1.8,
-                    marginBottom: '20px',
-                  }}
-                >
-                  For more than two decades, LEOZ Cucine has shaped the standards of modular kitchens and dressing suites in Gujarat. What originated as a relentless passion for precision engineering has evolved into one of the most trusted names for architects, discerning homeowners, and luxury developers.
-                </p>
-
-                <p
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '14.5px',
-                    color: 'rgba(255, 255, 255, 0.7)',
-                    lineHeight: 1.8,
-                    marginBottom: '36px',
-                  }}
-                >
-                  We believe true luxury requires complete accountability. That is why every hinge, carcass panel, and lacquer coat is crafted in our own Ahmedabad factory, installed by our certified technicians with zero reliance on third-party contractors.
-                </p>
-
-                {/* Key Metrics */}
-                <div
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: '1fr 1fr',
-                    gap: '24px',
-                    borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-                    paddingTop: '24px',
-                  }}
-                >
-                  <div>
-                    <span style={{ fontFamily: 'var(--font-heading)', fontSize: '32px', color: '#B69A6B', display: 'block', marginBottom: '4px' }}>
-                      20+ Yrs
-                    </span>
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: 'rgba(255, 255, 255, 0.6)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                      Manufacturing History
-                    </span>
-                  </div>
-                  <div>
-                    <span style={{ fontFamily: 'var(--font-heading)', fontSize: '32px', color: '#B69A6B', display: 'block', marginBottom: '4px' }}>
-                      5,000+
-                    </span>
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', color: 'rgba(255, 255, 255, 0.6)', textTransform: 'uppercase', letterSpacing: '0.1em' }}>
-                      Projects Handed Over
-                    </span>
-                  </div>
-                </div>
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* =========================================================================
-            SECTION 3: MEET THE LEADERSHIP / DIRECTOR PORTRAIT (RiFRA STYLE)
-            ========================================================================= */}
-        <section
-          style={{
-            backgroundColor: '#000000',
-            paddingTop: 'clamp(80px, 10vw, 130px)',
-            paddingBottom: 'clamp(80px, 10vw, 130px)',
-            paddingLeft: '5.5vw',
-            paddingRight: '5.5vw',
-          }}
-        >
-          <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
-            <div
-              className="rifra-dual-grid"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1.1fr 1fr',
-                gap: 'clamp(40px, 7vw, 100px)',
-                alignItems: 'center',
-              }}
-            >
-              {/* Left Column: Director Message */}
-              <motion.div
-                initial={{ opacity: 0, x: -40 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
-                transition={{ duration: 0.8, ease: luxuryEase }}
-              >
-                <span
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '11px',
-                    letterSpacing: '0.25em',
-                    textTransform: 'uppercase',
-                    color: '#B69A6B',
-                    display: 'block',
-                    marginBottom: '16px',
-                    fontWeight: 600,
-                  }}
-                >
-                  LEADERSHIP &amp; VISION
-                </span>
-
-                <h2
-                  style={{
-                    fontFamily: 'var(--font-heading)',
-                    fontSize: 'clamp(28px, 3.5vw, 44px)',
-                    fontWeight: 300,
-                    lineHeight: 1.15,
-                    color: '#FFFFFF',
-                    margin: '0 0 24px 0',
-                  }}
-                >
-                  Meet the Director.
+                  Design is Only
+                  <br />
+                  The Beginning.
                 </h2>
 
                 <p
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontSize: '15px',
-                    color: 'rgba(255, 255, 255, 0.75)',
-                    lineHeight: 1.8,
-                    marginBottom: '20px',
-                    fontStyle: 'italic',
-                  }}
-                >
-                  "True luxury is not defined by excess, but by the quiet confidence of perfect engineering and honest materials that endure for generations."
-                </p>
-
-                <p
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '14px',
-                    color: 'rgba(255, 255, 255, 0.65)',
+                    color: 'rgba(255, 255, 255, 0.78)',
                     lineHeight: 1.75,
-                    marginBottom: '32px',
+                    marginBottom: '28px',
                   }}
                 >
-                  Mayur Vadhiya brings over 20 years of mastery to LEOZ Cucine's production and automated quality systems. Leading with German-grade manufacturing rigor and a personal touch, he ensures every kitchen and dressing suite represents world-class execution.
+                  A visionary 3D render is meaningless if it cannot be engineered to millimeter tolerances, manufactured in-house, and installed with white-glove care. At LEOZ, these four disciplines operate as one single continuous chain of responsibility.
                 </p>
 
-                <div>
-                  <h4
-                    style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: '22px',
-                      fontWeight: 400,
-                      color: '#FFFFFF',
-                      margin: '0 0 4px 0',
-                    }}
-                  >
-                    Mayur Vadhiya
-                  </h4>
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '11.5px',
-                      fontWeight: 500,
-                      letterSpacing: '0.15em',
-                      textTransform: 'uppercase',
-                      color: '#B69A6B',
-                    }}
-                  >
-                    Director, LEOZ Cucine India Pvt. Ltd.
-                  </span>
+                {/* 4 Connected Stages Ribbon */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+                  {[
+                    { label: '01 / DESIGN', desc: 'Spatial harmony & aesthetic planning' },
+                    { label: '02 / ENGINEERING', desc: '0.1mm CNC technical files & hardware geometry' },
+                    { label: '03 / MANUFACTURING', desc: 'Direct plant fabrication in Gandhinagar' },
+                    { label: '04 / INSTALLATION', desc: 'Turnkey assembly by certified LEOZ fitters' },
+                  ].map((s) => (
+                    <div
+                      key={s.label}
+                      style={{
+                        backgroundColor: '#1E1D1B',
+                        padding: '16px',
+                        border: '1px solid rgba(255, 255, 255, 0.08)',
+                        borderRadius: '2px',
+                      }}
+                    >
+                      <strong style={{ fontSize: '11px', color: '#B69A6B', letterSpacing: '0.12em', display: 'block', marginBottom: '4px' }}>
+                        {s.label}
+                      </strong>
+                      <span style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.65)', lineHeight: 1.4, display: 'block' }}>
+                        {s.desc}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </motion.div>
 
-              {/* Right Column: Director Portrait Frame */}
+              {/* Right Column Image */}
               <motion.div
-                initial={{ opacity: 0, x: 40 }}
+                initial={{ opacity: 0, x: 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
+                viewport={{ once: true, amount: 0.25 }}
                 transition={{ duration: 0.8, ease: luxuryEase }}
                 style={{
                   position: 'relative',
-                  aspectRatio: '1 / 1.25',
+                  aspectRatio: '16 / 12',
+                  borderRadius: '3px',
                   overflow: 'hidden',
-                  borderRadius: '2px',
-                  border: '1px solid rgba(255, 255, 255, 0.12)',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
                 }}
               >
                 <img
-                  src="/director.webp"
-                  alt="Mayur Vadhiya - Director LEOZ Cucine"
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    display: 'block',
-                  }}
+                  src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85"
+                  alt="LEOZ Design to Installation Architecture"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                 />
               </motion.div>
             </div>
@@ -651,132 +392,160 @@ export const About: React.FC = () => {
         </section>
 
         {/* =========================================================================
-            SECTION 4: 20,000 SQ. FT. FACILITY (RiFRA 3-COLUMN BENTO MATRIX)
+            SECTION 03: THE LEOZ DIFFERENCE (4 PILLARS)
             ========================================================================= */}
         <section
-          id="factory"
+          aria-label="The LEOZ Difference"
           style={{
-            backgroundColor: '#0A0A0A',
-            paddingTop: 'clamp(80px, 10vw, 130px)',
-            paddingBottom: 'clamp(80px, 10vw, 130px)',
-            paddingLeft: '5.5vw',
-            paddingRight: '5.5vw',
-            borderTop: '1px solid rgba(255, 255, 255, 0.06)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+            paddingTop: 'clamp(70px, 9vw, 120px)',
+            paddingBottom: 'clamp(70px, 9vw, 120px)',
+            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
+            paddingRight: 'clamp(20px, 5.5vw, 80px)',
+            backgroundColor: '#FAF9F6',
           }}
         >
-          <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: 'clamp(48px, 6vw, 80px)' }}>
+          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
+            <div style={{ textAlign: 'center', marginBottom: 'clamp(40px, 5vw, 64px)' }}>
               <span
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '11px',
-                  letterSpacing: '0.25em',
+                  fontWeight: 600,
+                  letterSpacing: '0.24em',
                   textTransform: 'uppercase',
                   color: '#B69A6B',
                   display: 'block',
-                  marginBottom: '14px',
-                  fontWeight: 600,
+                  marginBottom: '12px',
                 }}
               >
-                THE MANUFACTURING LAB
+                OUR FOUR CORE VALUES
               </span>
               <h2
                 style={{
                   fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(30px, 3.8vw, 48px)',
+                  fontSize: 'clamp(28px, 3.8vw, 46px)',
                   fontWeight: 300,
-                  color: '#FFFFFF',
-                  margin: '0 0 16px 0',
+                  color: '#161514',
+                  margin: '0 0 14px 0',
                 }}
               >
-                A 20,000 Sq. Ft. Facility Built for Precision.
+                The LEOZ Difference
               </h2>
               <p
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '14.5px',
-                  color: 'rgba(255, 255, 255, 0.65)',
-                  maxWidth: '680px',
+                  color: 'rgba(22, 21, 20, 0.7)',
+                  maxWidth: '600px',
                   margin: '0 auto',
+                  lineHeight: 1.6,
                 }}
               >
-                Spanning 20,000 sq. ft., our manufacturing plant houses automated European machinery, ensuring consistent craftsmanship, on-time delivery, and competitive direct pricing.
+                Built on design clarity, engineered precision, authentic materials, and direct client care.
               </p>
             </div>
 
+            {/* 4 Pillars Grid */}
             <div
-              className="rifra-tri-grid"
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(3, 1fr)',
-                gap: '32px',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+                gap: '24px',
               }}
             >
-              {factoryHighlights.map((item, idx) => {
-                const Icon = item.icon;
+              {leozPillars.map((p, idx) => {
+                const Icon = p.icon;
                 return (
                   <motion.div
-                    key={item.title}
-                    initial={{ opacity: 0, y: 25 }}
+                    key={p.title}
+                    initial={{ opacity: 0, y: 20 }}
                     whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.2 }}
-                    transition={{ duration: 0.6, delay: idx * 0.12, ease: luxuryEase }}
+                    viewport={{ once: true, amount: 0.15 }}
+                    transition={{ duration: 0.5, delay: idx * 0.08, ease: luxuryEase }}
                     style={{
-                      backgroundColor: '#000000',
-                      border: '1px solid rgba(255, 255, 255, 0.08)',
-                      padding: 'clamp(28px, 3.5vw, 40px)',
+                      backgroundColor: '#FFFFFF',
+                      border: '1px solid rgba(22, 21, 20, 0.08)',
+                      borderRadius: '3px',
+                      padding: '30px 24px',
                       display: 'flex',
                       flexDirection: 'column',
-                      borderRadius: '2px',
                       transition: 'all 0.35s ease',
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = 'rgba(182, 154, 107, 0.4)';
+                      e.currentTarget.style.borderColor = 'rgba(182, 154, 107, 0.5)';
                       e.currentTarget.style.transform = 'translateY(-4px)';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+                      e.currentTarget.style.borderColor = 'rgba(22, 21, 20, 0.08)';
                       e.currentTarget.style.transform = 'translateY(0)';
                     }}
                   >
                     <div
                       style={{
-                        width: '46px',
-                        height: '46px',
-                        borderRadius: '50%',
-                        backgroundColor: 'rgba(182, 154, 107, 0.12)',
-                        color: '#B69A6B',
                         display: 'flex',
+                        justifyContent: 'space-between',
                         alignItems: 'center',
-                        justifyContent: 'center',
-                        marginBottom: '20px',
+                        marginBottom: '16px',
+                        paddingBottom: '10px',
+                        borderBottom: '1px solid rgba(22, 21, 20, 0.06)',
                       }}
                     >
-                      <Icon size={22} strokeWidth={1.5} />
+                      <span style={{ fontSize: '10.5px', color: '#B69A6B', fontWeight: 600, letterSpacing: '0.15em' }}>
+                        {p.code}
+                      </span>
+                      <div
+                        style={{
+                          width: '32px',
+                          height: '32px',
+                          borderRadius: '4px',
+                          backgroundColor: 'rgba(182, 154, 107, 0.12)',
+                          color: '#B69A6B',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}
+                      >
+                        <Icon size={16} />
+                      </div>
                     </div>
+
                     <h3
                       style={{
                         fontFamily: 'var(--font-heading)',
-                        fontSize: '20px',
+                        fontSize: '22px',
                         fontWeight: 400,
-                        color: '#FFFFFF',
-                        margin: '0 0 12px 0',
+                        color: '#161514',
+                        margin: '0 0 10px 0',
                       }}
                     >
-                      {item.title}
+                      {p.title}
                     </h3>
+
                     <p
                       style={{
                         fontFamily: 'var(--font-body)',
-                        fontSize: '13.5px',
-                        color: 'rgba(255, 255, 255, 0.65)',
-                        lineHeight: 1.65,
-                        margin: 0,
+                        fontSize: '13px',
+                        color: 'rgba(22, 21, 20, 0.7)',
+                        lineHeight: 1.6,
+                        margin: '0 0 20px 0',
+                        flexGrow: 1,
                       }}
                     >
-                      {item.desc}
+                      {p.desc}
                     </p>
+
+                    <div
+                      style={{
+                        paddingTop: '10px',
+                        borderTop: '1px solid rgba(22, 21, 20, 0.08)',
+                        fontSize: '11px',
+                        fontFamily: 'var(--font-body)',
+                        color: '#B69A6B',
+                        fontWeight: 600,
+                      }}
+                    >
+                      ✓ {p.highlights}
+                    </div>
                   </motion.div>
                 );
               })}
@@ -785,105 +554,247 @@ export const About: React.FC = () => {
         </section>
 
         {/* =========================================================================
-            SECTION 5: MILESTONES & HISTORY (RiFRA TIMELINE)
+            SECTION 04: BRAND STORY (EDITORIAL PHOTO ESSAY)
             ========================================================================= */}
         <section
+          aria-label="Brand Story Essay"
           style={{
-            backgroundColor: '#000000',
-            paddingTop: 'clamp(80px, 10vw, 130px)',
-            paddingBottom: 'clamp(80px, 10vw, 130px)',
-            paddingLeft: '5.5vw',
-            paddingRight: '5.5vw',
+            paddingTop: 'clamp(60px, 8vw, 100px)',
+            paddingBottom: 'clamp(70px, 9vw, 120px)',
+            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
+            paddingRight: 'clamp(20px, 5.5vw, 80px)',
+            backgroundColor: '#FAF9F6',
           }}
         >
-          <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: 'clamp(48px, 6vw, 80px)' }}>
+          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
+            <div
+              style={{
+                position: 'relative',
+                width: '100%',
+                aspectRatio: '21 / 10',
+                borderRadius: '3px',
+                overflow: 'hidden',
+                marginBottom: '32px',
+              }}
+            >
+              <img
+                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2200&q=85"
+                alt="LEOZ Architectural Brand Story"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'linear-gradient(180deg, transparent 40%, rgba(22, 21, 20, 0.85) 100%)',
+                }}
+              />
+              <div
+                style={{
+                  position: 'absolute',
+                  bottom: '24px',
+                  left: '24px',
+                  right: '24px',
+                  color: '#FFFFFF',
+                }}
+              >
+                <span
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    letterSpacing: '0.2em',
+                    textTransform: 'uppercase',
+                    color: '#B69A6B',
+                    display: 'block',
+                    marginBottom: '6px',
+                  }}
+                >
+                  ESTABLISHED WITH PURPOSE
+                </span>
+                <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(18px, 2.5vw, 26px)', fontWeight: 300, margin: 0 }}>
+                  “We do not just create kitchens and wardrobes; we shape the private rituals of everyday life.”
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            SECTION 05: SHOWROOMS (AHMEDABAD & SURAT)
+            ========================================================================= */}
+        <section
+          id="showrooms"
+          aria-label="LEOZ Showrooms"
+          style={{
+            backgroundColor: '#161514',
+            color: '#FFFFFF',
+            paddingTop: 'clamp(80px, 10vw, 130px)',
+            paddingBottom: 'clamp(80px, 10vw, 130px)',
+            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
+            paddingRight: 'clamp(20px, 5.5vw, 80px)',
+            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+          }}
+        >
+          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
+            <div style={{ textAlign: 'center', marginBottom: 'clamp(40px, 5vw, 64px)' }}>
               <span
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '11px',
-                  letterSpacing: '0.25em',
+                  fontWeight: 600,
+                  letterSpacing: '0.24em',
                   textTransform: 'uppercase',
                   color: '#B69A6B',
                   display: 'block',
-                  marginBottom: '14px',
-                  fontWeight: 600,
+                  marginBottom: '12px',
                 }}
               >
-                OUR TIMELINE
+                EXPERIENCE STUDIOS
               </span>
               <h2
                 style={{
                   fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(30px, 3.8vw, 48px)',
+                  fontSize: 'clamp(28px, 3.8vw, 46px)',
                   fontWeight: 300,
                   color: '#FFFFFF',
-                  margin: 0,
+                  margin: '0 0 14px 0',
                 }}
               >
-                A Track Record of Unwavering Growth.
+                Visit Our Showrooms
               </h2>
+              <p
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '14.5px',
+                  color: 'rgba(255, 255, 255, 0.75)',
+                  maxWidth: '620px',
+                  margin: '0 auto',
+                  lineHeight: 1.6,
+                }}
+              >
+                Step inside our physical experience studios in Ahmedabad and Surat to feel authentic lacquers, sintered monoliths, and sliding mechanisms.
+              </p>
             </div>
 
+            {/* Showrooms 2-Column Grid */}
             <div
-              className="rifra-4col-grid"
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(4, 1fr)',
-                gap: '24px',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                gap: '32px',
               }}
             >
-              {milestones.map((item, idx) => (
+              {showrooms.map((sh, idx) => (
                 <motion.div
-                  key={item.year}
+                  key={sh.city}
                   initial={{ opacity: 0, y: 25 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
+                  viewport={{ once: true, amount: 0.15 }}
                   transition={{ duration: 0.6, delay: idx * 0.1, ease: luxuryEase }}
                   style={{
-                    backgroundColor: '#0D0D0D',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                    padding: 'clamp(24px, 3vw, 36px)',
+                    backgroundColor: '#1E1D1B',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    borderRadius: '3px',
+                    overflow: 'hidden',
                     display: 'flex',
                     flexDirection: 'column',
-                    borderRadius: '2px',
+                    transition: 'all 0.35s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(182, 154, 107, 0.5)';
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                    e.currentTarget.style.transform = 'translateY(0)';
                   }}
                 >
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: '32px',
-                      fontWeight: 300,
-                      color: '#B69A6B',
-                      display: 'block',
-                      marginBottom: '12px',
-                      lineHeight: 1,
-                    }}
-                  >
-                    {item.year}
-                  </span>
-                  <h3
-                    style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: '18px',
-                      fontWeight: 400,
-                      color: '#FFFFFF',
-                      margin: '0 0 10px 0',
-                    }}
-                  >
-                    {item.title}
-                  </h3>
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '13px',
-                      color: 'rgba(255, 255, 255, 0.65)',
-                      lineHeight: 1.6,
-                      margin: 0,
-                    }}
-                  >
-                    {item.desc}
-                  </p>
+                  <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 10', overflow: 'hidden' }}>
+                    <img src={sh.image} alt={sh.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '14px',
+                        left: '14px',
+                        padding: '4px 10px',
+                        backgroundColor: 'rgba(22, 21, 20, 0.8)',
+                        backdropFilter: 'blur(8px)',
+                        color: '#B69A6B',
+                        fontSize: '10px',
+                        fontWeight: 600,
+                        letterSpacing: '0.15em',
+                        borderRadius: '2px',
+                      }}
+                    >
+                      {sh.city}
+                    </div>
+                  </div>
+
+                  <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
+                    <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', fontWeight: 400, color: '#FFFFFF', margin: '0 0 10px 0' }}>
+                      {sh.title}
+                    </h3>
+
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)', lineHeight: 1.6, margin: '0 0 16px 0' }}>
+                      📍 {sh.address}
+                    </p>
+
+                    <div style={{ fontSize: '12.5px', color: '#B69A6B', marginBottom: '20px' }}>
+                      🕒 {sh.hours}
+                    </div>
+
+                    <div style={{ marginTop: 'auto', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                      <a
+                        href={sh.mapsUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          padding: '10px 18px',
+                          backgroundColor: 'rgba(255, 255, 255, 0.08)',
+                          color: '#FFFFFF',
+                          fontFamily: 'var(--font-body)',
+                          fontSize: '11.5px',
+                          fontWeight: 500,
+                          letterSpacing: '0.1em',
+                          textTransform: 'uppercase',
+                          textDecoration: 'none',
+                          borderRadius: '2px',
+                          transition: 'all 0.25s ease',
+                        }}
+                      >
+                        <span>Get Directions</span>
+                        <MapPin size={13} />
+                      </a>
+
+                      <a
+                        href="/talk-to-us"
+                        onClick={(e) => navigate(e, '/talk-to-us')}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          gap: '8px',
+                          padding: '10px 18px',
+                          backgroundColor: '#B69A6B',
+                          color: '#FFFFFF',
+                          fontFamily: 'var(--font-body)',
+                          fontSize: '11.5px',
+                          fontWeight: 600,
+                          letterSpacing: '0.1em',
+                          textTransform: 'uppercase',
+                          textDecoration: 'none',
+                          borderRadius: '2px',
+                        }}
+                      >
+                        <span>Book Visit</span>
+                        <ArrowRight size={13} />
+                      </a>
+                    </div>
+                  </div>
                 </motion.div>
               ))}
             </div>
@@ -891,137 +802,17 @@ export const About: React.FC = () => {
         </section>
 
         {/* =========================================================================
-            SECTION 6: WHY TRUST LEOZ CUCINE (5 PILLARS)
+            FINAL SECTION: "LET'S BUILD SOMETHING THAT LASTS."
             ========================================================================= */}
         <section
-          style={{
-            backgroundColor: '#0A0A0A',
-            paddingTop: 'clamp(80px, 10vw, 120px)',
-            paddingBottom: 'clamp(80px, 10vw, 120px)',
-            paddingLeft: '5.5vw',
-            paddingRight: '5.5vw',
-            borderTop: '1px solid rgba(255, 255, 255, 0.06)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
-          }}
-        >
-          <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: 'clamp(48px, 6vw, 70px)' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '11px',
-                  letterSpacing: '0.25em',
-                  textTransform: 'uppercase',
-                  color: '#B69A6B',
-                  display: 'block',
-                  marginBottom: '14px',
-                  fontWeight: 600,
-                }}
-              >
-                THE LEOZ DISTINCTION
-              </span>
-              <h2
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(28px, 3.5vw, 44px)',
-                  fontWeight: 300,
-                  color: '#FFFFFF',
-                  margin: 0,
-                }}
-              >
-                Why Homeowners &amp; Architects Trust Us.
-              </h2>
-            </div>
-
-            <div
-              className="rifra-5col-grid"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(5, 1fr)',
-                gap: '20px',
-              }}
-            >
-              {[
-                { icon: Clock, title: '20+ Yrs Business', desc: 'A proven track record built project by project.' },
-                { icon: Factory, title: 'In-House Plant', desc: 'Direct control over materials, cuts, and finishes.' },
-                { icon: ShieldCheck, title: '10-Yr Guarantee', desc: 'Unwavering confidence backed by written warranty.' },
-                { icon: Wrench, title: 'In-House Fitters', desc: 'Consistent fit and zero outsourced installation.' },
-                { icon: Handshake, title: 'Architect Choice', desc: 'Trusted by leading luxury developers & builders.' },
-              ].map((item, idx) => {
-                const Icon = item.icon;
-                return (
-                  <motion.div
-                    key={item.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.2 }}
-                    transition={{ duration: 0.5, delay: idx * 0.08, ease: luxuryEase }}
-                    style={{
-                      backgroundColor: '#000000',
-                      border: '1px solid rgba(255, 255, 255, 0.08)',
-                      padding: '28px 20px',
-                      textAlign: 'center',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      borderRadius: '2px',
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: '46px',
-                        height: '46px',
-                        borderRadius: '50%',
-                        backgroundColor: 'rgba(182, 154, 107, 0.1)',
-                        color: '#B69A6B',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        marginBottom: '16px',
-                      }}
-                    >
-                      <Icon size={20} strokeWidth={1.5} />
-                    </div>
-                    <h3
-                      style={{
-                        fontFamily: 'var(--font-heading)',
-                        fontSize: '17px',
-                        fontWeight: 400,
-                        color: '#FFFFFF',
-                        margin: '0 0 8px 0',
-                      }}
-                    >
-                      {item.title}
-                    </h3>
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '12.5px',
-                        color: 'rgba(255, 255, 255, 0.6)',
-                        lineHeight: 1.55,
-                        margin: 0,
-                      }}
-                    >
-                      {item.desc}
-                    </p>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* =========================================================================
-            SECTION 7: RiFRA CINEMATIC CTA
-            ========================================================================= */}
-        <section
+          aria-label="Book About Consultation"
           style={{
             position: 'relative',
-            backgroundColor: '#000000',
+            backgroundColor: '#0F0E0D',
             paddingTop: 'clamp(90px, 12vw, 150px)',
             paddingBottom: 'clamp(90px, 12vw, 150px)',
-            paddingLeft: '5.5vw',
-            paddingRight: '5.5vw',
+            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
+            paddingRight: 'clamp(20px, 5.5vw, 80px)',
             overflow: 'hidden',
             display: 'flex',
             alignItems: 'center',
@@ -1029,63 +820,70 @@ export const About: React.FC = () => {
             textAlign: 'center',
           }}
         >
+          {/* Background Scrim */}
           <div
             style={{
               position: 'absolute',
               inset: 0,
               backgroundImage: 'url(https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=85)',
-              backgroundPosition: 'center',
+              backgroundPosition: 'center 45%',
               backgroundSize: 'cover',
-              opacity: 0.18,
+              opacity: 0.2,
             }}
           />
           <div
             style={{
               position: 'absolute',
               inset: 0,
-              background: 'radial-gradient(circle at center, rgba(0,0,0,0.6) 0%, #000000 90%)',
+              background: 'radial-gradient(circle at center, rgba(15, 14, 13, 0.7) 0%, #0F0E0D 95%)',
             }}
           />
 
-          <div style={{ position: 'relative', zIndex: 10, maxWidth: '760px', margin: '0 auto' }}>
+          <div style={{ position: 'relative', zIndex: 10, maxWidth: '780px', margin: '0 auto' }}>
             <span
               style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: '11px',
+                fontWeight: 600,
                 letterSpacing: '0.25em',
                 textTransform: 'uppercase',
                 color: '#B69A6B',
                 display: 'block',
                 marginBottom: '16px',
-                fontWeight: 600,
               }}
             >
-              START THE CONVERSATION
+              BESPOKE ARCHITECTURAL COMMISSION
             </span>
 
             <h2
               style={{
                 fontFamily: 'var(--font-heading)',
-                fontSize: 'clamp(32px, 4.5vw, 56px)',
+                fontSize: 'clamp(34px, 5.5vw, 64px)',
                 fontWeight: 300,
                 color: '#FFFFFF',
-                lineHeight: 1.12,
+                lineHeight: 1.08,
                 margin: '0 0 20px 0',
+                letterSpacing: '0.01em',
               }}
             >
-              Experience the LEOZ Cucine Standard.
+              Let’s Build Something
+              <br />
+              That Lasts.
             </h2>
 
             <p
               style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: 'clamp(14px, 1.2vw, 17px)',
-                color: 'rgba(255, 255, 255, 0.75)',
+                fontSize: 'clamp(14.5px, 1.3vw, 17.5px)',
+                color: 'rgba(255, 255, 255, 0.8)',
                 lineHeight: 1.7,
                 marginBottom: '36px',
+                maxWidth: '620px',
+                marginLeft: 'auto',
+                marginRight: 'auto',
               }}
             >
-              Schedule an exclusive design walkthrough at our Ahmedabad flagship showroom or speak directly with our engineering team.
+              Schedule a private design consultation with LEOZ principal designers to begin planning your bespoke interior.
             </p>
 
             <a
@@ -1094,10 +892,10 @@ export const About: React.FC = () => {
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
-                gap: '10px',
+                gap: '12px',
                 padding: '16px 36px',
-                backgroundColor: '#FFFFFF',
-                color: '#000000',
+                backgroundColor: '#B69A6B',
+                color: '#FFFFFF',
                 fontFamily: 'var(--font-body)',
                 fontSize: '12.5px',
                 fontWeight: 600,
@@ -1105,18 +903,13 @@ export const About: React.FC = () => {
                 textTransform: 'uppercase',
                 textDecoration: 'none',
                 borderRadius: '2px',
+                boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
                 transition: 'all 0.3s ease',
               }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#B69A6B';
-                e.currentTarget.style.color = '#FFFFFF';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#FFFFFF';
-                e.currentTarget.style.color = '#000000';
-              }}
+              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#9F8255')}
+              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#B69A6B')}
             >
-              <span>Talk to Our Team</span>
+              <span>Book a Consultation</span>
               <ArrowRight size={15} />
             </a>
           </div>
@@ -1125,23 +918,12 @@ export const About: React.FC = () => {
 
       <Footer />
 
-      {/* Responsive Breakpoints CSS */}
+      {/* Responsive Styles */}
       <style>{`
-        @media (max-width: 1024px) {
-          .rifra-dual-grid {
+        @media (max-width: 900px) {
+          .leoz-beginning-split {
             grid-template-columns: 1fr !important;
-            gap: 40px !important;
-          }
-          .rifra-tri-grid, .rifra-4col-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-          }
-          .rifra-5col-grid {
-            grid-template-columns: repeat(3, 1fr) !important;
-          }
-        }
-        @media (max-width: 768px) {
-          .rifra-tri-grid, .rifra-4col-grid, .rifra-5col-grid {
-            grid-template-columns: 1fr !important;
+            gap: 36px !important;
           }
         }
       `}</style>
