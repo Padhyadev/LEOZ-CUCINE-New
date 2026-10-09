@@ -119,7 +119,7 @@ export const App: React.FC = () => {
   return (
     <LenisProvider>
       <Analytics />
-      <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait" initial={false}>
         <motion.div key={currentPath} style={{ width: '100%', height: '100%' }}>
           <Suspense fallback={<div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F7F5F1' }}></div>}>
             {renderPage()}
