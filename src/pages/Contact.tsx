@@ -113,7 +113,7 @@ export const Contact: React.FC = () => {
             SECTION 01: HERO — UNIVERSAL FULL-BLEED ARCHITECTURAL HERO
             ========================================================================= */}
         <UniversalHero
-          image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=85"
+          image="/contact-hero.png"
           imageAlt="LEOZ Showroom & Architectural Living"
           imagePosition="center 40%"
           eyebrow="05 / CONTACT US"

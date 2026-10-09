@@ -182,8 +182,8 @@ export const FranchiseOpportunities: React.FC = () => {
             UNIVERSAL HERO SECTION: LEOZ / FRANCHISE ENQUIRY (DRAFT 07)
             ========================================================================= */}
         <UniversalHero
-          image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=85"
-          mobileImage="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=85"
+          image="/franchise-hero.png"
+          mobileImage="/franchise-hero.png"
           imageAlt="LEOZ Luxury Showroom Kitchen and Wardrobe Consultation Space"
           imagePosition="center 50%"
           eyebrow="LEOZ / FRANCHISE ENQUIRY"
