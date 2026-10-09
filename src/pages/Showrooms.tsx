@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Header } from '../components/common/Header';
 import { Footer } from '../components/common/Footer';
+import { UniversalHero } from '../components/common/UniversalHero';
 import { useDocumentMeta } from '../hooks/useDocumentMeta';
 import {
   ArrowRight,
@@ -45,7 +46,7 @@ export const Showrooms: React.FC = () => {
       phone: '+91 93131 51559',
       email: 'director@leozartofambience.com',
       timings: 'Monday to Saturday: 10:00 AM – 7:30 PM (Private Appointments Recommended)',
-      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1400&q=85',
+      image: '/Skyline Monolithic Island.webp',
       focalPosition: 'center 42%',
       mapsUrl: 'https://maps.google.com/?q=LEOZ+Cucine+Ahmedabad',
       features: ['Full-Scale Monolith Kitchens', 'Master Walk-In Dressing Suites', 'Tactile Materials Bar'],
@@ -58,7 +59,7 @@ export const Showrooms: React.FC = () => {
       phone: '+91 93131 51559',
       email: 'director@leozartofambience.com',
       timings: 'Monday to Saturday: 10:00 AM – 7:30 PM (Private Appointments Recommended)',
-      image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=85',
+      image: '/Master Walk-In Dressing Suite.webp',
       focalPosition: 'center 45%',
       mapsUrl: 'https://maps.google.com/?q=LEOZ+Cucine+Surat',
       features: ['Co-Planar Sliding Wardrobes', 'Integrated Wine Lounge Bar', '1-on-1 Designer Consultations'],
@@ -71,149 +72,59 @@ export const Showrooms: React.FC = () => {
       title: 'Explore Kitchens',
       category: '01 / FULL-SCALE ARCHITECTURE',
       desc: 'Step into fully functional monolith islands with 45-degree mitered stone countertops and handleless Gola profiles.',
-      image: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=85',
+      image: '/The Opus Penthouse Kitchen.jfif',
     },
     {
       title: 'Explore Wardrobes',
       category: '02 / DRESSING SUITES',
       desc: 'Experience 3.0m floor-to-ceiling smoked glass vitrines, co-planar sliding tracks, and illuminated accessory islands.',
-      image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=85',
+      image: '/Smoked Glass Vitrine Wardrobe.webp',
     },
     {
       title: 'Touch Materials',
       category: '03 / TACTILE PALETTE',
       desc: 'Inspect genuine sintered quartzite, open-pore smoked European oak, velvet anti-fingerprint lacquers, and metals.',
-      image: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=800&q=85',
+      image: '/Italian Marble.webp',
     },
     {
       title: 'Understand Hardware',
       category: '04 / GERMAN MOTION',
       desc: 'Feel the whisper-quiet glide of Blum Servo-Drive electronic drawers and concealed heavy-duty rolling systems.',
-      image: 'https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?auto=format&fit=crop&w=800&q=85',
+      image: '/Metal Accents.webp',
     },
     {
       title: 'Meet Designers',
       category: '05 / PRINCIPAL ARCHITECTS',
       desc: 'Sit down with our senior spatial planners and interior architects to analyze your floor plans and lighting orientations.',
-      image: 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=800&q=85',
+      image: '/about.webp',
     },
     {
       title: 'Discuss Your Project',
       category: '06 / BESPOKE ESTIMATION',
       desc: 'Receive tailored budget scoping, 3D CAD visualization previews, and turnkey manufacturing timelines for your home.',
-      image: 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=800&q=85',
+      image: '/Glass Vitrines.webp',
     },
   ];
 
   return (
-    <div style={{ backgroundColor: '#FAF9F6', color: '#161514', minHeight: '100vh', overflowX: 'hidden' }}>
+    <div style={{ backgroundColor: '#F7F4EE', color: '#262522', minHeight: '100vh', overflowX: 'hidden' }}>
       <Header />
 
       <main id="main-content">
         {/* =========================================================================
-            HERO: "EXPERIENCE LEOZ, IN PERSON."
+            UNIVERSAL HERO SECTION: LEOZ / SHOWROOMS
             ========================================================================= */}
-        <section
-          aria-label="Showrooms Hero"
-          style={{
-            position: 'relative',
-            width: '100%',
-            minHeight: 'clamp(560px, 82vh, 740px)',
-            display: 'flex',
-            alignItems: 'flex-end',
-            backgroundColor: '#161514',
-            overflow: 'hidden',
-          }}
-        >
-          {/* Dedicated Studio Image Background */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: 'url(https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2200&q=90)',
-              backgroundPosition: 'center 42%',
-              backgroundSize: 'cover',
-            }}
-          />
-
-          {/* Soft Scrim */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'linear-gradient(180deg, rgba(22, 21, 20, 0.25) 0%, rgba(22, 21, 20, 0.4) 40%, rgba(22, 21, 20, 0.92) 95%)',
-            }}
-          />
-
-          {/* Hero Content */}
-          <div
-            style={{
-              position: 'relative',
-              zIndex: 10,
-              maxWidth: '1360px',
-              width: '100%',
-              margin: '0 auto',
-              paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-              paddingRight: 'clamp(20px, 5.5vw, 80px)',
-              paddingBottom: 'clamp(44px, 7vw, 76px)',
-            }}
-          >
-            <div style={{ maxWidth: '820px' }}>
-              <motion.span
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: luxuryEase }}
-                style={{
-                  display: 'inline-block',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  letterSpacing: '0.24em',
-                  textTransform: 'uppercase',
-                  color: '#B69A6B',
-                  marginBottom: '14px',
-                }}
-              >
-                FLAGSHIP EXPERIENCE STUDIOS • AHMEDABAD &amp; SURAT
-              </motion.span>
-
-              <motion.h1
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.1, ease: luxuryEase }}
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(36px, 5.8vw, 72px)',
-                  fontWeight: 300,
-                  lineHeight: 1.05,
-                  letterSpacing: '-0.01em',
-                  color: '#FFFFFF',
-                  margin: '0 0 18px 0',
-                }}
-              >
-                Experience LEOZ,
-                <br />
-                In Person.
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.2, ease: luxuryEase }}
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'clamp(14.5px, 1.3vw, 17.5px)',
-                  color: 'rgba(255, 255, 255, 0.85)',
-                  lineHeight: 1.65,
-                  maxWidth: '640px',
-                  marginBottom: '28px',
-                }}
-              >
-                Photographs can reveal design, but true luxury must be touched. Feel the weight of mitered stone, the silent glide of German hardware, and the warmth of smoked European timber.
-              </motion.p>
-            </div>
-          </div>
-        </section>
+        <UniversalHero
+          image="/Skyline Monolithic Island.webp"
+          imageAlt="LEOZ Ahmedabad Flagship Architectural Experience Studio"
+          imagePosition="center 42%"
+          eyebrow="LEOZ / SHOWROOMS"
+          headline="Experience LEOZ, In Person."
+          supportingText="Visit our flagship experience studios in Ahmedabad and Surat."
+          ctaText="Explore Studios →"
+          ctaHref="#studios-list"
+          brightness={0.88}
+        />
 
         {/* =========================================================================
             SECTION 01: TWO MAJOR LOCATION CARDS (AHMEDABAD & SURAT)
@@ -225,7 +136,7 @@ export const Showrooms: React.FC = () => {
             paddingBottom: 'clamp(70px, 9vw, 120px)',
             paddingLeft: 'clamp(20px, 5.5vw, 80px)',
             paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            backgroundColor: '#FAF9F6',
+            backgroundColor: '#EEE9E0',
           }}
         >
           <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
@@ -237,7 +148,7 @@ export const Showrooms: React.FC = () => {
                   fontWeight: 600,
                   letterSpacing: '0.24em',
                   textTransform: 'uppercase',
-                  color: '#B69A6B',
+                  color: '#8A725B',
                   display: 'block',
                   marginBottom: '12px',
                 }}
@@ -249,7 +160,7 @@ export const Showrooms: React.FC = () => {
                   fontFamily: 'var(--font-heading)',
                   fontSize: 'clamp(28px, 3.8vw, 46px)',
                   fontWeight: 300,
-                  color: '#161514',
+                  color: '#262522',
                   margin: '0 0 14px 0',
                 }}
               >
@@ -259,7 +170,7 @@ export const Showrooms: React.FC = () => {
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '14.5px',
-                  color: 'rgba(22, 21, 20, 0.7)',
+                  color: '#66635D',
                   maxWidth: '600px',
                   margin: '0 auto',
                   lineHeight: 1.6,
@@ -286,7 +197,7 @@ export const Showrooms: React.FC = () => {
                   transition={{ duration: 0.6, delay: idx * 0.1, ease: luxuryEase }}
                   style={{
                     backgroundColor: '#FFFFFF',
-                    border: '1px solid rgba(22, 21, 20, 0.08)',
+                    border: '1px solid #D5CDBE',
                     borderRadius: '4px',
                     overflow: 'hidden',
                     display: 'flex',
@@ -295,12 +206,12 @@ export const Showrooms: React.FC = () => {
                     transition: 'all 0.35s ease',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(182, 154, 107, 0.5)';
+                    e.currentTarget.style.borderColor = '#8A725B';
                     e.currentTarget.style.transform = 'translateY(-5px)';
-                    e.currentTarget.style.boxShadow = '0 16px 40px rgba(0,0,0,0.08)';
+                    e.currentTarget.style.boxShadow = '0 16px 40px rgba(138, 114, 91, 0.12)';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(22, 21, 20, 0.08)';
+                    e.currentTarget.style.borderColor = '#D5CDBE';
                     e.currentTarget.style.transform = 'translateY(0)';
                     e.currentTarget.style.boxShadow = '0 8px 30px rgba(0,0,0,0.04)';
                   }}
@@ -325,9 +236,9 @@ export const Showrooms: React.FC = () => {
                         top: '16px',
                         left: '16px',
                         padding: '6px 14px',
-                        backgroundColor: 'rgba(22, 21, 20, 0.85)',
+                        backgroundColor: 'rgba(38, 37, 34, 0.88)',
                         backdropFilter: 'blur(8px)',
-                        color: '#B69A6B',
+                        color: '#F7F4EE',
                         fontFamily: 'var(--font-body)',
                         fontSize: '11px',
                         fontWeight: 600,
@@ -347,7 +258,7 @@ export const Showrooms: React.FC = () => {
                         fontFamily: 'var(--font-body)',
                         fontSize: '11px',
                         fontWeight: 600,
-                        color: '#B69A6B',
+                        color: '#8A725B',
                         letterSpacing: '0.15em',
                         textTransform: 'uppercase',
                         display: 'block',
@@ -362,7 +273,7 @@ export const Showrooms: React.FC = () => {
                         fontFamily: 'var(--font-heading)',
                         fontSize: '24px',
                         fontWeight: 400,
-                        color: '#161514',
+                        color: '#262522',
                         margin: '0 0 16px 0',
                       }}
                     >
@@ -372,22 +283,22 @@ export const Showrooms: React.FC = () => {
                     {/* Address, Timings & Phone */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
                       <div style={{ display: 'flex', gap: '10px' }}>
-                        <MapPin size={16} style={{ color: '#B69A6B', flexShrink: 0, marginTop: '3px' }} />
-                        <span style={{ fontSize: '13.5px', color: 'rgba(22, 21, 20, 0.75)', lineHeight: 1.5 }}>
+                        <MapPin size={16} style={{ color: '#8A725B', flexShrink: 0, marginTop: '3px' }} />
+                        <span style={{ fontSize: '13.5px', color: '#66635D', lineHeight: 1.5 }}>
                           {loc.address}
                         </span>
                       </div>
                       <div style={{ display: 'flex', gap: '10px' }}>
-                        <Clock size={16} style={{ color: '#B69A6B', flexShrink: 0, marginTop: '3px' }} />
-                        <span style={{ fontSize: '13px', color: 'rgba(22, 21, 20, 0.75)', lineHeight: 1.5 }}>
+                        <Clock size={16} style={{ color: '#8A725B', flexShrink: 0, marginTop: '3px' }} />
+                        <span style={{ fontSize: '13px', color: '#66635D', lineHeight: 1.5 }}>
                           {loc.timings}
                         </span>
                       </div>
                       <div style={{ display: 'flex', gap: '10px' }}>
-                        <Phone size={16} style={{ color: '#B69A6B', flexShrink: 0, marginTop: '3px' }} />
+                        <Phone size={16} style={{ color: '#8A725B', flexShrink: 0, marginTop: '3px' }} />
                         <a
                           href={`tel:${loc.phone.replace(/\s+/g, '')}`}
-                          style={{ fontSize: '13.5px', color: '#161514', fontWeight: 600, textDecoration: 'none' }}
+                          style={{ fontSize: '13.5px', color: '#262522', fontWeight: 600, textDecoration: 'none' }}
                         >
                           {loc.phone}
                         </a>
@@ -401,11 +312,11 @@ export const Showrooms: React.FC = () => {
                           key={f}
                           style={{
                             padding: '4px 10px',
-                            backgroundColor: 'rgba(22, 21, 20, 0.04)',
-                            border: '1px solid rgba(22, 21, 20, 0.08)',
+                            backgroundColor: '#F7F4EE',
+                            border: '1px solid #D5CDBE',
                             borderRadius: '2px',
                             fontSize: '11px',
-                            color: '#716B61',
+                            color: '#66635D',
                           }}
                         >
                           ✓ {f}
@@ -425,8 +336,8 @@ export const Showrooms: React.FC = () => {
                           gap: '8px',
                           padding: '12px 22px',
                           backgroundColor: 'transparent',
-                          color: '#161514',
-                          border: '1px solid rgba(22, 21, 20, 0.2)',
+                          color: '#262522',
+                          border: '1px solid #D5CDBE',
                           fontFamily: 'var(--font-body)',
                           fontSize: '12px',
                           fontWeight: 600,
@@ -437,11 +348,11 @@ export const Showrooms: React.FC = () => {
                           transition: 'all 0.25s ease',
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.borderColor = '#161514';
-                          e.currentTarget.style.backgroundColor = 'rgba(22, 21, 20, 0.04)';
+                          e.currentTarget.style.borderColor = '#262522';
+                          e.currentTarget.style.backgroundColor = '#F7F4EE';
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.borderColor = 'rgba(22, 21, 20, 0.2)';
+                          e.currentTarget.style.borderColor = '#D5CDBE';
                           e.currentTarget.style.backgroundColor = 'transparent';
                         }}
                       >
@@ -457,8 +368,8 @@ export const Showrooms: React.FC = () => {
                           alignItems: 'center',
                           gap: '8px',
                           padding: '12px 24px',
-                          backgroundColor: '#B69A6B',
-                          color: '#FFFFFF',
+                          backgroundColor: '#262522',
+                          color: '#F7F4EE',
                           fontFamily: 'var(--font-body)',
                           fontSize: '12px',
                           fontWeight: 600,
@@ -468,8 +379,14 @@ export const Showrooms: React.FC = () => {
                           borderRadius: '2px',
                           transition: 'all 0.25s ease',
                         }}
-                        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#9F8255')}
-                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#B69A6B')}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = '#8A725B';
+                          e.currentTarget.style.color = '#FFFFFF';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = '#262522';
+                          e.currentTarget.style.color = '#F7F4EE';
+                        }}
                       >
                         <span>Book a Visit</span>
                         <ArrowRight size={13} />
@@ -483,19 +400,19 @@ export const Showrooms: React.FC = () => {
         </section>
 
         {/* =========================================================================
-            SECTION 02: "WHAT YOU'LL EXPERIENCE" (6 IMMERSIVE TOUCHPOINTS)
+            SECTION 02: "WHAT YOU'LL EXPERIENCE" (WARM STONE WITH CRISP TILES)
             ========================================================================= */}
         <section
           aria-label="What You'll Experience"
           style={{
-            backgroundColor: '#161514',
-            color: '#FFFFFF',
+            backgroundColor: '#F7F4EE',
+            color: '#262522',
             paddingTop: 'clamp(80px, 10vw, 130px)',
             paddingBottom: 'clamp(80px, 10vw, 130px)',
             paddingLeft: 'clamp(20px, 5.5vw, 80px)',
             paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            borderTop: '1px solid #E5DED2',
+            borderBottom: '1px solid #E5DED2',
           }}
         >
           <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
@@ -507,7 +424,7 @@ export const Showrooms: React.FC = () => {
                   fontWeight: 600,
                   letterSpacing: '0.24em',
                   textTransform: 'uppercase',
-                  color: '#B69A6B',
+                  color: '#8A725B',
                   display: 'block',
                   marginBottom: '14px',
                 }}
@@ -519,7 +436,7 @@ export const Showrooms: React.FC = () => {
                   fontFamily: 'var(--font-heading)',
                   fontSize: 'clamp(28px, 3.8vw, 46px)',
                   fontWeight: 300,
-                  color: '#FFFFFF',
+                  color: '#262522',
                   margin: '0 0 16px 0',
                 }}
               >
@@ -529,7 +446,7 @@ export const Showrooms: React.FC = () => {
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '15px',
-                  color: 'rgba(255, 255, 255, 0.75)',
+                  color: '#66635D',
                   maxWidth: '680px',
                   margin: '0 auto',
                   lineHeight: 1.7,
@@ -555,8 +472,8 @@ export const Showrooms: React.FC = () => {
                   viewport={{ once: true, amount: 0.15 }}
                   transition={{ duration: 0.5, delay: idx * 0.07, ease: luxuryEase }}
                   style={{
-                    backgroundColor: '#1E1D1B',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid #D5CDBE',
                     borderRadius: '3px',
                     overflow: 'hidden',
                     display: 'flex',
@@ -564,11 +481,11 @@ export const Showrooms: React.FC = () => {
                     transition: 'all 0.35s ease',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(182, 154, 107, 0.5)';
+                    e.currentTarget.style.borderColor = '#8A725B';
                     e.currentTarget.style.transform = 'translateY(-4px)';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
+                    e.currentTarget.style.borderColor = '#D5CDBE';
                     e.currentTarget.style.transform = 'translateY(0)';
                   }}
                 >
@@ -585,9 +502,9 @@ export const Showrooms: React.FC = () => {
                         top: '12px',
                         left: '12px',
                         padding: '4px 10px',
-                        backgroundColor: 'rgba(15, 14, 13, 0.8)',
+                        backgroundColor: 'rgba(38, 37, 34, 0.88)',
                         backdropFilter: 'blur(8px)',
-                        color: '#B69A6B',
+                        color: '#F7F4EE',
                         fontFamily: 'var(--font-body)',
                         fontSize: '9.5px',
                         fontWeight: 600,
@@ -605,7 +522,7 @@ export const Showrooms: React.FC = () => {
                         fontFamily: 'var(--font-heading)',
                         fontSize: '20px',
                         fontWeight: 400,
-                        color: '#FFFFFF',
+                        color: '#262522',
                         margin: '0 0 8px 0',
                       }}
                     >
@@ -615,7 +532,7 @@ export const Showrooms: React.FC = () => {
                       style={{
                         fontFamily: 'var(--font-body)',
                         fontSize: '13px',
-                        color: 'rgba(255, 255, 255, 0.68)',
+                        color: '#66635D',
                         lineHeight: 1.6,
                         margin: 0,
                       }}
@@ -630,15 +547,15 @@ export const Showrooms: React.FC = () => {
         </section>
 
         {/* =========================================================================
-            FINAL SECTION: "COME SEE THE DIFFERENCE."
+            FINAL SECTION: STRATEGIC DARK CONTRAST CLOSING (10% RATIO)
             ========================================================================= */}
         <section
           aria-label="Book Showroom Visit Final CTA"
           style={{
             position: 'relative',
-            backgroundColor: '#0F0E0D',
-            paddingTop: 'clamp(90px, 12vw, 150px)',
-            paddingBottom: 'clamp(90px, 12vw, 150px)',
+            backgroundColor: '#302D28',
+            paddingTop: 'clamp(90px, 11vw, 140px)',
+            paddingBottom: 'clamp(90px, 11vw, 140px)',
             paddingLeft: 'clamp(20px, 5.5vw, 80px)',
             paddingRight: 'clamp(20px, 5.5vw, 80px)',
             overflow: 'hidden',
@@ -648,25 +565,6 @@ export const Showrooms: React.FC = () => {
             textAlign: 'center',
           }}
         >
-          {/* Background Scrim */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: 'url(https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=85)',
-              backgroundPosition: 'center 45%',
-              backgroundSize: 'cover',
-              opacity: 0.18,
-            }}
-          />
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'radial-gradient(circle at center, rgba(15, 14, 13, 0.7) 0%, #0F0E0D 95%)',
-            }}
-          />
-
           <div style={{ position: 'relative', zIndex: 10, maxWidth: '780px', margin: '0 auto' }}>
             <span
               style={{
@@ -675,7 +573,7 @@ export const Showrooms: React.FC = () => {
                 fontWeight: 600,
                 letterSpacing: '0.25em',
                 textTransform: 'uppercase',
-                color: '#B69A6B',
+                color: '#8A725B',
                 display: 'block',
                 marginBottom: '16px',
               }}
@@ -688,7 +586,7 @@ export const Showrooms: React.FC = () => {
                 fontFamily: 'var(--font-heading)',
                 fontSize: 'clamp(34px, 5.5vw, 64px)',
                 fontWeight: 300,
-                color: '#FFFFFF',
+                color: '#F7F4EE',
                 lineHeight: 1.08,
                 margin: '0 0 20px 0',
                 letterSpacing: '0.01em',
@@ -701,7 +599,7 @@ export const Showrooms: React.FC = () => {
               style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: 'clamp(14.5px, 1.3vw, 17.5px)',
-                color: 'rgba(255, 255, 255, 0.8)',
+                color: 'rgba(247, 244, 238, 0.8)',
                 lineHeight: 1.7,
                 marginBottom: '36px',
                 maxWidth: '620px',
@@ -720,20 +618,25 @@ export const Showrooms: React.FC = () => {
                 alignItems: 'center',
                 gap: '12px',
                 padding: '16px 36px',
-                backgroundColor: '#B69A6B',
-                color: '#FFFFFF',
+                backgroundColor: '#F7F4EE',
+                color: '#262522',
                 fontFamily: 'var(--font-body)',
-                fontSize: '12.5px',
+                fontSize: '12px',
                 fontWeight: 600,
                 letterSpacing: '0.14em',
                 textTransform: 'uppercase',
                 textDecoration: 'none',
                 borderRadius: '2px',
-                boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
                 transition: 'all 0.3s ease',
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#9F8255')}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#B69A6B')}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#8A725B';
+                e.currentTarget.style.color = '#FFFFFF';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#F7F4EE';
+                e.currentTarget.style.color = '#262522';
+              }}
             >
               <span>Book a Showroom Visit</span>
               <ArrowRight size={15} />

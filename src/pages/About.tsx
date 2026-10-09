@@ -1,22 +1,26 @@
-import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Header } from '../components/common/Header';
 import { Footer } from '../components/common/Footer';
+import { UniversalHero } from '../components/common/UniversalHero';
 import { useDocumentMeta } from '../hooks/useDocumentMeta';
 import {
   ArrowRight,
-  MapPin,
-  Calendar,
   Compass,
-  Cpu,
-  Award,
-  Sparkles,
   Layers,
-  Factory,
+  Building2,
+  Users,
   CheckCircle2,
+  Shield,
+  Cpu,
+  Wrench,
+  Factory,
+  Eye,
+  Target,
+  Award,
 } from 'lucide-react';
+import { factoryAssets } from '../assets/images';
 
-/* Easing curve for luxury architectural motion */
 const luxuryEase = [0.16, 1, 0.3, 1];
 
 export const About: React.FC = () => {
@@ -25,595 +29,383 @@ export const About: React.FC = () => {
   }, []);
 
   useDocumentMeta(
-    'About LEOZ | Emotional Brand Story & Architectural Heritage',
-    'Discover the story of LEOZ Cucine. Where German precision engineering, Indian architectural warmth, and in-house manufacturing unite to create spaces designed around you.'
+    'About LEOZ Cucine | A Passion for Detail. A Commitment to Excellence.',
+    'Based in Gujarat, LEOZ Cucine specialises in luxury modular kitchens and bespoke wardrobes. Discover our story, philosophy, 20,000 sq. ft. Gandhinagar plant, and leadership by Mr. Mayur Vadhia.'
   );
 
   const navigate = (e: React.MouseEvent, path: string) => {
     e.preventDefault();
     window.history.pushState({}, '', path);
     window.dispatchEvent(new Event('popstate'));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  /* =========================================================================
-     4 PILLARS: THE LEOZ DIFFERENCE
-     ========================================================================= */
-  const leozPillars = [
-    {
-      code: 'PILLAR / 01',
-      title: 'DESIGN',
-      desc: 'Architectural proportion, spatial harmony, and considered minimalism where every line serves an intentional purpose.',
-      icon: Compass,
-      highlights: 'Spatial Harmony • Monolithic Balance',
-    },
-    {
-      code: 'PILLAR / 02',
-      title: 'PRECISION',
-      desc: '0.1mm micro-tolerance automated machining and 5-axis CNC routing that eliminate manual carpentry deviations.',
-      icon: Cpu,
-      highlights: '0.1mm Tolerance • German Hardware',
-    },
-    {
-      code: 'PILLAR / 03',
-      title: 'CRAFT',
-      desc: 'Master hand-finishing, robotically cured Italian lacquers, and hand-stitched leather organizers tailored to perfection.',
-      icon: Award,
-      highlights: 'Hand-Rubbed Lacquers • Tactile Wood',
-    },
-    {
-      code: 'PILLAR / 04',
-      title: 'SERVICE',
-      desc: 'Direct white-glove turnkey installation by in-house master fitters backed by an uncompromised 10-year written warranty.',
-      icon: Sparkles,
-      highlights: 'Turnkey Handover • 10-Yr Guarantee',
-    },
+  const qualityPoints = [
+    { num: '01', title: 'Material Specifications', desc: 'Pre-production verification of core board density, certified moisture resistance (HDMR), and calibrated surface flatness.' },
+    { num: '02', title: 'Dimensional Accuracy', desc: 'Automated European CNC panel sizing maintaining 0.1mm micro-tolerances across every shutter and carcass joint.' },
+    { num: '03', title: 'Fit & Finish Inspection', desc: 'Zero-glue-line PUR edge banding, seamless 45° miters, and UV-stabilized surface coatings audited before assembly.' },
+    { num: '04', title: 'Hardware Compatibility', desc: 'Rigorous motion testing of Blum and Hettich runners, hinges, and lift-up systems under full load specifications.' },
+    { num: '05', title: 'Final Installation Checks', desc: 'Multi-point on-site handover audit verifying laser plumb alignment, smooth glide, and spotless handoff.' },
   ];
 
-  /* =========================================================================
-     SHOWROOMS DATA
-     ========================================================================= */
-  const showrooms = [
+  const whyChooseUsPoints = [
     {
-      city: 'AHMEDABAD',
-      title: 'Ahmedabad Flagship Experience Studio',
-      address: 'Near Sindhu Bhavan Road & Bodakdev, Ahmedabad, Gujarat 380054',
-      phone: '+91 93131 51559',
-      hours: 'Mon – Sat: 10:00 AM – 7:30 PM (By Appointment)',
-      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85',
-      mapsUrl: 'https://maps.google.com/?q=LEOZ+Cucine+Ahmedabad',
+      num: '01',
+      title: '20+ Years Leadership Expertise',
+      desc: 'Two decades of hands-on modular experience guiding every concept, material specification, and engineering detail.',
     },
     {
-      city: 'SURAT',
-      title: 'Surat Architectural Experience Studio',
-      address: 'Dumas Road & VIP Road Junction, Vesu, Surat, Gujarat 395007',
-      phone: '+91 93131 51559',
-      hours: 'Mon – Sat: 10:00 AM – 7:30 PM (By Appointment)',
-      image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85',
-      mapsUrl: 'https://maps.google.com/?q=LEOZ+Cucine+Surat',
+      num: '02',
+      title: 'Specialised Product Focus',
+      desc: 'Exclusively dedicated to luxury kitchens and bespoke wardrobes — bringing refined depth and mastery to both disciplines.',
+    },
+    {
+      num: '03',
+      title: '20,000 Sq. Ft. In-House Manufacturing',
+      desc: 'Our modern facility in Rakanpur, Gandhinagar ensures direct quality control, automated precision, and reliable timelines.',
+    },
+    {
+      num: '04',
+      title: 'Uncompromised Design Flexibility',
+      desc: 'Bespoke planning tailored to architectural blueprints, unique room constraints, and personalized aesthetic styles.',
+    },
+    {
+      num: '05',
+      title: 'Attention to Detailing',
+      desc: 'From integrated LED channels and microfiber velvet dividers to zero-gap shadow channels and flawless edge seals.',
+    },
+    {
+      num: '06',
+      title: 'Professional Installation & Warranty',
+      desc: 'Meticulous on-site assembly by certified LEOZ master fitters backed by documented warranty terms.',
     },
   ];
 
   return (
-    <div style={{ backgroundColor: '#FAF9F6', color: '#161514', minHeight: '100vh', overflowX: 'hidden' }}>
+    <div style={{ backgroundColor: '#F7F7F5', color: '#20211F', minHeight: '100vh', overflowX: 'hidden' }}>
       <Header />
 
       <main id="main-content">
         {/* =========================================================================
-            HERO: "WE BELIEVE A HOME SHOULD FEEL LIKE YOU."
+            SECTION 01: HERO BANNER
             ========================================================================= */}
-        <section
-          aria-label="About LEOZ Hero"
-          style={{
-            position: 'relative',
-            width: '100%',
-            minHeight: 'clamp(580px, 86vh, 760px)',
-            display: 'flex',
-            alignItems: 'flex-end',
-            backgroundColor: '#161514',
-            overflow: 'hidden',
-          }}
-        >
-          {/* Architectural Background */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: 'url(https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=2200&q=90)',
-              backgroundPosition: 'center 42%',
-              backgroundSize: 'cover',
-            }}
-          />
-
-          {/* Soft Scrim */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'linear-gradient(180deg, rgba(22, 21, 20, 0.25) 0%, rgba(22, 21, 20, 0.4) 40%, rgba(22, 21, 20, 0.9) 95%)',
-            }}
-          />
-
-          {/* Hero Typography */}
-          <div
-            style={{
-              position: 'relative',
-              zIndex: 10,
-              maxWidth: '1360px',
-              width: '100%',
-              margin: '0 auto',
-              paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-              paddingRight: 'clamp(20px, 5.5vw, 80px)',
-              paddingBottom: 'clamp(44px, 7vw, 76px)',
-            }}
-          >
-            <div style={{ maxWidth: '880px' }}>
-              <motion.span
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: luxuryEase }}
-                style={{
-                  display: 'inline-block',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  letterSpacing: '0.24em',
-                  textTransform: 'uppercase',
-                  color: '#B69A6B',
-                  marginBottom: '14px',
-                }}
-              >
-                THE LEOZ STORY &amp; ETHOS
-              </motion.span>
-
-              <motion.h1
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.1, ease: luxuryEase }}
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(36px, 6vw, 76px)',
-                  fontWeight: 300,
-                  lineHeight: 1.04,
-                  letterSpacing: '-0.01em',
-                  color: '#FFFFFF',
-                  margin: '0 0 20px 0',
-                }}
-              >
-                We Believe
-                <br />
-                A Home Should Feel
-                <br />
-                Like You.
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.2, ease: luxuryEase }}
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'clamp(15px, 1.35vw, 18px)',
-                  color: 'rgba(255, 255, 255, 0.85)',
-                  lineHeight: 1.65,
-                  maxWidth: '680px',
-                  marginBottom: '28px',
-                }}
-              >
-                LEOZ was founded on a simple truth: true luxury is personal. It is the effortless feeling of entering a kitchen or dressing suite where every surface, shadow gap, and drawer glide feels intuitively crafted for your way of living.
-              </motion.p>
-            </div>
-          </div>
-        </section>
+        <UniversalHero
+          image="/about.webp"
+          imageAlt="LEOZ Architectural Interior & Brand Philosophy"
+          imagePosition="center 40%"
+          eyebrow="04 / ABOUT LEOZ CUCINE"
+          headline="A Passion for Detail. A Commitment to Excellence."
+          supportingText="Based in Gujarat, LEOZ Cucine specialises in luxury modular kitchens and bespoke wardrobes, bringing thoughtful design and manufacturing control to distinctive homes."
+          ctaText="Discover LEOZ →"
+          ctaHref="#our-story"
+          brightness={0.88}
+        />
 
         {/* =========================================================================
-            SECTION 01: WHO LEOZ IS, WHAT WE CREATE & WHY WE EXIST
+            SECTION 02: OUR STORY & OUR PHILOSOPHY
             ========================================================================= */}
         <section
+          id="our-story"
           style={{
-            paddingTop: 'clamp(80px, 10vw, 130px)',
-            paddingBottom: 'clamp(70px, 9vw, 120px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            backgroundColor: '#FAF9F6',
-          }}
-        >
-          <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
-                gap: 'clamp(32px, 5vw, 56px)',
-              }}
-            >
-              <div>
-                <span style={{ fontSize: '10.5px', color: '#B69A6B', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', display: 'block', marginBottom: '12px' }}>
-                  WHO WE ARE
-                </span>
-                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '24px', fontWeight: 400, color: '#161514', margin: '0 0 12px 0' }}>
-                  Architectural Craftsmen
-                </h3>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: 'rgba(22, 21, 20, 0.72)', lineHeight: 1.7, margin: 0 }}>
-                  We are a specialist team of interior architects, technical engineers, and master woodworkers who combine European design restraint with two decades of in-house manufacturing experience.
-                </p>
-              </div>
-
-              <div>
-                <span style={{ fontSize: '10.5px', color: '#B69A6B', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', display: 'block', marginBottom: '12px' }}>
-                  WHAT WE CREATE
-                </span>
-                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '24px', fontWeight: 400, color: '#161514', margin: '0 0 12px 0' }}>
-                  Spaces of Living Calibre
-                </h3>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: 'rgba(22, 21, 20, 0.72)', lineHeight: 1.7, margin: 0 }}>
-                  We create bespoke modular kitchens, full-height walk-in wardrobes, and turnkey residential interiors where monolithic stone, authentic timber, and silent German hardware harmonize.
-                </p>
-              </div>
-
-              <div>
-                <span style={{ fontSize: '10.5px', color: '#B69A6B', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', display: 'block', marginBottom: '12px' }}>
-                  WHY WE EXIST
-                </span>
-                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '24px', fontWeight: 400, color: '#161514', margin: '0 0 12px 0' }}>
-                  To End Compromise
-                </h3>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: 'rgba(22, 21, 20, 0.72)', lineHeight: 1.7, margin: 0 }}>
-                  Homeowners were constantly forced to choose between generic imported brands with poor local support or unpredictable on-site carpenter work. LEOZ was built to deliver uncompromising factory certainty.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* =========================================================================
-            SECTION 02: "DESIGN IS ONLY THE BEGINNING."
-            ========================================================================= */}
-        <section
-          aria-label="Design is only the beginning"
-          style={{
-            backgroundColor: '#161514',
-            color: '#FFFFFF',
-            paddingTop: 'clamp(80px, 10vw, 130px)',
-            paddingBottom: 'clamp(80px, 10vw, 130px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            backgroundColor: '#F7F7F5',
+            paddingTop: 'clamp(80px, 11vw, 140px)',
+            paddingBottom: 'clamp(80px, 11vw, 140px)',
+            paddingLeft: 'clamp(20px, 6vw, 100px)',
+            paddingRight: 'clamp(20px, 6vw, 100px)',
+            borderBottom: '1px solid #EBEAE5',
           }}
         >
           <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: '1fr 1.1fr',
-                gap: 'clamp(40px, 6vw, 80px)',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
+                gap: 'clamp(36px, 6vw, 80px)',
+                marginBottom: 'clamp(50px, 8vw, 90px)',
+              }}
+            >
+              {/* Our Story Block */}
+              <div style={{ backgroundColor: '#FFFFFF', padding: 'clamp(32px, 4vw, 48px)', border: '1px solid #E5E4E0', borderTop: '3px solid #A58B62' }}>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#A58B62', display: 'block', marginBottom: '14px' }}>
+                  OUR ORIGIN &amp; PURPOSE
+                </span>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(28px, 3.2vw, 42px)', fontWeight: 300, color: '#20211F', margin: '0 0 16px 0', lineHeight: 1.15 }}>
+                  Our Story
+                </h2>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '15.5px', color: '#686963', lineHeight: 1.75, margin: 0 }}>
+                  LEOZ Cucine is built on the conviction that a kitchen or wardrobe should be as accomplished in use as it is beautiful in appearance. Guided by deep practical expertise, the brand focuses solely on these two product categories, with personalisation, skilled production and considered installation at its core.
+                </p>
+              </div>
+
+              {/* Our Philosophy Block */}
+              <div style={{ backgroundColor: '#FFFFFF', padding: 'clamp(32px, 4vw, 48px)', border: '1px solid #E5E4E0', borderTop: '3px solid #A58B62' }}>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.22em', textTransform: 'uppercase', color: '#A58B62', display: 'block', marginBottom: '14px' }}>
+                  DESIGN PRINCIPLES
+                </span>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(28px, 3.2vw, 42px)', fontWeight: 300, color: '#20211F', margin: '0 0 16px 0', lineHeight: 1.15 }}>
+                  Our Philosophy
+                </h2>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '15.5px', color: '#686963', lineHeight: 1.75, margin: 0 }}>
+                  German-inspired precision meets a nuanced understanding of Indian homes. We consider how each space is used before developing its form: ergonomics, movement, storage, materials and finish are treated as one coherent design.
+                </p>
+              </div>
+            </div>
+
+            {/* Vision & Mission Cards */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
+                gap: 'clamp(28px, 4vw, 48px)',
+              }}
+            >
+              <div style={{ borderLeft: '2px solid #A58B62', paddingLeft: '24px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                  <Eye size={18} color="#A58B62" />
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#A58B62' }}>
+                    OUR VISION
+                  </span>
+                </div>
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', fontWeight: 400, color: '#20211F', margin: '0 0 10px 0' }}>
+                  Distinct Design &amp; Thoughtful Experiences
+                </h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '14.5px', color: '#686963', lineHeight: 1.7, margin: 0 }}>
+                  To become a recognised name in luxury kitchens and wardrobes through distinct design, manufacturing precision and thoughtful client experiences.
+                </p>
+              </div>
+
+              <div style={{ borderLeft: '2px solid #A58B62', paddingLeft: '24px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                  <Target size={18} color="#A58B62" />
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#A58B62' }}>
+                    OUR MISSION
+                  </span>
+                </div>
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', fontWeight: 400, color: '#20211F', margin: '0 0 10px 0' }}>
+                  Dependable Precision &amp; Responsive Support
+                </h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '14.5px', color: '#686963', lineHeight: 1.7, margin: 0 }}>
+                  To offer personalised planning, dependable manufacturing, meticulous installation and responsive support, enabling customers to enjoy refined, functional living spaces.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            SECTION 02.5: BRAND IDENTITY & THE SPIRIT OF LEOZ
+            ========================================================================= */}
+        <section
+          id="brand-spirit"
+          style={{
+            backgroundColor: '#1C1D1A',
+            color: '#FFFFFF',
+            paddingTop: 'clamp(90px, 12vw, 150px)',
+            paddingBottom: 'clamp(90px, 12vw, 150px)',
+            paddingLeft: 'clamp(20px, 6vw, 100px)',
+            paddingRight: 'clamp(20px, 6vw, 100px)',
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+        >
+          <div
+            style={{
+              position: 'absolute',
+              top: '50%',
+              left: '30%',
+              transform: 'translate(-50%, -50%)',
+              width: '600px',
+              height: '600px',
+              background: 'radial-gradient(circle, rgba(165, 139, 98, 0.15) 0%, transparent 70%)',
+              pointerEvents: 'none',
+            }}
+          />
+
+          <div style={{ maxWidth: '1360px', margin: '0 auto', position: 'relative', zIndex: 2 }}>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: '1fr 1.25fr',
+                gap: 'clamp(40px, 7vw, 100px)',
                 alignItems: 'center',
               }}
-              className="leoz-beginning-split"
+              className="editorial-grid"
             >
-              {/* Left Column Text */}
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.25 }}
-                transition={{ duration: 0.8, ease: luxuryEase }}
+              <div
+                style={{
+                  position: 'relative',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
               >
+                <div
+                  style={{
+                    position: 'relative',
+                    width: '100%',
+                    maxWidth: '440px',
+                    aspectRatio: '4/5',
+                    borderRadius: '4px',
+                    overflow: 'hidden',
+                    boxShadow: '0 25px 60px rgba(0, 0, 0, 0.6), 0 0 40px rgba(165, 139, 98, 0.2)',
+                    border: '1px solid rgba(212, 175, 55, 0.35)',
+                    backgroundColor: '#0F100E',
+                  }}
+                >
+                  <img
+                    src="/i_am_leoz_perfect.jpg"
+                    alt="I am Leoz — Royal Brand Guardian"
+                    style={{
+                      width: '100%',
+                      height: '100%',
+                      objectFit: 'cover',
+                      objectPosition: 'center 40%',
+                      display: 'block',
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div>
                 <span
                   style={{
                     fontFamily: 'var(--font-body)',
-                    fontSize: '11px',
+                    fontSize: '11.5px',
                     fontWeight: 600,
                     letterSpacing: '0.24em',
                     textTransform: 'uppercase',
-                    color: '#B69A6B',
+                    color: '#D4AF37',
                     display: 'block',
-                    marginBottom: '14px',
+                    marginBottom: '16px',
                   }}
                 >
-                  THE COMPLETE CHAIN
+                  BRAND IDENTITY &amp; GUARDIAN
                 </span>
-
                 <h2
                   style={{
                     fontFamily: 'var(--font-heading)',
-                    fontSize: 'clamp(30px, 4vw, 50px)',
+                    fontSize: 'clamp(32px, 4.5vw, 56px)',
                     fontWeight: 300,
-                    lineHeight: 1.12,
+                    lineHeight: 1.2,
+                    letterSpacing: '-0.015em',
                     color: '#FFFFFF',
-                    margin: '0 0 20px 0',
+                    margin: '0 0 24px 0',
                   }}
                 >
-                  Design is Only
-                  <br />
-                  The Beginning.
+                  The Spirit of LEOZ.{' '}
+                  <span
+                    style={{
+                      display: 'block',
+                      marginTop: '6px',
+                      color: '#D4AF37',
+                      fontWeight: 400,
+                    }}
+                  >
+                    Royal Strength &amp; Precision.
+                  </span>
                 </h2>
 
                 <p
                   style={{
                     fontFamily: 'var(--font-body)',
-                    fontSize: '15px',
-                    color: 'rgba(255, 255, 255, 0.78)',
-                    lineHeight: 1.75,
-                    marginBottom: '28px',
+                    fontSize: 'clamp(16px, 1.2vw, 18px)',
+                    fontWeight: 300,
+                    lineHeight: 1.7,
+                    color: '#D9D9D4',
+                    marginBottom: '20px',
                   }}
                 >
-                  A visionary 3D render is meaningless if it cannot be engineered to millimeter tolerances, manufactured in-house, and installed with white-glove care. At LEOZ, these four disciplines operate as one single continuous chain of responsibility.
+                  "I am Leoz" embodies our unwavering guardian promise — uncompromising structural integrity, noble Italian design aesthetics, and lifetime durability for the modern sanctuary.
                 </p>
 
-                {/* 4 Connected Stages Ribbon */}
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-                  {[
-                    { label: '01 / DESIGN', desc: 'Spatial harmony & aesthetic planning' },
-                    { label: '02 / ENGINEERING', desc: '0.1mm CNC technical files & hardware geometry' },
-                    { label: '03 / MANUFACTURING', desc: 'Direct plant fabrication in Gandhinagar' },
-                    { label: '04 / INSTALLATION', desc: 'Turnkey assembly by certified LEOZ fitters' },
-                  ].map((s) => (
-                    <div
-                      key={s.label}
-                      style={{
-                        backgroundColor: '#1E1D1B',
-                        padding: '16px',
-                        border: '1px solid rgba(255, 255, 255, 0.08)',
-                        borderRadius: '2px',
-                      }}
-                    >
-                      <strong style={{ fontSize: '11px', color: '#B69A6B', letterSpacing: '0.12em', display: 'block', marginBottom: '4px' }}>
-                        {s.label}
-                      </strong>
-                      <span style={{ fontSize: '12px', color: 'rgba(255, 255, 255, 0.65)', lineHeight: 1.4, display: 'block' }}>
-                        {s.desc}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              </motion.div>
-
-              {/* Right Column Image */}
-              <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.25 }}
-                transition={{ duration: 0.8, ease: luxuryEase }}
-                style={{
-                  position: 'relative',
-                  aspectRatio: '16 / 12',
-                  borderRadius: '3px',
-                  overflow: 'hidden',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                }}
-              >
-                <img
-                  src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85"
-                  alt="LEOZ Design to Installation Architecture"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* =========================================================================
-            SECTION 03: THE LEOZ DIFFERENCE (4 PILLARS)
-            ========================================================================= */}
-        <section
-          aria-label="The LEOZ Difference"
-          style={{
-            paddingTop: 'clamp(70px, 9vw, 120px)',
-            paddingBottom: 'clamp(70px, 9vw, 120px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            backgroundColor: '#FAF9F6',
-          }}
-        >
-          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: 'clamp(40px, 5vw, 64px)' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  letterSpacing: '0.24em',
-                  textTransform: 'uppercase',
-                  color: '#B69A6B',
-                  display: 'block',
-                  marginBottom: '12px',
-                }}
-              >
-                OUR FOUR CORE VALUES
-              </span>
-              <h2
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(28px, 3.8vw, 46px)',
-                  fontWeight: 300,
-                  color: '#161514',
-                  margin: '0 0 14px 0',
-                }}
-              >
-                The LEOZ Difference
-              </h2>
-              <p
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '14.5px',
-                  color: 'rgba(22, 21, 20, 0.7)',
-                  maxWidth: '600px',
-                  margin: '0 auto',
-                  lineHeight: 1.6,
-                }}
-              >
-                Built on design clarity, engineered precision, authentic materials, and direct client care.
-              </p>
-            </div>
-
-            {/* 4 Pillars Grid */}
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-                gap: '24px',
-              }}
-            >
-              {leozPillars.map((p, idx) => {
-                const Icon = p.icon;
-                return (
-                  <motion.div
-                    key={p.title}
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true, amount: 0.15 }}
-                    transition={{ duration: 0.5, delay: idx * 0.08, ease: luxuryEase }}
-                    style={{
-                      backgroundColor: '#FFFFFF',
-                      border: '1px solid rgba(22, 21, 20, 0.08)',
-                      borderRadius: '3px',
-                      padding: '30px 24px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      transition: 'all 0.35s ease',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = 'rgba(182, 154, 107, 0.5)';
-                      e.currentTarget.style.transform = 'translateY(-4px)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = 'rgba(22, 21, 20, 0.08)';
-                      e.currentTarget.style.transform = 'translateY(0)';
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        marginBottom: '16px',
-                        paddingBottom: '10px',
-                        borderBottom: '1px solid rgba(22, 21, 20, 0.06)',
-                      }}
-                    >
-                      <span style={{ fontSize: '10.5px', color: '#B69A6B', fontWeight: 600, letterSpacing: '0.15em' }}>
-                        {p.code}
-                      </span>
-                      <div
-                        style={{
-                          width: '32px',
-                          height: '32px',
-                          borderRadius: '4px',
-                          backgroundColor: 'rgba(182, 154, 107, 0.12)',
-                          color: '#B69A6B',
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <Icon size={16} />
-                      </div>
-                    </div>
-
-                    <h3
-                      style={{
-                        fontFamily: 'var(--font-heading)',
-                        fontSize: '22px',
-                        fontWeight: 400,
-                        color: '#161514',
-                        margin: '0 0 10px 0',
-                      }}
-                    >
-                      {p.title}
-                    </h3>
-
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '13px',
-                        color: 'rgba(22, 21, 20, 0.7)',
-                        lineHeight: 1.6,
-                        margin: '0 0 20px 0',
-                        flexGrow: 1,
-                      }}
-                    >
-                      {p.desc}
-                    </p>
-
-                    <div
-                      style={{
-                        paddingTop: '10px',
-                        borderTop: '1px solid rgba(22, 21, 20, 0.08)',
-                        fontSize: '11px',
-                        fontFamily: 'var(--font-body)',
-                        color: '#B69A6B',
-                        fontWeight: 600,
-                      }}
-                    >
-                      ✓ {p.highlights}
-                    </div>
-                  </motion.div>
-                );
-              })}
-            </div>
-          </div>
-        </section>
-
-        {/* =========================================================================
-            SECTION 04: BRAND STORY (EDITORIAL PHOTO ESSAY)
-            ========================================================================= */}
-        <section
-          aria-label="Brand Story Essay"
-          style={{
-            paddingTop: 'clamp(60px, 8vw, 100px)',
-            paddingBottom: 'clamp(70px, 9vw, 120px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            backgroundColor: '#FAF9F6',
-          }}
-        >
-          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-            <div
-              style={{
-                position: 'relative',
-                width: '100%',
-                aspectRatio: '21 / 10',
-                borderRadius: '3px',
-                overflow: 'hidden',
-                marginBottom: '32px',
-              }}
-            >
-              <img
-                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2200&q=85"
-                alt="LEOZ Architectural Brand Story"
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              />
-              <div
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                  background: 'linear-gradient(180deg, transparent 40%, rgba(22, 21, 20, 0.85) 100%)',
-                }}
-              />
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: '24px',
-                  left: '24px',
-                  right: '24px',
-                  color: '#FFFFFF',
-                }}
-              >
-                <span
+                <p
                   style={{
                     fontFamily: 'var(--font-body)',
-                    fontSize: '11px',
-                    fontWeight: 600,
-                    letterSpacing: '0.2em',
-                    textTransform: 'uppercase',
-                    color: '#B69A6B',
-                    display: 'block',
-                    marginBottom: '6px',
+                    fontSize: '14.5px',
+                    lineHeight: 1.75,
+                    color: '#A8A8A2',
+                    marginBottom: '32px',
                   }}
                 >
-                  ESTABLISHED WITH PURPOSE
+                  Just as the lion commands dignity and strength, every bespoke kitchen and wardrobe crafted under the LEOZ emblem is armored with European hardware, 150-ton hydraulic lamination, and razor-sharp German tolerances.
+                </p>
+
+                <div
+                  style={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
+                    gap: '24px',
+                    borderTop: '1px solid rgba(255, 255, 255, 0.12)',
+                    paddingTop: '24px',
+                  }}
+                >
+                  <div>
+                    <span style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', color: '#D4AF37', display: 'block', marginBottom: '4px' }}>
+                      Strength
+                    </span>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#8E8E88' }}>
+                      Anti-warp marine grade cores
+                    </span>
+                  </div>
+                  <div>
+                    <span style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', color: '#D4AF37', display: 'block', marginBottom: '4px' }}>
+                      Precision
+                    </span>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#8E8E88' }}>
+                      0.1mm CNC automated tolerance
+                    </span>
+                  </div>
+                  <div>
+                    <span style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', color: '#D4AF37', display: 'block', marginBottom: '4px' }}>
+                      Elegance
+                    </span>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#8E8E88' }}>
+                      Refined Italian &amp; German finishes
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            SECTION 03: MEET THE DIRECTOR | MR. MAYUR VADHIA
+            ========================================================================= */}
+        <section
+          style={{
+            backgroundColor: '#ECEBE7',
+            paddingTop: 'clamp(90px, 12vw, 150px)',
+            paddingBottom: 'clamp(90px, 12vw, 150px)',
+            paddingLeft: 'clamp(20px, 6vw, 100px)',
+            paddingRight: 'clamp(20px, 6vw, 100px)',
+          }}
+        >
+          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.25fr', gap: 'clamp(40px, 7vw, 100px)', alignItems: 'center' }} className="editorial-grid">
+              <div style={{ width: '100%', aspectRatio: '4/5', overflow: 'hidden', backgroundColor: '#D9D9D4', borderRadius: '2px', boxShadow: '0 16px 40px rgba(32, 33, 31, 0.12)' }}>
+                <img
+                  src={factoryAssets.directorPortrait.desktop}
+                  alt={factoryAssets.directorPortrait.alt}
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top center' }}
+                />
+              </div>
+
+              <div>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '11.5px', fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#A58B62', display: 'block', marginBottom: '12px' }}>
+                  LEADERSHIP &amp; EXPERTISE
                 </span>
-                <p style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(18px, 2.5vw, 26px)', fontWeight: 300, margin: 0 }}>
-                  “We do not just create kitchens and wardrobes; we shape the private rituals of everyday life.”
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(36px, 4.5vw, 60px)', fontWeight: 300, color: '#20211F', margin: '0 0 8px 0' }}>
+                  Mr. Mayur Vadhia
+                </h2>
+                <div style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#A58B62', marginBottom: '22px' }}>
+                  Director – Kitchens, Wardrobes &amp; Manufacturing
+                </div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '15.5px', lineHeight: 1.75, color: '#20211F', marginBottom: '18px' }}>
+                  With over 20 years of intensive hands-on experience, Mayur Vadhia is among the highly experienced modular kitchen specialists in Gujarat. His knowledge spans the entire journey—from concept development, space planning, material and hardware selection through engineering, manufacturing, site installation and final execution.
+                </p>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '15px', lineHeight: 1.75, color: '#686963', margin: 0 }}>
+                  Having worked through changing technologies and product practices, he brings exceptional practical insight to the relationship between a compelling design and a well-executed product. His leadership shapes LEOZ’s attention to technical accuracy, manufacturing discipline and functional detail.
                 </p>
               </div>
             </div>
@@ -621,269 +413,324 @@ export const About: React.FC = () => {
         </section>
 
         {/* =========================================================================
-            SECTION 05: SHOWROOMS (AHMEDABAD & SURAT)
+            SECTION 04: OUR MANUFACTURING FACILITY & PRODUCTION CAPABILITY
             ========================================================================= */}
         <section
-          id="showrooms"
-          aria-label="LEOZ Showrooms"
           style={{
-            backgroundColor: '#161514',
-            color: '#FFFFFF',
-            paddingTop: 'clamp(80px, 10vw, 130px)',
-            paddingBottom: 'clamp(80px, 10vw, 130px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            backgroundColor: '#F7F7F5',
+            paddingTop: 'clamp(90px, 12vw, 150px)',
+            paddingBottom: 'clamp(90px, 12vw, 150px)',
+            paddingLeft: 'clamp(20px, 6vw, 100px)',
+            paddingRight: 'clamp(20px, 6vw, 100px)',
+            borderTop: '1px solid #E5E5DF',
           }}
         >
           <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: 'clamp(40px, 5vw, 64px)' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  letterSpacing: '0.24em',
-                  textTransform: 'uppercase',
-                  color: '#B69A6B',
-                  display: 'block',
-                  marginBottom: '12px',
-                }}
-              >
-                EXPERIENCE STUDIOS
-              </span>
-              <h2
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(28px, 3.8vw, 46px)',
-                  fontWeight: 300,
-                  color: '#FFFFFF',
-                  margin: '0 0 14px 0',
-                }}
-              >
-                Visit Our Showrooms
-              </h2>
-              <p
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '14.5px',
-                  color: 'rgba(255, 255, 255, 0.75)',
-                  maxWidth: '620px',
-                  margin: '0 auto',
-                  lineHeight: 1.6,
-                }}
-              >
-                Step inside our physical experience studios in Ahmedabad and Surat to feel authentic lacquers, sintered monoliths, and sliding mechanisms.
-              </p>
-            </div>
-
-            {/* Showrooms 2-Column Grid */}
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-                gap: '32px',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
+                gap: 'clamp(24px, 5vw, 64px)',
+                alignItems: 'flex-end',
+                marginBottom: 'clamp(48px, 6vw, 80px)',
               }}
             >
-              {showrooms.map((sh, idx) => (
-                <motion.div
-                  key={sh.city}
-                  initial={{ opacity: 0, y: 25 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.15 }}
-                  transition={{ duration: 0.6, delay: idx * 0.1, ease: luxuryEase }}
-                  style={{
-                    backgroundColor: '#1E1D1B',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '3px',
-                    overflow: 'hidden',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    transition: 'all 0.35s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(182, 154, 107, 0.5)';
-                    e.currentTarget.style.transform = 'translateY(-4px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.1)';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }}
-                >
-                  <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 10', overflow: 'hidden' }}>
-                    <img src={sh.image} alt={sh.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                    <div
-                      style={{
-                        position: 'absolute',
-                        top: '14px',
-                        left: '14px',
-                        padding: '4px 10px',
-                        backgroundColor: 'rgba(22, 21, 20, 0.8)',
-                        backdropFilter: 'blur(8px)',
-                        color: '#B69A6B',
-                        fontSize: '10px',
-                        fontWeight: 600,
-                        letterSpacing: '0.15em',
-                        borderRadius: '2px',
-                      }}
-                    >
-                      {sh.city}
-                    </div>
-                  </div>
+              <div>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#A58B62', display: 'block', marginBottom: '12px' }}>
+                  IN-HOUSE INFRASTRUCTURE
+                </span>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(32px, 4.5vw, 54px)', fontWeight: 300, color: '#20211F', letterSpacing: '-0.015em', margin: 0, lineHeight: 1.15 }}>
+                  Our Manufacturing Facility
+                </h2>
+              </div>
+              <div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '15.5px', color: '#686963', lineHeight: 1.75, margin: 0 }}>
+                  The 20,000 sq. ft. in-house production facility at Rakanpur, Gandhinagar supports made-to-measure kitchen and wardrobe manufacturing. It brings product development, component processing, finishing and quality oversight into a coordinated environment.
+                </p>
+              </div>
+            </div>
 
-                  <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                    <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', fontWeight: 400, color: '#FFFFFF', margin: '0 0 10px 0' }}>
-                      {sh.title}
-                    </h3>
+            {/* 3 Facility Highlights Cards */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))',
+                gap: '28px',
+              }}
+            >
+              <div style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E4E0', borderTop: '3px solid #A58B62', padding: '32px 28px', borderRadius: '2px' }}>
+                <Cpu size={28} color="#A58B62" style={{ marginBottom: '16px' }} />
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', fontWeight: 400, color: '#20211F', margin: '0 0 10px 0' }}>
+                  Advanced Machinery
+                </h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '14.5px', color: '#686963', lineHeight: 1.7, margin: 0 }}>
+                  Modern European-grade production machinery supports precise cutting, consistent dimensions, controlled edge treatment and repeatable assembly of specified components.
+                </p>
+              </div>
 
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)', lineHeight: 1.6, margin: '0 0 16px 0' }}>
-                      📍 {sh.address}
-                    </p>
+              <div style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E4E0', borderTop: '3px solid #A58B62', padding: '32px 28px', borderRadius: '2px' }}>
+                <Shield size={28} color="#A58B62" style={{ marginBottom: '16px' }} />
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', fontWeight: 400, color: '#20211F', margin: '0 0 10px 0' }}>
+                  Quality Control
+                </h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '14.5px', color: '#686963', lineHeight: 1.7, margin: 0 }}>
+                  Our quality approach considers material specifications, dimensional accuracy, fit and finish, hardware compatibility and final installation checks against approved commercial specifications.
+                </p>
+              </div>
 
-                    <div style={{ fontSize: '12.5px', color: '#B69A6B', marginBottom: '20px' }}>
-                      🕒 {sh.hours}
-                    </div>
+              <div style={{ backgroundColor: '#FFFFFF', border: '1px solid #E5E4E0', borderTop: '3px solid #A58B62', padding: '32px 28px', borderRadius: '2px' }}>
+                <Building2 size={28} color="#A58B62" style={{ marginBottom: '16px' }} />
+                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', fontWeight: 400, color: '#20211F', margin: '0 0 10px 0' }}>
+                  Production Capability
+                </h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '14.5px', color: '#686963', lineHeight: 1.7, margin: 0 }}>
+                  An integrated facility enables us to coordinate individual bespoke homes and planned multi-unit residential kitchen and wardrobe requirements, subject to agreed capacity and project schedules.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
 
-                    <div style={{ marginTop: 'auto', display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
-                      <a
-                        href={sh.mapsUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                          padding: '10px 18px',
-                          backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                          color: '#FFFFFF',
-                          fontFamily: 'var(--font-body)',
-                          fontSize: '11.5px',
-                          fontWeight: 500,
-                          letterSpacing: '0.1em',
-                          textTransform: 'uppercase',
-                          textDecoration: 'none',
-                          borderRadius: '2px',
-                          transition: 'all 0.25s ease',
-                        }}
-                      >
-                        <span>Get Directions</span>
-                        <MapPin size={13} />
-                      </a>
+        {/* =========================================================================
+            SECTION 05: QUALITY CONTROL PROCESS (5 STAGES)
+            ========================================================================= */}
+        <section
+          style={{
+            backgroundColor: '#ECEBE7',
+            paddingTop: 'clamp(90px, 12vw, 150px)',
+            paddingBottom: 'clamp(90px, 12vw, 150px)',
+            paddingLeft: 'clamp(20px, 6vw, 100px)',
+            paddingRight: 'clamp(20px, 6vw, 100px)',
+            borderTop: '1px solid #D9D9D4',
+          }}
+        >
+          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
+            <div style={{ marginBottom: 'clamp(50px, 7vw, 90px)', maxWidth: '780px' }}>
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: '11.5px', fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#A58B62', display: 'block', marginBottom: '12px' }}>
+                RIGOROUS STANDARDS
+              </span>
+              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(36px, 4.5vw, 64px)', fontWeight: 300, color: '#20211F', letterSpacing: '-0.015em', margin: '0 0 16px 0' }}>
+                5-Stage Quality Assurance
+              </h2>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: '#686963', lineHeight: 1.7, margin: 0 }}>
+                Every panel, edge seal, and hardware mechanism is audited through documented quality checkpoints before leaving our Gandhinagar plant.
+              </p>
+            </div>
 
-                      <a
-                        href="/talk-to-us"
-                        onClick={(e) => navigate(e, '/talk-to-us')}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '8px',
-                          padding: '10px 18px',
-                          backgroundColor: '#B69A6B',
-                          color: '#FFFFFF',
-                          fontFamily: 'var(--font-body)',
-                          fontSize: '11.5px',
-                          fontWeight: 600,
-                          letterSpacing: '0.1em',
-                          textTransform: 'uppercase',
-                          textDecoration: 'none',
-                          borderRadius: '2px',
-                        }}
-                      >
-                        <span>Book Visit</span>
-                        <ArrowRight size={13} />
-                      </a>
-                    </div>
-                  </div>
-                </motion.div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '28px' }}>
+              {qualityPoints.map((point) => (
+                <div key={point.num} style={{ backgroundColor: '#F7F7F5', padding: '28px 24px', borderTop: '2px solid #A58B62' }}>
+                  <span style={{ fontFamily: 'var(--font-heading)', fontSize: '32px', fontWeight: 300, color: '#A58B62', display: 'block', marginBottom: '8px' }}>
+                    {point.num}
+                  </span>
+                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '20px', fontWeight: 400, color: '#20211F', margin: '0 0 10px 0' }}>
+                    {point.title}
+                  </h3>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '13.5px', color: '#686963', lineHeight: 1.65, margin: 0 }}>
+                    {point.desc}
+                  </p>
+                </div>
               ))}
             </div>
           </div>
         </section>
 
         {/* =========================================================================
-            FINAL SECTION: "LET'S BUILD SOMETHING THAT LASTS."
+            SECTION 06: OUR RELATIONSHIPS & COLLABORATION
             ========================================================================= */}
         <section
-          aria-label="Book About Consultation"
           style={{
-            position: 'relative',
-            backgroundColor: '#0F0E0D',
+            backgroundColor: '#F7F7F5',
             paddingTop: 'clamp(90px, 12vw, 150px)',
             paddingBottom: 'clamp(90px, 12vw, 150px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            overflow: 'hidden',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            textAlign: 'center',
+            paddingLeft: 'clamp(20px, 6vw, 100px)',
+            paddingRight: 'clamp(20px, 6vw, 100px)',
           }}
         >
-          {/* Background Scrim */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: 'url(https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=85)',
-              backgroundPosition: 'center 45%',
-              backgroundSize: 'cover',
-              opacity: 0.2,
-            }}
-          />
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'radial-gradient(circle at center, rgba(15, 14, 13, 0.7) 0%, #0F0E0D 95%)',
-            }}
-          />
-
-          <div style={{ position: 'relative', zIndex: 10, maxWidth: '780px', margin: '0 auto' }}>
-            <span
+          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
+            <div
               style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '11px',
-                fontWeight: 600,
-                letterSpacing: '0.25em',
-                textTransform: 'uppercase',
-                color: '#B69A6B',
-                display: 'block',
-                marginBottom: '16px',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
+                gap: 'clamp(24px, 5vw, 64px)',
+                alignItems: 'flex-end',
+                marginBottom: 'clamp(48px, 6vw, 80px)',
               }}
             >
-              BESPOKE ARCHITECTURAL COMMISSION
+              <div>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#A58B62', display: 'block', marginBottom: '12px' }}>
+                  PROFESSIONAL COLLABORATION
+                </span>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(32px, 4.5vw, 54px)', fontWeight: 300, color: '#20211F', letterSpacing: '-0.015em', margin: 0, lineHeight: 1.15 }}>
+                  Our Relationships
+                </h2>
+              </div>
+              <div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '15.5px', color: '#686963', lineHeight: 1.75, margin: 0 }}>
+                  LEOZ serves discerning homeowners and works with architects, interior designers and residential developers seeking specialist kitchen and wardrobe solutions. Geographic servicing and installation arrangements are confirmed project by project.
+                </p>
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
+                gap: '24px',
+              }}
+            >
+              {[
+                { icon: <Compass size={24} color="#A58B62" />, title: 'Architects', desc: 'Bespoke CAD integration, technical joinery drawings, and factory-level execution for signature residences.' },
+                { icon: <Layers size={24} color="#A58B62" />, title: 'Interior Designers', desc: 'Curated surface archives, open veneer matching, and custom glass vitrines without creative barriers.' },
+                { icon: <Building2 size={24} color="#A58B62" />, title: 'Residential Developers', desc: 'Scalable manufacturing capacity, planned scheduling, and precision turnkey fitment for luxury developments.' },
+                { icon: <Users size={24} color="#A58B62" />, title: 'Discerning Homeowners', desc: 'Personal 1-on-1 consultation, transparent proposals, and white-glove after-sales coordination.' },
+              ].map((item) => (
+                <div
+                  key={item.title}
+                  style={{
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid #E5E4E0',
+                    borderTop: '3px solid #A58B62',
+                    padding: '30px 24px',
+                    borderRadius: '2px',
+                    boxShadow: '0 4px 20px rgba(32, 33, 31, 0.04)',
+                  }}
+                >
+                  <div style={{ width: '44px', height: '44px', borderRadius: '2px', backgroundColor: '#F7F7F5', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: '18px', border: '1px solid #ECEBE7' }}>
+                    {item.icon}
+                  </div>
+                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '21px', fontWeight: 400, color: '#20211F', margin: '0 0 10px 0' }}>
+                    {item.title}
+                  </h3>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '13.5px', color: '#686963', lineHeight: 1.65, margin: 0 }}>
+                    {item.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            SECTION 07: WHY CLIENTS CHOOSE US & MILESTONES
+            ========================================================================= */}
+        <section
+          style={{
+            backgroundColor: '#ECEBE7',
+            paddingTop: 'clamp(90px, 12vw, 150px)',
+            paddingBottom: 'clamp(90px, 12vw, 150px)',
+            paddingLeft: 'clamp(20px, 6vw, 100px)',
+            paddingRight: 'clamp(20px, 6vw, 100px)',
+            borderTop: '1px solid #D9D9D4',
+          }}
+        >
+          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
+                gap: 'clamp(24px, 5vw, 64px)',
+                alignItems: 'flex-end',
+                marginBottom: 'clamp(48px, 6vw, 80px)',
+              }}
+            >
+              <div>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#A58B62', display: 'block', marginBottom: '12px' }}>
+                  THE LEOZ ADVANTAGE
+                </span>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(32px, 4.5vw, 54px)', fontWeight: 300, color: '#20211F', letterSpacing: '-0.015em', margin: 0, lineHeight: 1.15 }}>
+                  Why Clients Choose Us
+                </h2>
+              </div>
+              <div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '15.5px', color: '#686963', lineHeight: 1.75, margin: 0 }}>
+                  20+ years of leadership expertise, specialised product focus, 20,000 sq. ft. in-house manufacturing, design flexibility, attention to detailing and professional installation.
+                </p>
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))',
+                gap: '24px',
+                marginBottom: '64px',
+              }}
+            >
+              {whyChooseUsPoints.map((card) => (
+                <div
+                  key={card.num}
+                  style={{
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid #E5E4E0',
+                    borderTop: '3px solid #A58B62',
+                    padding: '32px 26px',
+                    borderRadius: '2px',
+                    boxShadow: '0 4px 20px rgba(32, 33, 31, 0.04)',
+                    transition: 'all 0.3s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 12px 30px rgba(165, 139, 98, 0.12)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 4px 20px rgba(32, 33, 31, 0.04)';
+                  }}
+                >
+                  <span style={{ fontFamily: 'var(--font-heading)', fontSize: '24px', color: '#A58B62', display: 'block', marginBottom: '10px' }}>
+                    {card.num}
+                  </span>
+                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '21px', fontWeight: 400, color: '#20211F', margin: '0 0 10px 0' }}>
+                    {card.title}
+                  </h3>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#686963', lineHeight: 1.7, margin: 0 }}>
+                    {card.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            {/* Our Milestones Ribbon */}
+            <div style={{ backgroundColor: '#252623', color: '#FFFFFF', padding: 'clamp(36px, 5vw, 54px)', borderRadius: '2px' }}>
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#D4AF37', display: 'block', marginBottom: '10px' }}>
+                OUR MILESTONES
+              </span>
+              <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(24px, 3vw, 36px)', fontWeight: 300, color: '#FFFFFF', margin: '0 0 16px 0' }}>
+                Two Decades of Specialist Manufacturing Evolution
+              </h3>
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: 'rgba(255,255,255,0.75)', lineHeight: 1.75, maxWidth: '850px', margin: 0 }}>
+                20+ years of hands-on sector experience behind the brand’s manufacturing leadership. Continued investment in a 20,000 sq. ft. facility at Gandhinagar. Ongoing development of luxury kitchen and wardrobe capabilities.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            SECTION 08: FINAL CTA | DISCOVER LEOZ
+            ========================================================================= */}
+        <section
+          id="cta"
+          style={{
+            backgroundColor: '#1C1D1A',
+            color: '#FFFFFF',
+            paddingTop: 'clamp(90px, 12vw, 140px)',
+            paddingBottom: 'clamp(90px, 12vw, 140px)',
+            paddingLeft: 'clamp(20px, 6vw, 100px)',
+            paddingRight: 'clamp(20px, 6vw, 100px)',
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+        >
+          <div style={{ maxWidth: '960px', margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 10 }}>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#D4AF37', display: 'block', marginBottom: '16px' }}>
+              DISCOVER LEOZ
             </span>
-
-            <h2
-              style={{
-                fontFamily: 'var(--font-heading)',
-                fontSize: 'clamp(34px, 5.5vw, 64px)',
-                fontWeight: 300,
-                color: '#FFFFFF',
-                lineHeight: 1.08,
-                margin: '0 0 20px 0',
-                letterSpacing: '0.01em',
-              }}
-            >
-              Let’s Build Something
-              <br />
-              That Lasts.
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(34px, 4.5vw, 60px)', fontWeight: 300, color: '#FFFFFF', letterSpacing: '-0.015em', margin: '0 0 20px 0', lineHeight: 1.15 }}>
+              Begin Your Architectural Consultation
             </h2>
-
-            <p
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: 'clamp(14.5px, 1.3vw, 17.5px)',
-                color: 'rgba(255, 255, 255, 0.8)',
-                lineHeight: 1.7,
-                marginBottom: '36px',
-                maxWidth: '620px',
-                marginLeft: 'auto',
-                marginRight: 'auto',
-              }}
-            >
-              Schedule a private design consultation with LEOZ principal designers to begin planning your bespoke interior.
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'clamp(15px, 1.2vw, 18px)', color: '#D9D9D4', lineHeight: 1.75, maxWidth: '680px', margin: '0 auto 36px auto' }}>
+              Visit us by appointment or discuss your project with our team. Experience German precision, dedicated production, and bespoke living spaces.
             </p>
 
             <a
@@ -893,8 +740,8 @@ export const About: React.FC = () => {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '12px',
-                padding: '16px 36px',
-                backgroundColor: '#B69A6B',
+                padding: '18px 38px',
+                backgroundColor: '#A58B62',
                 color: '#FFFFFF',
                 fontFamily: 'var(--font-body)',
                 fontSize: '12.5px',
@@ -903,13 +750,20 @@ export const About: React.FC = () => {
                 textTransform: 'uppercase',
                 textDecoration: 'none',
                 borderRadius: '2px',
+                border: '1px solid #A58B62',
                 boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
                 transition: 'all 0.3s ease',
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#9F8255')}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#B69A6B')}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#8C744F';
+                e.currentTarget.style.borderColor = '#8C744F';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#A58B62';
+                e.currentTarget.style.borderColor = '#A58B62';
+              }}
             >
-              <span>Book a Consultation</span>
+              <span>Arrange a Consultation</span>
               <ArrowRight size={15} />
             </a>
           </div>
@@ -918,12 +772,33 @@ export const About: React.FC = () => {
 
       <Footer />
 
-      {/* Responsive Styles */}
       <style>{`
-        @media (max-width: 900px) {
-          .leoz-beginning-split {
-            grid-template-columns: 1fr !important;
-            gap: 36px !important;
+        @media (max-width: 768px) {
+          .editorial-grid {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 28px !important;
+            width: 100% !important;
+          }
+
+          .editorial-grid > div {
+            width: 100% !important;
+            max-width: 100% !important;
+          }
+
+          .editorial-grid h2 {
+            font-size: clamp(34px, 9vw, 42px) !important;
+            line-height: 1.05 !important;
+            letter-spacing: normal !important;
+            text-align: left !important;
+          }
+
+          .editorial-grid p {
+            font-size: 16px !important;
+            line-height: 1.68 !important;
+            text-align: left !important;
+            letter-spacing: normal !important;
+            word-spacing: normal !important;
           }
         }
       `}</style>

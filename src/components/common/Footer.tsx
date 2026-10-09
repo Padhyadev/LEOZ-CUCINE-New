@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React from 'react';
 import { Logo } from './Logo';
-import { ArrowRight, ArrowUpRight, ChevronDown, MapPin, Phone, Mail, Instagram, Linkedin, Youtube, Facebook } from 'lucide-react';
+import { Phone, Mail, Instagram, Linkedin, Facebook, Youtube } from 'lucide-react';
+import { PHONE_SALES_DISPLAY, PHONE_SALES_HREF, SOCIAL_LINKS } from '../../constants/siteInfo';
 
 export const Footer: React.FC = () => {
   const navigate = (e: React.MouseEvent, path: string) => {
@@ -11,478 +11,405 @@ export const Footer: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  /* Accordion state for mobile viewport */
-  const [openSection, setOpenSection] = useState<string | null>(null);
+  const collectionLinks = [
+    { label: 'Home', path: '/' },
+    { label: 'Kitchens', path: '/modular-kitchens' },
+    { label: 'Wardrobes', path: '/modular-wardrobes' },
+    { label: 'Craftsmanship & Factory', path: '/factory' },
+  ];
 
-  const toggleSection = (sectionKey: string) => {
-    setOpenSection(openSection === sectionKey ? null : sectionKey);
-  };
+  const companyLinks = [
+    { label: 'About LEOZ', path: '/about' },
+    { label: 'Book a Consultation', path: '/consultation' },
+    { label: 'Franchise Enquiry', path: '/franchise-opportunities' },
+    { label: 'Contact Us', path: '/contact' },
+    { label: 'Privacy Policy', path: '/privacy-policy' },
+  ];
 
   return (
     <footer
       id="global-footer"
       role="contentinfo"
       style={{
-        backgroundColor: '#161514', // Deep warm charcoal (not harsh pitch black)
-        color: '#FAF9F6',
+        backgroundColor: '#20211F',
+        color: '#F7F7F5',
         position: 'relative',
-        overflow: 'hidden',
+        paddingTop: 'clamp(54px, 7vw, 84px)',
+        paddingBottom: '36px',
+        paddingLeft: 'clamp(20px, 5vw, 80px)',
+        paddingRight: 'clamp(20px, 5vw, 80px)',
+        borderTop: '1px solid rgba(255, 255, 255, 0.08)',
       }}
     >
-      {/* =========================================================================
-          FOOTER HERO CTA SECTION (THE INVITATION CHAPTER)
-          ========================================================================= */}
-      <section
-        aria-label="Footer Consultation Invitation"
-        style={{
-          position: 'relative',
-          paddingTop: 'clamp(80px, 10vw, 130px)',
-          paddingBottom: 'clamp(80px, 10vw, 130px)',
-          paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-          paddingRight: 'clamp(20px, 5.5vw, 80px)',
-          borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          textAlign: 'center',
-        }}
-      >
-        {/* Architectural Background with Soft Controlled Scrim */}
+      <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
+        {/* Main Grid: 4 Clean Architectural Columns */}
         <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            backgroundImage: 'url(https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2200&q=85)',
-            backgroundPosition: 'center 42%',
-            backgroundSize: 'cover',
-            opacity: 0.16,
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            inset: 0,
-            background: 'radial-gradient(circle at center, rgba(22, 21, 20, 0.75) 0%, #161514 95%)',
-          }}
-        />
-
-        <div style={{ position: 'relative', zIndex: 10, maxWidth: '820px', margin: '0 auto' }}>
-          <span
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '11px',
-              fontWeight: 600,
-              letterSpacing: '0.25em',
-              textTransform: 'uppercase',
-              color: '#B69A6B',
-              display: 'block',
-              marginBottom: '16px',
-            }}
-          >
-            BEGIN YOUR JOURNEY
-          </span>
-
-          <h2
-            style={{
-              fontFamily: 'var(--font-heading)',
-              fontSize: 'clamp(32px, 5.2vw, 62px)',
-              fontWeight: 300,
-              color: '#FFFFFF',
-              lineHeight: 1.08,
-              margin: '0 0 18px 0',
-              letterSpacing: '-0.01em',
-            }}
-          >
-            Let's Create
-            <br />
-            a Space That Feels Like You.
-          </h2>
-
-          <p
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 'clamp(14px, 1.25vw, 17px)',
-              color: 'rgba(255, 255, 255, 0.8)',
-              lineHeight: 1.65,
-              maxWidth: '620px',
-              margin: '0 auto 36px auto',
-            }}
-          >
-            Talk to our design team about your modular kitchen, master dressing suite, or complete residential interior.
-          </p>
-
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              gap: '14px',
-              flexWrap: 'wrap',
-            }}
-          >
-            <a
-              href="/talk-to-us"
-              onClick={(e) => navigate(e, '/talk-to-us')}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '10px',
-                padding: '15px 32px',
-                backgroundColor: '#FFFFFF',
-                color: '#161514',
-                fontFamily: 'var(--font-body)',
-                fontSize: '12px',
-                fontWeight: 600,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                textDecoration: 'none',
-                borderRadius: '2px',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#B69A6B';
-                e.currentTarget.style.color = '#FFFFFF';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#FFFFFF';
-                e.currentTarget.style.color = '#161514';
-              }}
-            >
-              BOOK A CONSULTATION
-              <ArrowRight size={14} />
-            </a>
-
-            <a
-              href="/showrooms"
-              onClick={(e) => navigate(e, '/showrooms')}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '10px',
-                padding: '15px 32px',
-                backgroundColor: 'transparent',
-                color: '#FFFFFF',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                fontFamily: 'var(--font-body)',
-                fontSize: '12px',
-                fontWeight: 600,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                textDecoration: 'none',
-                borderRadius: '2px',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = '#B69A6B';
-                e.currentTarget.style.color = '#B69A6B';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-                e.currentTarget.style.color = '#FFFFFF';
-              }}
-            >
-              VISIT A SHOWROOM
-              <ArrowUpRight size={14} />
-            </a>
-          </div>
-        </div>
-      </section>
-
-      {/* =========================================================================
-          MAIN MULTI-COLUMN ARCHITECTURAL FOOTER
-          ========================================================================= */}
-      <div
-        style={{
-          maxWidth: '1360px',
-          margin: '0 auto',
-          paddingTop: 'clamp(60px, 8vw, 90px)',
-          paddingBottom: 'clamp(40px, 5vw, 60px)',
-          paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-          paddingRight: 'clamp(20px, 5.5vw, 80px)',
-        }}
-      >
-        <div
-          className="leoz-footer-main-grid"
+          className="leoz-footer-grid"
           style={{
             display: 'grid',
-            gridTemplateColumns: '1.4fr 1fr 1fr 1.3fr',
-            gap: 'clamp(32px, 4.5vw, 64px)',
-            marginBottom: 'clamp(48px, 6vw, 72px)',
+            gridTemplateColumns: '1.4fr 0.9fr 1.1fr 1.3fr',
+            gap: 'clamp(32px, 4vw, 54px)',
+            paddingBottom: 'clamp(36px, 5vw, 48px)',
+            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
           }}
         >
-          {/* COLUMN 01: BRAND IDENTITY & SOCIAL */}
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ marginBottom: '18px' }}>
+          {/* Column 1: Brand & Description */}
+          <div>
+            <div style={{ marginBottom: '20px' }}>
               <Logo variant="dark" showTagline={false} />
             </div>
             <p
               style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: '13.5px',
-                color: 'rgba(250, 249, 246, 0.72)',
+                fontSize: '14px',
+                color: 'rgba(247, 247, 245, 0.72)',
                 lineHeight: 1.65,
+                maxWidth: '360px',
                 marginBottom: '24px',
-                maxWidth: '340px',
               }}
             >
-              Premium modular kitchens, wardrobes and complete residential interiors designed, engineered and crafted for modern architectural living.
+              Bespoke kitchens and wardrobes, designed with care and precision-manufactured in Gujarat.
             </p>
 
             {/* Social Icons */}
             <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
               <a
-                href="https://www.instagram.com/leoz.furniture"
+                href={SOCIAL_LINKS.instagram}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="LEOZ on Instagram"
-                style={{ color: '#B69A6B', transition: 'transform 0.25s ease' }}
-                onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-2px)')}
-                onMouseLeave={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+                aria-label="Instagram"
+                style={{
+                  color: '#A58B62',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '6px',
+                  borderRadius: '4px',
+                  transition: 'color 0.2s ease, transform 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = '#FFFFFF';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = '#A58B62';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
               >
                 <Instagram size={19} />
               </a>
               <a
-                href="https://www.linkedin.com/company/leozfurniture"
+                href={SOCIAL_LINKS.linkedin}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="LEOZ on LinkedIn"
-                style={{ color: '#B69A6B', transition: 'transform 0.25s ease' }}
-                onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-2px)')}
-                onMouseLeave={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+                aria-label="LinkedIn"
+                style={{
+                  color: '#A58B62',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '6px',
+                  borderRadius: '4px',
+                  transition: 'color 0.2s ease, transform 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = '#FFFFFF';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = '#A58B62';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
               >
                 <Linkedin size={19} />
               </a>
               <a
-                href="https://www.facebook.com/leozfurniture"
+                href={SOCIAL_LINKS.facebook}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="LEOZ on Facebook"
-                style={{ color: '#B69A6B', transition: 'transform 0.25s ease' }}
-                onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-2px)')}
-                onMouseLeave={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+                aria-label="Facebook"
+                style={{
+                  color: '#A58B62',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '6px',
+                  borderRadius: '4px',
+                  transition: 'color 0.2s ease, transform 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = '#FFFFFF';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = '#A58B62';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
               >
                 <Facebook size={19} />
               </a>
               <a
-                href="https://www.youtube.com/@leozfurniture"
+                href={SOCIAL_LINKS.youtube}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="LEOZ on YouTube"
-                style={{ color: '#B69A6B', transition: 'transform 0.25s ease' }}
-                onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-2px)')}
-                onMouseLeave={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
+                aria-label="YouTube"
+                style={{
+                  color: '#A58B62',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '6px',
+                  borderRadius: '4px',
+                  transition: 'color 0.2s ease, transform 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = '#FFFFFF';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = '#A58B62';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                }}
               >
                 <Youtube size={19} />
               </a>
             </div>
           </div>
 
-          {/* COLUMN 02: EXPLORE */}
-          <div className="leoz-footer-col">
-            <h4
+          {/* Column 2: Collections */}
+          <div>
+            <span
               style={{
-                fontFamily: 'var(--font-heading)',
-                fontSize: '15px',
-                fontWeight: 400,
-                color: '#FFFFFF',
-                marginBottom: '18px',
-                letterSpacing: '0.04em',
+                display: 'block',
+                fontFamily: 'var(--font-body)',
+                fontSize: '11px',
+                fontWeight: 600,
+                letterSpacing: '0.18em',
                 textTransform: 'uppercase',
+                color: '#A58B62',
+                marginBottom: '20px',
               }}
             >
-              Explore
-            </h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '11px' }}>
-              {[
-                { label: 'Kitchens', path: '/modular-kitchens' },
-                { label: 'Wardrobes', path: '/modular-wardrobes' },
-                { label: 'Interiors', path: '/projects' },
-                { label: 'Projects & Case Studies', path: '/projects' },
-                { label: 'Materials & Finishes', path: '/materials' },
-              ].map((item) => (
-                <li key={item.label}>
-                  <a
-                    href={item.path}
-                    onClick={(e) => navigate(e, item.path)}
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '13px',
-                      color: 'rgba(250, 249, 246, 0.7)',
-                      textDecoration: 'none',
-                      transition: 'color 0.2s ease',
-                      display: 'inline-block',
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = '#B69A6B')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(250, 249, 246, 0.7)')}
-                  >
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* COLUMN 03: LEOZ ECOSYSTEM */}
-          <div className="leoz-footer-col">
-            <h4
-              style={{
-                fontFamily: 'var(--font-heading)',
-                fontSize: '15px',
-                fontWeight: 400,
-                color: '#FFFFFF',
-                marginBottom: '18px',
-                letterSpacing: '0.04em',
-                textTransform: 'uppercase',
-              }}
-            >
-              LEOZ
-            </h4>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '11px' }}>
-              {[
-                { label: 'Our Method', path: '/our-method' },
-                { label: 'Factory & Infrastructure', path: '/factory' },
-                { label: 'About LEOZ', path: '/about' },
-                { label: 'Showrooms', path: '/showrooms' },
-                { label: 'Franchise Opportunities', path: '/franchise-opportunities' },
-              ].map((item) => (
-                <li key={item.label}>
-                  <a
-                    href={item.path}
-                    onClick={(e) => navigate(e, item.path)}
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '13px',
-                      color: 'rgba(250, 249, 246, 0.7)',
-                      textDecoration: 'none',
-                      transition: 'color 0.2s ease',
-                      display: 'inline-block',
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = '#B69A6B')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(250, 249, 246, 0.7)')}
-                  >
-                    {item.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* COLUMN 04: CONTACT & SHOWROOMS */}
-          <div className="leoz-footer-col">
-            <h4
-              style={{
-                fontFamily: 'var(--font-heading)',
-                fontSize: '15px',
-                fontWeight: 400,
-                color: '#FFFFFF',
-                marginBottom: '18px',
-                letterSpacing: '0.04em',
-                textTransform: 'uppercase',
-              }}
-            >
-              Contact &amp; Studios
-            </h4>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', fontSize: '13px', fontFamily: 'var(--font-body)', color: 'rgba(250,249,246,0.7)' }}>
-              <div>
-                <strong style={{ color: '#FFFFFF', display: 'block', fontSize: '12px', letterSpacing: '0.1em' }}>
-                  AHMEDABAD FLAGSHIP
-                </strong>
-                <span style={{ fontSize: '12px' }}>Sindhu Bhavan Road / Bodakdev</span>
-                <div style={{ display: 'flex', gap: '10px', marginTop: '4px' }}>
-                  <a href="/showrooms" onClick={(e) => navigate(e, '/showrooms')} style={{ color: '#B69A6B', textDecoration: 'none', fontSize: '11px', fontWeight: 600 }}>
-                    Visit Studio →
-                  </a>
-                  <a href="https://maps.google.com/?q=LEOZ+Cucine+Ahmedabad" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none', fontSize: '11px' }}>
-                    Get Directions
-                  </a>
-                </div>
-              </div>
-
-              <div>
-                <strong style={{ color: '#FFFFFF', display: 'block', fontSize: '12px', letterSpacing: '0.1em' }}>
-                  SURAT STUDIO
-                </strong>
-                <span style={{ fontSize: '12px' }}>Dumas Road &amp; VIP Road Junction, Vesu</span>
-                <div style={{ display: 'flex', gap: '10px', marginTop: '4px' }}>
-                  <a href="/showrooms" onClick={(e) => navigate(e, '/showrooms')} style={{ color: '#B69A6B', textDecoration: 'none', fontSize: '11px', fontWeight: 600 }}>
-                    Visit Studio →
-                  </a>
-                  <a href="https://maps.google.com/?q=LEOZ+Cucine+Surat" target="_blank" rel="noopener noreferrer" style={{ color: 'rgba(255,255,255,0.6)', textDecoration: 'none', fontSize: '11px' }}>
-                    Get Directions
-                  </a>
-                </div>
-              </div>
-
-              <div style={{ paddingTop: '8px', borderTop: '1px solid rgba(255,255,255,0.08)' }}>
-                <a href="tel:+919313151559" style={{ color: '#FFFFFF', textDecoration: 'none', display: 'block', marginBottom: '4px' }}>
-                  +91 93131 51559
+              COLLECTIONS
+            </span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {collectionLinks.map((item) => (
+                <a
+                  key={item.label}
+                  href={item.path}
+                  onClick={(e) => navigate(e, item.path)}
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '13.5px',
+                    color: 'rgba(247, 247, 245, 0.75)',
+                    textDecoration: 'none',
+                    transition: 'color 0.2s ease',
+                    display: 'inline-block',
+                    padding: '2px 0',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = '#A58B62')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(247, 247, 245, 0.75)')}
+                >
+                  {item.label}
                 </a>
-                <a href="mailto:director@leozartofambience.com" style={{ color: 'rgba(250,249,246,0.7)', textDecoration: 'none' }}>
-                  director@leozartofambience.com
+              ))}
+            </div>
+          </div>
+
+          {/* Column 3: Company */}
+          <div>
+            <span
+              style={{
+                display: 'block',
+                fontFamily: 'var(--font-body)',
+                fontSize: '11px',
+                fontWeight: 600,
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                color: '#A58B62',
+                marginBottom: '20px',
+              }}
+            >
+              COMPANY
+            </span>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+              {companyLinks.map((item) => (
+                <a
+                  key={item.label}
+                  href={item.path}
+                  onClick={(e) => navigate(e, item.path)}
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '13.5px',
+                    color: 'rgba(247, 247, 245, 0.75)',
+                    textDecoration: 'none',
+                    transition: 'color 0.2s ease',
+                    display: 'inline-block',
+                    padding: '2px 0',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = '#A58B62')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(247, 247, 245, 0.75)')}
+                >
+                  {item.label}
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Column 4: Showroom & Office Contact */}
+          <div>
+            <span
+              style={{
+                display: 'block',
+                fontFamily: 'var(--font-body)',
+                fontSize: '11px',
+                fontWeight: 600,
+                letterSpacing: '0.18em',
+                textTransform: 'uppercase',
+                color: '#A58B62',
+                marginBottom: '20px',
+              }}
+            >
+              AHMEDABAD SHOWROOM
+            </span>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              <div style={{ fontFamily: 'var(--font-body)', fontSize: '13.5px', color: 'rgba(247, 247, 245, 0.75)', lineHeight: 1.6 }}>
+                509, Sankalp Square 3B, Beside Taj Skyline, Sindhu Bhavan Road, Thaltej, Ahmedabad – 380059
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '4px' }}>
+                <a
+                  href={PHONE_SALES_HREF}
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '14px',
+                    fontWeight: 500,
+                    color: '#FFFFFF',
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    transition: 'color 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = '#D4AF37')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = '#FFFFFF')}
+                >
+                  <Phone size={15} color="#A58B62" />
+                  <span>{PHONE_SALES_DISPLAY}</span>
+                </a>
+
+                <a
+                  href="mailto:director@leozartofambience.com"
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '13.5px',
+                    color: 'rgba(247, 247, 245, 0.75)',
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    transition: 'color 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = '#A58B62')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(247, 247, 245, 0.75)')}
+                >
+                  <Mail size={15} color="#A58B62" />
+                  <span>director@leozartofambience.com</span>
+                </a>
+
+                <a
+                  href="https://www.leozartofambience.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '13.5px',
+                    color: 'rgba(247, 247, 245, 0.75)',
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    transition: 'color 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = '#A58B62')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(247, 247, 245, 0.75)')}
+                >
+                  <span style={{ color: '#A58B62', fontSize: '13px', fontWeight: 600 }}>↗</span>
+                  <span>www.leozartofambience.com</span>
+                </a>
+              </div>
+
+              <div style={{ marginTop: '8px' }}>
+                <a
+                  href="https://maps.app.goo.gl/xT39MPBvZR4v923E9"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '12.5px',
+                    fontWeight: 600,
+                    color: '#A58B62',
+                    textDecoration: 'none',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                    transition: 'color 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => (e.currentTarget.style.color = '#FFFFFF')}
+                  onMouseLeave={(e) => (e.currentTarget.style.color = '#A58B62')}
+                >
+                  <span>View on Google Maps</span>
+                  <span>→</span>
                 </a>
               </div>
             </div>
           </div>
         </div>
 
-        {/* =========================================================================
-            FOOTER BOTTOM LEGAL & COPYRIGHT DIVIDER
-            ========================================================================= */}
+        {/* Bottom Legal Bar */}
         <div
           style={{
             paddingTop: '28px',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
             flexWrap: 'wrap',
             gap: '16px',
             fontFamily: 'var(--font-body)',
-            fontSize: '11.5px',
-            color: 'rgba(250, 249, 246, 0.5)',
+            fontSize: '12px',
+            color: 'rgba(247, 247, 245, 0.45)',
           }}
         >
           <div>
-            © {new Date().getFullYear()} LEOZ Cucine • 509, Sankalp Square 3B, Beside Taj Skyline, Sindhu Bhavan Road, Ahmedabad. All rights reserved.
+            © {new Date().getFullYear()} LEOZ Cucine. All rights reserved.
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
             <a
               href="/privacy-policy"
               onClick={(e) => navigate(e, '/privacy-policy')}
-              style={{ color: 'rgba(250, 249, 246, 0.7)', textDecoration: 'none' }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#B69A6B')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(250, 249, 246, 0.7)')}
+              style={{ color: 'rgba(247, 247, 245, 0.6)', textDecoration: 'none' }}
+              onMouseEnter={(e) => (e.currentTarget.style.color = '#A58B62')}
+              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(247, 247, 245, 0.6)')}
             >
               Privacy Policy
             </a>
             <span>•</span>
-            <a
-              href="/contact"
-              onClick={(e) => navigate(e, '/contact')}
-              style={{ color: 'rgba(250, 249, 246, 0.7)', textDecoration: 'none' }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#B69A6B')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(250, 249, 246, 0.7)')}
-            >
-              Terms of Engagement
-            </a>
-            <span>•</span>
-            <span>www.leozartofambience.com</span>
+            <span>Precision Manufacturing in Gujarat</span>
           </div>
         </div>
       </div>
 
       <style>{`
         @media (max-width: 1024px) {
-          .leoz-footer-main-grid {
-            grid-template-columns: repeat(2, 1fr) !important;
-            gap: 40px 24px !important;
+          .leoz-footer-grid {
+            grid-template-columns: 1fr 1fr !important;
+            gap: 40px !important;
           }
         }
-        @media (max-width: 640px) {
-          .leoz-footer-main-grid {
+        @media (max-width: 600px) {
+          .leoz-footer-grid {
             grid-template-columns: 1fr !important;
             gap: 36px !important;
           }

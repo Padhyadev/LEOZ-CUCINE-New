@@ -1,8 +1,8 @@
 import React from 'react';
-import { Phone, MessageCircle } from 'lucide-react';
+import { Phone, MessageSquare } from 'lucide-react';
 import { PHONE_SALES_HREF, buildWhatsAppHref } from '../../constants/siteInfo';
 
-const WHATSAPP_HREF = buildWhatsAppHref("Hi LEOZ Cucine, I’d like to know more about your modular kitchens.");
+const WHATSAPP_HREF = buildWhatsAppHref("Hi LEOZ Cucine, I’d like to explore your modular kitchens & wardrobes.");
 
 export const MobileActionBar: React.FC = () => {
   return (
@@ -16,11 +16,14 @@ export const MobileActionBar: React.FC = () => {
         left: 0,
         right: 0,
         bottom: 0,
-        zIndex: 900,
-        backgroundColor: 'var(--color-dark-bg)',
-        borderTop: '1px solid rgba(182, 154, 107, 0.25)',
+        zIndex: 9999,
+        backgroundColor: '#292621',
+        borderTop: '1px solid rgba(255, 252, 246, 0.12)',
+        boxShadow: '0 -8px 28px rgba(41, 38, 33, 0.35)',
+        paddingBottom: 'env(safe-area-inset-bottom, 0px)',
       }}
     >
+      {/* CALL BUTTON */}
       <a
         href={PHONE_SALES_HREF}
         style={{
@@ -28,19 +31,40 @@ export const MobileActionBar: React.FC = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: '8px',
-          minHeight: '56px',
-          fontFamily: 'var(--font-family-sans)',
-          fontSize: '13px',
-          fontWeight: 600,
-          letterSpacing: '0.05em',
+          gap: '10px',
+          minHeight: '54px',
+          fontFamily: 'var(--font-family-sans, sans-serif)',
+          fontSize: '12.5px',
+          fontWeight: 700,
+          letterSpacing: '0.14em',
           textTransform: 'uppercase',
-          color: '#FFFFFF',
+          color: '#FFFCF6',
+          backgroundColor: '#292621',
+          textDecoration: 'none',
+          transition: 'background-color 0.2s ease',
         }}
       >
-        <Phone size={18} strokeWidth={1.75} />
-        Call
+        <span
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '28px',
+            height: '28px',
+            borderRadius: '50%',
+            backgroundColor: 'rgba(255, 252, 246, 0.12)',
+            color: '#FFFCF6',
+          }}
+        >
+          <Phone size={13} strokeWidth={2.2} />
+        </span>
+        <span>CALL NOW</span>
       </a>
+
+      {/* SEPARATOR */}
+      <div style={{ width: '1px', height: '28px', backgroundColor: 'rgba(255, 252, 246, 0.15)', alignSelf: 'center' }} />
+
+      {/* WHATSAPP BUTTON (Recognizable green accent) */}
       <a
         href={WHATSAPP_HREF}
         target="_blank"
@@ -50,19 +74,35 @@ export const MobileActionBar: React.FC = () => {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          gap: '8px',
-          minHeight: '56px',
-          fontFamily: 'var(--font-family-sans)',
-          fontSize: '13px',
-          fontWeight: 600,
-          letterSpacing: '0.05em',
+          gap: '10px',
+          minHeight: '54px',
+          fontFamily: 'var(--font-family-sans, sans-serif)',
+          fontSize: '12.5px',
+          fontWeight: 700,
+          letterSpacing: '0.14em',
           textTransform: 'uppercase',
-          color: 'var(--color-accent-gold)',
-          borderLeft: '1px solid rgba(182, 154, 107, 0.25)',
+          color: '#FFFFFF',
+          backgroundColor: '#201E1A',
+          textDecoration: 'none',
+          transition: 'background-color 0.2s ease',
         }}
       >
-        <MessageCircle size={18} strokeWidth={1.75} />
-        WhatsApp
+        <span
+          style={{
+            display: 'inline-flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: '28px',
+            height: '28px',
+            borderRadius: '50%',
+            backgroundColor: '#25D366',
+            color: '#FFFFFF',
+            boxShadow: '0 2px 8px rgba(37, 211, 102, 0.35)',
+          }}
+        >
+          <MessageSquare size={13} strokeWidth={2.2} />
+        </span>
+        <span>WHATSAPP</span>
       </a>
 
       <style>{`

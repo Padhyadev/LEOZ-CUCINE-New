@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Header } from '../components/common/Header';
 import { Footer } from '../components/common/Footer';
+import { UniversalHero } from '../components/common/UniversalHero';
 import { useDocumentMeta } from '../hooks/useDocumentMeta';
 import {
   ArrowRight,
@@ -9,8 +10,12 @@ import {
   Phone,
   Mail,
   CheckCircle2,
-  Clock,
   Sparkles,
+  Layers,
+  Compass,
+  Building2,
+  Users,
+  Globe,
 } from 'lucide-react';
 import { submitEnquiryForm } from '../lib/submitEnquiryForm';
 
@@ -23,18 +28,19 @@ export const Contact: React.FC = () => {
   }, []);
 
   useDocumentMeta(
-    'Contact Us | LEOZ Cucine — Connect with Our Design Team',
-    'Get in touch with LEOZ Cucine principal designers. Start your bespoke kitchen, wardrobe, or complete residential interior project.'
+    'Contact LEOZ Cucine | Luxury Kitchen & Wardrobe Inquiries',
+    'Connect with LEOZ Cucine for luxury modular kitchens and bespoke wardrobes. Corporate office on Sindhu Bhavan Road, Ahmedabad, manufacturing in Gandhinagar.'
   );
 
-  // Form State
+  // Form State matching all required fields
   const [formData, setFormData] = useState({
-    name: '',
+    fullName: '',
     phone: '',
     email: '',
-    city: '',
-    projectType: 'Kitchen',
-    projectSize: '',
+    location: '',
+    projectType: 'Luxury Modular Kitchen',
+    budget: '₹15L – ₹25L',
+    stage: 'Planning & Drawings',
     message: '',
   });
 
@@ -44,18 +50,18 @@ export const Contact: React.FC = () => {
 
   const validateForm = () => {
     const errs: Record<string, string> = {};
-    if (!formData.name.trim()) errs.name = 'Please enter your full name.';
+    if (!formData.fullName.trim()) errs.fullName = 'Please enter your full name.';
     if (!formData.phone.trim()) {
-      errs.phone = 'Please enter your contact number.';
+      errs.phone = 'Please enter your mobile number.';
     } else if (formData.phone.replace(/\D/g, '').length < 10) {
-      errs.phone = 'Please enter a valid 10-digit number.';
+      errs.phone = 'Please enter a valid 10-digit mobile number.';
     }
     if (!formData.email.trim()) {
       errs.email = 'Please enter your email address.';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
       errs.email = 'Please enter a valid email address.';
     }
-    if (!formData.city.trim()) errs.city = 'Please enter your city / locality.';
+    if (!formData.location.trim()) errs.location = 'Please specify your project location / city.';
     return errs;
   };
 
@@ -70,165 +76,165 @@ export const Contact: React.FC = () => {
     setIsSubmitting(true);
 
     try {
-      await submitEnquiryForm({
-        fullName: formData.name,
+      await submitEnquiryForm('contact', {
+        fullName: formData.fullName,
         phone: formData.phone,
         email: formData.email,
-        city: formData.city,
+        city: formData.location,
         projectType: formData.projectType,
-        projectSize: formData.projectSize,
+        projectSize: `${formData.budget} | Stage: ${formData.stage}`,
         message: formData.message,
-        formType: 'Contact_Page_Enquiry',
       });
       setFormSubmitted(true);
     } catch {
-      // Fallback optimistic success for smooth UX
       setFormSubmitted(true);
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  /* =========================================================================
+     HOW WE CAN ASSIST (5 CORE CAPABILITIES)
+     ========================================================================= */
+  const assistServices = [
+    { title: 'New Kitchens', desc: 'Bespoke modular kitchens with handleless Gola profiles, monolith islands, and German motion hardware.' },
+    { title: 'Bespoke Wardrobes', desc: 'Custom walk-in suites, flush co-planar sliding doors, illuminated glass vitrines, and velvet accessories.' },
+    { title: 'Material & Finish Options', desc: 'Tactile curation of European PU lacquers, smoked oak veneers, sintered stone slabs, and metal profiles.' },
+    { title: 'Design Consultations', desc: 'One-on-one spatial planning, laser site surveys, and ergonomic 3D photorealistic CAD layouts.' },
+    { title: 'Product-Focused Collaborations', desc: 'Technical trade support for architects, interior designers, and premium residential developers.' },
+  ];
+
   return (
-    <div style={{ backgroundColor: '#FAF9F6', color: '#161514', minHeight: '100vh', overflowX: 'hidden' }}>
+    <div style={{ backgroundColor: '#F7F7F5', color: '#20211F', minHeight: '100vh', overflowX: 'hidden' }}>
       <Header />
 
       <main id="main-content">
         {/* =========================================================================
-            HERO: "LET'S TALK ABOUT YOUR SPACE."
+            SECTION 01: HERO — UNIVERSAL FULL-BLEED ARCHITECTURAL HERO
             ========================================================================= */}
-        <section
-          aria-label="Contact Hero"
-          style={{
-            position: 'relative',
-            width: '100%',
-            minHeight: 'clamp(440px, 60vh, 560px)',
-            display: 'flex',
-            alignItems: 'flex-end',
-            backgroundColor: '#161514',
-            overflow: 'hidden',
-          }}
-        >
-          {/* Architectural Scrimmed Background */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: 'url(https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2200&q=90)',
-              backgroundPosition: 'center 45%',
-              backgroundSize: 'cover',
-            }}
-          />
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'linear-gradient(180deg, rgba(22, 21, 20, 0.3) 0%, rgba(22, 21, 20, 0.45) 40%, rgba(22, 21, 20, 0.92) 95%)',
-            }}
-          />
-
-          <div
-            style={{
-              position: 'relative',
-              zIndex: 10,
-              maxWidth: '1360px',
-              width: '100%',
-              margin: '0 auto',
-              paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-              paddingRight: 'clamp(20px, 5.5vw, 80px)',
-              paddingBottom: 'clamp(40px, 6vw, 68px)',
-            }}
-          >
-            <div style={{ maxWidth: '820px' }}>
-              <motion.span
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: luxuryEase }}
-                style={{
-                  display: 'inline-block',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  letterSpacing: '0.24em',
-                  textTransform: 'uppercase',
-                  color: '#B69A6B',
-                  marginBottom: '14px',
-                }}
-              >
-                CONNECT WITH LEOZ PRINCIPAL DESIGNERS
-              </motion.span>
-
-              <motion.h1
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.1, ease: luxuryEase }}
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(36px, 5.8vw, 72px)',
-                  fontWeight: 300,
-                  lineHeight: 1.05,
-                  letterSpacing: '-0.01em',
-                  color: '#FFFFFF',
-                  margin: '0 0 16px 0',
-                }}
-              >
-                Let’s Talk
-                <br />
-                About Your Space.
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.2, ease: luxuryEase }}
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'clamp(14.5px, 1.3vw, 17.5px)',
-                  color: 'rgba(255, 255, 255, 0.85)',
-                  lineHeight: 1.65,
-                  maxWidth: '640px',
-                  margin: 0,
-                }}
-              >
-                Tell us about your project and our design team will get in touch to schedule a private consultation.
-              </motion.p>
-            </div>
-          </div>
-        </section>
+        <UniversalHero
+          image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=85"
+          imageAlt="LEOZ Showroom & Architectural Living"
+          imagePosition="center 40%"
+          eyebrow="05 / CONTACT US"
+          headline="Begin Your LEOZ Experience"
+          supportingText="We welcome homeowners, architects, designers and premium residential developers to connect with us for luxury kitchen and wardrobe enquiries."
+          ctaText="Send an Enquiry →"
+          ctaHref="#enquiry-form"
+          brightness={0.88}
+        />
 
         {/* =========================================================================
-            SECTION: SPLIT-SCREEN CONTACT (FORM + VISUAL PANELS)
+            SECTION 02: HOW WE CAN ASSIST (5 CORE CAPABILITIES)
             ========================================================================= */}
         <section
+          aria-label="How We Can Assist"
           style={{
-            paddingTop: 'clamp(60px, 8vw, 100px)',
-            paddingBottom: 'clamp(80px, 10vw, 130px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            backgroundColor: '#FAF9F6',
+            backgroundColor: '#ECEBE7',
+            color: '#20211F',
+            paddingTop: 'clamp(70px, 9vw, 110px)',
+            paddingBottom: 'clamp(70px, 9vw, 110px)',
+            paddingLeft: 'clamp(20px, 6vw, 100px)',
+            paddingRight: 'clamp(20px, 6vw, 100px)',
+            borderBottom: '1px solid #D9D9D4',
           }}
         >
           <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
             <div
               style={{
                 display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
+                gap: 'clamp(24px, 5vw, 64px)',
+                alignItems: 'flex-end',
+                marginBottom: 'clamp(44px, 6vw, 70px)',
+              }}
+            >
+              <div>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#A58B62', display: 'block', marginBottom: '12px' }}>
+                  OUR SERVICES &amp; EXPERTISE
+                </span>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(32px, 4.4vw, 54px)', fontWeight: 300, color: '#20211F', letterSpacing: '-0.015em', margin: 0, lineHeight: 1.15 }}>
+                  How We Can Assist
+                </h2>
+              </div>
+              <div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '15.5px', color: '#686963', lineHeight: 1.75, margin: 0 }}>
+                  Our team can discuss new kitchens, bespoke wardrobes, material and finish options, design consultations and product-focused collaborations.
+                </p>
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
+                gap: '24px',
+              }}
+            >
+              {assistServices.map((srv, idx) => (
+                <div
+                  key={srv.title}
+                  style={{
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid #E5E4E0',
+                    borderTop: '3px solid #A58B62',
+                    borderRadius: '2px',
+                    padding: '28px 22px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    boxShadow: '0 4px 16px rgba(32, 33, 31, 0.03)',
+                  }}
+                >
+                  <span style={{ fontFamily: 'var(--font-heading)', fontSize: '24px', fontWeight: 300, color: '#A58B62', display: 'block', marginBottom: '8px' }}>
+                    0{idx + 1}
+                  </span>
+                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '20px', fontWeight: 400, color: '#20211F', margin: '0 0 10px 0' }}>
+                    {srv.title}
+                  </h3>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '13.5px', color: '#686963', lineHeight: 1.65, margin: 0 }}>
+                    {srv.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            SECTION 03 & 04 & 05: ENQUIRY FORM & ARCHITECTURAL INFO PANELS
+            ========================================================================= */}
+        <section
+          id="enquiry-form"
+          style={{
+            paddingTop: 'clamp(80px, 10vw, 130px)',
+            paddingBottom: 'clamp(90px, 11vw, 150px)',
+            paddingLeft: 'clamp(20px, 6vw, 100px)',
+            paddingRight: 'clamp(20px, 6vw, 100px)',
+            backgroundColor: '#F7F7F5',
+          }}
+        >
+          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
+            <div
+              className="leoz-contact-layout"
+              style={{
+                display: 'grid',
                 gridTemplateColumns: '1.2fr 1fr',
                 gap: 'clamp(40px, 6vw, 80px)',
                 alignItems: 'flex-start',
               }}
-              className="leoz-contact-split"
             >
-              {/* Left Column: Form Panel */}
+              {/* Left Column: Premium Minimal Enquiry Form */}
               <motion.div
                 initial={{ opacity: 0, y: 25 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, ease: luxuryEase }}
                 style={{
                   backgroundColor: '#FFFFFF',
-                  border: '1px solid rgba(22, 21, 20, 0.08)',
-                  borderRadius: '4px',
-                  padding: 'clamp(28px, 5vw, 48px)',
-                  boxShadow: '0 8px 32px rgba(0,0,0,0.03)',
+                  border: '1px solid #E5E4E0',
+                  borderTop: '3px solid #A58B62',
+                  borderRadius: '2px',
+                  padding: 'clamp(28px, 4.5vw, 48px)',
+                  boxShadow: '0 8px 32px rgba(32, 33, 31, 0.04)',
                 }}
               >
                 <AnimatePresence mode="wait">
@@ -246,7 +252,6 @@ export const Contact: React.FC = () => {
                         alignItems: 'center',
                       }}
                     >
-                      {/* Subtle LEOZ Animated Mark */}
                       <motion.div
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
@@ -255,8 +260,8 @@ export const Contact: React.FC = () => {
                           width: '64px',
                           height: '64px',
                           borderRadius: '50%',
-                          backgroundColor: 'rgba(182, 154, 107, 0.12)',
-                          color: '#B69A6B',
+                          backgroundColor: '#ECEBE7',
+                          color: '#A58B62',
                           display: 'flex',
                           alignItems: 'center',
                           justifyContent: 'center',
@@ -266,47 +271,18 @@ export const Contact: React.FC = () => {
                         <CheckCircle2 size={32} />
                       </motion.div>
 
-                      <span
-                        style={{
-                          fontFamily: 'var(--font-body)',
-                          fontSize: '11px',
-                          fontWeight: 600,
-                          letterSpacing: '0.24em',
-                          textTransform: 'uppercase',
-                          color: '#B69A6B',
-                          display: 'block',
-                          marginBottom: '10px',
-                        }}
-                      >
-                        COMMISSION INITIATED
+                      <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#A58B62', display: 'block', marginBottom: '10px' }}>
+                        ENQUIRY RECEIVED
                       </span>
 
-                      <h3
-                        style={{
-                          fontFamily: 'var(--font-heading)',
-                          fontSize: 'clamp(26px, 3.5vw, 38px)',
-                          fontWeight: 300,
-                          color: '#161514',
-                          margin: '0 0 16px 0',
-                          lineHeight: 1.15,
-                        }}
-                      >
+                      <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(26px, 3.5vw, 38px)', fontWeight: 300, color: '#20211F', margin: '0 0 16px 0', lineHeight: 1.15 }}>
                         Thank You.
                         <br />
-                        We’ll Be in Touch Shortly.
+                        We will contact you shortly.
                       </h3>
 
-                      <p
-                        style={{
-                          fontFamily: 'var(--font-body)',
-                          fontSize: '14.5px',
-                          color: 'rgba(22, 21, 20, 0.72)',
-                          maxWidth: '460px',
-                          lineHeight: 1.65,
-                          marginBottom: '28px',
-                        }}
-                      >
-                        One of our principal spatial designers will review your project details and reach out within 24 business hours to arrange your consultation.
+                      <p style={{ fontFamily: 'var(--font-body)', fontSize: '14.5px', color: '#686963', maxWidth: '460px', lineHeight: 1.65, marginBottom: '28px' }}>
+                        We will review your details and contact you to arrange the next discussion.
                       </p>
 
                       <button
@@ -314,119 +290,80 @@ export const Contact: React.FC = () => {
                         onClick={() => {
                           setFormSubmitted(false);
                           setFormData({
-                            name: '',
+                            fullName: '',
                             phone: '',
                             email: '',
-                            city: '',
-                            projectType: 'Kitchen',
-                            projectSize: '',
+                            location: '',
+                            projectType: 'Luxury Modular Kitchen',
+                            budget: '₹15L – ₹25L',
+                            stage: 'Planning & Drawings',
                             message: '',
                           });
                         }}
                         style={{
-                          padding: '12px 28px',
-                          backgroundColor: '#161514',
+                          padding: '13px 28px',
+                          backgroundColor: '#20211F',
                           color: '#FFFFFF',
                           fontFamily: 'var(--font-body)',
-                          fontSize: '12px',
+                          fontSize: '11.5px',
                           fontWeight: 600,
-                          letterSpacing: '0.1em',
+                          letterSpacing: '0.12em',
                           textTransform: 'uppercase',
                           border: 'none',
                           borderRadius: '2px',
                           cursor: 'pointer',
                         }}
                       >
-                        Submit Another Inquiry
+                        Submit Another Enquiry
                       </button>
                     </motion.div>
                   ) : (
-                    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '22px' }}>
-                      <div>
-                        <span
-                          style={{
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '10.5px',
-                            fontWeight: 600,
-                            letterSpacing: '0.2em',
-                            textTransform: 'uppercase',
-                            color: '#B69A6B',
-                            display: 'block',
-                            marginBottom: '6px',
-                          }}
-                        >
-                          PROJECT INQUIRY FORM
+                    <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+                      <div style={{ marginBottom: '4px' }}>
+                        <span style={{ fontFamily: 'var(--font-body)', fontSize: '10.5px', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#A58B62', display: 'block', marginBottom: '6px' }}>
+                          GET IN TOUCH
                         </span>
-                        <h2
-                          style={{
-                            fontFamily: 'var(--font-heading)',
-                            fontSize: '28px',
-                            fontWeight: 300,
-                            color: '#161514',
-                            margin: 0,
-                          }}
-                        >
-                          Tell Us About Your Vision
+                        <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '28px', fontWeight: 300, color: '#20211F', margin: '0 0 10px 0' }}>
+                          Start the Conversation
                         </h2>
+                        <p style={{ fontFamily: 'var(--font-body)', fontSize: '14.5px', color: '#686963', lineHeight: 1.65, margin: 0 }}>
+                          Tell us a little about your space and what you envision. We will review your details and contact you to arrange the next discussion.
+                        </p>
                       </div>
 
-                      {/* Name Field */}
+                      {/* Full Name */}
                       <div>
-                        <label
-                          htmlFor="name"
-                          style={{
-                            display: 'block',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '11px',
-                            fontWeight: 600,
-                            letterSpacing: '0.12em',
-                            textTransform: 'uppercase',
-                            color: '#716B61',
-                            marginBottom: '6px',
-                          }}
-                        >
+                        <label htmlFor="fullName" style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#686963', marginBottom: '6px' }}>
                           Full Name *
                         </label>
                         <input
-                          id="name"
+                          id="fullName"
                           type="text"
                           required
-                          value={formData.name}
-                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          value={formData.fullName}
+                          onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
                           placeholder="e.g. Vikramaditya Mehta"
                           style={{
                             width: '100%',
-                            padding: '14px 16px',
+                            padding: '13px 15px',
                             fontFamily: 'var(--font-body)',
                             fontSize: '14px',
-                            border: `1px solid ${errors.name ? '#E53E3E' : 'rgba(22, 21, 20, 0.15)'}`,
+                            border: `1px solid ${errors.fullName ? '#E53E3E' : '#D9D9D4'}`,
                             borderRadius: '2px',
-                            backgroundColor: '#FAF9F6',
-                            color: '#161514',
+                            backgroundColor: '#FFFFFF',
+                            color: '#20211F',
                             outline: 'none',
                             boxSizing: 'border-box',
                           }}
                         />
-                        {errors.name && <span style={{ fontSize: '11px', color: '#E53E3E', marginTop: '4px', display: 'block' }}>{errors.name}</span>}
+                        {errors.fullName && <span style={{ fontSize: '11px', color: '#E53E3E', marginTop: '4px', display: 'block' }}>{errors.fullName}</span>}
                       </div>
 
-                      {/* Phone & Email (2 Columns) */}
+                      {/* Mobile Number & Email (2 Columns) */}
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
                         <div>
-                          <label
-                            htmlFor="phone"
-                            style={{
-                              display: 'block',
-                              fontFamily: 'var(--font-body)',
-                              fontSize: '11px',
-                              fontWeight: 600,
-                              letterSpacing: '0.12em',
-                              textTransform: 'uppercase',
-                              color: '#716B61',
-                              marginBottom: '6px',
-                            }}
-                          >
-                            Phone Number *
+                          <label htmlFor="phone" style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#686963', marginBottom: '6px' }}>
+                            Mobile Number *
                           </label>
                           <input
                             id="phone"
@@ -437,13 +374,13 @@ export const Contact: React.FC = () => {
                             placeholder="+91 98765 43210"
                             style={{
                               width: '100%',
-                              padding: '14px 16px',
+                              padding: '13px 15px',
                               fontFamily: 'var(--font-body)',
                               fontSize: '14px',
-                              border: `1px solid ${errors.phone ? '#E53E3E' : 'rgba(22, 21, 20, 0.15)'}`,
+                              border: `1px solid ${errors.phone ? '#E53E3E' : '#D9D9D4'}`,
                               borderRadius: '2px',
-                              backgroundColor: '#FAF9F6',
-                              color: '#161514',
+                              backgroundColor: '#FFFFFF',
+                              color: '#20211F',
                               outline: 'none',
                               boxSizing: 'border-box',
                             }}
@@ -452,19 +389,7 @@ export const Contact: React.FC = () => {
                         </div>
 
                         <div>
-                          <label
-                            htmlFor="email"
-                            style={{
-                              display: 'block',
-                              fontFamily: 'var(--font-body)',
-                              fontSize: '11px',
-                              fontWeight: 600,
-                              letterSpacing: '0.12em',
-                              textTransform: 'uppercase',
-                              color: '#716B61',
-                              marginBottom: '6px',
-                            }}
-                          >
+                          <label htmlFor="email" style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#686963', marginBottom: '6px' }}>
                             Email Address *
                           </label>
                           <input
@@ -476,13 +401,13 @@ export const Contact: React.FC = () => {
                             placeholder="name@residence.com"
                             style={{
                               width: '100%',
-                              padding: '14px 16px',
+                              padding: '13px 15px',
                               fontFamily: 'var(--font-body)',
                               fontSize: '14px',
-                              border: `1px solid ${errors.email ? '#E53E3E' : 'rgba(22, 21, 20, 0.15)'}`,
+                              border: `1px solid ${errors.email ? '#E53E3E' : '#D9D9D4'}`,
                               borderRadius: '2px',
-                              backgroundColor: '#FAF9F6',
-                              color: '#161514',
+                              backgroundColor: '#FFFFFF',
+                              color: '#20211F',
                               outline: 'none',
                               boxSizing: 'border-box',
                             }}
@@ -491,160 +416,143 @@ export const Contact: React.FC = () => {
                         </div>
                       </div>
 
-                      {/* City & Project Size */}
+                      {/* Project Location & Approximate Budget */}
                       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
                         <div>
-                          <label
-                            htmlFor="city"
-                            style={{
-                              display: 'block',
-                              fontFamily: 'var(--font-body)',
-                              fontSize: '11px',
-                              fontWeight: 600,
-                              letterSpacing: '0.12em',
-                              textTransform: 'uppercase',
-                              color: '#716B61',
-                              marginBottom: '6px',
-                            }}
-                          >
-                            City / Locality *
+                          <label htmlFor="location" style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#686963', marginBottom: '6px' }}>
+                            Project Location *
                           </label>
                           <input
-                            id="city"
+                            id="location"
                             type="text"
                             required
-                            value={formData.city}
-                            onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                            placeholder="e.g. Ahmedabad, Surat, Mumbai"
+                            value={formData.location}
+                            onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                            placeholder="e.g. Bodakdev, Ahmedabad"
                             style={{
                               width: '100%',
-                              padding: '14px 16px',
+                              padding: '13px 15px',
                               fontFamily: 'var(--font-body)',
                               fontSize: '14px',
-                              border: `1px solid ${errors.city ? '#E53E3E' : 'rgba(22, 21, 20, 0.15)'}`,
+                              border: `1px solid ${errors.location ? '#E53E3E' : '#D9D9D4'}`,
                               borderRadius: '2px',
-                              backgroundColor: '#FAF9F6',
-                              color: '#161514',
+                              backgroundColor: '#FFFFFF',
+                              color: '#20211F',
                               outline: 'none',
                               boxSizing: 'border-box',
                             }}
                           />
-                          {errors.city && <span style={{ fontSize: '11px', color: '#E53E3E', marginTop: '4px', display: 'block' }}>{errors.city}</span>}
+                          {errors.location && <span style={{ fontSize: '11px', color: '#E53E3E', marginTop: '4px', display: 'block' }}>{errors.location}</span>}
                         </div>
 
                         <div>
-                          <label
-                            htmlFor="projectSize"
-                            style={{
-                              display: 'block',
-                              fontFamily: 'var(--font-body)',
-                              fontSize: '11px',
-                              fontWeight: 600,
-                              letterSpacing: '0.12em',
-                              textTransform: 'uppercase',
-                              color: '#716B61',
-                              marginBottom: '6px',
-                            }}
-                          >
-                            Approximate Project Size
+                          <label htmlFor="budget" style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#686963', marginBottom: '6px' }}>
+                            Approximate Budget
                           </label>
-                          <input
-                            id="projectSize"
-                            type="text"
-                            value={formData.projectSize}
-                            onChange={(e) => setFormData({ ...formData, projectSize: e.target.value })}
-                            placeholder="e.g. 4 BHK Villa / 4,000 sq ft"
+                          <select
+                            id="budget"
+                            value={formData.budget}
+                            onChange={(e) => setFormData({ ...formData, budget: e.target.value })}
                             style={{
                               width: '100%',
-                              padding: '14px 16px',
+                              padding: '13px 15px',
                               fontFamily: 'var(--font-body)',
                               fontSize: '14px',
-                              border: '1px solid rgba(22, 21, 20, 0.15)',
+                              border: '1px solid #D9D9D4',
                               borderRadius: '2px',
-                              backgroundColor: '#FAF9F6',
-                              color: '#161514',
+                              backgroundColor: '#FFFFFF',
+                              color: '#20211F',
                               outline: 'none',
                               boxSizing: 'border-box',
                             }}
-                          />
+                          >
+                            <option value="₹10L – ₹15L">₹10L – ₹15L</option>
+                            <option value="₹15L – ₹25L">₹15L – ₹25L</option>
+                            <option value="₹25L – ₹40L">₹25L – ₹40L</option>
+                            <option value="₹40L+ (Bespoke Villa / Estate)">₹40L+ (Bespoke Villa / Estate)</option>
+                          </select>
                         </div>
                       </div>
 
-                      {/* Project Type Selector */}
-                      <div>
-                        <label
-                          style={{
-                            display: 'block',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '11px',
-                            fontWeight: 600,
-                            letterSpacing: '0.12em',
-                            textTransform: 'uppercase',
-                            color: '#716B61',
-                            marginBottom: '10px',
-                          }}
-                        >
-                          Project Type *
-                        </label>
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }} className="project-type-pills">
-                          {['Kitchen', 'Wardrobe', 'Complete Interior'].map((t) => (
-                            <button
-                              key={t}
-                              type="button"
-                              onClick={() => setFormData({ ...formData, projectType: t })}
-                              style={{
-                                padding: '12px 10px',
-                                textAlign: 'center',
-                                backgroundColor: formData.projectType === t ? '#161514' : '#FAF9F6',
-                                color: formData.projectType === t ? '#FFFFFF' : '#161514',
-                                border: `1px solid ${formData.projectType === t ? '#161514' : 'rgba(22, 21, 20, 0.15)'}`,
-                                borderRadius: '2px',
-                                fontFamily: 'var(--font-body)',
-                                fontSize: '12px',
-                                fontWeight: 600,
-                                letterSpacing: '0.05em',
-                                cursor: 'pointer',
-                                transition: 'all 0.2s ease',
-                              }}
-                            >
-                              {t}
-                            </button>
-                          ))}
+                      {/* Project Type & Project Stage */}
+                      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+                        <div>
+                          <label htmlFor="projectType" style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#686963', marginBottom: '6px' }}>
+                            Project Type
+                          </label>
+                          <select
+                            id="projectType"
+                            value={formData.projectType}
+                            onChange={(e) => setFormData({ ...formData, projectType: e.target.value })}
+                            style={{
+                              width: '100%',
+                              padding: '13px 15px',
+                              fontFamily: 'var(--font-body)',
+                              fontSize: '14px',
+                              border: '1px solid #D9D9D4',
+                              borderRadius: '2px',
+                              backgroundColor: '#FFFFFF',
+                              color: '#20211F',
+                              outline: 'none',
+                              boxSizing: 'border-box',
+                            }}
+                          >
+                            <option value="Luxury Modular Kitchen">Luxury Modular Kitchen</option>
+                            <option value="Customised Wardrobe Suite">Customised Wardrobe Suite</option>
+                            <option value="Complete Kitchen & Wardrobe Joinery">Complete Kitchen &amp; Wardrobe Joinery</option>
+                            <option value="Architectural Trade Collaboration">Architectural Trade Collaboration</option>
+                          </select>
+                        </div>
+
+                        <div>
+                          <label htmlFor="stage" style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#686963', marginBottom: '6px' }}>
+                            Project Stage
+                          </label>
+                          <select
+                            id="stage"
+                            value={formData.stage}
+                            onChange={(e) => setFormData({ ...formData, stage: e.target.value })}
+                            style={{
+                              width: '100%',
+                              padding: '13px 15px',
+                              fontFamily: 'var(--font-body)',
+                              fontSize: '14px',
+                              border: '1px solid #D9D9D4',
+                              borderRadius: '2px',
+                              backgroundColor: '#FFFFFF',
+                              color: '#20211F',
+                              outline: 'none',
+                              boxSizing: 'border-box',
+                            }}
+                          >
+                            <option value="Under Construction / Architecture">Under Construction / Architecture</option>
+                            <option value="Planning & Drawings">Planning &amp; Drawings</option>
+                            <option value="Civil Work Ready for Joinery">Civil Work Ready for Joinery</option>
+                            <option value="Immediate Renovation">Immediate Renovation</option>
+                          </select>
                         </div>
                       </div>
 
-                      {/* Message Field */}
+                      {/* Message */}
                       <div>
-                        <label
-                          htmlFor="message"
-                          style={{
-                            display: 'block',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '11px',
-                            fontWeight: 600,
-                            letterSpacing: '0.12em',
-                            textTransform: 'uppercase',
-                            color: '#716B61',
-                            marginBottom: '6px',
-                          }}
-                        >
-                          Project Details / Notes (Optional)
+                        <label htmlFor="message" style={{ display: 'block', fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#686963', marginBottom: '6px' }}>
+                          Message / Project Details (Optional)
                         </label>
                         <textarea
                           id="message"
                           rows={4}
                           value={formData.message}
                           onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                          placeholder="Tell us about your timeline, architectural drawings, or preferred finishes..."
+                          placeholder="Tell us about your spatial vision, architectural drawings, or preferred finishes..."
                           style={{
                             width: '100%',
-                            padding: '14px 16px',
+                            padding: '13px 15px',
                             fontFamily: 'var(--font-body)',
                             fontSize: '14px',
-                            border: '1px solid rgba(22, 21, 20, 0.15)',
+                            border: '1px solid #D9D9D4',
                             borderRadius: '2px',
-                            backgroundColor: '#FAF9F6',
-                            color: '#161514',
+                            backgroundColor: '#FFFFFF',
+                            color: '#20211F',
                             outline: 'none',
                             boxSizing: 'border-box',
                             resize: 'vertical',
@@ -652,7 +560,7 @@ export const Contact: React.FC = () => {
                         />
                       </div>
 
-                      {/* Submit CTA Button */}
+                      {/* Submit Button */}
                       <button
                         type="submit"
                         disabled={isSubmitting}
@@ -662,28 +570,31 @@ export const Contact: React.FC = () => {
                           justifyContent: 'center',
                           gap: '10px',
                           padding: '16px 36px',
-                          backgroundColor: '#B69A6B',
+                          backgroundColor: '#20211F',
                           color: '#FFFFFF',
                           fontFamily: 'var(--font-body)',
-                          fontSize: '12.5px',
+                          fontSize: '12px',
                           fontWeight: 600,
-                          letterSpacing: '0.14em',
+                          letterSpacing: '0.12em',
                           textTransform: 'uppercase',
                           border: 'none',
                           borderRadius: '2px',
                           cursor: isSubmitting ? 'wait' : 'pointer',
-                          boxShadow: '0 8px 24px rgba(182, 154, 107, 0.25)',
-                          transition: 'all 0.3s ease',
+                          transition: 'all 0.25s ease',
                           marginTop: '6px',
                         }}
                         onMouseEnter={(e) => {
-                          if (!isSubmitting) e.currentTarget.style.backgroundColor = '#9F8255';
+                          if (!isSubmitting) {
+                            e.currentTarget.style.backgroundColor = '#A58B62';
+                          }
                         }}
                         onMouseLeave={(e) => {
-                          if (!isSubmitting) e.currentTarget.style.backgroundColor = '#B69A6B';
+                          if (!isSubmitting) {
+                            e.currentTarget.style.backgroundColor = '#20211F';
+                          }
                         }}
                       >
-                        <span>{isSubmitting ? 'Submitting...' : 'Start My Project'}</span>
+                        <span>{isSubmitting ? 'Sending...' : 'Send Enquiry'}</span>
                         <ArrowRight size={14} />
                       </button>
                     </form>
@@ -691,90 +602,139 @@ export const Contact: React.FC = () => {
                 </AnimatePresence>
               </motion.div>
 
-              {/* Right Column: Visual Image & Showroom Contact Information */}
+              {/* Right Column: Architectural Information Blocks */}
               <motion.div
                 initial={{ opacity: 0, y: 25 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.1, ease: luxuryEase }}
-                style={{ display: 'flex', flexDirection: 'column', gap: '28px' }}
+                style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}
               >
-                {/* Visual Image */}
-                <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 10', borderRadius: '3px', overflow: 'hidden' }}>
-                  <img
-                    src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85"
-                    alt="LEOZ Architectural Interior"
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
-                  <div
-                    style={{
-                      position: 'absolute',
-                      inset: 0,
-                      background: 'linear-gradient(180deg, transparent 40%, rgba(22, 21, 20, 0.8) 100%)',
-                    }}
-                  />
-                  <div style={{ position: 'absolute', bottom: '16px', left: '16px', right: '16px', color: '#FFFFFF' }}>
-                    <span style={{ fontSize: '10.5px', color: '#B69A6B', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase' }}>
-                      IN-HOUSE ARCHITECTURAL PRECISION
-                    </span>
-                    <p style={{ fontFamily: 'var(--font-heading)', fontSize: '18px', margin: '4px 0 0 0' }}>
-                      Direct turnkey commissions from blueprint to white-glove handover.
-                    </p>
+                {/* Director Contact Block */}
+                <div
+                  style={{
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid #E5E4E0',
+                    borderTop: '3px solid #A58B62',
+                    borderRadius: '2px',
+                    padding: '28px 24px',
+                    boxShadow: '0 4px 16px rgba(32, 33, 31, 0.03)',
+                  }}
+                >
+                  <span style={{ fontSize: '10.5px', color: '#A58B62', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', display: 'block', marginBottom: '8px' }}>
+                    DIRECTOR CONTACT
+                  </span>
+                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', color: '#20211F', margin: '0 0 4px 0', fontWeight: 400 }}>
+                    Mr. Piyush Gahlot
+                  </h3>
+                  <p style={{ fontSize: '12px', color: '#A58B62', fontWeight: 600, margin: '0 0 16px 0' }}>
+                    Director – Sales, Business Development &amp; Global Alliances
+                  </p>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', borderTop: '1px solid #ECEBE7', paddingTop: '14px' }}>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13.5px', color: '#20211F' }}>
+                      <Phone size={14} color="#A58B62" />
+                      <a href="tel:+919825022616" style={{ textDecoration: 'none', color: '#20211F', fontWeight: 600 }}>+91 98250 22616</a>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13.5px', color: '#686963' }}>
+                      <Mail size={14} color="#A58B62" />
+                      <a href="mailto:director@leozartofambience.com" style={{ textDecoration: 'none', color: '#686963' }}>director@leozartofambience.com</a>
+                    </div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13.5px', color: '#686963' }}>
+                      <Globe size={14} color="#A58B62" />
+                      <a href="https://www.leozartofambience.com" target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: '#686963' }}>www.leozartofambience.com</a>
+                    </div>
                   </div>
                 </div>
 
-                {/* Showroom Cards */}
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                  {/* Ahmedabad */}
-                  <div
+                {/* Section: Visit Our Ahmedabad Office */}
+                <div
+                  style={{
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid #E5E4E0',
+                    borderTop: '3px solid #A58B62',
+                    borderRadius: '2px',
+                    padding: '28px 24px',
+                    boxShadow: '0 4px 16px rgba(32, 33, 31, 0.03)',
+                  }}
+                >
+                  <span style={{ fontSize: '10.5px', color: '#A58B62', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', display: 'block', marginBottom: '8px' }}>
+                    VISIT OUR AHMEDABAD OFFICE
+                  </span>
+                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', color: '#20211F', margin: '0 0 8px 0', fontWeight: 400 }}>
+                    Corporate Office &amp; Design Lounge
+                  </h3>
+                  <p style={{ fontSize: '13.5px', color: '#686963', lineHeight: 1.65, margin: '0 0 12px 0' }}>
+                    Explore your requirements and discuss finishes, layout possibilities and product specifications with the team. Visits are recommended by appointment.
+                  </p>
+                  <p style={{ fontSize: '13px', color: '#20211F', fontWeight: 500, lineHeight: 1.6, margin: '0 0 16px 0' }}>
+                    509, Sankalp Square 3B, Beside Taj Skyline, Sindhu Bhavan Road, Thaltej, Ahmedabad – 380059, Gujarat.
+                  </p>
+                  <a
+                    href="https://maps.app.goo.gl/xT39MPBvZR4v923E9"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     style={{
-                      backgroundColor: '#FFFFFF',
-                      border: '1px solid rgba(22, 21, 20, 0.08)',
-                      borderRadius: '3px',
-                      padding: '24px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      fontSize: '12px',
+                      fontFamily: 'var(--font-body)',
+                      fontWeight: 700,
+                      letterSpacing: '0.08em',
+                      textTransform: 'uppercase',
+                      color: '#20211F',
+                      textDecoration: 'none',
                     }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = '#A58B62')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = '#20211F')}
                   >
-                    <span style={{ fontSize: '10.5px', color: '#B69A6B', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
-                      FLAGSHIP STUDIO
-                    </span>
-                    <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '20px', color: '#161514', margin: '0 0 10px 0' }}>
-                      Ahmedabad Showroom
-                    </h3>
-                    <p style={{ fontSize: '13px', color: 'rgba(22, 21, 20, 0.75)', lineHeight: 1.5, margin: '0 0 8px 0' }}>
-                      📍 Near Sindhu Bhavan Road &amp; Bodakdev, Ahmedabad, Gujarat 380054
-                    </p>
-                    <p style={{ fontSize: '13px', color: '#161514', margin: '0 0 4px 0' }}>
-                      📞 <strong>+91 93131 51559</strong>
-                    </p>
-                    <p style={{ fontSize: '13px', color: '#716B61', margin: 0 }}>
-                      ✉️ director@leozartofambience.com
-                    </p>
-                  </div>
+                    <MapPin size={13} color="#A58B62" />
+                    <span>Open Office on Google Maps →</span>
+                  </a>
+                </div>
 
-                  {/* Surat */}
-                  <div
+                {/* Section: Manufacturing Unit */}
+                <div
+                  style={{
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid #E5E4E0',
+                    borderTop: '3px solid #A58B62',
+                    borderRadius: '2px',
+                    padding: '28px 24px',
+                    boxShadow: '0 4px 16px rgba(32, 33, 31, 0.03)',
+                  }}
+                >
+                  <span style={{ fontSize: '10.5px', color: '#A58B62', fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', display: 'block', marginBottom: '8px' }}>
+                    MANUFACTURING UNIT (20,000 SQ. FT.)
+                  </span>
+                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', color: '#20211F', margin: '0 0 8px 0', fontWeight: 400 }}>
+                    LEOZ Furniture Pvt. Ltd.
+                  </h3>
+                  <p style={{ fontSize: '13.5px', color: '#686963', lineHeight: 1.65, margin: '0 0 12px 0' }}>
+                    Kothari Cross Road, Rakanpur–Satej Road, Rakanpur, Gandhinagar – 382721, Gujarat. (Plant visits by prior appointment)
+                  </p>
+                  <a
+                    href="https://maps.app.goo.gl/mVzVJEBEg3G3re7CA"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     style={{
-                      backgroundColor: '#FFFFFF',
-                      border: '1px solid rgba(22, 21, 20, 0.08)',
-                      borderRadius: '3px',
-                      padding: '24px',
+                      display: 'inline-flex',
+                      alignItems: 'center',
+                      gap: '6px',
+                      fontSize: '12px',
+                      fontFamily: 'var(--font-body)',
+                      fontWeight: 700,
+                      letterSpacing: '0.08em',
+                      textTransform: 'uppercase',
+                      color: '#20211F',
+                      textDecoration: 'none',
                     }}
+                    onMouseEnter={(e) => (e.currentTarget.style.color = '#A58B62')}
+                    onMouseLeave={(e) => (e.currentTarget.style.color = '#20211F')}
                   >
-                    <span style={{ fontSize: '10.5px', color: '#B69A6B', fontWeight: 600, letterSpacing: '0.15em', textTransform: 'uppercase', display: 'block', marginBottom: '6px' }}>
-                      EXPERIENCE LOUNGE
-                    </span>
-                    <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '20px', color: '#161514', margin: '0 0 10px 0' }}>
-                      Surat Showroom
-                    </h3>
-                    <p style={{ fontSize: '13px', color: 'rgba(22, 21, 20, 0.75)', lineHeight: 1.5, margin: '0 0 8px 0' }}>
-                      📍 Dumas Road &amp; VIP Road Junction, Vesu, Surat, Gujarat 395007
-                    </p>
-                    <p style={{ fontSize: '13px', color: '#161514', margin: '0 0 4px 0' }}>
-                      📞 <strong>+91 93131 51559</strong>
-                    </p>
-                    <p style={{ fontSize: '13px', color: '#716B61', margin: 0 }}>
-                      ✉️ director@leozartofambience.com
-                    </p>
-                  </div>
+                    <MapPin size={13} color="#A58B62" />
+                    <span>Open Factory Location on Maps →</span>
+                  </a>
                 </div>
               </motion.div>
             </div>
@@ -787,11 +747,9 @@ export const Contact: React.FC = () => {
       {/* Responsive Styles */}
       <style>{`
         @media (max-width: 900px) {
-          .leoz-contact-split {
+          .leoz-contact-layout {
             grid-template-columns: 1fr !important;
-          }
-          .project-type-pills {
-            grid-template-columns: 1fr !important;
+            gap: 36px !important;
           }
         }
       `}</style>

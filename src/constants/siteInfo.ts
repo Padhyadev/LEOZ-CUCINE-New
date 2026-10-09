@@ -17,10 +17,10 @@ export const PHONE_CARE_HREF = 'tel:+919825022616';
 export const WEBSITE_URL = 'https://www.leozartofambience.com';
 
 export const SOCIAL_LINKS = {
-  instagram: 'https://www.instagram.com/leoz.furniture',
-  youtube: 'https://www.youtube.com/@leozfurniture',
-  facebook: 'https://www.facebook.com/leozfurniture',
-  linkedin: 'https://www.linkedin.com/company/leozfurniture',
+  instagram: 'https://www.instagram.com',
+  youtube: 'https://www.youtube.com',
+  facebook: 'https://www.facebook.com',
+  linkedin: 'https://www.linkedin.com',
   officeMap: 'https://maps.app.goo.gl/xT39MPBvZR4v923E9',
   factoryMap: 'https://maps.app.goo.gl/mVzVJEBEg3G3re7CA',
 };

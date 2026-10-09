@@ -36,7 +36,7 @@ export const OurMethod: React.FC = () => {
   }, []);
 
   useDocumentMeta(
-    'Our Method | LEOZ Cucine — The 7-Stage Architectural Journey',
+    'Our Method | LEOZ Cucine — Architectural Precision from Idea to Installation',
     'Explore the LEOZ 7-stage architectural method: Discover, Plan, Design, Engineer, Manufacture, Craft, and Install.'
   );
 
@@ -50,14 +50,14 @@ export const OurMethod: React.FC = () => {
     {
       number: '01',
       title: 'DISCOVER',
-      subtitle: 'STAGE / 01',
-      tagline: 'Understanding your lifestyle, space and aspirations.',
+      subtitle: 'STAGE 01',
+      tagline: 'Understanding your lifestyle, space and spatial rituals.',
       description:
-        'We begin by listening deeply to the nuances of your daily life — how you cook, how you host, how you move through morning and evening rituals. We analyse architectural blueprints, natural lighting paths, and spatial proportions.',
+        'We begin by listening deeply to the nuances of your daily life — how you cook, how you host, and how you move through morning and evening rituals. We analyse architectural blueprints, natural lighting paths, and spatial proportions.',
       points: [
         'In-depth lifestyle and culinary audit',
         'Architectural site analysis & natural light mapping',
-        'Aesthetic orientation & moodboard curation',
+        'Aesthetic orientation & tactile material curation',
       ],
       image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85',
       focalPosition: 'center 45%',
@@ -66,8 +66,8 @@ export const OurMethod: React.FC = () => {
     {
       number: '02',
       title: 'PLAN',
-      subtitle: 'STAGE / 02',
-      tagline: 'Spatial planning and functional thinking.',
+      subtitle: 'STAGE 02',
+      tagline: 'Spatial planning and ergonomic workflow calculation.',
       description:
         'Translating lifestyle requirements into rigorous architectural flow. We map the golden triangle of kitchen efficiency, calculate vertical storage volumes, and ensure harmonious transitions between open living zones.',
       points: [
@@ -82,8 +82,8 @@ export const OurMethod: React.FC = () => {
     {
       number: '03',
       title: 'DESIGN',
-      subtitle: 'STAGE / 03',
-      tagline: 'Architectural design, materials and aesthetics.',
+      subtitle: 'STAGE 03',
+      tagline: 'Architectural aesthetics, lighting and material harmony.',
       description:
         'Where form and tactile beauty take shape. We generate photorealistic 3D architectural renders reflecting exact lighting conditions, continuous stone veining, and hand-selected wood veneer grains.',
       points: [
@@ -98,8 +98,8 @@ export const OurMethod: React.FC = () => {
     {
       number: '04',
       title: 'ENGINEER',
-      subtitle: 'STAGE / 04',
-      tagline: 'Detailed technical planning and precision engineering.',
+      subtitle: 'STAGE 04',
+      tagline: 'Detailed technical blueprints and precision engineering.',
       description:
         'Every component is translated into computerized manufacturing files. We calculate 0.1mm hardware drilling patterns, specify Blum and Hettich concealed mechanisms, and engineer climate-resilient marine core structures.',
       points: [
@@ -114,10 +114,10 @@ export const OurMethod: React.FC = () => {
     {
       number: '05',
       title: 'MANUFACTURE',
-      subtitle: 'STAGE / 05',
-      tagline: 'Advanced machinery and controlled production.',
+      subtitle: 'STAGE 05',
+      tagline: 'Automated machinery and high-precision production.',
       description:
-        'Fabricated 100% in-house at our dedicated 20,000 sq. ft. Gandhinagar manufacturing plant. Automated beam saws, hydraulic multi-ton cold presses, and 5-axis CNC routers eliminate manual craftsmanship deviations.',
+        'Fabricated 100% in-house at our dedicated Gandhinagar manufacturing plant. Automated beam saws, hydraulic multi-ton cold presses, and 5-axis CNC routers eliminate manual craftsmanship deviations.',
       points: [
         '2-blade scoring panel saws with zero chip-out',
         'Hydraulic cold press lamination under 150-ton uniform load',
@@ -130,8 +130,8 @@ export const OurMethod: React.FC = () => {
     {
       number: '06',
       title: 'CRAFT',
-      subtitle: 'STAGE / 06',
-      tagline: 'Finishing, detailing and quality control.',
+      subtitle: 'STAGE 06',
+      tagline: 'Meticulous detailing, lacquering and quality control.',
       description:
         'Master hand-finishing brings the components to life. Multi-coat Italian lacquers are cured under UV light, stone miters are hand-polished, and every drawer glide is tested under load before factory dispatch.',
       points: [
@@ -146,8 +146,8 @@ export const OurMethod: React.FC = () => {
     {
       number: '07',
       title: 'INSTALL',
-      subtitle: 'STAGE / 07',
-      tagline: 'Professional installation and final execution.',
+      subtitle: 'STAGE 07',
+      tagline: 'White-glove installation and immaculate handover.',
       description:
         'A seamless transition from blueprint to finished reality. Installed directly by certified LEOZ master fitters with laser-levelled sub-bases, precision door gap alignment, and a pristine dust-free handover.',
       points: [
@@ -183,143 +183,245 @@ export const OurMethod: React.FC = () => {
   }, []);
 
   return (
-    <div style={{ backgroundColor: '#FAF9F6', color: '#161514', minHeight: '100vh', overflowX: 'hidden' }}>
+    <div style={{ backgroundColor: '#F7F4EE', color: '#262522', minHeight: '100vh', overflowX: 'hidden' }}>
       <Header />
 
       <main id="main-content">
         {/* =========================================================================
-            HERO: "FROM IDEA TO EVERY DETAIL."
+            HERO: UNIVERSAL FULL-BLEED ARCHITECTURAL HERO
             ========================================================================= */}
         <section
           aria-label="Our Method Hero"
           style={{
             position: 'relative',
             width: '100%',
-            minHeight: 'clamp(540px, 80vh, 720px)',
+            minHeight: '85vh',
             display: 'flex',
-            alignItems: 'flex-end',
-            backgroundColor: '#161514',
+            flexDirection: 'column',
+            justifyContent: 'flex-end',
+            paddingTop: 'clamp(110px, 14vh, 180px)',
+            paddingBottom: 'clamp(44px, 7vh, 88px)',
+            paddingLeft: 'clamp(20px, 6vw, 100px)',
+            paddingRight: 'clamp(20px, 6vw, 100px)',
             overflow: 'hidden',
           }}
         >
-          {/* Architectural Background */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: 'url(https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2200&q=90)',
-              backgroundPosition: 'center 42%',
-              backgroundSize: 'cover',
-            }}
-          />
-
-          {/* Soft Scrim */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'linear-gradient(180deg, rgba(22, 21, 20, 0.25) 0%, rgba(22, 21, 20, 0.4) 40%, rgba(22, 21, 20, 0.9) 95%)',
-            }}
-          />
-
-          {/* Hero Content */}
-          <div
-            style={{
-              position: 'relative',
-              zIndex: 10,
-              maxWidth: '1360px',
-              width: '100%',
-              margin: '0 auto',
-              paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-              paddingRight: 'clamp(20px, 5.5vw, 80px)',
-              paddingBottom: 'clamp(44px, 7vw, 76px)',
-            }}
+          <motion.div
+            initial={{ scale: 1.04, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1.3, ease: luxuryEase }}
+            style={{ position: 'absolute', inset: 0, zIndex: 1 }}
           >
-            <div style={{ maxWidth: '820px' }}>
-              <motion.span
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: luxuryEase }}
+            <img
+              src="/PHILOSOPHY.webp"
+              alt="LEOZ Architectural Craftsmanship and Method"
+              style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 40%', filter: 'brightness(0.92)' }}
+            />
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background:
+                  'linear-gradient(180deg, rgba(14, 15, 13, 0.45) 0%, rgba(14, 15, 13, 0.25) 30%, rgba(14, 15, 13, 0.78) 70%, rgba(14, 15, 13, 0.95) 100%)',
+              }}
+            />
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background:
+                  'radial-gradient(circle at 20% 75%, rgba(10, 11, 10, 0.8) 0%, rgba(10, 11, 10, 0.35) 50%, transparent 75%)',
+                pointerEvents: 'none',
+              }}
+            />
+          </motion.div>
+
+          <div style={{ position: 'relative', zIndex: 10, maxWidth: '880px', color: '#FFFFFF' }}>
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.65, delay: 0.15, ease: luxuryEase }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                fontFamily: 'var(--font-body)',
+                fontSize: 'clamp(9.5px, 0.95vw, 11px)',
+                fontWeight: 600,
+                letterSpacing: '0.22em',
+                textTransform: 'uppercase',
+                color: '#D4AF37',
+                backgroundColor: 'rgba(10, 11, 10, 0.55)',
+                padding: '6px 14px',
+                borderRadius: '2px',
+                border: '1px solid rgba(212, 175, 55, 0.3)',
+                backdropFilter: 'blur(10px)',
+                marginBottom: '18px',
+                textShadow: '0 2px 8px rgba(0,0,0,0.85)',
+              }}
+            >
+              LEOZ / OUR METHOD
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.28, ease: luxuryEase }}
+              style={{
+                fontFamily: 'var(--font-heading)',
+                fontSize: 'clamp(38px, 6vw, 84px)',
+                fontWeight: 300,
+                lineHeight: 1.08,
+                letterSpacing: '-0.02em',
+                color: '#FFFFFF',
+                margin: '0 0 18px 0',
+                textShadow: '0 3px 20px rgba(0,0,0,0.9), 0 1px 4px rgba(0,0,0,0.95)',
+              }}
+            >
+              From Vision to Reality.
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.75, delay: 0.42, ease: luxuryEase }}
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 'clamp(14.5px, 1.2vw, 17.5px)',
+                fontWeight: 300,
+                lineHeight: 1.65,
+                color: '#ECEBE7',
+                maxWidth: '580px',
+                margin: '0 0 28px 0',
+                textShadow: '0 2px 12px rgba(0,0,0,0.9)',
+              }}
+            >
+              A considered journey from consultation and design to precision manufacturing and installation.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.55, ease: luxuryEase }}
+            >
+              <a
+                href="#stages-timeline"
+                onClick={(e) => {
+                  e.preventDefault();
+                  const target = document.querySelector('#stages-timeline');
+                  if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                  }
+                }}
                 style={{
-                  display: 'inline-block',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  padding: '12px 24px',
+                  backgroundColor: '#A58B62',
+                  color: '#FFFFFF',
                   fontFamily: 'var(--font-body)',
                   fontSize: '11px',
                   fontWeight: 600,
-                  letterSpacing: '0.24em',
+                  letterSpacing: '0.14em',
                   textTransform: 'uppercase',
-                  color: '#B69A6B',
-                  marginBottom: '14px',
+                  textDecoration: 'none',
+                  borderRadius: '2px',
+                  border: '1px solid #A58B62',
+                  boxShadow: '0 4px 18px rgba(0,0,0,0.4)',
+                  transition: 'all 0.3s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#8C744F';
+                  e.currentTarget.style.borderColor = '#8C744F';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#A58B62';
+                  e.currentTarget.style.borderColor = '#A58B62';
                 }}
               >
-                THE LEOZ PHILOSOPHY • 7-STAGE PROCESS
-              </motion.span>
+                <span>Discover Our Method</span>
+                <ArrowRight size={13} />
+              </a>
+            </motion.div>
+          </div>
+        </section>
 
-              <motion.h1
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.1, ease: luxuryEase }}
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(36px, 5.8vw, 72px)',
-                  fontWeight: 300,
-                  lineHeight: 1.05,
-                  letterSpacing: '-0.01em',
-                  color: '#FFFFFF',
-                  margin: '0 0 18px 0',
-                }}
-              >
-                From Idea
-                <br />
-                To Every Detail.
-              </motion.h1>
+        <section
+          id="stages-timeline"
+          style={{
+            backgroundColor: '#F7F4EE',
+            paddingTop: '30px',
+            paddingBottom: '30px',
+            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
+            paddingRight: 'clamp(20px, 5.5vw, 80px)',
+            borderBottom: '1px solid #E5DED2',
+          }}
+        >
+          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
 
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.2, ease: luxuryEase }}
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'clamp(14.5px, 1.3vw, 17.5px)',
-                  color: 'rgba(255, 255, 255, 0.85)',
-                  lineHeight: 1.65,
-                  maxWidth: '640px',
-                  marginBottom: '28px',
-                }}
-              >
-                A considered process where design, engineering and craftsmanship work as one.
-              </motion.p>
+            {/* Quick-Jump Stage Pills */}
+            <div
+              style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '10px',
+                paddingTop: '16px',
+              }}
+            >
+              {stages.map((st, i) => (
+                <button
+                  key={st.number}
+                  onClick={() => {
+                    const el = stageRefs.current[i];
+                    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  }}
+                  style={{
+                    padding: '8px 18px',
+                    borderRadius: '2px',
+                    border: activeStage === i ? '1px solid #262522' : '1px solid #D5CDBE',
+                    backgroundColor: activeStage === i ? '#262522' : '#FFFFFF',
+                    color: activeStage === i ? '#F7F4EE' : '#262522',
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    letterSpacing: '0.14em',
+                    textTransform: 'uppercase',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                  }}
+                >
+                  {st.number} {st.title}
+                </button>
+              ))}
             </div>
           </div>
         </section>
 
         {/* =========================================================================
-            SECTION: 7-STAGE ARCHITECTURAL JOURNEY TIMELINE
+            SECTION: 7-STAGE ARCHITECTURAL JOURNEY TIMELINE (WARM LIGHT SURFACES)
             ========================================================================= */}
         <section
           aria-label="The 7-Stage Architectural Method"
           style={{
-            paddingTop: 'clamp(70px, 9vw, 120px)',
-            paddingBottom: 'clamp(80px, 10vw, 140px)',
+            paddingTop: 'clamp(60px, 8vw, 110px)',
+            paddingBottom: 'clamp(80px, 10vw, 130px)',
             paddingLeft: 'clamp(20px, 5.5vw, 80px)',
             paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            backgroundColor: '#FAF9F6',
+            backgroundColor: '#EEE9E0',
             position: 'relative',
           }}
         >
           <div style={{ maxWidth: '1360px', margin: '0 auto', position: 'relative' }}>
-            
-            {/* Timeline Wrapper with Connected Gold Center Line */}
             <div
               className="leoz-method-timeline"
               style={{
                 position: 'relative',
                 display: 'flex',
                 flexDirection: 'column',
-                gap: 'clamp(60px, 9vw, 120px)',
+                gap: 'clamp(48px, 7vw, 90px)',
               }}
             >
               {stages.map((stage, idx) => {
-                const Icon = stage.icon;
                 const isEven = idx % 2 === 0;
                 const isHighlighted = activeStage === idx;
 
@@ -332,19 +434,24 @@ export const OurMethod: React.FC = () => {
                       position: 'relative',
                       display: 'grid',
                       gridTemplateColumns: isEven ? '1.1fr 1fr' : '1fr 1.1fr',
-                      gap: 'clamp(36px, 6vw, 80px)',
+                      gap: 'clamp(28px, 5vw, 64px)',
                       alignItems: 'center',
+                      backgroundColor: '#FFFFFF',
+                      border: `1px solid ${isHighlighted ? '#8A725B' : '#E5DED2'}`,
+                      borderRadius: '4px',
+                      padding: 'clamp(24px, 4vw, 48px)',
+                      boxShadow: isHighlighted ? '0 16px 36px rgba(138, 114, 91, 0.12)' : '0 4px 20px rgba(0,0,0,0.03)',
+                      transition: 'all 0.4s ease',
                     }}
                   >
-                    {/* Content Column (Flips order on alternate rows on desktop) */}
+                    {/* Content Column */}
                     <motion.div
-                      initial={{ opacity: 0, y: 25 }}
+                      initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
                       viewport={{ once: true, amount: 0.2 }}
-                      transition={{ duration: 0.7, ease: luxuryEase }}
+                      transition={{ duration: 0.6, ease: luxuryEase }}
                       style={{
                         order: isEven ? 1 : 2,
-                        padding: 'clamp(10px, 2vw, 30px)',
                       }}
                     >
                       <div
@@ -352,16 +459,17 @@ export const OurMethod: React.FC = () => {
                           display: 'flex',
                           alignItems: 'center',
                           gap: '12px',
-                          marginBottom: '12px',
+                          marginBottom: '14px',
                         }}
                       >
                         <span
                           style={{
                             fontFamily: 'var(--font-heading)',
-                            fontSize: '32px',
+                            fontSize: '36px',
                             fontWeight: 300,
-                            color: isHighlighted ? '#B69A6B' : '#A0988A',
+                            color: isHighlighted ? '#8A725B' : '#66635D',
                             transition: 'color 0.4s ease',
+                            lineHeight: 1,
                           }}
                         >
                           {stage.number}
@@ -370,7 +478,7 @@ export const OurMethod: React.FC = () => {
                           style={{
                             width: '32px',
                             height: '1px',
-                            backgroundColor: isHighlighted ? '#B69A6B' : 'rgba(22, 21, 20, 0.15)',
+                            backgroundColor: isHighlighted ? '#8A725B' : '#D5CDBE',
                             transition: 'background-color 0.4s ease',
                           }}
                         />
@@ -381,7 +489,7 @@ export const OurMethod: React.FC = () => {
                             fontWeight: 600,
                             letterSpacing: '0.2em',
                             textTransform: 'uppercase',
-                            color: '#B69A6B',
+                            color: '#8A725B',
                           }}
                         >
                           {stage.subtitle}
@@ -391,9 +499,9 @@ export const OurMethod: React.FC = () => {
                       <h2
                         style={{
                           fontFamily: 'var(--font-heading)',
-                          fontSize: 'clamp(28px, 3.8vw, 44px)',
+                          fontSize: 'clamp(28px, 3.6vw, 42px)',
                           fontWeight: 300,
-                          color: '#161514',
+                          color: '#262522',
                           margin: '0 0 10px 0',
                           letterSpacing: '0.01em',
                         }}
@@ -406,9 +514,9 @@ export const OurMethod: React.FC = () => {
                           fontFamily: 'var(--font-body)',
                           fontSize: '15px',
                           fontWeight: 600,
-                          color: '#B69A6B',
+                          color: '#8A725B',
                           lineHeight: 1.5,
-                          margin: '0 0 16px 0',
+                          margin: '0 0 14px 0',
                         }}
                       >
                         {stage.tagline}
@@ -417,9 +525,9 @@ export const OurMethod: React.FC = () => {
                       <p
                         style={{
                           fontFamily: 'var(--font-body)',
-                          fontSize: '14px',
-                          color: 'rgba(22, 21, 20, 0.72)',
-                          lineHeight: 1.75,
+                          fontSize: '14.5px',
+                          color: '#66635D',
+                          lineHeight: 1.7,
                           marginBottom: '24px',
                         }}
                       >
@@ -432,11 +540,11 @@ export const OurMethod: React.FC = () => {
                           <div key={pt} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                             <div
                               style={{
-                                width: '18px',
-                                height: '18px',
+                                width: '20px',
+                                height: '20px',
                                 borderRadius: '50%',
-                                backgroundColor: isHighlighted ? 'rgba(182, 154, 107, 0.15)' : 'rgba(22, 21, 20, 0.06)',
-                                color: isHighlighted ? '#B69A6B' : '#716B61',
+                                backgroundColor: isHighlighted ? 'rgba(138, 114, 91, 0.15)' : '#F7F4EE',
+                                color: isHighlighted ? '#8A725B' : '#66635D',
                                 display: 'flex',
                                 alignItems: 'center',
                                 justifyContent: 'center',
@@ -444,13 +552,13 @@ export const OurMethod: React.FC = () => {
                                 transition: 'all 0.4s ease',
                               }}
                             >
-                              <CheckCircle2 size={12} />
+                              <CheckCircle2 size={13} />
                             </div>
                             <span
                               style={{
                                 fontFamily: 'var(--font-body)',
-                                fontSize: '13px',
-                                color: 'rgba(22, 21, 20, 0.85)',
+                                fontSize: '13.5px',
+                                color: '#262522',
                               }}
                             >
                               {pt}
@@ -462,20 +570,18 @@ export const OurMethod: React.FC = () => {
 
                     {/* Image Column */}
                     <motion.div
-                      initial={{ opacity: 0, scale: 0.96 }}
+                      initial={{ opacity: 0, scale: 0.97 }}
                       whileInView={{ opacity: 1, scale: 1 }}
                       viewport={{ once: true, amount: 0.2 }}
-                      transition={{ duration: 0.7, ease: luxuryEase }}
+                      transition={{ duration: 0.6, ease: luxuryEase }}
                       style={{
                         order: isEven ? 2 : 1,
                         position: 'relative',
                         width: '100%',
                         aspectRatio: '16 / 11',
-                        borderRadius: '3px',
+                        borderRadius: '2px',
                         overflow: 'hidden',
-                        border: `1px solid ${isHighlighted ? 'rgba(182, 154, 107, 0.5)' : 'rgba(22, 21, 20, 0.08)'}`,
-                        boxShadow: isHighlighted ? '0 16px 40px rgba(182, 154, 107, 0.12)' : '0 4px 20px rgba(0,0,0,0.03)',
-                        transition: 'all 0.5s ease',
+                        border: '1px solid #E5DED2',
                       }}
                     >
                       <img
@@ -493,12 +599,12 @@ export const OurMethod: React.FC = () => {
                       <div
                         style={{
                           position: 'absolute',
-                          bottom: '16px',
-                          left: '16px',
+                          bottom: '14px',
+                          left: '14px',
                           padding: '6px 14px',
-                          backgroundColor: 'rgba(22, 21, 20, 0.8)',
+                          backgroundColor: 'rgba(38, 37, 34, 0.88)',
                           backdropFilter: 'blur(8px)',
-                          color: '#FFFFFF',
+                          color: '#F7F4EE',
                           fontFamily: 'var(--font-body)',
                           fontSize: '10.5px',
                           fontWeight: 600,
@@ -518,15 +624,15 @@ export const OurMethod: React.FC = () => {
         </section>
 
         {/* =========================================================================
-            FINAL SECTION: "ONE VISION. EVERY DETAIL CONNECTED."
+            FINAL SECTION: STRATEGIC DARK CONTRAST CLOSING (10% RATIO)
             ========================================================================= */}
         <section
           aria-label="Start Your Method Journey"
           style={{
             position: 'relative',
-            backgroundColor: '#0F0E0D',
-            paddingTop: 'clamp(90px, 12vw, 150px)',
-            paddingBottom: 'clamp(90px, 12vw, 150px)',
+            backgroundColor: '#302D28',
+            paddingTop: 'clamp(90px, 11vw, 140px)',
+            paddingBottom: 'clamp(90px, 11vw, 140px)',
             paddingLeft: 'clamp(20px, 5.5vw, 80px)',
             paddingRight: 'clamp(20px, 5.5vw, 80px)',
             overflow: 'hidden',
@@ -536,34 +642,15 @@ export const OurMethod: React.FC = () => {
             textAlign: 'center',
           }}
         >
-          {/* Background Scrim */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: 'url(https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=85)',
-              backgroundPosition: 'center 45%',
-              backgroundSize: 'cover',
-              opacity: 0.2,
-            }}
-          />
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'radial-gradient(circle at center, rgba(15, 14, 13, 0.7) 0%, #0F0E0D 95%)',
-            }}
-          />
-
           <div style={{ position: 'relative', zIndex: 10, maxWidth: '780px', margin: '0 auto' }}>
             <span
               style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: '11px',
                 fontWeight: 600,
-                letterSpacing: '0.25em',
+                letterSpacing: '0.24em',
                 textTransform: 'uppercase',
-                color: '#B69A6B',
+                color: '#8A725B',
                 display: 'block',
                 marginBottom: '16px',
               }}
@@ -576,7 +663,7 @@ export const OurMethod: React.FC = () => {
                 fontFamily: 'var(--font-heading)',
                 fontSize: 'clamp(34px, 5.5vw, 64px)',
                 fontWeight: 300,
-                color: '#FFFFFF',
+                color: '#F7F4EE',
                 lineHeight: 1.08,
                 margin: '0 0 20px 0',
                 letterSpacing: '0.01em',
@@ -591,7 +678,7 @@ export const OurMethod: React.FC = () => {
               style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: 'clamp(14.5px, 1.3vw, 17.5px)',
-                color: 'rgba(255, 255, 255, 0.8)',
+                color: 'rgba(247, 244, 238, 0.8)',
                 lineHeight: 1.7,
                 marginBottom: '36px',
                 maxWidth: '620px',
@@ -610,20 +697,25 @@ export const OurMethod: React.FC = () => {
                 alignItems: 'center',
                 gap: '12px',
                 padding: '16px 36px',
-                backgroundColor: '#B69A6B',
-                color: '#FFFFFF',
+                backgroundColor: '#F7F4EE',
+                color: '#262522',
                 fontFamily: 'var(--font-body)',
-                fontSize: '12.5px',
+                fontSize: '12px',
                 fontWeight: 600,
                 letterSpacing: '0.14em',
                 textTransform: 'uppercase',
                 textDecoration: 'none',
                 borderRadius: '2px',
-                boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
                 transition: 'all 0.3s ease',
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#9F8255')}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#B69A6B')}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#8A725B';
+                e.currentTarget.style.color = '#FFFFFF';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#F7F4EE';
+                e.currentTarget.style.color = '#262522';
+              }}
             >
               <span>Start Your Project</span>
               <ArrowRight size={15} />
@@ -639,7 +731,8 @@ export const OurMethod: React.FC = () => {
         @media (max-width: 900px) {
           .leoz-timeline-stage {
             grid-template-columns: 1fr !important;
-            gap: 28px !important;
+            gap: 24px !important;
+            padding: 24px !important;
           }
           .leoz-timeline-stage > div {
             order: initial !important;

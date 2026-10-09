@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Header } from '../components/common/Header';
 import { Footer } from '../components/common/Footer';
 import { useDocumentMeta } from '../hooks/useDocumentMeta';
+import { useLenisScroll } from '../hooks/useLenisScroll';
 import {
   ArrowRight,
   ArrowUpRight,
@@ -56,6 +57,22 @@ export const Projects: React.FC = () => {
 
   const [activeFilter, setActiveFilter] = useState<'ALL' | 'KITCHENS' | 'WARDROBES' | 'COMPLETE INTERIORS'>('ALL');
   const [selectedProject, setSelectedProject] = useState<ProjectItem | null>(null);
+  const { lenis } = useLenisScroll();
+
+  // Handle Lenis pause and modal scroll
+  useEffect(() => {
+    if (selectedProject) {
+      lenis?.stop();
+      document.body.style.overflow = 'hidden';
+    } else {
+      lenis?.start();
+      document.body.style.overflow = '';
+    }
+    return () => {
+      lenis?.start();
+      document.body.style.overflow = '';
+    };
+  }, [selectedProject, lenis]);
 
   const navigate = (e: React.MouseEvent, path: string) => {
     e.preventDefault();
@@ -75,7 +92,7 @@ export const Projects: React.FC = () => {
       year: '2026',
       area: '620 sq. ft. Culinary Suite',
       materials: ['Taj Mahal Natural Quartzite', 'Smoked European Oak', 'Champagne Anodized Metal'],
-      heroImage: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1600&q=85',
+      heroImage: '/Skyline Monolithic Island.webp',
       focalPosition: 'center 40%',
       gridSpan: 'large',
       intro: 'A continuous 4.2-metre monolithic quartzite kitchen island functioning as the architectural centrepiece of an expansive private villa.',
@@ -84,25 +101,25 @@ export const Projects: React.FC = () => {
         {
           title: 'Monolith Island Waterfall',
           caption: 'Continuous 45° mitered quartzite waterfall island with flush induction cooktop.',
-          image: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=85',
+          image: '/Italian Marble.webp',
           category: 'Kitchen Island',
         },
         {
           title: 'Concealed Tall Unit Wall',
           caption: 'Smoked oak pocket door tall units concealing high-end Miele ovens and prep station.',
-          image: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1200&q=85',
+          image: '/Wood Veneer.webp',
           category: 'Cabinetry',
         },
         {
           title: 'Micro-Diffused Plinth Lighting',
           caption: '3000K recessed LED plinth illumination floating the stone volume above the floor.',
-          image: 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=85',
+          image: '/Glass Vitrines.webp',
           category: 'Lighting Architecture',
         },
       ],
       beforeAfter: {
-        before: 'https://images.unsplash.com/photo-1513694203232-719a280e022f?auto=format&fit=crop&w=1200&q=80',
-        after: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85',
+        before: '/Matte Finish.webp',
+        after: '/Gloss Finish.webp',
         caption: 'Spatial transformation: Traditional closed compartmentalized kitchen into an open architectural monolith.',
       },
     },
@@ -114,7 +131,7 @@ export const Projects: React.FC = () => {
       year: '2026',
       area: '480 sq. ft. Master Boudoir',
       materials: ['Smoked Bronze Aero Glass', 'Fluted Eucalyptus', 'Italian Stitched Leather'],
-      heroImage: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1400&q=85',
+      heroImage: '/Master Walk-In Dressing Suite.webp',
       focalPosition: 'center 45%',
       gridSpan: 'tall',
       intro: 'A full-height walk-in dressing sanctuary featuring floor-to-ceiling smoked glass vitrines and an acoustic velvet island.',
@@ -123,13 +140,13 @@ export const Projects: React.FC = () => {
         {
           title: 'Central Vitrine Island',
           caption: 'Handcrafted leather watch drawers with motorized biometric lock access.',
-          image: 'https://images.unsplash.com/photo-1558997519-83ea9252edf8?auto=format&fit=crop&w=1200&q=85',
+          image: '/Contemporary Leather Dressing Suite.jfif',
           category: 'Island Showcase',
         },
         {
           title: 'Aero Glass Wardrobe Bay',
           caption: '3.0m tinted glass shutters with ultra-slim champagne anodized profiles.',
-          image: 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=1200&q=85',
+          image: '/Glass Finish Wardrobes.jfif',
           category: 'Wardrobe Bays',
         },
       ],
@@ -142,7 +159,7 @@ export const Projects: React.FC = () => {
       year: '2026',
       area: '4,500 sq. ft. Complete Home',
       materials: ['Calacatta Marble', 'Thermal Matte Nero', 'Acoustic Wall Panels'],
-      heroImage: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1400&q=85',
+      heroImage: '/The Opus Penthouse Kitchen.jfif',
       focalPosition: 'center 45%',
       gridSpan: 'wide',
       intro: 'A harmonious complete residential interior bringing architectural unity across open-concept kitchen, dining, living lounge, and private bedrooms.',
@@ -151,13 +168,13 @@ export const Projects: React.FC = () => {
         {
           title: 'Living & Dining Flow',
           caption: 'Continuous wood panelling and bespoke TV credenza seamlessly framing the city views.',
-          image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85',
+          image: '/Grand Villa Estate.webp',
           category: 'Living Lounge',
         },
         {
           title: 'Integrated Wine & Bar Lounge',
           caption: 'Backlit fluted glass bar with climate-controlled bottle displays.',
-          image: 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=85',
+          image: '/Glass Vitrines.webp',
           category: 'Hospitality Zone',
         },
       ],
@@ -170,7 +187,7 @@ export const Projects: React.FC = () => {
       year: '2025',
       area: '540 sq. ft. Garden Kitchen',
       materials: ['Fluted Acoustic Walnut', 'Honed Nero Sintered Stone', 'Blum Servo-Drive'],
-      heroImage: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1400&q=85',
+      heroImage: '/Architectural Handleless Kitchen.jfif',
       focalPosition: 'center 50%',
       gridSpan: 'standard',
       intro: 'Warm hospitality kitchen seamlessly connecting to an outdoor garden pavilion, featuring 45-degree mitered stone details.',
@@ -179,7 +196,7 @@ export const Projects: React.FC = () => {
         {
           title: 'Fluted Acoustic Walnut Detailing',
           caption: 'Micron-level CNC precision fluting with invisible J-pull finger channels.',
-          image: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85',
+          image: '/Wood Veneer.webp',
           category: 'Finishes',
         },
       ],
@@ -192,7 +209,7 @@ export const Projects: React.FC = () => {
       year: '2025',
       area: '380 sq. ft. Wardrobe Suite',
       materials: ['Co-Planar Sliding Track', 'Velvet Melamine', 'Smoked Bronze Mirror'],
-      heroImage: 'https://images.unsplash.com/photo-1595428774223-ef52624120d2?auto=format&fit=crop&w=1400&q=85',
+      heroImage: '/Smoked Glass Vitrine Wardrobe.webp',
       focalPosition: 'center 48%',
       gridSpan: 'standard',
       intro: 'Flush co-planar sliding wardrobe with concealed pull-down hydraulic elevators and hidden vault.',
@@ -201,7 +218,7 @@ export const Projects: React.FC = () => {
         {
           title: 'Illuminated Shoe Gallery',
           caption: 'Precision angled shelves with brass heel-stop rails and diffused lighting.',
-          image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85',
+          image: '/Mirror Finish wardrobe.jfif',
           category: 'Shoe Storage',
         },
       ],
@@ -214,7 +231,7 @@ export const Projects: React.FC = () => {
       year: '2025',
       area: '6,200 sq. ft. Villa Interior',
       materials: ['Natural White Quartzite', 'Smoked European Oak', 'Ultra-Matte Satin Lacquer'],
-      heroImage: 'https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?auto=format&fit=crop&w=1400&q=85',
+      heroImage: '/Grand Villa Estate.webp',
       focalPosition: 'center 42%',
       gridSpan: 'large',
       intro: 'Turnkey architectural interior encompassing double-height living foyer, chef & wet kitchen suites, master boudoir, and media room.',
@@ -223,13 +240,13 @@ export const Projects: React.FC = () => {
         {
           title: 'Chef Kitchen & Island',
           caption: 'Dual island kitchen with integrated prep sink and cantilevered breakfast bar.',
-          image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85',
+          image: '/Skyline Monolithic Island.webp',
           category: 'Kitchen',
         },
         {
           title: 'Master Dressing Boudoir',
           caption: 'His-and-hers walk-in closet with central accessory console.',
-          image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1200&q=85',
+          image: '/Fluted Walnut Executive Wardrobe.webp',
           category: 'Wardrobe',
         },
       ],
@@ -242,110 +259,143 @@ export const Projects: React.FC = () => {
   });
 
   return (
-    <div style={{ backgroundColor: '#FAF9F6', color: '#161514', minHeight: '100vh', overflowX: 'hidden' }}>
+    <div style={{ backgroundColor: '#F7F4EE', color: '#262522', minHeight: '100vh', overflowX: 'hidden' }}>
       <Header />
 
       <main id="main-content">
         {/* =========================================================================
-            HERO: "SPACES WE'VE CREATED."
+            HERO: UNIVERSAL FULL-BLEED ARCHITECTURAL HERO
             ========================================================================= */}
         <section
-          aria-label="LEOZ Portfolio Hero"
+          aria-label="LEOZ Projects Hero"
           style={{
             position: 'relative',
             width: '100%',
-            minHeight: 'clamp(520px, 78vh, 700px)',
+            minHeight: '85vh',
             display: 'flex',
-            alignItems: 'flex-end',
-            backgroundColor: '#161514',
+            flexDirection: 'column',
+            justifyContent: 'flex-end',
+            paddingTop: 'clamp(110px, 14vh, 180px)',
+            paddingBottom: 'clamp(44px, 7vh, 88px)',
+            paddingLeft: 'clamp(20px, 6vw, 100px)',
+            paddingRight: 'clamp(20px, 6vw, 100px)',
             overflow: 'hidden',
           }}
         >
-          {/* Immersive Architectural Background */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: 'url(https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2200&q=90)',
-              backgroundPosition: 'center 45%',
-              backgroundSize: 'cover',
-            }}
-          />
-
-          {/* Soft Scrim for High Readability */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'linear-gradient(180deg, rgba(22, 21, 20, 0.3) 0%, rgba(22, 21, 20, 0.4) 40%, rgba(22, 21, 20, 0.88) 95%)',
-            }}
-          />
-
-          {/* Hero Content */}
-          <div
-            style={{
-              position: 'relative',
-              zIndex: 10,
-              maxWidth: '1360px',
-              width: '100%',
-              margin: '0 auto',
-              paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-              paddingRight: 'clamp(20px, 5.5vw, 80px)',
-              paddingBottom: 'clamp(44px, 7vw, 76px)',
-            }}
+          <motion.div
+            initial={{ scale: 1.04, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1.3, ease: luxuryEase }}
+            style={{ position: 'absolute', inset: 0, zIndex: 1 }}
           >
-            <div style={{ maxWidth: '820px' }}>
-              <motion.span
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: luxuryEase }}
-                style={{
-                  display: 'inline-block',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  letterSpacing: '0.24em',
-                  textTransform: 'uppercase',
-                  color: '#B69A6B',
-                  marginBottom: '14px',
-                }}
-              >
-                LEOZ CUCINE • ARCHITECTURAL PORTFOLIO
-              </motion.span>
+            <img
+              src="/Skyline Monolithic Island.webp"
+              alt="LEOZ Architectural Kitchen and Wardrobe Projects"
+              style={{ width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 45%', filter: 'brightness(0.92)' }}
+            />
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background:
+                  'linear-gradient(180deg, rgba(20, 21, 19, 0.45) 0%, rgba(20, 21, 19, 0.25) 30%, rgba(20, 21, 19, 0.72) 70%, rgba(20, 21, 19, 0.94) 100%)',
+              }}
+            />
+          </motion.div>
 
-              <motion.h1
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.1, ease: luxuryEase }}
+          <div style={{ position: 'relative', zIndex: 10, maxWidth: '860px', color: '#FFFFFF' }}>
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.65, delay: 0.15, ease: luxuryEase }}
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: '12px',
+                fontWeight: 600,
+                letterSpacing: '0.24em',
+                textTransform: 'uppercase',
+                color: '#D4AF37',
+                marginBottom: '16px',
+                textShadow: '0 2px 8px rgba(0,0,0,0.8)',
+              }}
+            >
+              LEOZ / PROJECTS
+            </motion.div>
+
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.28, ease: luxuryEase }}
+              style={{
+                fontFamily: 'var(--font-heading)',
+                fontSize: 'clamp(36px, 5vw, 64px)',
+                fontWeight: 400,
+                lineHeight: 1.12,
+                letterSpacing: '-0.015em',
+                color: '#FFFFFF',
+                margin: '0 0 18px 0',
+                textShadow: '0 3px 18px rgba(0,0,0,0.75)',
+              }}
+            >
+              Spaces, Designed Around You.
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.75, delay: 0.42, ease: luxuryEase }}
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 'clamp(15px, 1.25vw, 17.5px)',
+                fontWeight: 400,
+                lineHeight: 1.7,
+                color: '#F0F0EC',
+                maxWidth: '620px',
+                margin: '0 0 28px 0',
+                textShadow: '0 2px 10px rgba(0,0,0,0.8)',
+              }}
+            >
+              Explore selected kitchens and wardrobes created for distinctive homes.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 14 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.55, ease: luxuryEase }}
+            >
+              <a
+                href="#projects-grid"
                 style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(36px, 5.8vw, 72px)',
-                  fontWeight: 300,
-                  lineHeight: 1.05,
-                  letterSpacing: '-0.01em',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  padding: '14px 28px',
+                  backgroundColor: '#A58B62',
                   color: '#FFFFFF',
-                  margin: '0 0 18px 0',
-                }}
-              >
-                Spaces We’ve Created.
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.2, ease: luxuryEase }}
-                style={{
                   fontFamily: 'var(--font-body)',
-                  fontSize: 'clamp(14.5px, 1.3vw, 17.5px)',
-                  color: 'rgba(255, 255, 255, 0.85)',
-                  lineHeight: 1.65,
-                  maxWidth: '640px',
-                  marginBottom: '28px',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  textDecoration: 'none',
+                  borderRadius: '2px',
+                  border: '1px solid #A58B62',
+                  boxShadow: '0 6px 20px rgba(0,0,0,0.4)',
+                  transition: 'all 0.3s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#8C744F';
+                  e.currentTarget.style.borderColor = '#8C744F';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#A58B62';
+                  e.currentTarget.style.borderColor = '#A58B62';
                 }}
               >
-                A collection of kitchens, wardrobes and complete interiors designed and crafted by LEOZ.
-              </motion.p>
-            </div>
+                <span>View Projects</span>
+                <ArrowRight size={14} />
+              </a>
+            </motion.div>
           </div>
         </section>
 
@@ -355,12 +405,12 @@ export const Projects: React.FC = () => {
         <section
           aria-label="Project Category Filters"
           style={{
-            paddingTop: 'clamp(32px, 4vw, 48px)',
-            paddingBottom: 'clamp(32px, 4vw, 48px)',
+            paddingTop: 'clamp(24px, 3.5vw, 36px)',
+            paddingBottom: 'clamp(24px, 3.5vw, 36px)',
             paddingLeft: 'clamp(20px, 5.5vw, 80px)',
             paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            borderBottom: '1px solid rgba(22, 21, 20, 0.08)',
-            backgroundColor: '#FAF9F6',
+            borderBottom: '1px solid #E5DED2',
+            backgroundColor: '#F7F4EE',
             position: 'sticky',
             top: '70px',
             zIndex: 30,
@@ -373,7 +423,7 @@ export const Projects: React.FC = () => {
               margin: '0 auto',
               display: 'flex',
               justifyContent: 'center',
-              gap: '12px',
+              gap: '10px',
               flexWrap: 'wrap',
             }}
           >
@@ -383,13 +433,13 @@ export const Projects: React.FC = () => {
                 type="button"
                 onClick={() => setActiveFilter(filter)}
                 style={{
-                  padding: '10px 22px',
-                  backgroundColor: activeFilter === filter ? '#161514' : 'transparent',
-                  color: activeFilter === filter ? '#FFFFFF' : '#161514',
-                  border: `1px solid ${activeFilter === filter ? '#161514' : 'rgba(22, 21, 20, 0.15)'}`,
+                  padding: '9px 20px',
+                  backgroundColor: activeFilter === filter ? '#262522' : '#FFFFFF',
+                  color: activeFilter === filter ? '#F7F4EE' : '#262522',
+                  border: `1px solid ${activeFilter === filter ? '#262522' : '#D5CDBE'}`,
                   borderRadius: '2px',
                   fontFamily: 'var(--font-body)',
-                  fontSize: '12px',
+                  fontSize: '11.5px',
                   fontWeight: 600,
                   letterSpacing: '0.12em',
                   textTransform: 'uppercase',
@@ -404,7 +454,7 @@ export const Projects: React.FC = () => {
         </section>
 
         {/* =========================================================================
-            ASYMMETRIC EDITORIAL PROJECT GRID
+            ASYMMETRIC EDITORIAL PROJECT GRID (WARM BACKGROUND WITH CRISP CARDS)
             ========================================================================= */}
         <section
           aria-label="Architectural Portfolio Grid"
@@ -413,7 +463,7 @@ export const Projects: React.FC = () => {
             paddingBottom: 'clamp(80px, 10vw, 130px)',
             paddingLeft: 'clamp(20px, 5.5vw, 80px)',
             paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            backgroundColor: '#FAF9F6',
+            backgroundColor: '#EEE9E0',
           }}
         >
           <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
@@ -454,24 +504,25 @@ export const Projects: React.FC = () => {
                       style={{
                         gridColumn: colSpan,
                         backgroundColor: '#FFFFFF',
-                        border: '1px solid rgba(22, 21, 20, 0.08)',
+                        border: '1px solid #D5CDBE',
                         borderRadius: '3px',
                         overflow: 'hidden',
                         cursor: 'pointer',
                         display: 'flex',
                         flexDirection: 'column',
                         transition: 'all 0.4s ease',
+                        boxShadow: '0 4px 16px rgba(0,0,0,0.03)',
                       }}
                       onClick={() => setSelectedProject(project)}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.borderColor = 'rgba(182, 154, 107, 0.5)';
+                        e.currentTarget.style.borderColor = '#8A725B';
                         e.currentTarget.style.transform = 'translateY(-6px)';
-                        e.currentTarget.style.boxShadow = '0 16px 36px rgba(0,0,0,0.08)';
+                        e.currentTarget.style.boxShadow = '0 16px 36px rgba(138, 114, 91, 0.12)';
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.borderColor = 'rgba(22, 21, 20, 0.08)';
+                        e.currentTarget.style.borderColor = '#D5CDBE';
                         e.currentTarget.style.transform = 'translateY(0)';
-                        e.currentTarget.style.boxShadow = 'none';
+                        e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.03)';
                       }}
                     >
                       {/* Project Image with Zoom */}
@@ -481,7 +532,7 @@ export const Projects: React.FC = () => {
                           width: '100%',
                           aspectRatio: aspectRatio,
                           overflow: 'hidden',
-                          backgroundColor: '#EBE8E1',
+                          backgroundColor: '#E5DED2',
                         }}
                       >
                         <img
@@ -514,9 +565,9 @@ export const Projects: React.FC = () => {
                           <span
                             style={{
                               padding: '5px 12px',
-                              backgroundColor: 'rgba(22, 21, 20, 0.8)',
+                              backgroundColor: 'rgba(38, 37, 34, 0.88)',
                               backdropFilter: 'blur(8px)',
-                              color: '#B69A6B',
+                              color: '#F7F4EE',
                               fontFamily: 'var(--font-body)',
                               fontSize: '10px',
                               fontWeight: 600,
@@ -530,9 +581,9 @@ export const Projects: React.FC = () => {
                           <span
                             style={{
                               padding: '5px 10px',
-                              backgroundColor: 'rgba(22, 21, 20, 0.75)',
+                              backgroundColor: 'rgba(38, 37, 34, 0.8)',
                               backdropFilter: 'blur(8px)',
-                              color: '#FFFFFF',
+                              color: '#F7F4EE',
                               fontFamily: 'var(--font-body)',
                               fontSize: '10px',
                               borderRadius: '2px',
@@ -549,9 +600,9 @@ export const Projects: React.FC = () => {
                             bottom: '14px',
                             left: '14px',
                             padding: '4px 10px',
-                            backgroundColor: 'rgba(22, 21, 20, 0.75)',
+                            backgroundColor: 'rgba(38, 37, 34, 0.88)',
                             backdropFilter: 'blur(8px)',
-                            color: '#FFFFFF',
+                            color: '#F7F4EE',
                             fontFamily: 'var(--font-body)',
                             fontSize: '11px',
                             borderRadius: '2px',
@@ -584,21 +635,21 @@ export const Projects: React.FC = () => {
                               fontFamily: 'var(--font-heading)',
                               fontSize: 'clamp(20px, 2.2vw, 24px)',
                               fontWeight: 400,
-                              color: '#161514',
+                              color: '#262522',
                               margin: 0,
                               transition: 'color 0.3s ease',
                             }}
                           >
                             {project.title}
                           </h3>
-                          <ArrowUpRight size={18} style={{ color: '#B69A6B' }} />
+                          <ArrowUpRight size={18} style={{ color: '#8A725B' }} />
                         </div>
 
                         <p
                           style={{
                             fontFamily: 'var(--font-body)',
                             fontSize: '13.5px',
-                            color: 'rgba(22, 21, 20, 0.72)',
+                            color: '#66635D',
                             lineHeight: 1.6,
                             margin: '0 0 16px 0',
                             flexGrow: 1,
@@ -610,17 +661,17 @@ export const Projects: React.FC = () => {
                         <div
                           style={{
                             paddingTop: '12px',
-                            borderTop: '1px solid rgba(22, 21, 20, 0.08)',
+                            borderTop: '1px solid #E5DED2',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
                             fontSize: '11.5px',
                             fontFamily: 'var(--font-body)',
-                            color: '#8A8275',
+                            color: '#66635D',
                           }}
                         >
                           <span>{project.area}</span>
-                          <span style={{ color: '#B69A6B', fontWeight: 600 }}>VIEW CASE STUDY →</span>
+                          <span style={{ color: '#8A725B', fontWeight: 600 }}>VIEW CASE STUDY →</span>
                         </div>
                       </div>
                     </motion.div>
@@ -637,16 +688,22 @@ export const Projects: React.FC = () => {
         <AnimatePresence>
           {selectedProject && (
             <motion.div
+              data-lenis-prevent="true"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
+              onClick={(e) => {
+                if (e.target === e.currentTarget) setSelectedProject(null);
+              }}
               style={{
                 position: 'fixed',
                 inset: 0,
-                backgroundColor: 'rgba(15, 14, 13, 0.95)',
-                backdropFilter: 'blur(16px)',
+                backgroundColor: 'rgba(38, 37, 34, 0.75)',
+                backdropFilter: 'blur(12px)',
                 zIndex: 2000,
                 overflowY: 'auto',
+                WebkitOverflowScrolling: 'touch',
+                overscrollBehavior: 'contain',
                 padding: 'clamp(20px, 4vw, 60px) clamp(16px, 4vw, 40px)',
               }}
             >
@@ -662,7 +719,8 @@ export const Projects: React.FC = () => {
                   borderRadius: '4px',
                   overflow: 'hidden',
                   position: 'relative',
-                  boxShadow: '0 30px 80px rgba(0,0,0,0.5)',
+                  boxShadow: '0 30px 80px rgba(0,0,0,0.3)',
+                  border: '1px solid #D5CDBE',
                 }}
               >
                 {/* Close Button */}
@@ -678,17 +736,17 @@ export const Projects: React.FC = () => {
                     width: '44px',
                     height: '44px',
                     borderRadius: '50%',
-                    backgroundColor: 'rgba(22, 21, 20, 0.85)',
+                    backgroundColor: 'rgba(38, 37, 34, 0.9)',
                     border: '1px solid rgba(255, 255, 255, 0.2)',
-                    color: '#FFFFFF',
+                    color: '#F7F4EE',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     cursor: 'pointer',
                     transition: 'all 0.2s ease',
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#B69A6B')}
-                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(22, 21, 20, 0.85)')}
+                  onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#8A725B')}
+                  onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'rgba(38, 37, 34, 0.9)')}
                 >
                   <X size={20} />
                 </button>
@@ -704,7 +762,7 @@ export const Projects: React.FC = () => {
                     style={{
                       position: 'absolute',
                       inset: 0,
-                      background: 'linear-gradient(180deg, transparent 40%, rgba(22, 21, 20, 0.9) 100%)',
+                      background: 'linear-gradient(180deg, transparent 40%, rgba(38, 37, 34, 0.9) 100%)',
                     }}
                   />
                   <div
@@ -713,7 +771,7 @@ export const Projects: React.FC = () => {
                       bottom: '28px',
                       left: 'clamp(24px, 4vw, 48px)',
                       right: 'clamp(24px, 4vw, 48px)',
-                      color: '#FFFFFF',
+                      color: '#F7F4EE',
                     }}
                   >
                     <span
@@ -723,7 +781,7 @@ export const Projects: React.FC = () => {
                         fontWeight: 600,
                         letterSpacing: '0.2em',
                         textTransform: 'uppercase',
-                        color: '#B69A6B',
+                        color: '#8A725B',
                         display: 'block',
                         marginBottom: '8px',
                       }}
@@ -736,7 +794,7 @@ export const Projects: React.FC = () => {
                         fontSize: 'clamp(28px, 4vw, 44px)',
                         fontWeight: 300,
                         margin: 0,
-                        color: '#FFFFFF',
+                        color: '#F7F4EE',
                       }}
                     >
                       {selectedProject.title}
@@ -745,7 +803,7 @@ export const Projects: React.FC = () => {
                 </div>
 
                 {/* Modal Story & Specs */}
-                <div style={{ padding: 'clamp(28px, 5vw, 56px)' }}>
+                <div style={{ padding: 'clamp(28px, 5vw, 56px)', backgroundColor: '#F7F4EE' }}>
                   <div
                     style={{
                       display: 'grid',
@@ -761,7 +819,7 @@ export const Projects: React.FC = () => {
                           fontFamily: 'var(--font-heading)',
                           fontSize: '22px',
                           fontWeight: 400,
-                          color: '#161514',
+                          color: '#262522',
                           margin: '0 0 14px 0',
                         }}
                       >
@@ -771,7 +829,7 @@ export const Projects: React.FC = () => {
                         style={{
                           fontFamily: 'var(--font-body)',
                           fontSize: '15px',
-                          color: 'rgba(22, 21, 20, 0.8)',
+                          color: '#66635D',
                           lineHeight: 1.75,
                           marginBottom: '16px',
                         }}
@@ -782,8 +840,8 @@ export const Projects: React.FC = () => {
 
                     <div
                       style={{
-                        backgroundColor: '#FAF9F6',
-                        border: '1px solid rgba(22, 21, 20, 0.08)',
+                        backgroundColor: '#FFFFFF',
+                        border: '1px solid #D5CDBE',
                         borderRadius: '3px',
                         padding: '24px',
                       }}
@@ -795,7 +853,7 @@ export const Projects: React.FC = () => {
                           fontWeight: 600,
                           letterSpacing: '0.15em',
                           textTransform: 'uppercase',
-                          color: '#B69A6B',
+                          color: '#8A725B',
                           margin: '0 0 16px 0',
                         }}
                       >
@@ -803,24 +861,24 @@ export const Projects: React.FC = () => {
                       </h4>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                         <div>
-                          <span style={{ fontSize: '11px', color: '#8A8275', display: 'block' }}>SPATIAL AREA</span>
-                          <strong style={{ fontSize: '13.5px', color: '#161514', fontWeight: 600 }}>
+                          <span style={{ fontSize: '11px', color: '#66635D', display: 'block' }}>SPATIAL AREA</span>
+                          <strong style={{ fontSize: '13.5px', color: '#262522', fontWeight: 600 }}>
                             {selectedProject.area}
                           </strong>
                         </div>
                         <div>
-                          <span style={{ fontSize: '11px', color: '#8A8275', display: 'block' }}>PRIMARY MATERIALS</span>
+                          <span style={{ fontSize: '11px', color: '#66635D', display: 'block' }}>PRIMARY MATERIALS</span>
                           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '4px' }}>
                             {selectedProject.materials.map((mat) => (
                               <span
                                 key={mat}
                                 style={{
                                   padding: '4px 10px',
-                                  backgroundColor: '#FFFFFF',
-                                  border: '1px solid rgba(22, 21, 20, 0.1)',
+                                  backgroundColor: '#F7F4EE',
+                                  border: '1px solid #D5CDBE',
                                   borderRadius: '2px',
                                   fontSize: '11.5px',
-                                  color: '#161514',
+                                  color: '#262522',
                                 }}
                               >
                                 {mat}
@@ -839,7 +897,7 @@ export const Projects: React.FC = () => {
                         fontFamily: 'var(--font-heading)',
                         fontSize: '22px',
                         fontWeight: 400,
-                        color: '#161514',
+                        color: '#262522',
                         margin: '0 0 20px 0',
                       }}
                     >
@@ -856,7 +914,8 @@ export const Projects: React.FC = () => {
                         <div
                           key={g.title}
                           style={{
-                            border: '1px solid rgba(22, 21, 20, 0.08)',
+                            backgroundColor: '#FFFFFF',
+                            border: '1px solid #D5CDBE',
                             borderRadius: '3px',
                             overflow: 'hidden',
                           }}
@@ -865,11 +924,11 @@ export const Projects: React.FC = () => {
                             <img src={g.image} alt={g.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                           </div>
                           <div style={{ padding: '16px' }}>
-                            <span style={{ fontSize: '10px', color: '#B69A6B', fontWeight: 600, letterSpacing: '0.12em' }}>
+                            <span style={{ fontSize: '10px', color: '#8A725B', fontWeight: 600, letterSpacing: '0.12em' }}>
                               {g.category}
                             </span>
-                            <h4 style={{ fontSize: '15px', margin: '4px 0 6px 0', color: '#161514' }}>{g.title}</h4>
-                            <p style={{ fontSize: '12.5px', color: 'rgba(22, 21, 20, 0.68)', margin: 0, lineHeight: 1.5 }}>
+                            <h4 style={{ fontSize: '15px', margin: '4px 0 6px 0', color: '#262522' }}>{g.title}</h4>
+                            <p style={{ fontSize: '12.5px', color: '#66635D', margin: 0, lineHeight: 1.5 }}>
                               {g.caption}
                             </p>
                           </div>
@@ -878,105 +937,25 @@ export const Projects: React.FC = () => {
                     </div>
                   </div>
 
-                  {/* Before / After if Available */}
-                  {selectedProject.beforeAfter && (
-                    <div
-                      style={{
-                        backgroundColor: '#FAF9F6',
-                        padding: '24px',
-                        borderRadius: '3px',
-                        border: '1px solid rgba(22, 21, 20, 0.08)',
-                        marginBottom: '48px',
-                      }}
-                    >
-                      <h3
-                        style={{
-                          fontFamily: 'var(--font-heading)',
-                          fontSize: '20px',
-                          fontWeight: 400,
-                          color: '#161514',
-                          margin: '0 0 16px 0',
-                        }}
-                      >
-                        Transformation Context
-                      </h3>
-                      <div
-                        style={{
-                          display: 'grid',
-                          gridTemplateColumns: '1fr 1fr',
-                          gap: '16px',
-                        }}
-                        className="before-after-grid"
-                      >
-                        <div>
-                          <div style={{ position: 'relative', aspectRatio: '16 / 10', overflow: 'hidden', borderRadius: '2px' }}>
-                            <img
-                              src={selectedProject.beforeAfter.before}
-                              alt="Before"
-                              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                            />
-                            <div
-                              style={{
-                                position: 'absolute',
-                                top: '10px',
-                                left: '10px',
-                                padding: '4px 8px',
-                                backgroundColor: 'rgba(0,0,0,0.7)',
-                                color: '#FFFFFF',
-                                fontSize: '10px',
-                                fontWeight: 600,
-                              }}
-                            >
-                              BEFORE
-                            </div>
-                          </div>
-                        </div>
-                        <div>
-                          <div style={{ position: 'relative', aspectRatio: '16 / 10', overflow: 'hidden', borderRadius: '2px' }}>
-                            <img
-                              src={selectedProject.beforeAfter.after}
-                              alt="After"
-                              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                            />
-                            <div
-                              style={{
-                                position: 'absolute',
-                                top: '10px',
-                                left: '10px',
-                                padding: '4px 8px',
-                                backgroundColor: '#B69A6B',
-                                color: '#FFFFFF',
-                                fontSize: '10px',
-                                fontWeight: 600,
-                              }}
-                            >
-                              AFTER LEOZ
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <p style={{ fontSize: '12.5px', color: 'rgba(22, 21, 20, 0.7)', margin: '14px 0 0 0' }}>
-                        {selectedProject.beforeAfter.caption}
-                      </p>
-                    </div>
-                  )}
-
                   {/* Modal Final CTA */}
                   <div
                     style={{
-                      padding: '32px',
-                      backgroundColor: '#161514',
+                      padding: 'clamp(28px, 4vw, 44px)',
+                      backgroundColor: '#20211F',
                       color: '#FFFFFF',
-                      borderRadius: '3px',
+                      borderRadius: '4px',
                       textAlign: 'center',
+                      border: '1px solid rgba(255, 255, 255, 0.08)',
                     }}
                   >
                     <h3
                       style={{
                         fontFamily: 'var(--font-heading)',
-                        fontSize: 'clamp(22px, 3vw, 30px)',
-                        fontWeight: 300,
+                        fontSize: 'clamp(24px, 3.2vw, 32px)',
+                        fontWeight: 400,
+                        color: '#FFFFFF',
                         margin: '0 0 12px 0',
+                        textShadow: '0 2px 12px rgba(0,0,0,0.5)',
                       }}
                     >
                       Commission an Interior of This Calibre
@@ -984,10 +963,11 @@ export const Projects: React.FC = () => {
                     <p
                       style={{
                         fontFamily: 'var(--font-body)',
-                        fontSize: '14px',
-                        color: 'rgba(255, 255, 255, 0.75)',
-                        maxWidth: '540px',
+                        fontSize: '14.5px',
+                        color: '#E6E6E2',
+                        maxWidth: '560px',
                         margin: '0 auto 24px auto',
+                        lineHeight: 1.65,
                       }}
                     >
                       Schedule a private consultation with LEOZ principal designers to begin planning your residence.
@@ -1003,7 +983,7 @@ export const Projects: React.FC = () => {
                         alignItems: 'center',
                         gap: '10px',
                         padding: '14px 32px',
-                        backgroundColor: '#B69A6B',
+                        backgroundColor: '#A58B62',
                         color: '#FFFFFF',
                         fontFamily: 'var(--font-body)',
                         fontSize: '12px',
@@ -1012,6 +992,17 @@ export const Projects: React.FC = () => {
                         textTransform: 'uppercase',
                         textDecoration: 'none',
                         borderRadius: '2px',
+                        border: '1px solid #A58B62',
+                        boxShadow: '0 4px 16px rgba(0,0,0,0.3)',
+                        transition: 'all 0.25s ease',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = '#8C744F';
+                        e.currentTarget.style.borderColor = '#8C744F';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = '#A58B62';
+                        e.currentTarget.style.borderColor = '#A58B62';
                       }}
                     >
                       <span>Start Your Project</span>
@@ -1025,15 +1016,15 @@ export const Projects: React.FC = () => {
         </AnimatePresence>
 
         {/* =========================================================================
-            SECTION: FINAL CTA ("START YOUR PROJECT")
+            SECTION: FINAL CTA STRATEGIC DARK CONTRAST (10% RATIO)
             ========================================================================= */}
         <section
           aria-label="Start Your Project CTA"
           style={{
             position: 'relative',
-            backgroundColor: '#0F0E0D',
-            paddingTop: 'clamp(90px, 12vw, 150px)',
-            paddingBottom: 'clamp(90px, 12vw, 150px)',
+            backgroundColor: '#302D28',
+            paddingTop: 'clamp(90px, 11vw, 140px)',
+            paddingBottom: 'clamp(90px, 11vw, 140px)',
             paddingLeft: 'clamp(20px, 5.5vw, 80px)',
             paddingRight: 'clamp(20px, 5.5vw, 80px)',
             overflow: 'hidden',
@@ -1043,24 +1034,6 @@ export const Projects: React.FC = () => {
             textAlign: 'center',
           }}
         >
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: 'url(https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=85)',
-              backgroundPosition: 'center 45%',
-              backgroundSize: 'cover',
-              opacity: 0.2,
-            }}
-          />
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'radial-gradient(circle at center, rgba(15, 14, 13, 0.7) 0%, #0F0E0D 95%)',
-            }}
-          />
-
           <div style={{ position: 'relative', zIndex: 10, maxWidth: '780px', margin: '0 auto' }}>
             <span
               style={{
@@ -1069,7 +1042,7 @@ export const Projects: React.FC = () => {
                 fontWeight: 600,
                 letterSpacing: '0.25em',
                 textTransform: 'uppercase',
-                color: '#B69A6B',
+                color: '#8A725B',
                 display: 'block',
                 marginBottom: '16px',
               }}
@@ -1082,7 +1055,7 @@ export const Projects: React.FC = () => {
                 fontFamily: 'var(--font-heading)',
                 fontSize: 'clamp(32px, 5.5vw, 62px)',
                 fontWeight: 300,
-                color: '#FFFFFF',
+                color: '#F7F4EE',
                 lineHeight: 1.08,
                 margin: '0 0 20px 0',
               }}
@@ -1094,7 +1067,7 @@ export const Projects: React.FC = () => {
               style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: 'clamp(14.5px, 1.3vw, 17.5px)',
-                color: 'rgba(255, 255, 255, 0.8)',
+                color: 'rgba(247, 244, 238, 0.8)',
                 lineHeight: 1.7,
                 marginBottom: '36px',
                 maxWidth: '620px',
@@ -1113,20 +1086,25 @@ export const Projects: React.FC = () => {
                 alignItems: 'center',
                 gap: '12px',
                 padding: '16px 36px',
-                backgroundColor: '#B69A6B',
-                color: '#FFFFFF',
+                backgroundColor: '#F7F4EE',
+                color: '#262522',
                 fontFamily: 'var(--font-body)',
-                fontSize: '12.5px',
+                fontSize: '12px',
                 fontWeight: 600,
                 letterSpacing: '0.14em',
                 textTransform: 'uppercase',
                 textDecoration: 'none',
                 borderRadius: '2px',
-                boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
                 transition: 'all 0.3s ease',
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#9F8255')}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#B69A6B')}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#8A725B';
+                e.currentTarget.style.color = '#FFFFFF';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#F7F4EE';
+                e.currentTarget.style.color = '#262522';
+              }}
             >
               <span>Book a Consultation</span>
               <ArrowRight size={15} />
@@ -1143,7 +1121,7 @@ export const Projects: React.FC = () => {
           transform: scale(1.05);
         }
         .leoz-project-item:hover .project-title {
-          color: #B69A6B;
+          color: #8A725B;
         }
 
         @media (max-width: 1024px) {
@@ -1160,9 +1138,6 @@ export const Projects: React.FC = () => {
 
         @media (max-width: 768px) {
           .leoz-portfolio-grid {
-            grid-template-columns: 1fr !important;
-          }
-          .before-after-grid {
             grid-template-columns: 1fr !important;
           }
         }

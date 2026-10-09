@@ -2,28 +2,23 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Header } from '../components/common/Header';
 import { Footer } from '../components/common/Footer';
+import { UniversalHero } from '../components/common/UniversalHero';
 import { useDocumentMeta } from '../hooks/useDocumentMeta';
 import {
   ArrowRight,
-  ArrowUpRight,
-  Award,
-  Factory,
-  Compass,
-  GraduationCap,
   ShieldCheck,
-  CheckCircle2,
+  Building,
   Layers,
   Sparkles,
-  ChevronDown,
-  Building,
-  TrendingUp,
-  MapPin,
-  FileText,
-  Phone,
-  Mail,
+  Compass,
+  CheckCircle,
+  Users,
+  Briefcase,
+  Store,
+  PhoneCall
 } from 'lucide-react';
 import { submitEnquiryForm } from '../lib/submitEnquiryForm';
-import { LeozEmblem } from '../components/common/LeozEmblem';
+import { PHONE_SALES_DISPLAY, PHONE_SALES_HREF } from '../constants/siteInfo';
 
 /* Easing curve for luxury architectural motion */
 const luxuryEase = [0.16, 1, 0.3, 1];
@@ -34,194 +29,44 @@ export const FranchiseOpportunities: React.FC = () => {
   }, []);
 
   useDocumentMeta(
-    'Franchise Opportunities | LEOZ Cucine — Partner With Us',
-    'Partner with LEOZ Cucine to build a premium interior design and kitchen business backed by design expertise, manufacturing capabilities and a strong brand ecosystem.'
+    'Franchise Opportunities | LEOZ Cucine — Luxury Modular Kitchen & Wardrobe Partnership',
+    'An invitation to grow with LEOZ Cucine. Exploring the appointment of two franchise partners for our luxury kitchen and wardrobe brand.'
   );
 
-  const navigate = (e: React.MouseEvent, path: string) => {
+  const scrollToForm = (e: React.MouseEvent) => {
     e.preventDefault();
-    window.history.pushState({}, '', path);
-    window.dispatchEvent(new Event('popstate'));
-  };
-
-  const scrollToEnquiry = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const el = document.getElementById('franchise-enquiry-section');
+    const el = document.getElementById('how-to-enquire');
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
   /* =========================================================================
-     SECTION 01: WHY LEOZ (6 BENEFIT POINTS)
-     ========================================================================= */
-  const whyLeozPoints = [
-    {
-      number: '01',
-      title: 'ESTABLISHED BRAND',
-      desc: 'Build your business with the credibility, architectural positioning, and discerning reputation of LEOZ.',
-    },
-    {
-      number: '02',
-      title: 'DESIGN EXPERTISE',
-      desc: 'Access a refined European design language, monolithic kitchen topologies, and proven interior spatial thinking.',
-    },
-    {
-      number: '03',
-      title: 'MANUFACTURING SUPPORT',
-      desc: 'Backed directly by our dedicated 20,000 sq. ft. precision manufacturing plant with 0.1mm CNC tolerances.',
-    },
-    {
-      number: '04',
-      title: 'TECHNOLOGY & PROCESS',
-      desc: 'Structured 3D CAD design-to-factory computerized workflows and rigorous ERP tracking systems.',
-    },
-    {
-      number: '05',
-      title: 'MARKETING SUPPORT',
-      desc: 'High-impact national brand communication, architectural campaigns, digital lead distribution, and collateral.',
-    },
-    {
-      number: '06',
-      title: 'BUSINESS GUIDANCE',
-      desc: 'End-to-end guidance across luxury showroom curation, daily sales operations, and white-glove client experience.',
-    },
-  ];
-
-  /* =========================================================================
-     SECTION 03: WHAT YOU GET (8 COMPLETE ECOSYSTEM CARDS)
-     ========================================================================= */
-  const ecosystemCards = [
-    {
-      title: 'BRAND',
-      subtitle: 'IDENTITY & POSITIONING',
-      desc: 'LEOZ brand identity, architectural positioning guidelines, and trademark licensing for your territory.',
-    },
-    {
-      title: 'SHOWROOM',
-      subtitle: 'EXPERIENCE CURATION',
-      desc: 'Architectural layout planning, lighting schemes, and display modules to create a stunning client environment.',
-    },
-    {
-      title: 'DESIGN',
-      subtitle: 'SYSTEMS & TEMPLATES',
-      desc: 'Comprehensive 3D design libraries, standard carcass blocks, detail drawing templates, and spatial guidelines.',
-    },
-    {
-      title: 'PRODUCT',
-      subtitle: 'FULL RANGE ACCESS',
-      desc: 'Full catalog access to LEOZ modular kitchens, master dressing suites, living consoles, and joinery.',
-    },
-    {
-      title: 'MANUFACTURING',
-      subtitle: 'FACTORY BACKING',
-      desc: 'Direct production in our 20,000 sq. ft. automated plant with beam saws, cold presses, and 5-axis CNCs.',
-    },
-    {
-      title: 'TRAINING',
-      subtitle: 'TEAM CERTIFICATION',
-      desc: 'Intensive certification for your interior designers, client relationship managers, and installation technicians.',
-    },
-    {
-      title: 'MARKETING',
-      subtitle: 'ASSETS & LEADS',
-      desc: 'Curated architectural photography, print lookbooks, digital campaigns, and qualified city customer leads.',
-    },
-    {
-      title: 'TECHNOLOGY',
-      subtitle: 'DIGITAL WORKFLOWS',
-      desc: 'Integrated CRM, estimation tools, order tracking portals, and direct factory file transmission systems.',
-    },
-  ];
-
-  /* =========================================================================
-     SECTION 04: FRANCHISE JOURNEY (8 STEPS)
-     ========================================================================= */
-  const journeySteps = [
-    { number: '01', title: 'APPLICATION', desc: 'Submit your franchise enquiry with background profile.' },
-    { number: '02', title: 'DISCOVERY', desc: 'Understand the LEOZ business model, margins, and vision.' },
-    { number: '03', title: 'EVALUATION', desc: 'Discuss local market potential, location, and business fit.' },
-    { number: '04', title: 'LOCATION', desc: 'Identify, audit, and finalize your flagship studio location.' },
-    { number: '05', title: 'SETUP', desc: 'Build and fit-out the LEOZ luxury showroom experience.' },
-    { number: '06', title: 'TRAINING', desc: 'Train and certify your design, sales, and technical teams.' },
-    { number: '07', title: 'LAUNCH', desc: 'Host a grand architectural preview and launch your city studio.' },
-    { number: '08', title: 'GROW', desc: 'Scale your local residential portfolio and grow with LEOZ.' },
-  ];
-
-  /* =========================================================================
-     SECTION 09: FAQ ACCORDION
-     ========================================================================= */
-  const faqs = [
-    {
-      q: 'What is the LEOZ franchise model?',
-      a: 'The LEOZ franchise model is an exclusive monobrand experience studio partnership. As a franchise partner, you operate a bespoke showroom, consult with homeowners and architects, and deliver turnkey interior projects backed 100% by LEOZ in-house manufacturing, design systems, and warranties.',
-    },
-    {
-      q: 'Who can apply for a LEOZ franchise?',
-      a: 'We welcome seasoned entrepreneurs, interior designers, architects, real estate professionals, and retail business owners who share our commitment to uncompromising craftsmanship, architectural aesthetics, and customer service.',
-    },
-    {
-      q: 'What kind of location and space is required?',
-      a: 'A prime commercial or high-street location with good visibility, accessible parking, and an area typically between 1,200 to 3,500 sq. ft. is recommended to showcase our kitchen monoliths, dressing suites, and materials library.',
-    },
-    {
-      q: 'Is prior interior industry experience required?',
-      a: 'While background experience in architecture, design, or luxury retail is valuable, it is not mandatory. LEOZ provides comprehensive training covering design systems, estimation, technical hardware, and operational workflows.',
-    },
-    {
-      q: 'What support does LEOZ provide?',
-      a: 'LEOZ provides end-to-end support including showroom layout architecture, display modules, 3D CAD training, direct factory manufacturing, software systems, marketing collateral, and qualified territory lead generation.',
-    },
-    {
-      q: 'What does the showroom setup involve?',
-      a: 'The setup involves building experiential live display kitchens, master walk-in wardrobe suites, a tactile material exploration bar, and client consultation lounges designed directly by the LEOZ spatial design team.',
-    },
-    {
-      q: 'What training is provided to our team?',
-      a: 'We offer specialized training modules for designers (3D CAD, space planning), sales consultants (luxury customer management, product knowledge), and installation technicians (German KD hardware, laser alignment).',
-    },
-    {
-      q: 'How does the application process work?',
-      a: 'Upon submitting your enquiry, our franchise development team connects for an introductory discovery call, followed by a personal meeting, showroom tour, and territory feasibility evaluation.',
-    },
-    {
-      q: 'What is the investment requirement?',
-      a: 'Investment varies based on city tier, showroom footprint, and local fit-out costs. Detailed financial models and capital estimates are discussed transparently during the evaluation phase.',
-    },
-    {
-      q: 'How long does the setup process take?',
-      a: 'From signing the franchise agreement and finalizing the retail site, a typical LEOZ showroom setup and launch takes approximately 60 to 90 days.',
-    },
-  ];
-
-  const [activeFaq, setActiveFaq] = useState<number | null>(null);
-
-  /* =========================================================================
-     SECTION 10: FRANCHISE ENQUIRY FORM STATE & HANDLER
+     FORM STATE & VALIDATION
      ========================================================================= */
   const [formData, setFormData] = useState({
     fullName: '',
-    phone: '',
+    mobile: '',
     email: '',
     city: '',
-    state: '',
-    profession: '',
-    experience: '',
-    investmentRange: '₹50 Lakhs – ₹1 Crore',
+    businessBackground: '',
+    proposedLocation: '',
+    availableArea: '1,500 – 2,500 sq. ft.',
+    indicativeInvestment: '₹75 Lakhs – ₹1.5 Crore',
     message: '',
   });
 
-  const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   const validateForm = () => {
     const errs: Record<string, string> = {};
     if (!formData.fullName.trim()) errs.fullName = 'Please enter your full name.';
-    if (!formData.phone.trim()) {
-      errs.phone = 'Please enter your contact number.';
-    } else if (formData.phone.replace(/\D/g, '').length < 10) {
-      errs.phone = 'Please enter a valid 10-digit number.';
+    if (!formData.mobile.trim()) {
+      errs.mobile = 'Please enter your mobile number.';
+    } else if (formData.mobile.replace(/\D/g, '').length < 10) {
+      errs.mobile = 'Please enter a valid 10-digit mobile number.';
     }
     if (!formData.email.trim()) {
       errs.email = 'Please enter your email address.';
@@ -229,272 +74,172 @@ export const FranchiseOpportunities: React.FC = () => {
       errs.email = 'Please enter a valid email address.';
     }
     if (!formData.city.trim()) errs.city = 'Please enter your target city.';
-    return errs;
+    if (!formData.businessBackground.trim()) errs.businessBackground = 'Please provide a brief business background.';
+
+    setErrors(errs);
+    return Object.keys(errs).length === 0;
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    if (name === 'mobile') {
+      const sanitized = value.replace(/[^\d+\s-]/g, '').slice(0, 15);
+      setFormData((prev) => ({ ...prev, [name]: sanitized }));
+      if (errors.mobile) setErrors((prev) => ({ ...prev, mobile: '' }));
+      return;
+    }
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const validationErrors = validateForm();
-    if (Object.keys(validationErrors).length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
-    setErrors({});
-    setIsSubmitting(true);
+    if (!validateForm()) return;
 
+    setIsSubmitting(true);
     try {
-      await submitEnquiryForm({
+      const res = await submitEnquiryForm('franchise', {
         fullName: formData.fullName,
-        phone: formData.phone,
+        mobile: formData.mobile,
         email: formData.email,
-        city: `${formData.city}${formData.state ? `, ${formData.state}` : ''}`,
-        projectType: 'Franchise Partnership Enquiry',
-        projectSize: `Exp: ${formData.experience || 'N/A'} | Budget: ${formData.investmentRange}`,
-        message: `Profession: ${formData.profession || 'N/A'}\nNotes: ${formData.message || 'None'}`,
-        formType: 'Franchise_Opportunities_Page',
+        city: formData.city,
+        projectType: 'Franchise Partner Application',
+        projectStage: formData.businessBackground,
+        approximateBudget: formData.indicativeInvestment,
+        message: `Proposed Location: ${formData.proposedLocation || 'Not specified'}\nAvailable Area: ${formData.availableArea}\nBusiness Background: ${formData.businessBackground}\nAdditional Notes: ${formData.message || 'None'}`,
       });
-      setFormSubmitted(true);
+
+      if (res.ok) {
+        setIsSubmitted(true);
+      } else {
+        setIsSubmitted(true); // Graceful fallback
+      }
     } catch {
-      setFormSubmitted(true);
+      setIsSubmitted(true);
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  /* The 6 Experience Pillars */
+  const experiencePillars = [
+    {
+      title: 'Brand',
+      desc: 'Architectural positioning, refined editorial identity, and an uncompromising reputation in the luxury interior sector.',
+    },
+    {
+      title: 'Design',
+      desc: 'German-inspired spatial planning, monolithic kitchen topologies, and bespoke wardrobe configuration systems.',
+    },
+    {
+      title: 'Product',
+      desc: 'Curated European surface materials, synchronized textures, integrated architectural vitrines, and custom joinery.',
+    },
+    {
+      title: 'Manufacturing',
+      desc: 'Direct backing from our dedicated 20,000 sq. ft. precision facility in Gujarat with automated CNC workflows.',
+    },
+    {
+      title: 'Consultation',
+      desc: 'Structured 1-on-1 client consultation methodologies, 3D CAD visualization protocols, and spatial presentation toolkits.',
+    },
+    {
+      title: 'Customer Experience',
+      desc: 'White-glove project coordination, calibrated factory tolerances, and professional installation standards.',
+    },
+  ];
+
+  /* Profiles we would like to meet - exactly aligned with the 07 draft criteria */
+  const partnerProfiles = [
+    {
+      icon: <Building size={22} color="#A58B62" />,
+      title: 'Local Premium Market Understanding',
+      desc: 'Professionals with a strong understanding of their local premium residential market and architectural landscape.',
+    },
+    {
+      icon: <Users size={22} color="#A58B62" />,
+      title: 'Customer Relationships',
+      desc: 'Established relationships with high-net-worth homeowners, architects, interior designers, and luxury developers.',
+    },
+    {
+      icon: <Store size={22} color="#A58B62" />,
+      title: 'Experience Centre Space',
+      desc: 'Space to establish an appropriate experience centre in a prominent design district or high-street location.',
+    },
+    {
+      icon: <Briefcase size={22} color="#A58B62" />,
+      title: 'Active Business Involvement',
+      desc: 'Entrepreneurs and design-industry leaders committed to active, hands-on business involvement and service excellence.',
+    },
+  ];
+
   return (
-    <div style={{ backgroundColor: '#FAF9F6', color: '#161514', minHeight: '100vh', overflowX: 'hidden' }}>
+    <div style={{ backgroundColor: '#F7F7F5', color: '#20211F', minHeight: '100vh', overflowX: 'hidden' }}>
       <Header />
 
       <main id="main-content">
         {/* =========================================================================
-            HERO SECTION
+            UNIVERSAL HERO SECTION: LEOZ / FRANCHISE ENQUIRY (DRAFT 07)
             ========================================================================= */}
-        <section
-          aria-label="Franchise Hero"
-          style={{
-            position: 'relative',
-            width: '100%',
-            minHeight: 'clamp(580px, 86vh, 760px)',
-            display: 'flex',
-            alignItems: 'flex-end',
-            backgroundColor: '#161514',
-            overflow: 'hidden',
-          }}
-        >
-          {/* Background Image */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: 'url(https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2200&q=90)',
-              backgroundPosition: 'center 42%',
-              backgroundSize: 'cover',
-            }}
-          />
-
-          {/* Soft Scrim */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'linear-gradient(180deg, rgba(22, 21, 20, 0.25) 0%, rgba(22, 21, 20, 0.45) 40%, rgba(22, 21, 20, 0.92) 95%)',
-            }}
-          />
-
-          <div
-            style={{
-              position: 'relative',
-              zIndex: 10,
-              maxWidth: '1360px',
-              width: '100%',
-              margin: '0 auto',
-              paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-              paddingRight: 'clamp(20px, 5.5vw, 80px)',
-              paddingBottom: 'clamp(44px, 7vw, 76px)',
-            }}
-          >
-            <div style={{ maxWidth: '860px' }}>
-              <motion.span
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: luxuryEase }}
-                style={{
-                  display: 'inline-block',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  letterSpacing: '0.24em',
-                  textTransform: 'uppercase',
-                  color: '#B69A6B',
-                  marginBottom: '14px',
-                }}
-              >
-                BUSINESS PARTNERSHIP PROGRAMME
-              </motion.span>
-
-              <motion.h1
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.1, ease: luxuryEase }}
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(36px, 5.6vw, 68px)',
-                  fontWeight: 300,
-                  lineHeight: 1.06,
-                  letterSpacing: '-0.01em',
-                  color: '#FFFFFF',
-                  margin: '0 0 18px 0',
-                }}
-              >
-                Build the Future of
-                <br />
-                Interiors with LEOZ.
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.2, ease: luxuryEase }}
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'clamp(14.5px, 1.3vw, 17.5px)',
-                  color: 'rgba(255, 255, 255, 0.85)',
-                  lineHeight: 1.65,
-                  maxWidth: '680px',
-                  margin: '0 0 32px 0',
-                }}
-              >
-                Partner with LEOZ to build a premium interior design and kitchen business backed by design expertise, manufacturing capabilities and a strong brand ecosystem.
-              </motion.p>
-
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.3, ease: luxuryEase }}
-                style={{ display: 'flex', gap: '14px', flexWrap: 'wrap' }}
-              >
-                <a
-                  href="#franchise-enquiry-section"
-                  onClick={scrollToEnquiry}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '10px',
-                    padding: '14px 28px',
-                    backgroundColor: '#FFFFFF',
-                    color: '#161514',
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    textDecoration: 'none',
-                    borderRadius: '2px',
-                    transition: 'all 0.3s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#B69A6B';
-                    e.currentTarget.style.color = '#FFFFFF';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#FFFFFF';
-                    e.currentTarget.style.color = '#161514';
-                  }}
-                >
-                  BECOME A FRANCHISE PARTNER
-                  <ArrowRight size={14} />
-                </a>
-
-                <a
-                  href="#franchise-enquiry-section"
-                  onClick={scrollToEnquiry}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '10px',
-                    padding: '14px 28px',
-                    backgroundColor: 'transparent',
-                    color: '#FFFFFF',
-                    border: '1px solid rgba(255, 255, 255, 0.3)',
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    textDecoration: 'none',
-                    borderRadius: '2px',
-                    transition: 'all 0.3s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#B69A6B';
-                    e.currentTarget.style.color = '#B69A6B';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-                    e.currentTarget.style.color = '#FFFFFF';
-                  }}
-                >
-                  DOWNLOAD FRANCHISE BROCHURE
-                  <FileText size={14} />
-                </a>
-              </motion.div>
-            </div>
-          </div>
-        </section>
+        <UniversalHero
+          image="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=85"
+          mobileImage="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=85"
+          imageAlt="LEOZ Luxury Showroom Kitchen and Wardrobe Consultation Space"
+          imagePosition="center 50%"
+          eyebrow="LEOZ / FRANCHISE ENQUIRY"
+          headline="An Invitation to Grow with LEOZ"
+          supportingText="LEOZ Cucine is exploring the appointment of two franchise partners for its luxury kitchen and wardrobe brand. We welcome expressions of interest from entrepreneurs and design-industry professionals who share our appreciation for refined products and customer experience."
+          ctaText="Express Franchise Interest →"
+          ctaHref="#how-to-enquire"
+          onCtaClick={scrollToForm}
+          brightness={0.88}
+        />
 
         {/* =========================================================================
-            SECTION 01: WHY PARTNER WITH LEOZ?
+            SECTION: THE OPPORTUNITY (DRAFT 07)
             ========================================================================= */}
         <section
-          aria-label="Why Partner With LEOZ"
+          aria-label="The Opportunity"
           style={{
-            paddingTop: 'clamp(80px, 10vw, 130px)',
-            paddingBottom: 'clamp(80px, 10vw, 130px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            backgroundColor: '#FAF9F6',
+            backgroundColor: '#ECEBE7',
+            paddingTop: 'clamp(70px, 9vw, 120px)',
+            paddingBottom: 'clamp(70px, 9vw, 120px)',
+            paddingLeft: 'clamp(20px, 5vw, 80px)',
+            paddingRight: 'clamp(20px, 5vw, 80px)',
+            borderBottom: '1px solid #D9D9D4',
           }}
         >
           <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: 'clamp(44px, 6vw, 72px)' }}>
+            <div style={{ maxWidth: '820px', marginBottom: 'clamp(40px, 5vw, 64px)' }}>
               <span
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '11px',
                   fontWeight: 600,
-                  letterSpacing: '0.24em',
+                  letterSpacing: '0.22em',
                   textTransform: 'uppercase',
-                  color: '#B69A6B',
+                  color: '#A58B62',
                   display: 'block',
                   marginBottom: '12px',
                 }}
               >
-                COMPETITIVE ADVANTAGE
+                THE PROPOSITION
               </span>
               <h2
                 style={{
                   fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(28px, 4vw, 48px)',
+                  fontSize: 'clamp(30px, 4.2vw, 50px)',
                   fontWeight: 300,
-                  color: '#161514',
-                  margin: '0 0 14px 0',
+                  color: '#20211F',
+                  letterSpacing: '-0.01em',
+                  lineHeight: 1.1,
+                  margin: '0 0 20px 0',
                 }}
               >
-                Why Partner With LEOZ?
+                The Opportunity
               </h2>
-              <p
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '15px',
-                  color: '#716B61',
-                  maxWidth: '620px',
-                  margin: '0 auto',
-                  lineHeight: 1.6,
-                }}
-              >
-                A high-margin business model combining bespoke architectural design with direct in-house factory manufacturing.
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '18px', color: '#20211F', lineHeight: 1.6, margin: 0, fontWeight: 400 }}>
+                A focused retail and consultation concept dedicated to luxury modular kitchens and bespoke wardrobes, backed by the brand’s manufacturing know-how and in-house production capability.
               </p>
             </div>
 
@@ -502,191 +247,111 @@ export const FranchiseOpportunities: React.FC = () => {
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-                gap: 'clamp(20px, 3vw, 32px)',
+                gap: '32px',
               }}
             >
-              {whyLeozPoints.map((item, idx) => (
-                <div
-                  key={item.number}
-                  style={{
-                    backgroundColor: '#FFFFFF',
-                    border: '1px solid rgba(22, 21, 20, 0.08)',
-                    borderRadius: '3px',
-                    padding: 'clamp(24px, 3.5vw, 36px)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
-                    transition: 'all 0.3s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(182, 154, 107, 0.5)';
-                    e.currentTarget.style.transform = 'translateY(-4px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(22, 21, 20, 0.08)';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }}
-                >
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: '32px',
-                      fontWeight: 300,
-                      color: '#B69A6B',
-                      marginBottom: '12px',
-                      display: 'block',
-                    }}
-                  >
-                    {item.number}
-                  </span>
-                  <h3
-                    style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: '20px',
-                      fontWeight: 400,
-                      color: '#161514',
-                      margin: '0 0 10px 0',
-                    }}
-                  >
-                    {item.title}
-                  </h3>
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '13.5px',
-                      color: '#716B61',
-                      lineHeight: 1.65,
-                      margin: 0,
-                    }}
-                  >
-                    {item.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* =========================================================================
-            SECTION 02: THE LEOZ BUSINESS MODEL (EDITORIAL SPLIT SCREEN)
-            ========================================================================= */}
-        <section
-          aria-label="The LEOZ Business Model"
-          style={{
-            backgroundColor: '#161514',
-            color: '#FFFFFF',
-            paddingTop: 'clamp(80px, 10vw, 130px)',
-            paddingBottom: 'clamp(80px, 10vw, 130px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-          }}
-        >
-          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: 'clamp(40px, 6vw, 80px)',
-                alignItems: 'center',
-              }}
-              className="leoz-responsive-split"
-            >
-              {/* Left Image */}
-              <div style={{ position: 'relative', width: '100%', aspectRatio: '1 / 0.95', overflow: 'hidden', borderRadius: '3px' }}>
-                <img
-                  src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85"
-                  alt="LEOZ Designer Consulting with Client"
-                  loading="lazy"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
-                />
-                <div
-                  style={{
-                    position: 'absolute',
-                    inset: 0,
-                    border: '1px solid rgba(182, 154, 107, 0.3)',
-                    pointerEvents: 'none',
-                  }}
-                />
-              </div>
-
-              {/* Right Content */}
-              <div>
+              {/* Card 1: Dedicated Concept */}
+              <div
+                style={{
+                  backgroundColor: '#FFFFFF',
+                  padding: 'clamp(32px, 4vw, 44px)',
+                  border: '1px solid #D9D9D4',
+                  borderRadius: '2px',
+                }}
+              >
                 <span
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontSize: '11px',
                     fontWeight: 600,
-                    letterSpacing: '0.24em',
+                    letterSpacing: '0.2em',
                     textTransform: 'uppercase',
-                    color: '#B69A6B',
+                    color: '#A58B62',
                     display: 'block',
-                    marginBottom: '14px',
+                    marginBottom: '16px',
                   }}
                 >
-                  INTEGRATED VALUE CHAIN
+                  SPECIALISATION
                 </span>
-                <h2
+                <h3
                   style={{
                     fontFamily: 'var(--font-heading)',
-                    fontSize: 'clamp(30px, 4.2vw, 52px)',
+                    fontSize: '24px',
                     fontWeight: 300,
-                    color: '#FFFFFF',
-                    lineHeight: 1.1,
-                    margin: '0 0 20px 0',
+                    color: '#20211F',
+                    margin: '0 0 16px 0',
                   }}
                 >
-                  A Business Built
-                  <br />
-                  Around Design.
-                </h2>
-                <p
+                  Retail & Consultation Concept
+                </h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '14.5px', color: '#686963', lineHeight: 1.7, marginBottom: '24px' }}>
+                  A focused, monobrand design environment tailored exclusively to luxury fitted interiors:
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ width: '6px', height: '6px', backgroundColor: '#A58B62', borderRadius: '50%' }} />
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', fontWeight: 500, color: '#20211F' }}>
+                      Luxury Modular Kitchens
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ width: '6px', height: '6px', backgroundColor: '#A58B62', borderRadius: '50%' }} />
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', fontWeight: 500, color: '#20211F' }}>
+                      Bespoke Wardrobes & Dressing Suites
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Card 2: Backed by In-House Production */}
+              <div
+                style={{
+                  backgroundColor: '#FFFFFF',
+                  padding: 'clamp(32px, 4vw, 44px)',
+                  border: '1px solid #D9D9D4',
+                  borderRadius: '2px',
+                }}
+              >
+                <span
                   style={{
                     fontFamily: 'var(--font-body)',
-                    fontSize: '14.5px',
-                    color: 'rgba(255, 255, 255, 0.75)',
-                    lineHeight: 1.7,
-                    margin: '0 0 32px 0',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    letterSpacing: '0.2em',
+                    textTransform: 'uppercase',
+                    color: '#A58B62',
+                    display: 'block',
+                    marginBottom: '16px',
                   }}
                 >
-                  The LEOZ franchise ecosystem seamlessly unites spatial design, luxury showroom experiences, client consultations, automated factory production, and certified turnkey installations under one unified standard.
-                </p>
-
-                {/* Flow Diagram */}
-                <div
+                  MANUFACTURING
+                </span>
+                <h3
                   style={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: '12px',
-                    padding: '20px',
-                    backgroundColor: '#1E1D1B',
-                    borderRadius: '3px',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: '24px',
+                    fontWeight: 300,
+                    color: '#20211F',
+                    margin: '0 0 16px 0',
                   }}
                 >
-                  <span style={{ fontSize: '10.5px', color: '#B69A6B', letterSpacing: '0.15em', fontWeight: 600 }}>
-                    THE TURNKEY VALUE STREAM
-                  </span>
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      fontSize: '12px',
-                      color: '#FFFFFF',
-                      fontFamily: 'var(--font-body)',
-                      flexWrap: 'wrap',
-                    }}
-                  >
-                    <span>CUSTOMER</span>
-                    <span style={{ color: '#B69A6B' }}>→</span>
-                    <span>DESIGN</span>
-                    <span style={{ color: '#B69A6B' }}>→</span>
-                    <span>PRODUCTION</span>
-                    <span style={{ color: '#B69A6B' }}>→</span>
-                    <span>INSTALLATION</span>
-                    <span style={{ color: '#B69A6B' }}>→</span>
-                    <span style={{ color: '#B69A6B', fontWeight: 600 }}>COMPLETED SPACE</span>
+                  In-House Production Capability
+                </h3>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '14.5px', color: '#686963', lineHeight: 1.7, marginBottom: '24px' }}>
+                  Backed directly by brand-owned manufacturing infrastructure and decades of joinery mastery:
+                </p>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ width: '6px', height: '6px', backgroundColor: '#A58B62', borderRadius: '50%' }} />
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', fontWeight: 500, color: '#20211F' }}>
+                      Decades of Technical & Manufacturing Know-How
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                    <div style={{ width: '6px', height: '6px', backgroundColor: '#A58B62', borderRadius: '50%' }} />
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', fontWeight: 500, color: '#20211F' }}>
+                      20,000 sq. ft. Precision Facility in Gujarat
+                    </span>
                   </div>
                 </div>
               </div>
@@ -695,333 +360,49 @@ export const FranchiseOpportunities: React.FC = () => {
         </section>
 
         {/* =========================================================================
-            SECTION 03: WHAT YOU GET (COMPLETE ECOSYSTEM)
+            SECTION: WHO WE WOULD LIKE TO MEET (DRAFT 07)
             ========================================================================= */}
         <section
-          aria-label="What You Get"
+          aria-label="Who We Would Like To Meet"
           style={{
-            paddingTop: 'clamp(80px, 10vw, 130px)',
-            paddingBottom: 'clamp(80px, 10vw, 130px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            backgroundColor: '#FAF9F6',
+            backgroundColor: '#F7F7F5',
+            paddingTop: 'clamp(70px, 9vw, 120px)',
+            paddingBottom: 'clamp(70px, 9vw, 120px)',
+            paddingLeft: 'clamp(20px, 5vw, 80px)',
+            paddingRight: 'clamp(20px, 5vw, 80px)',
+            borderBottom: '1px solid #D9D9D4',
           }}
         >
           <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: 'clamp(44px, 6vw, 72px)' }}>
+            <div style={{ maxWidth: '820px', marginBottom: 'clamp(40px, 5vw, 64px)' }}>
               <span
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '11px',
                   fontWeight: 600,
-                  letterSpacing: '0.24em',
+                  letterSpacing: '0.22em',
                   textTransform: 'uppercase',
-                  color: '#B69A6B',
+                  color: '#A58B62',
                   display: 'block',
                   marginBottom: '12px',
                 }}
               >
-                COMPREHENSIVE ENABLEMENT
+                PARTNER SUITABILITY
               </span>
               <h2
                 style={{
                   fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(28px, 4vw, 48px)',
+                  fontSize: 'clamp(30px, 4.2vw, 50px)',
                   fontWeight: 300,
-                  color: '#161514',
-                  margin: '0 0 14px 0',
+                  color: '#20211F',
+                  letterSpacing: '-0.01em',
+                  margin: '0 0 16px 0',
                 }}
               >
-                More Than a Franchise.
-                <br />
-                A Complete Business Ecosystem.
+                Who We Would Like to Meet
               </h2>
-            </div>
-
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                gap: '20px',
-              }}
-            >
-              {ecosystemCards.map((card) => (
-                <div
-                  key={card.title}
-                  style={{
-                    backgroundColor: '#FFFFFF',
-                    border: '1px solid rgba(22, 21, 20, 0.08)',
-                    borderRadius: '2px',
-                    padding: '28px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    transition: 'all 0.3s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(182, 154, 107, 0.5)';
-                    e.currentTarget.style.transform = 'translateY(-4px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(22, 21, 20, 0.08)';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }}
-                >
-                  <span style={{ fontSize: '10px', color: '#B69A6B', letterSpacing: '0.15em', fontWeight: 600, marginBottom: '6px' }}>
-                    {card.subtitle}
-                  </span>
-                  <h3
-                    style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: '22px',
-                      fontWeight: 400,
-                      color: '#161514',
-                      margin: '0 0 10px 0',
-                    }}
-                  >
-                    {card.title}
-                  </h3>
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '13px',
-                      color: '#716B61',
-                      lineHeight: 1.6,
-                      margin: 0,
-                    }}
-                  >
-                    {card.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* =========================================================================
-            SECTION 04: FRANCHISE JOURNEY
-            ========================================================================= */}
-        <section
-          aria-label="Franchise Journey"
-          style={{
-            backgroundColor: '#161514',
-            color: '#FFFFFF',
-            paddingTop: 'clamp(80px, 10vw, 130px)',
-            paddingBottom: 'clamp(80px, 10vw, 130px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-          }}
-        >
-          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: 'clamp(44px, 6vw, 72px)' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  letterSpacing: '0.24em',
-                  textTransform: 'uppercase',
-                  color: '#B69A6B',
-                  display: 'block',
-                  marginBottom: '12px',
-                }}
-              >
-                THE ROADMAP
-              </span>
-              <h2
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(28px, 4vw, 48px)',
-                  fontWeight: 300,
-                  color: '#FFFFFF',
-                  margin: 0,
-                }}
-              >
-                From Partner to Business Owner.
-              </h2>
-            </div>
-
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
-                gap: '20px',
-              }}
-            >
-              {journeySteps.map((step) => (
-                <div
-                  key={step.number}
-                  style={{
-                    backgroundColor: '#1E1D1B',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                    borderRadius: '2px',
-                    padding: '24px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                  }}
-                >
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: '24px',
-                      color: '#B69A6B',
-                      marginBottom: '8px',
-                      display: 'block',
-                    }}
-                  >
-                    {step.number}
-                  </span>
-                  <strong style={{ fontSize: '15px', color: '#FFFFFF', marginBottom: '6px' }}>{step.title}</strong>
-                  <p style={{ fontSize: '12.5px', color: 'rgba(255, 255, 255, 0.7)', lineHeight: 1.55, margin: 0 }}>
-                    {step.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* =========================================================================
-            SECTION 05: IDEAL FRANCHISE PARTNER
-            ========================================================================= */}
-        <section
-          aria-label="Ideal Franchise Partner"
-          style={{
-            paddingTop: 'clamp(80px, 10vw, 130px)',
-            paddingBottom: 'clamp(80px, 10vw, 130px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            backgroundColor: '#FAF9F6',
-          }}
-        >
-          <div style={{ maxWidth: '1000px', margin: '0 auto', textAlign: 'center' }}>
-            <span
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '11px',
-                fontWeight: 600,
-                letterSpacing: '0.24em',
-                textTransform: 'uppercase',
-                color: '#B69A6B',
-                display: 'block',
-                marginBottom: '12px',
-              }}
-            >
-              MUTUAL FIT &amp; VALUES
-            </span>
-            <h2
-              style={{
-                fontFamily: 'var(--font-heading)',
-                fontSize: 'clamp(28px, 4vw, 46px)',
-                fontWeight: 300,
-                color: '#161514',
-                margin: '0 0 24px 0',
-              }}
-            >
-              Who We Are Looking For
-            </h2>
-            <p
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '15px',
-                color: '#716B61',
-                lineHeight: 1.7,
-                marginBottom: '36px',
-              }}
-            >
-              We seek visionary partners with an entrepreneurial mindset, strong local high-net-worth networks, an appreciation for architectural design, business management capabilities, and an uncompromised commitment to customer service.
-            </p>
-
-            <div
-              style={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                justifyContent: 'center',
-                gap: '10px',
-              }}
-            >
-              {[
-                'Entrepreneurial Mindset',
-                'Strong Local Network',
-                'Interest in Design & Interiors',
-                'Customer-Focused Approach',
-                'Business Management Capability',
-                'Commitment to Premium Service',
-                'Long-Term Growth Mindset',
-              ].map((pill) => (
-                <span
-                  key={pill}
-                  style={{
-                    padding: '8px 16px',
-                    backgroundColor: '#FFFFFF',
-                    border: '1px solid rgba(22, 21, 20, 0.12)',
-                    borderRadius: '2px',
-                    fontSize: '12px',
-                    fontFamily: 'var(--font-body)',
-                    color: '#161514',
-                    fontWeight: 500,
-                  }}
-                >
-                  ✓ {pill}
-                </span>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* =========================================================================
-            SECTION 07: FRANCHISE LOCATIONS & EXPANSION
-            ========================================================================= */}
-        <section
-          aria-label="Franchise Locations"
-          style={{
-            backgroundColor: '#161514',
-            color: '#FFFFFF',
-            paddingTop: 'clamp(80px, 10vw, 130px)',
-            paddingBottom: 'clamp(80px, 10vw, 130px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-          }}
-        >
-          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: 'clamp(44px, 6vw, 72px)' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  letterSpacing: '0.24em',
-                  textTransform: 'uppercase',
-                  color: '#B69A6B',
-                  display: 'block',
-                  marginBottom: '12px',
-                }}
-              >
-                TERRITORY AVAILABILITY
-              </span>
-              <h2
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(28px, 4vw, 48px)',
-                  fontWeight: 300,
-                  color: '#FFFFFF',
-                  margin: '0 0 14px 0',
-                }}
-              >
-                Bring LEOZ to Your City.
-              </h2>
-              <p
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '14.5px',
-                  color: 'rgba(255, 255, 255, 0.75)',
-                  maxWidth: '600px',
-                  margin: '0 auto',
-                  lineHeight: 1.6,
-                }}
-              >
-                Operating experience studios in Ahmedabad and Surat, with selective franchise expansion opportunities across tier-1 and high-growth luxury markets across India (Subject to availability).
+              <p style={{ fontFamily: 'var(--font-body)', fontSize: '16px', color: '#686963', lineHeight: 1.7, margin: 0 }}>
+                Professionals with a strong understanding of their local premium residential market, customer relationships, space to establish an appropriate experience centre, and a commitment to active business involvement.
               </p>
             </div>
 
@@ -1032,174 +413,47 @@ export const FranchiseOpportunities: React.FC = () => {
                 gap: '24px',
               }}
             >
-              <div
-                style={{
-                  padding: '28px',
-                  backgroundColor: '#1E1D1B',
-                  borderRadius: '3px',
-                  border: '1px solid rgba(182, 154, 107, 0.4)',
-                }}
-              >
-                <span style={{ fontSize: '10.5px', color: '#B69A6B', letterSpacing: '0.15em', fontWeight: 600 }}>
-                  CURRENT FLAGSHIP
-                </span>
-                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '24px', color: '#FFFFFF', margin: '6px 0 10px 0' }}>
-                  Ahmedabad Studio
-                </h3>
-                <p style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)', lineHeight: 1.5, margin: 0 }}>
-                  Sindhu Bhavan Road / Bodakdev Flagship Materials Lab.
-                </p>
-              </div>
-
-              <div
-                style={{
-                  padding: '28px',
-                  backgroundColor: '#1E1D1B',
-                  borderRadius: '3px',
-                  border: '1px solid rgba(182, 154, 107, 0.4)',
-                }}
-              >
-                <span style={{ fontSize: '10.5px', color: '#B69A6B', letterSpacing: '0.15em', fontWeight: 600 }}>
-                  CURRENT STUDIO
-                </span>
-                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '24px', color: '#FFFFFF', margin: '6px 0 10px 0' }}>
-                  Surat Studio
-                </h3>
-                <p style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)', lineHeight: 1.5, margin: 0 }}>
-                  Dumas Road &amp; VIP Road Junction, Vesu Living Experience Centre.
-                </p>
-              </div>
-
-              <div
-                style={{
-                  padding: '28px',
-                  backgroundColor: '#1E1D1B',
-                  borderRadius: '3px',
-                  border: '1px dashed rgba(255, 255, 255, 0.25)',
-                }}
-              >
-                <span style={{ fontSize: '10.5px', color: '#FFFFFF', letterSpacing: '0.15em', fontWeight: 600, opacity: 0.6 }}>
-                  EXPANSION MARKETS
-                </span>
-                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '24px', color: '#B69A6B', margin: '6px 0 10px 0' }}>
-                  Your City
-                </h3>
-                <p style={{ fontSize: '13px', color: 'rgba(255, 255, 255, 0.7)', lineHeight: 1.5, margin: 0 }}>
-                  Mumbai, Pune, Bengaluru, Hyderabad, Delhi NCR, Jaipur, Vadodara, Rajkot &amp; more.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* =========================================================================
-            SECTION 09: FAQ ACCORDION
-            ========================================================================= */}
-        <section
-          aria-label="Franchise FAQ"
-          style={{
-            paddingTop: 'clamp(80px, 10vw, 130px)',
-            paddingBottom: 'clamp(80px, 10vw, 130px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            backgroundColor: '#FAF9F6',
-          }}
-        >
-          <div style={{ maxWidth: '880px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: 'clamp(44px, 6vw, 64px)' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  letterSpacing: '0.24em',
-                  textTransform: 'uppercase',
-                  color: '#B69A6B',
-                  display: 'block',
-                  marginBottom: '12px',
-                }}
-              >
-                FREQUENTLY ASKED QUESTIONS
-              </span>
-              <h2
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(28px, 4vw, 46px)',
-                  fontWeight: 300,
-                  color: '#161514',
-                  margin: 0,
-                }}
-              >
-                Everything You Need to Know
-              </h2>
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {faqs.map((faq, idx) => (
+              {partnerProfiles.map((profile) => (
                 <div
-                  key={faq.q}
+                  key={profile.title}
                   style={{
                     backgroundColor: '#FFFFFF',
-                    border: '1px solid rgba(22, 21, 20, 0.08)',
+                    padding: 'clamp(30px, 3.5vw, 38px)',
+                    border: '1px solid #D9D9D4',
                     borderRadius: '2px',
-                    overflow: 'hidden',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    justifyContent: 'flex-start',
                   }}
                 >
-                  <button
-                    type="button"
-                    onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}
+                  <div
                     style={{
-                      width: '100%',
-                      padding: '20px 24px',
+                      width: '48px',
+                      height: '48px',
+                      borderRadius: '2px',
+                      backgroundColor: '#ECEBE7',
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'space-between',
-                      textAlign: 'left',
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: '17px',
-                      fontWeight: 400,
-                      color: '#161514',
-                      background: 'none',
-                      border: 'none',
-                      cursor: 'pointer',
+                      justifyContent: 'center',
+                      marginBottom: '20px',
                     }}
                   >
-                    <span>{faq.q}</span>
-                    <ChevronDown
-                      size={18}
-                      style={{
-                        transform: activeFaq === idx ? 'rotate(180deg)' : 'rotate(0deg)',
-                        transition: 'transform 0.3s ease',
-                        color: '#B69A6B',
-                        flexShrink: 0,
-                        marginLeft: '12px',
-                      }}
-                    />
-                  </button>
-
-                  <AnimatePresence>
-                    {activeFaq === idx && (
-                      <motion.div
-                        initial={{ opacity: 0, height: 0 }}
-                        animate={{ opacity: 1, height: 'auto' }}
-                        exit={{ opacity: 0, height: 0 }}
-                        transition={{ duration: 0.3, ease: luxuryEase }}
-                      >
-                        <div
-                          style={{
-                            padding: '0 24px 20px 24px',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '13.5px',
-                            color: '#716B61',
-                            lineHeight: 1.65,
-                            borderTop: '1px solid rgba(22, 21, 20, 0.05)',
-                          }}
-                        >
-                          {faq.a}
-                        </div>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
+                    {profile.icon}
+                  </div>
+                  <h3
+                    style={{
+                      fontFamily: 'var(--font-heading)',
+                      fontSize: '20px',
+                      fontWeight: 400,
+                      color: '#20211F',
+                      margin: '0 0 12px 0',
+                    }}
+                  >
+                    {profile.title}
+                  </h3>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#686963', lineHeight: 1.65, margin: 0 }}>
+                    {profile.desc}
+                  </p>
                 </div>
               ))}
             </div>
@@ -1207,451 +461,700 @@ export const FranchiseOpportunities: React.FC = () => {
         </section>
 
         {/* =========================================================================
-            SECTION 10: FRANCHISE ENQUIRY FORM (THE CONVERSION ENGINE)
+            SECTION: THE LEOZ EXPERIENCE (6 PILLARS)
             ========================================================================= */}
         <section
-          id="franchise-enquiry-section"
-          aria-label="Franchise Application Form"
+          aria-label="The LEOZ Experience"
           style={{
-            backgroundColor: '#161514',
-            color: '#FFFFFF',
-            paddingTop: 'clamp(80px, 10vw, 130px)',
-            paddingBottom: 'clamp(80px, 10vw, 130px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+            backgroundColor: '#252623',
+            color: '#F7F7F5',
+            paddingTop: 'clamp(70px, 9vw, 120px)',
+            paddingBottom: 'clamp(70px, 9vw, 120px)',
+            paddingLeft: 'clamp(20px, 5vw, 80px)',
+            paddingRight: 'clamp(20px, 5vw, 80px)',
           }}
         >
-          <div style={{ maxWidth: '840px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: 'clamp(36px, 5vw, 56px)' }}>
+          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
+            <div style={{ maxWidth: '720px', marginBottom: 'clamp(40px, 5vw, 64px)' }}>
               <span
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '11px',
                   fontWeight: 600,
-                  letterSpacing: '0.24em',
+                  letterSpacing: '0.22em',
                   textTransform: 'uppercase',
-                  color: '#B69A6B',
+                  color: '#A58B62',
                   display: 'block',
                   marginBottom: '12px',
                 }}
               >
-                INITIATE PARTNERSHIP
+                ECOSYSTEM & INFRASTRUCTURE
               </span>
               <h2
                 style={{
                   fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(30px, 4.5vw, 52px)',
+                  fontSize: 'clamp(30px, 4.2vw, 50px)',
                   fontWeight: 300,
                   color: '#FFFFFF',
-                  margin: '0 0 14px 0',
+                  letterSpacing: '-0.01em',
+                  margin: 0,
                 }}
               >
-                Ready to Build
-                <br />
-                LEOZ in Your City?
+                THE LEOZ EXPERIENCE
               </h2>
-              <p
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '14.5px',
-                  color: 'rgba(255, 255, 255, 0.75)',
-                  maxWidth: '580px',
-                  margin: '0 auto',
-                  lineHeight: 1.6,
-                }}
-              >
-                Tell us a little about yourself and your business ambitions. Our franchise development leadership will connect with you directly.
-              </p>
             </div>
 
-            {/* Form Box */}
             <div
               style={{
-                backgroundColor: '#1E1D1B',
-                borderRadius: '3px',
-                border: '1px solid rgba(182, 154, 107, 0.3)',
-                padding: 'clamp(24px, 4.5vw, 44px)',
-                boxShadow: '0 20px 50px rgba(0, 0, 0, 0.5)',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                gap: '28px',
               }}
             >
-              {formSubmitted ? (
-                <div style={{ textAlign: 'center', padding: '40px 20px' }}>
-                  <LeozEmblem size={80} animate={true} color="#B69A6B" />
+              {experiencePillars.map((pillar, idx) => (
+                <div
+                  key={pillar.title}
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.04)',
+                    padding: 'clamp(28px, 3.5vw, 36px)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    borderRadius: '2px',
+                  }}
+                >
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '11px',
+                      fontWeight: 600,
+                      letterSpacing: '0.18em',
+                      textTransform: 'uppercase',
+                      color: '#A58B62',
+                      display: 'block',
+                      marginBottom: '12px',
+                    }}
+                  >
+                    0{idx + 1}
+                  </span>
                   <h3
                     style={{
                       fontFamily: 'var(--font-heading)',
-                      fontSize: '28px',
+                      fontSize: '22px',
                       fontWeight: 300,
                       color: '#FFFFFF',
-                      margin: '20px 0 10px 0',
+                      margin: '0 0 12px 0',
                     }}
                   >
-                    THANK YOU.
+                    {pillar.title}
                   </h3>
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14.5px',
-                      color: 'rgba(255, 255, 255, 0.8)',
-                      maxWidth: '480px',
-                      margin: '0 auto 28px auto',
-                      lineHeight: 1.6,
-                    }}
-                  >
-                    Our franchise development team has received your application and will connect with you shortly for a confidential discussion.
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#A0A09B', lineHeight: 1.65, margin: 0 }}>
+                    {pillar.desc}
                   </p>
-                  <button
-                    type="button"
-                    onClick={() => setFormSubmitted(false)}
-                    style={{
-                      padding: '12px 24px',
-                      backgroundColor: 'transparent',
-                      color: '#B69A6B',
-                      border: '1px solid #B69A6B',
-                      borderRadius: '2px',
-                      fontSize: '11.5px',
-                      fontWeight: 600,
-                      letterSpacing: '0.12em',
-                      textTransform: 'uppercase',
-                      cursor: 'pointer',
-                    }}
-                  >
-                    SUBMIT ANOTHER APPLICATION
-                  </button>
                 </div>
-              ) : (
-                <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
-                    {/* Full Name */}
-                    <div>
-                      <label style={{ display: 'block', fontSize: '11px', color: '#B69A6B', letterSpacing: '0.12em', fontWeight: 600, marginBottom: '8px' }}>
-                        FULL NAME *
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.fullName}
-                        onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
-                        placeholder="e.g. Vikramaditya Mehta"
-                        style={{
-                          width: '100%',
-                          padding: '14px 16px',
-                          backgroundColor: '#161514',
-                          border: `1px solid ${errors.fullName ? '#E53E3E' : 'rgba(255, 255, 255, 0.15)'}`,
-                          borderRadius: '2px',
-                          color: '#FFFFFF',
-                          fontSize: '14px',
-                          fontFamily: 'var(--font-body)',
-                          outline: 'none',
-                        }}
-                      />
-                      {errors.fullName && <span style={{ fontSize: '11px', color: '#FC8181', marginTop: '4px', display: 'block' }}>{errors.fullName}</span>}
-                    </div>
-
-                    {/* Phone */}
-                    <div>
-                      <label style={{ display: 'block', fontSize: '11px', color: '#B69A6B', letterSpacing: '0.12em', fontWeight: 600, marginBottom: '8px' }}>
-                        PHONE NUMBER *
-                      </label>
-                      <input
-                        type="tel"
-                        value={formData.phone}
-                        onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                        placeholder="+91 98250 00000"
-                        style={{
-                          width: '100%',
-                          padding: '14px 16px',
-                          backgroundColor: '#161514',
-                          border: `1px solid ${errors.phone ? '#E53E3E' : 'rgba(255, 255, 255, 0.15)'}`,
-                          borderRadius: '2px',
-                          color: '#FFFFFF',
-                          fontSize: '14px',
-                          fontFamily: 'var(--font-body)',
-                          outline: 'none',
-                        }}
-                      />
-                      {errors.phone && <span style={{ fontSize: '11px', color: '#FC8181', marginTop: '4px', display: 'block' }}>{errors.phone}</span>}
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
-                    {/* Email */}
-                    <div>
-                      <label style={{ display: 'block', fontSize: '11px', color: '#B69A6B', letterSpacing: '0.12em', fontWeight: 600, marginBottom: '8px' }}>
-                        EMAIL ADDRESS *
-                      </label>
-                      <input
-                        type="email"
-                        value={formData.email}
-                        onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        placeholder="vikram@enterprise.com"
-                        style={{
-                          width: '100%',
-                          padding: '14px 16px',
-                          backgroundColor: '#161514',
-                          border: `1px solid ${errors.email ? '#E53E3E' : 'rgba(255, 255, 255, 0.15)'}`,
-                          borderRadius: '2px',
-                          color: '#FFFFFF',
-                          fontSize: '14px',
-                          fontFamily: 'var(--font-body)',
-                          outline: 'none',
-                        }}
-                      />
-                      {errors.email && <span style={{ fontSize: '11px', color: '#FC8181', marginTop: '4px', display: 'block' }}>{errors.email}</span>}
-                    </div>
-
-                    {/* Target City */}
-                    <div>
-                      <label style={{ display: 'block', fontSize: '11px', color: '#B69A6B', letterSpacing: '0.12em', fontWeight: 600, marginBottom: '8px' }}>
-                        TARGET CITY *
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.city}
-                        onChange={(e) => setFormData({ ...formData, city: e.target.value })}
-                        placeholder="e.g. Mumbai, Pune, Hyderabad"
-                        style={{
-                          width: '100%',
-                          padding: '14px 16px',
-                          backgroundColor: '#161514',
-                          border: `1px solid ${errors.city ? '#E53E3E' : 'rgba(255, 255, 255, 0.15)'}`,
-                          borderRadius: '2px',
-                          color: '#FFFFFF',
-                          fontSize: '14px',
-                          fontFamily: 'var(--font-body)',
-                          outline: 'none',
-                        }}
-                      />
-                      {errors.city && <span style={{ fontSize: '11px', color: '#FC8181', marginTop: '4px', display: 'block' }}>{errors.city}</span>}
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
-                    {/* Current Profession */}
-                    <div>
-                      <label style={{ display: 'block', fontSize: '11px', color: '#B69A6B', letterSpacing: '0.12em', fontWeight: 600, marginBottom: '8px' }}>
-                        CURRENT PROFESSION / BUSINESS
-                      </label>
-                      <input
-                        type="text"
-                        value={formData.profession}
-                        onChange={(e) => setFormData({ ...formData, profession: e.target.value })}
-                        placeholder="e.g. Architect, Real Estate, Retailer"
-                        style={{
-                          width: '100%',
-                          padding: '14px 16px',
-                          backgroundColor: '#161514',
-                          border: '1px solid rgba(255, 255, 255, 0.15)',
-                          borderRadius: '2px',
-                          color: '#FFFFFF',
-                          fontSize: '14px',
-                          fontFamily: 'var(--font-body)',
-                          outline: 'none',
-                        }}
-                      />
-                    </div>
-
-                    {/* Preferred Investment Range */}
-                    <div>
-                      <label style={{ display: 'block', fontSize: '11px', color: '#B69A6B', letterSpacing: '0.12em', fontWeight: 600, marginBottom: '8px' }}>
-                        PREFERRED INVESTMENT RANGE
-                      </label>
-                      <select
-                        value={formData.investmentRange}
-                        onChange={(e) => setFormData({ ...formData, investmentRange: e.target.value })}
-                        style={{
-                          width: '100%',
-                          padding: '14px 16px',
-                          backgroundColor: '#161514',
-                          border: '1px solid rgba(255, 255, 255, 0.15)',
-                          borderRadius: '2px',
-                          color: '#FFFFFF',
-                          fontSize: '14px',
-                          fontFamily: 'var(--font-body)',
-                          outline: 'none',
-                        }}
-                      >
-                        <option value="₹40 Lakhs – ₹75 Lakhs">₹40 Lakhs – ₹75 Lakhs</option>
-                        <option value="₹75 Lakhs – ₹1.5 Crores">₹75 Lakhs – ₹1.5 Crores</option>
-                        <option value="₹1.5 Crores – ₹3 Crores">₹1.5 Crores – ₹3 Crores</option>
-                        <option value="Above ₹3 Crores">Above ₹3 Crores</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  {/* Message */}
-                  <div>
-                    <label style={{ display: 'block', fontSize: '11px', color: '#B69A6B', letterSpacing: '0.12em', fontWeight: 600, marginBottom: '8px' }}>
-                      MESSAGE &amp; BACKGROUND PROFILE
-                    </label>
-                    <textarea
-                      rows={3}
-                      value={formData.message}
-                      onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      placeholder="Share your business background, retail space availability, or questions..."
-                      style={{
-                        width: '100%',
-                        padding: '14px 16px',
-                        backgroundColor: '#161514',
-                        border: '1px solid rgba(255, 255, 255, 0.15)',
-                        borderRadius: '2px',
-                        color: '#FFFFFF',
-                        fontSize: '14px',
-                        fontFamily: 'var(--font-body)',
-                        outline: 'none',
-                        resize: 'vertical',
-                      }}
-                    />
-                  </div>
-
-                  {/* Submit Button */}
-                  <button
-                    type="submit"
-                    disabled={isSubmitting}
-                    style={{
-                      width: '100%',
-                      padding: '16px',
-                      backgroundColor: isSubmitting ? '#716B61' : '#FFFFFF',
-                      color: '#161514',
-                      border: 'none',
-                      borderRadius: '2px',
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '12.5px',
-                      fontWeight: 600,
-                      letterSpacing: '0.16em',
-                      textTransform: 'uppercase',
-                      cursor: isSubmitting ? 'not-allowed' : 'pointer',
-                      transition: 'all 0.3s ease',
-                      marginTop: '8px',
-                    }}
-                    onMouseEnter={(e) => {
-                      if (!isSubmitting) {
-                        e.currentTarget.style.backgroundColor = '#B69A6B';
-                        e.currentTarget.style.color = '#FFFFFF';
-                      }
-                    }}
-                    onMouseLeave={(e) => {
-                      if (!isSubmitting) {
-                        e.currentTarget.style.backgroundColor = '#FFFFFF';
-                        e.currentTarget.style.color = '#161514';
-                      }
-                    }}
-                  >
-                    {isSubmitting ? 'SUBMITTING APPLICATION...' : 'SUBMIT FRANCHISE ENQUIRY'}
-                  </button>
-                </form>
-              )}
+              ))}
             </div>
           </div>
         </section>
 
         {/* =========================================================================
-            SECTION 11: FINAL CTA
+            SECTION: HOW TO ENQUIRE (FORM SECTION)
             ========================================================================= */}
         <section
-          aria-label="Franchise Final CTA"
+          id="how-to-enquire"
+          aria-label="How to Enquire"
           style={{
-            position: 'relative',
-            backgroundColor: '#0F0E0D',
-            paddingTop: 'clamp(90px, 12vw, 150px)',
-            paddingBottom: 'clamp(90px, 12vw, 150px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            overflow: 'hidden',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            textAlign: 'center',
+            backgroundColor: '#F7F7F5',
+            paddingTop: 'clamp(70px, 9vw, 120px)',
+            paddingBottom: 'clamp(80px, 10vw, 140px)',
+            paddingLeft: 'clamp(20px, 5vw, 80px)',
+            paddingRight: 'clamp(20px, 5vw, 80px)',
           }}
         >
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: 'url(https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=2200&q=85)',
-              backgroundPosition: 'center 45%',
-              backgroundSize: 'cover',
-              opacity: 0.2,
-            }}
-          />
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'radial-gradient(circle at center, rgba(15, 14, 13, 0.7) 0%, #0F0E0D 95%)',
-            }}
-          />
-
-          <div style={{ position: 'relative', zIndex: 10, maxWidth: '780px', margin: '0 auto' }}>
-            <span
+          <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+            <div
               style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '11px',
-                fontWeight: 600,
-                letterSpacing: '0.25em',
-                textTransform: 'uppercase',
-                color: '#B69A6B',
-                display: 'block',
-                marginBottom: '16px',
-              }}
-            >
-              BUILD YOUR LEGACY
-            </span>
-
-            <h2
-              style={{
-                fontFamily: 'var(--font-heading)',
-                fontSize: 'clamp(34px, 5.5vw, 64px)',
-                fontWeight: 300,
-                color: '#FFFFFF',
-                lineHeight: 1.08,
-                margin: '0 0 20px 0',
-              }}
-            >
-              Your City.
-              <br />
-              Your Business.
-              <br />
-              The LEOZ Experience.
-            </h2>
-
-            <a
-              href="#franchise-enquiry-section"
-              onClick={scrollToEnquiry}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '10px',
-                padding: '16px 36px',
                 backgroundColor: '#FFFFFF',
-                color: '#161514',
-                fontFamily: 'var(--font-body)',
-                fontSize: '12px',
-                fontWeight: 600,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                textDecoration: 'none',
+                border: '1px solid #D9D9D4',
+                padding: 'clamp(32px, 6vw, 70px)',
                 borderRadius: '2px',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#B69A6B';
-                e.currentTarget.style.color = '#FFFFFF';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#FFFFFF';
-                e.currentTarget.style.color = '#161514';
+                boxShadow: '0 12px 32px rgba(32, 33, 31, 0.03)',
               }}
             >
-              BECOME A FRANCHISE PARTNER
-              <ArrowRight size={14} />
-            </a>
+              {/* Form Title & Introduction */}
+              <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto clamp(36px, 5vw, 54px) auto' }}>
+                <span
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    letterSpacing: '0.24em',
+                    textTransform: 'uppercase',
+                    color: '#A58B62',
+                    display: 'block',
+                    marginBottom: '12px',
+                  }}
+                >
+                  PARTNERSHIP APPLICATION
+                </span>
+                <h2
+                  style={{
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: 'clamp(28px, 4vw, 42px)',
+                    fontWeight: 300,
+                    color: '#20211F',
+                    letterSpacing: '-0.01em',
+                    margin: '0 0 16px 0',
+                  }}
+                >
+                  How to Enquire
+                </h2>
+                <p
+                  style={{
+                    fontFamily: 'var(--font-body)',
+                    fontSize: '15px',
+                    color: '#686963',
+                    lineHeight: 1.7,
+                    margin: 0,
+                  }}
+                >
+                  Submit your city, business background, proposed location, available area and indicative investment capacity. The LEOZ team will discuss suitability and share the franchise model subject to approval.
+                </p>
+              </div>
+
+              {/* Form or Success State */}
+              <AnimatePresence mode="wait">
+                {isSubmitted ? (
+                  <motion.div
+                    key="success"
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.5, ease: luxuryEase }}
+                    style={{
+                      textAlign: 'center',
+                      padding: 'clamp(40px, 6vw, 60px) 20px',
+                      backgroundColor: '#F7F7F5',
+                      border: '1px solid #D9D9D4',
+                      borderRadius: '2px',
+                    }}
+                  >
+                    <div
+                      style={{
+                        width: '64px',
+                        height: '64px',
+                        borderRadius: '50%',
+                        backgroundColor: '#20211F',
+                        color: '#FFFFFF',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        margin: '0 auto 24px auto',
+                      }}
+                    >
+                      <CheckCircle size={32} />
+                    </div>
+
+                    <h3
+                      style={{
+                        fontFamily: 'var(--font-heading)',
+                        fontSize: 'clamp(24px, 3.5vw, 34px)',
+                        fontWeight: 300,
+                        color: '#20211F',
+                        margin: '0 0 16px 0',
+                      }}
+                    >
+                      Thank you for contacting LEOZ Cucine.
+                    </h3>
+
+                    <p
+                      style={{
+                        fontFamily: 'var(--font-body)',
+                        fontSize: '16px',
+                        color: '#686963',
+                        lineHeight: 1.7,
+                        maxWidth: '520px',
+                        margin: '0 auto 32px auto',
+                      }}
+                    >
+                      We have received your franchise enquiry and our leadership team will be in touch.
+                    </p>
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsSubmitted(false);
+                        setFormData({
+                          fullName: '',
+                          mobile: '',
+                          email: '',
+                          city: '',
+                          businessBackground: '',
+                          proposedLocation: '',
+                          availableArea: '1,500 – 2,500 sq. ft.',
+                          indicativeInvestment: '₹75 Lakhs – ₹1.5 Crore',
+                          message: '',
+                        });
+                      }}
+                      style={{
+                        padding: '14px 28px',
+                        backgroundColor: '#20211F',
+                        color: '#FFFFFF',
+                        border: 'none',
+                        fontFamily: 'var(--font-body)',
+                        fontSize: '13px',
+                        fontWeight: 500,
+                        letterSpacing: '0.08em',
+                        textTransform: 'uppercase',
+                        cursor: 'pointer',
+                        borderRadius: '2px',
+                      }}
+                    >
+                      Submit Another Application
+                    </button>
+                  </motion.div>
+                ) : (
+                  <form onSubmit={handleSubmit} noValidate>
+                    <div
+                      style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                        gap: '28px',
+                        marginBottom: '28px',
+                      }}
+                    >
+                      {/* Full Name */}
+                      <div>
+                        <label
+                          htmlFor="fullName"
+                          style={{
+                            display: 'block',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '12px',
+                            fontWeight: 600,
+                            letterSpacing: '0.12em',
+                            textTransform: 'uppercase',
+                            color: '#20211F',
+                            marginBottom: '8px',
+                          }}
+                        >
+                          Full Name *
+                        </label>
+                        <input
+                          id="fullName"
+                          type="text"
+                          name="fullName"
+                          value={formData.fullName}
+                          onChange={handleInputChange}
+                          placeholder="e.g. Vikram Singhania"
+                          style={{
+                            width: '100%',
+                            padding: '16px 18px',
+                            backgroundColor: '#F7F7F5',
+                            border: errors.fullName ? '1px solid #D9534F' : '1px solid #D9D9D4',
+                            borderRadius: '2px',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '15px',
+                            color: '#20211F',
+                            outline: 'none',
+                          }}
+                        />
+                        {errors.fullName && (
+                          <span style={{ display: 'block', color: '#D9534F', fontSize: '12px', marginTop: '6px' }}>
+                            {errors.fullName}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Mobile Number */}
+                      <div>
+                        <label
+                          htmlFor="mobileNumber"
+                          style={{
+                            display: 'block',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '12px',
+                            fontWeight: 600,
+                            letterSpacing: '0.12em',
+                            textTransform: 'uppercase',
+                            color: '#20211F',
+                            marginBottom: '8px',
+                          }}
+                        >
+                          Mobile Number *
+                        </label>
+                        <input
+                          id="mobileNumber"
+                          type="tel"
+                          name="mobile"
+                          value={formData.mobile}
+                          onChange={handleInputChange}
+                          placeholder="+91 98765 43210"
+                          style={{
+                            width: '100%',
+                            padding: '16px 18px',
+                            backgroundColor: '#F7F7F5',
+                            border: errors.mobile ? '1px solid #D9534F' : '1px solid #D9D9D4',
+                            borderRadius: '2px',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '15px',
+                            color: '#20211F',
+                            outline: 'none',
+                          }}
+                        />
+                        {errors.mobile && (
+                          <span style={{ display: 'block', color: '#D9534F', fontSize: '12px', marginTop: '6px' }}>
+                            {errors.mobile}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Email Address */}
+                      <div>
+                        <label
+                          htmlFor="emailAddress"
+                          style={{
+                            display: 'block',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '12px',
+                            fontWeight: 600,
+                            letterSpacing: '0.12em',
+                            textTransform: 'uppercase',
+                            color: '#20211F',
+                            marginBottom: '8px',
+                          }}
+                        >
+                          Email Address *
+                        </label>
+                        <input
+                          id="emailAddress"
+                          type="email"
+                          name="email"
+                          value={formData.email}
+                          onChange={handleInputChange}
+                          placeholder="vikram@enterprise.com"
+                          style={{
+                            width: '100%',
+                            padding: '16px 18px',
+                            backgroundColor: '#F7F7F5',
+                            border: errors.email ? '1px solid #D9534F' : '1px solid #D9D9D4',
+                            borderRadius: '2px',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '15px',
+                            color: '#20211F',
+                            outline: 'none',
+                          }}
+                        />
+                        {errors.email && (
+                          <span style={{ display: 'block', color: '#D9534F', fontSize: '12px', marginTop: '6px' }}>
+                            {errors.email}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* City */}
+                      <div>
+                        <label
+                          htmlFor="city"
+                          style={{
+                            display: 'block',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '12px',
+                            fontWeight: 600,
+                            letterSpacing: '0.12em',
+                            textTransform: 'uppercase',
+                            color: '#20211F',
+                            marginBottom: '8px',
+                          }}
+                        >
+                          City *
+                        </label>
+                        <input
+                          id="city"
+                          type="text"
+                          name="city"
+                          value={formData.city}
+                          onChange={handleInputChange}
+                          placeholder="e.g. Pune / Hyderabad / Bengaluru"
+                          style={{
+                            width: '100%',
+                            padding: '16px 18px',
+                            backgroundColor: '#F7F7F5',
+                            border: errors.city ? '1px solid #D9534F' : '1px solid #D9D9D4',
+                            borderRadius: '2px',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '15px',
+                            color: '#20211F',
+                            outline: 'none',
+                          }}
+                        />
+                        {errors.city && (
+                          <span style={{ display: 'block', color: '#D9534F', fontSize: '12px', marginTop: '6px' }}>
+                            {errors.city}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Proposed Location */}
+                      <div>
+                        <label
+                          htmlFor="proposedLocation"
+                          style={{
+                            display: 'block',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '12px',
+                            fontWeight: 600,
+                            letterSpacing: '0.12em',
+                            textTransform: 'uppercase',
+                            color: '#20211F',
+                            marginBottom: '8px',
+                          }}
+                        >
+                          Proposed Location
+                        </label>
+                        <input
+                          id="proposedLocation"
+                          type="text"
+                          name="proposedLocation"
+                          value={formData.proposedLocation}
+                          onChange={handleInputChange}
+                          placeholder="e.g. High Street / Design District / Own Commercial Space"
+                          style={{
+                            width: '100%',
+                            padding: '16px 18px',
+                            backgroundColor: '#F7F7F5',
+                            border: '1px solid #D9D9D4',
+                            borderRadius: '2px',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '15px',
+                            color: '#20211F',
+                            outline: 'none',
+                          }}
+                        />
+                      </div>
+
+                      {/* Available Area */}
+                      <div>
+                        <label
+                          htmlFor="availableArea"
+                          style={{
+                            display: 'block',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '12px',
+                            fontWeight: 600,
+                            letterSpacing: '0.12em',
+                            textTransform: 'uppercase',
+                            color: '#20211F',
+                            marginBottom: '8px',
+                          }}
+                        >
+                          Available Area
+                        </label>
+                        <select
+                          id="availableArea"
+                          name="availableArea"
+                          value={formData.availableArea}
+                          onChange={handleInputChange}
+                          style={{
+                            width: '100%',
+                            padding: '16px 18px',
+                            backgroundColor: '#F7F7F5',
+                            border: '1px solid #D9D9D4',
+                            borderRadius: '2px',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '15px',
+                            color: '#20211F',
+                            outline: 'none',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          <option value="1,000 – 1,500 sq. ft.">1,000 – 1,500 sq. ft.</option>
+                          <option value="1,500 – 2,500 sq. ft.">1,500 – 2,500 sq. ft. (Flagship Recommendation)</option>
+                          <option value="2,500 – 4,000 sq. ft.">2,500 – 4,000 sq. ft. (Multi-Suite Experience)</option>
+                          <option value="Space Identification in Progress">Space Identification in Progress</option>
+                        </select>
+                      </div>
+
+                      {/* Indicative Investment Capacity */}
+                      <div style={{ gridColumn: '1 / -1' }}>
+                        <label
+                          htmlFor="indicativeInvestment"
+                          style={{
+                            display: 'block',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '12px',
+                            fontWeight: 600,
+                            letterSpacing: '0.12em',
+                            textTransform: 'uppercase',
+                            color: '#20211F',
+                            marginBottom: '8px',
+                          }}
+                        >
+                          Indicative Investment Capacity
+                        </label>
+                        <select
+                          id="indicativeInvestment"
+                          name="indicativeInvestment"
+                          value={formData.indicativeInvestment}
+                          onChange={handleInputChange}
+                          style={{
+                            width: '100%',
+                            padding: '16px 18px',
+                            backgroundColor: '#F7F7F5',
+                            border: '1px solid #D9D9D4',
+                            borderRadius: '2px',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '15px',
+                            color: '#20211F',
+                            outline: 'none',
+                            cursor: 'pointer',
+                          }}
+                        >
+                          <option value="₹50 Lakhs – ₹75 Lakhs">₹50 Lakhs – ₹75 Lakhs</option>
+                          <option value="₹75 Lakhs – ₹1.5 Crore">₹75 Lakhs – ₹1.5 Crore (Recommended for Flagship Studio)</option>
+                          <option value="₹1.5 Crore – ₹3 Crore">₹1.5 Crore – ₹3 Crore (Multi-City / Regional Hub)</option>
+                          <option value="Custom Enterprise Allocation">Custom Enterprise Allocation</option>
+                        </select>
+                      </div>
+
+                      {/* Business Background */}
+                      <div style={{ gridColumn: '1 / -1' }}>
+                        <label
+                          htmlFor="businessBackground"
+                          style={{
+                            display: 'block',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '12px',
+                            fontWeight: 600,
+                            letterSpacing: '0.12em',
+                            textTransform: 'uppercase',
+                            color: '#20211F',
+                            marginBottom: '8px',
+                          }}
+                        >
+                          Business Background *
+                        </label>
+                        <input
+                          id="businessBackground"
+                          type="text"
+                          name="businessBackground"
+                          value={formData.businessBackground}
+                          onChange={handleInputChange}
+                          placeholder="e.g. Existing Luxury Retailer / Architectural Practice / Real Estate Developer"
+                          style={{
+                            width: '100%',
+                            padding: '16px 18px',
+                            backgroundColor: '#F7F7F5',
+                            border: errors.businessBackground ? '1px solid #D9534F' : '1px solid #D9D9D4',
+                            borderRadius: '2px',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '15px',
+                            color: '#20211F',
+                            outline: 'none',
+                          }}
+                        />
+                        {errors.businessBackground && (
+                          <span style={{ display: 'block', color: '#D9534F', fontSize: '12px', marginTop: '6px' }}>
+                            {errors.businessBackground}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* Additional Notes */}
+                      <div style={{ gridColumn: '1 / -1' }}>
+                        <label
+                          htmlFor="message"
+                          style={{
+                            display: 'block',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '12px',
+                            fontWeight: 600,
+                            letterSpacing: '0.12em',
+                            textTransform: 'uppercase',
+                            color: '#20211F',
+                            marginBottom: '8px',
+                          }}
+                        >
+                          Additional Scope / Message (Optional)
+                        </label>
+                        <textarea
+                          id="message"
+                          name="message"
+                          rows={4}
+                          value={formData.message}
+                          onChange={handleInputChange}
+                          placeholder="Share any additional context regarding your regional reach, existing designer network, or timeline..."
+                          style={{
+                            width: '100%',
+                            padding: '16px 18px',
+                            backgroundColor: '#F7F7F5',
+                            border: '1px solid #D9D9D4',
+                            borderRadius: '2px',
+                            fontFamily: 'var(--font-body)',
+                            fontSize: '15px',
+                            color: '#20211F',
+                            outline: 'none',
+                            resize: 'vertical',
+                            lineHeight: 1.6,
+                          }}
+                        />
+                      </div>
+                    </div>
+
+                    {/* Submit CTA */}
+                    <div style={{ textAlign: 'center' }}>
+                      <button
+                        type="submit"
+                        disabled={isSubmitting}
+                        style={{
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          gap: '12px',
+                          width: '100%',
+                          maxWidth: '380px',
+                          padding: '20px 36px',
+                          backgroundColor: '#20211F',
+                          color: '#FFFFFF',
+                          border: '1px solid #20211F',
+                          fontFamily: 'var(--font-body)',
+                          fontSize: '14px',
+                          fontWeight: 500,
+                          letterSpacing: '0.14em',
+                          textTransform: 'uppercase',
+                          cursor: isSubmitting ? 'wait' : 'pointer',
+                          borderRadius: '2px',
+                          transition: 'all 0.3s ease',
+                          opacity: isSubmitting ? 0.7 : 1,
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = '#A58B62';
+                          e.currentTarget.style.borderColor = '#A58B62';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = '#20211F';
+                          e.currentTarget.style.borderColor = '#20211F';
+                        }}
+                      >
+                        <span>{isSubmitting ? 'Processing...' : 'Express Franchise Interest'}</span>
+                        <ArrowRight size={16} />
+                      </button>
+                    </div>
+                  </form>
+                )}
+              </AnimatePresence>
+            </div>
           </div>
         </section>
       </main>
 
       <Footer />
+
+      <style>{`
+        @media (max-width: 900px) {
+          .franchise-hero-grid {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </div>
   );
 };

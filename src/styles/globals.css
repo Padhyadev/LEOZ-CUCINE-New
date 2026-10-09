@@ -1,5 +1,5 @@
 /* ==========================================================================
-   LEOZ CUCINE — GLOBAL STYLES & LUXURY NAVY BUTTON UTILITIES
+   LEOZ CUCINE — GLOBAL STYLES & WARM ARCHITECTURAL LUXURY UTILITIES
    ========================================================================== */
 
 @import './tokens.css';
@@ -14,10 +14,9 @@
 
 html {
   font-size: 16px;
-  /* scroll-behavior: smooth — removed: Lenis handles all scroll smoothing */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: var(--color-surface-dark);
+  background-color: var(--color-surface-primary);
   color: var(--color-text-primary);
   font-family: var(--font-family-sans);
 }
@@ -26,13 +25,13 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   line-height: var(--line-height-base);
-  background-color: var(--color-surface-dark);
+  background-color: var(--color-surface-primary);
   color: var(--color-text-primary);
 }
 
 /* Accessibility Focus Rings */
 :focus-visible {
-  outline: 2px solid var(--color-accent-gold);
+  outline: 2px solid var(--color-accent);
   outline-offset: 4px;
 }
 
@@ -63,7 +62,8 @@ h4,
 .serif-heading {
   font-family: var(--font-family-serif);
   font-weight: 400;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.01em;
+  color: var(--color-text-primary);
 }
 
 /* ==========================================================================
@@ -74,28 +74,28 @@ h4,
 .rifra-eyebrow,
 .section-label {
   font-family: var(--font-body) !important;
-  font-size: 11.5px !important;
+  font-size: 11px !important;
   font-weight: 600 !important;
-  letter-spacing: 0.22em !important;
+  letter-spacing: 0.24em !important;
   text-transform: uppercase !important;
-  color: #B69A6B !important;
+  color: var(--color-accent) !important;
   display: inline-block;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 
 .section-label-on-light {
-  color: var(--color-accent-on-light);
+  color: var(--color-accent);
 }
 
 /* Universal Hero Display Title (H1) */
 .rifra-hero-title,
 .hero-title {
   font-family: var(--font-heading) !important;
-  font-size: clamp(32px, 4.5vw, 60px) !important;
+  font-size: clamp(34px, 5.5vw, 68px) !important;
   font-weight: 300 !important;
-  line-height: 1.12 !important;
+  line-height: 1.1 !important;
   letter-spacing: -0.01em !important;
-  color: #FFFFFF !important;
+  color: var(--color-text-primary) !important;
   margin-bottom: 18px !important;
 }
 
@@ -104,11 +104,11 @@ h4,
 .page-title,
 .section-title {
   font-family: var(--font-heading) !important;
-  font-size: clamp(28px, 3.6vw, 46px) !important;
+  font-size: clamp(28px, 3.8vw, 48px) !important;
   font-weight: 300 !important;
   line-height: 1.15 !important;
   letter-spacing: -0.01em !important;
-  color: #FFFFFF !important;
+  color: var(--color-text-primary) !important;
   margin-bottom: 16px !important;
 }
 
@@ -120,7 +120,7 @@ h4,
   font-size: clamp(20px, 2.2vw, 24px) !important;
   font-weight: 400 !important;
   line-height: 1.25 !important;
-  color: #FFFFFF !important;
+  color: var(--color-text-primary) !important;
 }
 
 /* Universal Paragraphs & Descriptions */
@@ -131,35 +131,89 @@ h4,
   font-family: var(--font-body) !important;
   font-size: 14.5px !important;
   line-height: 1.75 !important;
-  color: rgba(255, 255, 255, 0.72) !important;
+  color: var(--color-text-secondary) !important;
 }
 
-/* Universal Primary Luxury Button */
-.rifra-btn-primary {
+/* ==========================================================================
+   WARM ARCHITECTURAL BUTTONS
+   ========================================================================== */
+
+/* Primary Button: Dark Charcoal background + Warm Ivory text */
+.rifra-btn-primary,
+.leoz-btn-primary {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 13px 28px;
-  background-color: #FFFFFF;
-  color: #000000;
+  padding: 15px 32px;
+  background-color: var(--color-text-primary);
+  color: var(--color-surface-primary);
   font-family: var(--font-body);
   font-size: 12px;
   font-weight: 600;
   letter-spacing: 0.12em;
   text-transform: uppercase;
   text-decoration: none;
-  border-radius: 2px;
-  border: 1px solid #FFFFFF;
-  transition: all 0.3s ease;
+  border-radius: var(--radius-xs);
+  box-shadow: 0 4px 16px rgba(38, 37, 34, 0.12);
+  transition: all var(--motion-duration-fast) var(--motion-ease-out);
   cursor: pointer;
 }
 
-.rifra-btn-primary:hover {
-  background-color: #B69A6B !important;
-  border-color: #B69A6B !important;
-  color: #FFFFFF !important;
+.rifra-btn-primary:hover,
+.leoz-btn-primary:hover {
+  background-color: var(--color-accent);
+  color: #FFFFFF;
   transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(138, 114, 91, 0.25);
+}
+
+/* Secondary Button: Transparent + Dark text + Thin dark border */
+.rifra-btn-secondary,
+.leoz-btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 14px 28px;
+  background-color: transparent;
+  color: var(--color-text-primary);
+  border: 1px solid var(--color-border-medium);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border-radius: var(--radius-xs);
+  transition: all var(--motion-duration-fast) var(--motion-ease-out);
+  cursor: pointer;
+}
+
+.rifra-btn-secondary:hover,
+.leoz-btn-secondary:hover {
+  background-color: var(--color-text-primary);
+  color: var(--color-surface-primary);
+  border-color: var(--color-text-primary);
+  transform: translateY(-2px);
+}
+
+/* ==========================================================================
+   ARCHITECTURAL MATERIAL CARDS
+   ========================================================================== */
+.leoz-card-material {
+  background-color: var(--color-surface-card);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-xs);
+  padding: 24px;
+  box-shadow: var(--shadow-architectural);
+  transition: all var(--motion-duration-fast) var(--motion-ease-out);
+}
+
+.leoz-card-material:hover {
+  border-color: var(--color-border-accent);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
 }
 
 /* Universal Secondary Ghost Button */
@@ -204,16 +258,17 @@ h4,
 }
 
 /* ==========================================================================
-   BODY-COPY JUSTIFICATION — site-wide
+   BODY-COPY ALIGNMENT — site-wide left aligned editorial standard
    ========================================================================== */
 #main-content p {
-  text-align: justify;
+  text-align: left;
+  text-wrap: pretty;
+  word-spacing: normal;
+  letter-spacing: normal;
 }
 
-/* Hero intro paragraphs stay centered — justify reads awkwardly on a short,
-   large-type marketing line meant to sit as one centered block. */
 #main-content p.hero-description {
-  text-align: center;
+  text-align: left;
 }
 
 /* ==========================================================================
@@ -403,17 +458,35 @@ h4,
     overflow-wrap: break-word;
     word-break: normal;
   }
+
+  /* Universal Responsive Editorial Grid (Desktop: 2-col, Mobile/Tablet: 1-col) */
+  .editorial-grid {
+    grid-template-columns: 1fr !important;
+    gap: clamp(32px, 6vw, 48px) !important;
+  }
+
+  .editorial-grid > div {
+    width: 100% !important;
+    max-width: 100% !important;
+  }
 }
 
 @media (max-width: 767px) {
+  /* Prevent horizontal scrolling glitches */
+  body, html {
+    overflow-x: hidden !important;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+  }
+
   /* Ensure luxury buttons look perfect on mobile screens with easy touch targets */
   .rifra-btn-primary,
   .rifra-btn-secondary,
   .btn-primary,
   .btn-secondary {
-    min-height: 46px;
-    padding: 12px 22px;
-    font-size: 11.5px;
+    min-height: 48px;
+    padding: 13px 24px;
+    font-size: 12px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -422,22 +495,78 @@ h4,
     white-space: normal;
   }
 
+  /* Hero button group full width wrapping on mobile */
+  .hero-btn-group,
+  .mobile-stack-buttons {
+    flex-direction: column !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    gap: 12px !important;
+  }
+
+  .hero-btn-group > a,
+  .mobile-stack-buttons > a,
+  .hero-btn-group > button,
+  .mobile-stack-buttons > button {
+    width: 100% !important;
+    justify-content: center !important;
+    text-align: center !important;
+  }
+
+  /* Refined Mobile Typography Scaling */
+  h1, .hero-title, .rifra-hero-title {
+    font-size: clamp(26px, 7.5vw, 36px) !important;
+    line-height: 1.18 !important;
+    letter-spacing: -0.01em !important;
+  }
+
+  h2, .page-title, .section-title, .rifra-section-title {
+    font-size: clamp(24px, 6.5vw, 32px) !important;
+    line-height: 1.2 !important;
+    letter-spacing: -0.01em !important;
+  }
+
+  /* Remove manual line breaks on mobile so headings flow naturally */
+  h1 br,
+  h2 br,
+  h3 br,
+  .desktop-heading-break {
+    display: none !important;
+  }
+
+  h3, .sub-title, .card-title, .rifra-card-title {
+    font-size: clamp(18px, 5vw, 22px) !important;
+    line-height: 1.3 !important;
+  }
+
   .rifra-body-text,
-  .description {
+  .description,
+  .our-approach-lead {
+    font-size: 14.5px !important;
+    line-height: 1.65 !important;
+  }
+
+  p {
     font-size: 14px !important;
     line-height: 1.65 !important;
   }
 
-  /* Touch friendly input sizing (prevents iOS auto-zoom) */
+  /* Touch friendly input sizing (prevents iOS auto-zoom on focus) */
   input,
   select,
   textarea {
-    font-size: 16px !important;
+    font-size: 15px !important;
+    min-height: 44px;
+    box-sizing: border-box !important;
+    max-width: 100% !important;
+    padding-left: 14px !important;
+    padding-right: 14px !important;
   }
 
-  /* Reserve space for the fixed mobile call/WhatsApp bar */
-  body {
-    padding-bottom: 56px;
+  /* Grid optimizations for single-column cards on smaller mobile */
+  .leoz-footer-grid,
+  .leoz-grid-responsive {
+    grid-template-columns: 1fr !important;
   }
 }
 

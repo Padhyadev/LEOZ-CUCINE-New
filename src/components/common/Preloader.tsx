@@ -1,10 +1,7 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import { LeozEmblem } from './LeozEmblem';
+import React, { useEffect, useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 
-/* ==========================================================================
-   LEOZ CUCINE — Preloader with Architectural Brand Character
-   ========================================================================== */
+import logoImg from '../../assets/logo.png';
 
 const SESSION_KEY = 'leoz_preloader_seen';
 
@@ -29,73 +26,85 @@ export const markPreloaderSeen = (): void => {
 };
 
 interface PreloaderProps {
-  isActive: boolean;
-  isExiting: boolean;
+  onComplete?: () => void;
 }
 
-export const Preloader: React.FC<PreloaderProps> = ({ isActive, isExiting }) => {
-  if (!isActive) return null;
+export const Preloader: React.FC<PreloaderProps> = ({ onComplete }) => {
+  const [isExiting, setIsExiting] = useState(false);
+
+  useEffect(() => {
+    // Fast appearance under 1 second (approx 750ms before smooth slide exit)
+    const timer = setTimeout(() => {
+      setIsExiting(true);
+    }, 700);
+
+    const endTimer = setTimeout(() => {
+      markPreloaderSeen();
+      if (onComplete) onComplete();
+    }, 1100);
+
+    return () => {
+      clearTimeout(timer);
+      clearTimeout(endTimer);
+    };
+  }, [onComplete]);
 
   return (
-    <motion.div
-      aria-hidden="true"
-      initial={{ y: '0%' }}
-      animate={{ y: isExiting ? '-100%' : '0%' }}
-      transition={{ duration: 1.0, ease: [0.76, 0, 0.24, 1] }}
-      style={{
-        position: 'fixed',
-        inset: 0,
-        zIndex: 9999,
-        backgroundColor: '#0F0E0D',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        willChange: 'transform',
-      }}
-    >
-      <div
+    <AnimatePresence>
+      <motion.div
+        aria-hidden="true"
+        initial={{ y: '0%' }}
+        animate={{ y: isExiting ? '-100%' : '0%' }}
+        transition={{ duration: 0.45, ease: [0.76, 0, 0.24, 1] }}
         style={{
+          position: 'fixed',
+          inset: 0,
+          zIndex: 99999,
+          backgroundColor: '#161715',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
-          gap: '20px',
-          opacity: isExiting ? 0 : 1,
-          transform: isExiting ? 'translateY(-10px)' : 'translateY(0)',
-          transition: 'opacity 400ms cubic-bezier(0.16, 1, 0.3, 1), transform 400ms cubic-bezier(0.16, 1, 0.3, 1)',
+          justifyContent: 'center',
+          willChange: 'transform',
         }}
       >
-        <LeozEmblem size={90} animate={true} color="#B69A6B" />
-
-        <div style={{ textAlign: 'center' }}>
-          <span
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '16px',
+            opacity: isExiting ? 0 : 1,
+            transition: 'opacity 250ms ease',
+          }}
+        >
+          {/* Brand Logo Presentation */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.94 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4, ease: 'easeOut' }}
             style={{
-              fontFamily: 'var(--font-heading)',
-              fontSize: '28px',
-              fontWeight: 300,
-              letterSpacing: '0.15em',
-              color: '#FFFFFF',
-              display: 'block',
-              margin: '0 0 4px 0',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
             }}
           >
-            LEOZ
-          </span>
-          <span
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '10.5px',
-              fontWeight: 600,
-              letterSpacing: '0.3em',
-              textTransform: 'uppercase',
-              color: '#B69A6B',
-            }}
-          >
-            Architectural Living
-          </span>
+            <img
+              src={logoImg}
+              alt="LEOZ CUCINE — Luxury Kitchens & Wardrobes"
+              style={{
+                height: ' clamp(60px, 10vw, 84px)',
+                width: 'auto',
+                maxWidth: '240px',
+                objectFit: 'contain',
+                filter: 'brightness(1.2) contrast(1.05) drop-shadow(0 4px 16px rgba(0, 0, 0, 0.5))',
+              }}
+            />
+          </motion.div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 

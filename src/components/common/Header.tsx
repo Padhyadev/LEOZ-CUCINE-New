@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Logo } from './Logo';
-import { Menu, X, ChevronDown, ArrowRight, Compass, Sparkles, Layers, Building } from 'lucide-react';
+import { Menu, X, ArrowRight } from 'lucide-react';
 import { useLenisScroll } from '../../hooks/useLenisScroll';
 
 interface HeaderProps {
@@ -15,15 +15,13 @@ const luxuryEase = [0.16, 1, 0.3, 1];
 export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showHeader = true }) => {
   const [scrolled, setScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [activeMegaMenu, setActiveMegaMenu] = useState<string | null>(null);
-  const dropdownTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const { lenis } = useLenisScroll();
   const hamburgerBtnRef = useRef<HTMLButtonElement>(null);
   const mobileNavPanelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 30);
+      setScrolled(window.scrollY > 20);
     };
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -63,7 +61,6 @@ export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showH
       if (e.key === 'Escape') {
         e.preventDefault();
         setIsMobileMenuOpen(false);
-        setActiveMegaMenu(null);
         return;
       }
       if (e.key !== 'Tab') return;
@@ -93,7 +90,6 @@ export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showH
   useEffect(() => {
     const handleRouteChange = () => {
       setIsMobileMenuOpen(false);
-      setActiveMegaMenu(null);
     };
     window.addEventListener('popstate', handleRouteChange);
     return () => window.removeEventListener('popstate', handleRouteChange);
@@ -102,7 +98,6 @@ export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showH
   const isVisible = !isPreloaderActive || showHeader;
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, fullPath: string) => {
-    setActiveMegaMenu(null);
     const [path, hash] = fullPath.split('#');
     const targetHash = hash ? `#${hash}` : '';
 
@@ -127,7 +122,7 @@ export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showH
       '/talk-to-us',
       '/book-consultation',
       '/privacy-policy',
-      '/404'
+      '/404',
     ];
 
     if (validRoutes.includes(path)) {
@@ -173,71 +168,17 @@ export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showH
     handleNavClick(e, path);
   };
 
-  const handleMouseEnter = (menuKey: string) => {
-    if (dropdownTimeoutRef.current) {
-      clearTimeout(dropdownTimeoutRef.current);
-    }
-    setActiveMegaMenu(menuKey);
-  };
-
-  const handleMouseLeave = () => {
-    dropdownTimeoutRef.current = setTimeout(() => {
-      setActiveMegaMenu(null);
-    }, 250);
-  };
-
   const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/';
 
-  /* =========================================================================
-     MEGA MENU DEFINITIONS (Kitchens, Wardrobes, Interiors, Projects)
-     ========================================================================= */
-  const megaMenus = {
-    kitchens: {
-      title: 'MODULAR KITCHENS',
-      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=85',
-      tagline: 'Architectural volumes & German engineering',
-      links: [
-        { label: 'Modern Kitchens', path: '/modular-kitchens' },
-        { label: 'Luxury Kitchens', path: '/modular-kitchens' },
-        { label: 'Island Kitchens', path: '/modular-kitchens' },
-        { label: 'Handleless Kitchens', path: '/modular-kitchens' },
-        { label: 'Kitchen Projects', path: '/projects' },
-      ],
-    },
-    wardrobes: {
-      title: 'MODULAR WARDROBES',
-      image: 'https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=85',
-      tagline: 'Sanctuary dressing suites & precision storage',
-      links: [
-        { label: 'Walk-in Wardrobes', path: '/modular-wardrobes' },
-        { label: 'Sliding Wardrobes', path: '/modular-wardrobes' },
-        { label: 'Luxury Vitrines', path: '/modular-wardrobes' },
-        { label: 'Wardrobe Projects', path: '/projects' },
-      ],
-    },
-    interiors: {
-      title: 'COMPLETE INTERIORS',
-      image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=85',
-      tagline: 'Harmonious full-home turnkey millwork',
-      links: [
-        { label: 'Living Spaces', path: '/projects' },
-        { label: 'Bedrooms & Boudoirs', path: '/modular-wardrobes' },
-        { label: 'Complete Homes', path: '/projects' },
-        { label: 'Interior Projects', path: '/projects' },
-      ],
-    },
-    projects: {
-      title: 'PROJECT PORTFOLIO',
-      image: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=85',
-      tagline: 'Architectural residences crafted across India',
-      links: [
-        { label: 'All Projects', path: '/projects' },
-        { label: 'Kitchen Projects', path: '/projects' },
-        { label: 'Wardrobe Suites', path: '/projects' },
-        { label: 'The Ahmedabad Residence', path: '/case-study' },
-      ],
-    },
-  };
+  const navLinks = [
+    { label: 'Kitchens', path: '/modular-kitchens' },
+    { label: 'Wardrobes', path: '/modular-wardrobes' },
+    // { label: 'Projects', path: '/projects' },
+    { label: 'Factory', path: '/factory' },
+    { label: 'About', path: '/about' },
+    { label: 'Franchise', path: '/franchise-opportunities' },
+    { label: 'Contact', path: '/contact' },
+  ];
 
   return (
     <>
@@ -250,32 +191,24 @@ export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showH
           left: 0,
           right: 0,
           zIndex: 1000,
-          height: scrolled ? '72px' : '86px',
-          padding: '0 clamp(20px, 4.5vw, 64px)',
-          backgroundColor: scrolled ? 'rgba(250, 249, 246, 0.98)' : 'transparent',
-          color: scrolled ? '#161514' : '#FFFFFF',
-          borderBottom: scrolled ? '1px solid rgba(22, 21, 20, 0.08)' : '1px solid rgba(255, 255, 255, 0.08)',
-          backdropFilter: scrolled ? 'blur(16px)' : 'none',
-          WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'none',
+          height: scrolled ? '76px' : '88px',
+          padding: '0 clamp(20px, 4vw, 64px)',
+          backgroundColor: '#F7F7F5', // Porcelain
+          color: '#20211F', // Graphite
+          borderBottom: '1px solid #D9D9D4', // Subtle hairline border
+          boxShadow: scrolled ? '0 4px 20px rgba(32, 33, 31, 0.04)' : 'none',
           opacity: isVisible ? 1 : 0,
           pointerEvents: isVisible ? 'auto' : 'none',
-          transition: 'all 350ms cubic-bezier(0.16, 1, 0.3, 1)',
+          transition: 'height 0.3s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.3s ease',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           width: '100%',
         }}
       >
-        {/* LEFT: LEOZ LOGO WITH BREATHING ROOM */}
+        {/* LEFT: LEOZ LOGO */}
         <div style={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-          <a
-            href="/"
-            onClick={(e) => handleNavClick(e, '/')}
-            aria-label="LEOZ Cucine Home"
-            style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none' }}
-          >
-            <Logo variant={scrolled ? 'light' : 'dark'} showTagline={false} />
-          </a>
+          <Logo variant="light" showTagline={false} />
         </div>
 
         {/* CENTER / NAVIGATION (DESKTOP) */}
@@ -285,311 +218,58 @@ export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showH
           style={{
             display: 'flex',
             alignItems: 'center',
-            gap: 'clamp(16px, 1.8vw, 32px)',
+            gap: 'clamp(14px, 1.8vw, 32px)',
           }}
         >
-          {/* 1. KITCHENS */}
-          <div
-            className="leoz-nav-item-wrapper"
-            onMouseEnter={() => handleMouseEnter('kitchens')}
-            onMouseLeave={handleMouseLeave}
-            style={{ position: 'relative', padding: '16px 0' }}
-          >
-            <a
-              href="/modular-kitchens"
-              onClick={(e) => handleNavClick(e, '/modular-kitchens')}
-              className={`leoz-nav-link ${currentPath === '/modular-kitchens' ? 'active' : ''}`}
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '12.5px',
-                fontWeight: 500,
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                color: scrolled ? '#161514' : '#FFFFFF',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-                position: 'relative',
-                paddingBottom: '4px',
-              }}
-            >
-              Kitchens
-              <ChevronDown size={12} opacity={0.6} />
-              {currentPath === '/modular-kitchens' && (
-                <motion.div
-                  layoutId="header-active-line"
-                  style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: '1.5px',
-                    backgroundColor: '#B69A6B',
-                  }}
-                />
-              )}
-            </a>
-          </div>
-
-          {/* 2. WARDROBES */}
-          <div
-            className="leoz-nav-item-wrapper"
-            onMouseEnter={() => handleMouseEnter('wardrobes')}
-            onMouseLeave={handleMouseLeave}
-            style={{ position: 'relative', padding: '16px 0' }}
-          >
-            <a
-              href="/modular-wardrobes"
-              onClick={(e) => handleNavClick(e, '/modular-wardrobes')}
-              className={`leoz-nav-link ${currentPath === '/modular-wardrobes' ? 'active' : ''}`}
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '12.5px',
-                fontWeight: 500,
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                color: scrolled ? '#161514' : '#FFFFFF',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-                position: 'relative',
-                paddingBottom: '4px',
-              }}
-            >
-              Wardrobes
-              <ChevronDown size={12} opacity={0.6} />
-              {currentPath === '/modular-wardrobes' && (
-                <motion.div
-                  layoutId="header-active-line"
-                  style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: '1.5px',
-                    backgroundColor: '#B69A6B',
-                  }}
-                />
-              )}
-            </a>
-          </div>
-
-          {/* 3. INTERIORS */}
-          <div
-            className="leoz-nav-item-wrapper"
-            onMouseEnter={() => handleMouseEnter('interiors')}
-            onMouseLeave={handleMouseLeave}
-            style={{ position: 'relative', padding: '16px 0' }}
-          >
-            <a
-              href="/projects"
-              onClick={(e) => handleNavClick(e, '/projects')}
-              className={`leoz-nav-link ${currentPath === '/projects' && !activeMegaMenu ? 'active' : ''}`}
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '12.5px',
-                fontWeight: 500,
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                color: scrolled ? '#161514' : '#FFFFFF',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-                position: 'relative',
-                paddingBottom: '4px',
-              }}
-            >
-              Interiors
-              <ChevronDown size={12} opacity={0.6} />
-            </a>
-          </div>
-
-          {/* 4. PROJECTS */}
-          <div
-            className="leoz-nav-item-wrapper"
-            onMouseEnter={() => handleMouseEnter('projects')}
-            onMouseLeave={handleMouseLeave}
-            style={{ position: 'relative', padding: '16px 0' }}
-          >
-            <a
-              href="/projects"
-              onClick={(e) => handleNavClick(e, '/projects')}
-              className={`leoz-nav-link ${currentPath === '/projects' || currentPath === '/case-study' ? 'active' : ''}`}
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '12.5px',
-                fontWeight: 500,
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                color: scrolled ? '#161514' : '#FFFFFF',
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '4px',
-                position: 'relative',
-                paddingBottom: '4px',
-              }}
-            >
-              Projects
-              <ChevronDown size={12} opacity={0.6} />
-              {(currentPath === '/projects' || currentPath === '/case-study') && (
-                <motion.div
-                  layoutId="header-active-line"
-                  style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: '1.5px',
-                    backgroundColor: '#B69A6B',
-                  }}
-                />
-              )}
-            </a>
-          </div>
-
-          {/* 5. OUR METHOD */}
-          <div style={{ position: 'relative', padding: '16px 0' }}>
-            <a
-              href="/our-method"
-              onClick={(e) => handleNavClick(e, '/our-method')}
-              className={`leoz-nav-link ${currentPath === '/our-method' ? 'active' : ''}`}
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '12.5px',
-                fontWeight: 500,
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                color: scrolled ? '#161514' : '#FFFFFF',
-                display: 'inline-block',
-                position: 'relative',
-                paddingBottom: '4px',
-              }}
-            >
-              Our Method
-              {currentPath === '/our-method' && (
-                <motion.div
-                  layoutId="header-active-line"
-                  style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: '1.5px',
-                    backgroundColor: '#B69A6B',
-                  }}
-                />
-              )}
-            </a>
-          </div>
-
-          {/* 6. FACTORY */}
-          <div style={{ position: 'relative', padding: '16px 0' }}>
-            <a
-              href="/factory"
-              onClick={(e) => handleNavClick(e, '/factory')}
-              className={`leoz-nav-link ${currentPath === '/factory' ? 'active' : ''}`}
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '12.5px',
-                fontWeight: 500,
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                color: scrolled ? '#161514' : '#FFFFFF',
-                display: 'inline-block',
-                position: 'relative',
-                paddingBottom: '4px',
-              }}
-            >
-              Factory
-              {currentPath === '/factory' && (
-                <motion.div
-                  layoutId="header-active-line"
-                  style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: '1.5px',
-                    backgroundColor: '#B69A6B',
-                  }}
-                />
-              )}
-            </a>
-          </div>
-
-          {/* 7. FRANCHISE */}
-          <div style={{ position: 'relative', padding: '16px 0' }}>
-            <a
-              href="/franchise-opportunities"
-              onClick={(e) => handleNavClick(e, '/franchise-opportunities')}
-              className={`leoz-nav-link ${currentPath === '/franchise-opportunities' ? 'active' : ''}`}
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '12.5px',
-                fontWeight: 500,
-                letterSpacing: '0.08em',
-                textTransform: 'uppercase',
-                color: scrolled ? '#161514' : '#FFFFFF',
-                display: 'inline-block',
-                position: 'relative',
-                paddingBottom: '4px',
-              }}
-            >
-              Franchise
-              {currentPath === '/franchise-opportunities' && (
-                <motion.div
-                  layoutId="header-active-line"
-                  style={{
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: '1.5px',
-                    backgroundColor: '#B69A6B',
-                  }}
-                />
-              )}
-            </a>
-          </div>
+          {navLinks.map((item) => {
+            const isActive = currentPath === item.path;
+            return (
+              <a
+                key={item.label}
+                href={item.path}
+                onClick={(e) => handleNavClick(e, item.path)}
+                className={`leoz-nav-link ${isActive ? 'active' : ''}`}
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  letterSpacing: '0.08em',
+                  textTransform: 'uppercase',
+                  color: isActive ? '#A58B62' : '#20211F',
+                  display: 'inline-block',
+                  position: 'relative',
+                  padding: '8px 0',
+                  textDecoration: 'none',
+                  transition: 'color 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  if (!isActive) e.currentTarget.style.color = '#A58B62';
+                }}
+                onMouseLeave={(e) => {
+                  if (!isActive) e.currentTarget.style.color = '#20211F';
+                }}
+              >
+                {item.label}
+                {isActive && (
+                  <motion.div
+                    layoutId="header-active-line"
+                    style={{
+                      position: 'absolute',
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      height: '2px',
+                      backgroundColor: '#A58B62',
+                    }}
+                  />
+                )}
+              </a>
+            );
+          })}
         </nav>
 
-        {/* RIGHT: ABOUT, CONTACT & PRIMARY CTA */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 'clamp(14px, 1.5vw, 24px)' }} className="leoz-header-right">
-          <a
-            href="/about"
-            onClick={(e) => handleNavClick(e, '/about')}
-            className="leoz-header-link-secondary"
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '12.5px',
-              fontWeight: 500,
-              letterSpacing: '0.08em',
-              textTransform: 'uppercase',
-              color: scrolled ? '#161514' : '#FFFFFF',
-              opacity: 0.85,
-            }}
-          >
-            About
-          </a>
-
-          <a
-            href="/contact"
-            onClick={(e) => handleNavClick(e, '/contact')}
-            className="leoz-header-link-secondary"
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: '12.5px',
-              fontWeight: 500,
-              letterSpacing: '0.08em',
-              textTransform: 'uppercase',
-              color: scrolled ? '#161514' : '#FFFFFF',
-              opacity: 0.85,
-            }}
-          >
-            Contact
-          </a>
-
-          {/* Minimal Rectangular Consultation Button */}
+        {/* RIGHT: PRIMARY CTA */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }} className="leoz-header-right">
           <a
             href="/talk-to-us"
             onClick={(e) => handleNavClick(e, '/talk-to-us')}
@@ -598,33 +278,31 @@ export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showH
               display: 'inline-flex',
               alignItems: 'center',
               gap: '8px',
-              padding: '11px 22px',
-              backgroundColor: scrolled ? '#161514' : '#FFFFFF',
-              color: scrolled ? '#FFFFFF' : '#161514',
+              padding: '12px 24px',
+              backgroundColor: '#20211F',
+              color: '#FFFFFF',
               fontFamily: 'var(--font-body)',
               fontSize: '11.5px',
               fontWeight: 600,
-              letterSpacing: '0.14em',
+              letterSpacing: '0.12em',
               textTransform: 'uppercase',
               textDecoration: 'none',
               borderRadius: '2px',
-              border: `1px solid ${scrolled ? '#161514' : '#FFFFFF'}`,
-              transition: 'all 0.3s ease',
+              border: '1px solid #20211F',
+              transition: 'all 0.25s ease',
               whiteSpace: 'nowrap',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = '#B69A6B';
-              e.currentTarget.style.borderColor = '#B69A6B';
-              e.currentTarget.style.color = '#FFFFFF';
+              e.currentTarget.style.backgroundColor = '#A58B62';
+              e.currentTarget.style.borderColor = '#A58B62';
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = scrolled ? '#161514' : '#FFFFFF';
-              e.currentTarget.style.borderColor = scrolled ? '#161514' : '#FFFFFF';
-              e.currentTarget.style.color = scrolled ? '#FFFFFF' : '#161514';
+              e.currentTarget.style.backgroundColor = '#20211F';
+              e.currentTarget.style.borderColor = '#20211F';
             }}
           >
-            <span>BOOK A CONSULTATION</span>
-            <ArrowRight size={13} />
+            <span>Book a Consultation</span>
+            <ArrowRight size={12} />
           </a>
 
           {/* Mobile Hamburger Toggle Button */}
@@ -637,7 +315,7 @@ export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showH
             aria-controls={MOBILE_NAV_PANEL_ID}
             style={{
               display: 'none',
-              color: scrolled ? '#161514' : '#FFFFFF',
+              color: '#20211F',
               background: 'none',
               border: 'none',
               cursor: 'pointer',
@@ -649,136 +327,10 @@ export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showH
             {isMobileMenuOpen ? <X size={26} /> : <Menu size={26} />}
           </button>
         </div>
-
-        {/* =========================================================================
-            DESKTOP MEGA MENU DROPDOWN PANEL
-            ========================================================================= */}
-        <AnimatePresence>
-          {activeMegaMenu && megaMenus[activeMegaMenu as keyof typeof megaMenus] && (
-            <motion.div
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 6 }}
-              transition={{ duration: 0.25, ease: luxuryEase }}
-              onMouseEnter={() => handleMouseEnter(activeMegaMenu)}
-              onMouseLeave={handleMouseLeave}
-              className="leoz-mega-menu-panel"
-              style={{
-                position: 'absolute',
-                top: '100%',
-                left: 0,
-                right: 0,
-                backgroundColor: '#161514',
-                color: '#FFFFFF',
-                borderTop: '1px solid rgba(182, 154, 107, 0.3)',
-                borderBottom: '1px solid rgba(255, 255, 255, 0.1)',
-                boxShadow: '0 24px 60px rgba(0,0,0,0.85)',
-                padding: '36px clamp(20px, 5.5vw, 80px)',
-              }}
-            >
-              <div
-                style={{
-                  maxWidth: '1360px',
-                  margin: '0 auto',
-                  display: 'grid',
-                  gridTemplateColumns: '1.2fr 1.8fr 1fr',
-                  gap: '40px',
-                  alignItems: 'center',
-                }}
-              >
-                {/* Mega Menu Image Preview */}
-                <div style={{ position: 'relative', width: '100%', aspectRatio: '1 / 0.65', overflow: 'hidden', borderRadius: '2px' }}>
-                  <img
-                    src={megaMenus[activeMegaMenu as keyof typeof megaMenus].image}
-                    alt={megaMenus[activeMegaMenu as keyof typeof megaMenus].title}
-                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                  />
-                  <div
-                    style={{
-                      position: 'absolute',
-                      inset: 0,
-                      background: 'linear-gradient(180deg, rgba(0,0,0,0) 40%, rgba(0,0,0,0.7) 100%)',
-                    }}
-                  />
-                </div>
-
-                {/* Category Links */}
-                <div>
-                  <span style={{ fontSize: '10px', color: '#B69A6B', letterSpacing: '0.2em', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
-                    {megaMenus[activeMegaMenu as keyof typeof megaMenus].title}
-                  </span>
-                  <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '14px 24px' }}>
-                    {megaMenus[activeMegaMenu as keyof typeof megaMenus].links.map((link) => (
-                      <a
-                        key={link.label}
-                        href={link.path}
-                        onClick={(e) => handleNavClick(e, link.path)}
-                        style={{
-                          fontFamily: 'var(--font-heading)',
-                          fontSize: '18px',
-                          color: '#FFFFFF',
-                          textDecoration: 'none',
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          gap: '6px',
-                          transition: 'color 0.2s ease',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.color = '#B69A6B';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.color = '#FFFFFF';
-                        }}
-                      >
-                        <span>{link.label}</span>
-                        <ArrowRight size={13} opacity={0.5} />
-                      </a>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Quick Action Box */}
-                <div
-                  style={{
-                    padding: '20px',
-                    backgroundColor: '#1E1D1B',
-                    borderRadius: '2px',
-                    border: '1px solid rgba(255, 255, 255, 0.08)',
-                  }}
-                >
-                  <span style={{ fontSize: '10px', color: '#B69A6B', letterSpacing: '0.15em', fontWeight: 600, display: 'block', marginBottom: '6px' }}>
-                    PRIVATE CONSULTATION
-                  </span>
-                  <p style={{ fontSize: '12px', color: 'rgba(255,255,255,0.75)', lineHeight: 1.5, marginBottom: '14px' }}>
-                    {megaMenus[activeMegaMenu as keyof typeof megaMenus].tagline}
-                  </p>
-                  <a
-                    href="/talk-to-us"
-                    onClick={(e) => handleNavClick(e, '/talk-to-us')}
-                    style={{
-                      fontSize: '11px',
-                      color: '#FFFFFF',
-                      fontWeight: 600,
-                      letterSpacing: '0.12em',
-                      textTransform: 'uppercase',
-                      textDecoration: 'none',
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '6px',
-                    }}
-                  >
-                    <span>Book Studio Visit</span>
-                    <ArrowRight size={12} color="#B69A6B" />
-                  </a>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
       </header>
 
       {/* =========================================================================
-          MOBILE FULL-SCREEN NAVIGATION OVERLAY (WARM IVORY / STONE)
+          MOBILE FULL-SCREEN NAVIGATION OVERLAY (PORCELAIN LUXURY)
           ========================================================================= */}
       <AnimatePresence>
         {isMobileMenuOpen && (
@@ -788,10 +340,10 @@ export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showH
             role="dialog"
             aria-modal="true"
             aria-label="Mobile Navigation"
-            initial={{ opacity: 0, x: '100%' }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: '100%' }}
-            transition={{ duration: 0.45, ease: luxuryEase }}
+            initial={{ opacity: 0, y: '-10%' }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: '-10%' }}
+            transition={{ duration: 0.35, ease: luxuryEase }}
             style={{
               position: 'fixed',
               top: 0,
@@ -800,29 +352,27 @@ export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showH
               bottom: 0,
               width: '100vw',
               height: '100vh',
-              backgroundColor: '#FAF9F6',
-              color: '#161514',
+              backgroundColor: '#F7F7F5', // Porcelain
+              color: '#20211F', // Graphite
               zIndex: 9999,
-              paddingTop: '88px',
+              paddingTop: '24px',
               paddingBottom: '36px',
-              paddingLeft: '28px',
-              paddingRight: '28px',
+              paddingLeft: '24px',
+              paddingRight: '24px',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-between',
               overflowY: 'auto',
             }}
           >
-            {/* Top Close Button in Panel Header */}
+            {/* Top Bar: Logo left, Close icon right */}
             <div
               style={{
-                position: 'absolute',
-                top: '20px',
-                left: '24px',
-                right: '24px',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'space-between',
+                paddingBottom: '20px',
+                borderBottom: '1px solid #D9D9D4',
               }}
             >
               <Logo variant="light" showTagline={false} />
@@ -833,71 +383,61 @@ export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showH
                 style={{
                   background: 'none',
                   border: 'none',
-                  color: '#161514',
+                  color: '#20211F',
                   cursor: 'pointer',
                   padding: '8px',
                   display: 'flex',
                   alignItems: 'center',
                 }}
               >
-                <X size={26} />
+                <X size={28} />
               </button>
             </div>
 
             {/* Mobile Vertical Menu Links */}
             <nav
               aria-label="Mobile Navigation List"
-              style={{ display: 'flex', flexDirection: 'column', gap: '14px', marginTop: '16px' }}
+              style={{ display: 'flex', flexDirection: 'column', gap: '14px', margin: '24px 0' }}
             >
-              {[
-                { label: 'Home', path: '/' },
-                { label: 'Kitchens', path: '/modular-kitchens' },
-                { label: 'Wardrobes', path: '/modular-wardrobes' },
-                { label: 'Interiors', path: '/projects' },
-                { label: 'Projects & Case Studies', path: '/projects' },
-                { label: 'Our Method', path: '/our-method' },
-                { label: 'Factory & Infrastructure', path: '/factory' },
-                { label: 'Materials & Finishes', path: '/materials' },
-                { label: 'Franchise Opportunities', path: '/franchise-opportunities' },
-                { label: 'About LEOZ', path: '/about' },
-                { label: 'Showrooms', path: '/showrooms' },
-                { label: 'Contact', path: '/contact' },
-              ].map((item, idx) => (
-                <motion.a
-                  key={item.label}
-                  href={item.path}
-                  onClick={(e) => handleMobileNavClick(e, item.path)}
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.35, delay: idx * 0.03, ease: luxuryEase }}
-                  style={{
-                    fontFamily: 'var(--font-heading)',
-                    fontSize: '22px',
-                    fontWeight: 400,
-                    color: currentPath === item.path ? '#B69A6B' : '#161514',
-                    textDecoration: 'none',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    paddingBottom: '10px',
-                    borderBottom: '1px solid rgba(22, 21, 20, 0.06)',
-                  }}
-                >
-                  <span>{item.label}</span>
-                  <ArrowRight size={14} color="#B69A6B" opacity={0.7} />
-                </motion.a>
-              ))}
+              {navLinks.map((item, idx) => {
+                const isActive = currentPath === item.path;
+                return (
+                  <motion.a
+                    key={item.label}
+                    href={item.path}
+                    onClick={(e) => handleMobileNavClick(e, item.path)}
+                    initial={{ opacity: 0, x: 16 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ duration: 0.35, delay: idx * 0.03, ease: luxuryEase }}
+                    style={{
+                      fontFamily: 'var(--font-heading)',
+                      fontSize: '24px',
+                      fontWeight: 300,
+                      color: isActive ? '#A58B62' : '#20211F',
+                      textDecoration: 'none',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      paddingBottom: '10px',
+                      borderBottom: '1px solid rgba(217, 217, 212, 0.6)',
+                    }}
+                  >
+                    <span>{item.label}</span>
+                    <ArrowRight size={16} color={isActive ? '#A58B62' : '#686963'} />
+                  </motion.a>
+                );
+              })}
             </nav>
 
-            {/* Mobile Action Buttons & Direct Studio Links */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', paddingTop: '24px' }}>
+            {/* Bottom: Book a Consultation */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
               <a
                 href="/talk-to-us"
                 onClick={(e) => handleMobileNavClick(e, '/talk-to-us')}
                 style={{
                   width: '100%',
-                  padding: '14px',
-                  backgroundColor: '#161514',
+                  padding: '16px',
+                  backgroundColor: '#20211F',
                   color: '#FFFFFF',
                   fontFamily: 'var(--font-body)',
                   fontSize: '12px',
@@ -909,29 +449,7 @@ export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showH
                   borderRadius: '2px',
                 }}
               >
-                BOOK A CONSULTATION
-              </a>
-
-              <a
-                href="/showrooms"
-                onClick={(e) => handleMobileNavClick(e, '/showrooms')}
-                style={{
-                  width: '100%',
-                  padding: '13px',
-                  backgroundColor: 'transparent',
-                  color: '#161514',
-                  border: '1px solid rgba(22, 21, 20, 0.2)',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  letterSpacing: '0.14em',
-                  textTransform: 'uppercase',
-                  textAlign: 'center',
-                  textDecoration: 'none',
-                  borderRadius: '2px',
-                }}
-              >
-                VISIT SHOWROOM (AHMEDABAD &amp; SURAT)
+                Book a Consultation
               </a>
             </div>
           </motion.div>
@@ -943,7 +461,6 @@ export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showH
           .leoz-desktop-nav {
             display: none !important;
           }
-          .leoz-header-right .leoz-header-link-secondary,
           .leoz-header-right .leoz-header-cta-btn {
             display: none !important;
           }

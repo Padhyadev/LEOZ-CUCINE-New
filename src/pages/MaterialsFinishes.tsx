@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Header } from '../components/common/Header';
 import { Footer } from '../components/common/Footer';
+import { UniversalHero } from '../components/common/UniversalHero';
 import { useDocumentMeta } from '../hooks/useDocumentMeta';
 import {
   ArrowRight,
@@ -126,7 +127,7 @@ export const MaterialsFinishes: React.FC = () => {
       origin: 'Architectural Anodized Aluminum',
       finish: 'Anti-Oxidation Anodized',
       image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=85',
-      swatch: '#B69A6B',
+      swatch: '#8A725B',
     },
     {
       id: 'metal-titanium-gunmetal',
@@ -225,7 +226,7 @@ export const MaterialsFinishes: React.FC = () => {
       origin: 'Architectural Grade 24V LED',
       finish: '3000K Warm Ambient Glow',
       image: 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1000&q=85',
-      swatch: '#E2B714',
+      swatch: '#8A725B',
     },
   ];
 
@@ -240,19 +241,19 @@ export const MaterialsFinishes: React.FC = () => {
   const comboOptions = {
     cabinets: [
       { name: 'Smoked European Oak', color: '#5A4633' },
-      { name: 'Velvet Matte Nero', color: '#1F2421' },
-      { name: 'Warm Ivory Satin Lacquer', color: '#EBE8E1' },
+      { name: 'Velvet Matte Nero', color: '#262522' },
+      { name: 'Warm Ivory Satin Lacquer', color: '#F7F4EE' },
       { name: 'Fluted Acoustic Walnut', color: '#6E4D34' },
     ],
     countertops: [
       { name: 'Taj Mahal Sintered Quartzite', color: '#D5CDBE' },
-      { name: 'Nero Marquina Stone', color: '#1F2421' },
+      { name: 'Nero Marquina Stone', color: '#262522' },
       { name: 'Calacatta Gold Vein', color: '#F7F5F1' },
     ],
     handles: [
-      { name: 'Champagne Brushed Bronze', color: '#B69A6B' },
+      { name: 'Champagne Brushed Bronze', color: '#8A725B' },
       { name: 'Titanium Gunmetal Profile', color: '#4A5568' },
-      { name: 'Handleless 45° Miter', color: '#161514' },
+      { name: 'Handleless 45° Miter', color: '#262522' },
     ],
     interiors: [
       { name: 'Tuscan Leather & Velvet', color: '#8C6239' },
@@ -267,114 +268,24 @@ export const MaterialsFinishes: React.FC = () => {
   const [selectedInterior, setSelectedInterior] = useState(comboOptions.interiors[0]);
 
   return (
-    <div style={{ backgroundColor: '#FAF9F6', color: '#161514', minHeight: '100vh', overflowX: 'hidden' }}>
+    <div style={{ backgroundColor: '#F7F4EE', color: '#262522', minHeight: '100vh', overflowX: 'hidden' }}>
       <Header />
 
       <main id="main-content">
         {/* =========================================================================
-            HERO: "EVERY SURFACE TELLS A STORY."
+            UNIVERSAL HERO SECTION: LEOZ / MATERIALS & FINISHES
             ========================================================================= */}
-        <section
-          aria-label="Materials Library Hero"
-          style={{
-            position: 'relative',
-            width: '100%',
-            minHeight: 'clamp(560px, 82vh, 740px)',
-            display: 'flex',
-            alignItems: 'flex-end',
-            backgroundColor: '#161514',
-            overflow: 'hidden',
-          }}
-        >
-          {/* Macro Photography Background */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: 'url(https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=2200&q=90)',
-              backgroundPosition: 'center 48%',
-              backgroundSize: 'cover',
-            }}
-          />
-
-          {/* Soft Scrim */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'linear-gradient(180deg, rgba(22, 21, 20, 0.25) 0%, rgba(22, 21, 20, 0.4) 40%, rgba(22, 21, 20, 0.92) 95%)',
-            }}
-          />
-
-          {/* Hero Typography */}
-          <div
-            style={{
-              position: 'relative',
-              zIndex: 10,
-              maxWidth: '1360px',
-              width: '100%',
-              margin: '0 auto',
-              paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-              paddingRight: 'clamp(20px, 5.5vw, 80px)',
-              paddingBottom: 'clamp(44px, 7vw, 76px)',
-            }}
-          >
-            <div style={{ maxWidth: '840px' }}>
-              <motion.span
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: luxuryEase }}
-                style={{
-                  display: 'inline-block',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  letterSpacing: '0.24em',
-                  textTransform: 'uppercase',
-                  color: '#B69A6B',
-                  marginBottom: '14px',
-                }}
-              >
-                TACTILE ARCHITECTURAL ARCHIVE
-              </motion.span>
-
-              <motion.h1
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.1, ease: luxuryEase }}
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(36px, 5.8vw, 72px)',
-                  fontWeight: 300,
-                  lineHeight: 1.05,
-                  letterSpacing: '-0.01em',
-                  color: '#FFFFFF',
-                  margin: '0 0 18px 0',
-                }}
-              >
-                Every Surface
-                <br />
-                Tells a Story.
-              </motion.h1>
-
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.2, ease: luxuryEase }}
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'clamp(14.5px, 1.3vw, 17.5px)',
-                  color: 'rgba(255, 255, 255, 0.85)',
-                  lineHeight: 1.65,
-                  maxWidth: '640px',
-                  margin: 0,
-                }}
-              >
-                A curated digital material library of sintered stones, smoked European woods, tinted glass vitrines, and micro-anodized metals crafted for India’s climate.
-              </motion.p>
-            </div>
-          </div>
-        </section>
+        <UniversalHero
+          image="/Italian Marble.webp"
+          imageAlt="LEOZ Sintered Quartzite Stone and Natural Woods Materiality"
+          imagePosition="center 50%"
+          eyebrow="LEOZ / MATERIALS & FINISHES"
+          headline="Every Surface Tells a Story."
+          supportingText="A curated digital material library of sintered stones, smoked European woods and anodized metals."
+          ctaText="Explore Materials →"
+          ctaHref="#materials-archive"
+          brightness={0.88}
+        />
 
         {/* =========================================================================
             SECTION 01: INTERACTIVE CATEGORY FILTER WALL
@@ -382,12 +293,12 @@ export const MaterialsFinishes: React.FC = () => {
         <section
           aria-label="Material Categories Filter"
           style={{
-            paddingTop: 'clamp(32px, 4vw, 48px)',
-            paddingBottom: 'clamp(32px, 4vw, 48px)',
+            paddingTop: 'clamp(24px, 3.5vw, 36px)',
+            paddingBottom: 'clamp(24px, 3.5vw, 36px)',
             paddingLeft: 'clamp(20px, 5.5vw, 80px)',
             paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            borderBottom: '1px solid rgba(22, 21, 20, 0.08)',
-            backgroundColor: '#FAF9F6',
+            borderBottom: '1px solid #E5DED2',
+            backgroundColor: '#F7F4EE',
             position: 'sticky',
             top: '70px',
             zIndex: 30,
@@ -411,9 +322,9 @@ export const MaterialsFinishes: React.FC = () => {
                 onClick={() => setActiveCategory(cat)}
                 style={{
                   padding: '9px 18px',
-                  backgroundColor: activeCategory === cat ? '#161514' : 'transparent',
-                  color: activeCategory === cat ? '#FFFFFF' : '#161514',
-                  border: `1px solid ${activeCategory === cat ? '#161514' : 'rgba(22, 21, 20, 0.15)'}`,
+                  backgroundColor: activeCategory === cat ? '#262522' : '#FFFFFF',
+                  color: activeCategory === cat ? '#F7F4EE' : '#262522',
+                  border: `1px solid ${activeCategory === cat ? '#262522' : '#D5CDBE'}`,
                   borderRadius: '2px',
                   fontFamily: 'var(--font-body)',
                   fontSize: '11.5px',
@@ -431,7 +342,7 @@ export const MaterialsFinishes: React.FC = () => {
         </section>
 
         {/* =========================================================================
-            SECTION 02: THE INTERACTIVE MATERIAL WALL (HOVER DETAILS)
+            SECTION 02: THE INTERACTIVE MATERIAL WALL (WARM BACKGROUND WITH CRISP CARDS)
             ========================================================================= */}
         <section
           aria-label="Material Wall"
@@ -440,7 +351,7 @@ export const MaterialsFinishes: React.FC = () => {
             paddingBottom: 'clamp(80px, 10vw, 130px)',
             paddingLeft: 'clamp(20px, 5.5vw, 80px)',
             paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            backgroundColor: '#FAF9F6',
+            backgroundColor: '#EEE9E0',
           }}
         >
           <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
@@ -465,28 +376,28 @@ export const MaterialsFinishes: React.FC = () => {
                     className="leoz-material-card"
                     style={{
                       backgroundColor: '#FFFFFF',
-                      border: '1px solid rgba(22, 21, 20, 0.08)',
+                      border: '1px solid #D5CDBE',
                       borderRadius: '3px',
                       overflow: 'hidden',
                       display: 'flex',
                       flexDirection: 'column',
                       cursor: 'pointer',
-                      boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
+                      boxShadow: '0 4px 16px rgba(0,0,0,0.03)',
                       transition: 'all 0.35s ease',
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.borderColor = 'rgba(182, 154, 107, 0.5)';
+                      e.currentTarget.style.borderColor = '#8A725B';
                       e.currentTarget.style.transform = 'translateY(-5px)';
-                      e.currentTarget.style.boxShadow = '0 16px 36px rgba(0,0,0,0.08)';
+                      e.currentTarget.style.boxShadow = '0 16px 36px rgba(138, 114, 91, 0.12)';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.borderColor = 'rgba(22, 21, 20, 0.08)';
+                      e.currentTarget.style.borderColor = '#D5CDBE';
                       e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.03)';
+                      e.currentTarget.style.boxShadow = '0 4px 16px rgba(0,0,0,0.03)';
                     }}
                   >
                     {/* Material Macro Photo */}
-                    <div style={{ position: 'relative', width: '100%', aspectRatio: '1 / 0.88', overflow: 'hidden' }}>
+                    <div style={{ position: 'relative', width: '100%', aspectRatio: '1 / 0.88', overflow: 'hidden', backgroundColor: '#E5DED2' }}>
                       <img
                         src={item.image}
                         alt={item.name}
@@ -506,9 +417,9 @@ export const MaterialsFinishes: React.FC = () => {
                           top: '12px',
                           left: '12px',
                           padding: '4px 10px',
-                          backgroundColor: 'rgba(22, 21, 20, 0.8)',
+                          backgroundColor: 'rgba(38, 37, 34, 0.88)',
                           backdropFilter: 'blur(8px)',
-                          color: '#B69A6B',
+                          color: '#F7F4EE',
                           fontFamily: 'var(--font-body)',
                           fontSize: '9.5px',
                           fontWeight: 600,
@@ -524,12 +435,12 @@ export const MaterialsFinishes: React.FC = () => {
                           position: 'absolute',
                           bottom: '12px',
                           right: '12px',
-                          width: '18px',
-                          height: '18px',
+                          width: '20px',
+                          height: '20px',
                           borderRadius: '50%',
                           backgroundColor: item.swatch,
                           border: '2px solid #FFFFFF',
-                          boxShadow: '0 2px 6px rgba(0,0,0,0.3)',
+                          boxShadow: '0 2px 6px rgba(0,0,0,0.2)',
                         }}
                       />
                     </div>
@@ -541,7 +452,7 @@ export const MaterialsFinishes: React.FC = () => {
                           fontFamily: 'var(--font-heading)',
                           fontSize: '20px',
                           fontWeight: 400,
-                          color: '#161514',
+                          color: '#262522',
                           margin: '0 0 6px 0',
                         }}
                       >
@@ -552,7 +463,7 @@ export const MaterialsFinishes: React.FC = () => {
                         style={{
                           fontFamily: 'var(--font-body)',
                           fontSize: '11.5px',
-                          color: '#B69A6B',
+                          color: '#8A725B',
                           fontWeight: 600,
                           display: 'block',
                           marginBottom: '10px',
@@ -567,20 +478,20 @@ export const MaterialsFinishes: React.FC = () => {
                           flexDirection: 'column',
                           gap: '6px',
                           paddingTop: '12px',
-                          borderTop: '1px solid rgba(22, 21, 20, 0.08)',
+                          borderTop: '1px solid #E5DED2',
                           fontSize: '11px',
                           fontFamily: 'var(--font-body)',
-                          color: '#716B61',
+                          color: '#66635D',
                         }}
                       >
                         <div>
-                          <strong>TEXTURE:</strong> {item.texture}
+                          <strong style={{ color: '#262522' }}>TEXTURE:</strong> {item.texture}
                         </div>
                         <div>
-                          <strong>PROVENANCE:</strong> {item.origin}
+                          <strong style={{ color: '#262522' }}>PROVENANCE:</strong> {item.origin}
                         </div>
                         <div>
-                          <strong>FINISH:</strong> {item.finish}
+                          <strong style={{ color: '#262522' }}>FINISH:</strong> {item.finish}
                         </div>
                       </div>
                     </div>
@@ -592,20 +503,20 @@ export const MaterialsFinishes: React.FC = () => {
         </section>
 
         {/* =========================================================================
-            SECTION 03: "CHOOSE YOUR FINISH" COMBINATION EXPLORER
+            SECTION 03: "CHOOSE YOUR FINISH" COMBINATION EXPLORER (WARM STONE PALETTE)
             ========================================================================= */}
         <section
           id="combination-explorer"
           aria-label="Combination Explorer"
           style={{
-            backgroundColor: '#161514',
-            color: '#FFFFFF',
+            backgroundColor: '#E5DED2',
+            color: '#262522',
             paddingTop: 'clamp(80px, 10vw, 130px)',
             paddingBottom: 'clamp(80px, 10vw, 130px)',
             paddingLeft: 'clamp(20px, 5.5vw, 80px)',
             paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            borderTop: '1px solid #D5CDBE',
+            borderBottom: '1px solid #D5CDBE',
           }}
         >
           <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
@@ -617,7 +528,7 @@ export const MaterialsFinishes: React.FC = () => {
                   fontWeight: 600,
                   letterSpacing: '0.24em',
                   textTransform: 'uppercase',
-                  color: '#B69A6B',
+                  color: '#8A725B',
                   display: 'block',
                   marginBottom: '12px',
                 }}
@@ -629,7 +540,7 @@ export const MaterialsFinishes: React.FC = () => {
                   fontFamily: 'var(--font-heading)',
                   fontSize: 'clamp(28px, 3.8vw, 46px)',
                   fontWeight: 300,
-                  color: '#FFFFFF',
+                  color: '#262522',
                   margin: '0 0 14px 0',
                 }}
               >
@@ -639,7 +550,7 @@ export const MaterialsFinishes: React.FC = () => {
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '14.5px',
-                  color: 'rgba(255, 255, 255, 0.75)',
+                  color: '#66635D',
                   maxWidth: '640px',
                   margin: '0 auto',
                   lineHeight: 1.6,
@@ -656,10 +567,11 @@ export const MaterialsFinishes: React.FC = () => {
                 gridTemplateColumns: '1.2fr 1fr',
                 gap: 'clamp(32px, 5vw, 56px)',
                 alignItems: 'center',
-                backgroundColor: '#1E1D1B',
+                backgroundColor: '#FFFFFF',
                 borderRadius: '4px',
-                border: '1px solid rgba(182, 154, 107, 0.3)',
+                border: '1px solid #D5CDBE',
                 padding: 'clamp(24px, 4.5vw, 48px)',
+                boxShadow: '0 8px 28px rgba(0,0,0,0.04)',
               }}
               className="leoz-combo-split"
             >
@@ -670,83 +582,83 @@ export const MaterialsFinishes: React.FC = () => {
                   <div
                     style={{
                       padding: '20px',
-                      backgroundColor: '#161514',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      backgroundColor: '#F7F4EE',
+                      border: '1px solid #E5DED2',
                       borderRadius: '3px',
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                       <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: selectedCabinet.color }} />
-                      <span style={{ fontSize: '10px', color: '#B69A6B', letterSpacing: '0.15em', fontWeight: 600 }}>
+                      <span style={{ fontSize: '10px', color: '#8A725B', letterSpacing: '0.15em', fontWeight: 600 }}>
                         PRIMARY CABINET
                       </span>
                     </div>
-                    <strong style={{ fontSize: '15px', color: '#FFFFFF' }}>{selectedCabinet.name}</strong>
+                    <strong style={{ fontSize: '15px', color: '#262522' }}>{selectedCabinet.name}</strong>
                   </div>
 
                   {/* Countertop Preview Box */}
                   <div
                     style={{
                       padding: '20px',
-                      backgroundColor: '#161514',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      backgroundColor: '#F7F4EE',
+                      border: '1px solid #E5DED2',
                       borderRadius: '3px',
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                       <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: selectedCountertop.color }} />
-                      <span style={{ fontSize: '10px', color: '#B69A6B', letterSpacing: '0.15em', fontWeight: 600 }}>
+                      <span style={{ fontSize: '10px', color: '#8A725B', letterSpacing: '0.15em', fontWeight: 600 }}>
                         MONOLITH TOP
                       </span>
                     </div>
-                    <strong style={{ fontSize: '15px', color: '#FFFFFF' }}>{selectedCountertop.name}</strong>
+                    <strong style={{ fontSize: '15px', color: '#262522' }}>{selectedCountertop.name}</strong>
                   </div>
 
                   {/* Handle Preview Box */}
                   <div
                     style={{
                       padding: '20px',
-                      backgroundColor: '#161514',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      backgroundColor: '#F7F4EE',
+                      border: '1px solid #E5DED2',
                       borderRadius: '3px',
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                       <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: selectedHandle.color }} />
-                      <span style={{ fontSize: '10px', color: '#B69A6B', letterSpacing: '0.15em', fontWeight: 600 }}>
+                      <span style={{ fontSize: '10px', color: '#8A725B', letterSpacing: '0.15em', fontWeight: 600 }}>
                         METALLIC GOLA
                       </span>
                     </div>
-                    <strong style={{ fontSize: '15px', color: '#FFFFFF' }}>{selectedHandle.name}</strong>
+                    <strong style={{ fontSize: '15px', color: '#262522' }}>{selectedHandle.name}</strong>
                   </div>
 
                   {/* Interior Preview Box */}
                   <div
                     style={{
                       padding: '20px',
-                      backgroundColor: '#161514',
-                      border: '1px solid rgba(255, 255, 255, 0.1)',
+                      backgroundColor: '#F7F4EE',
+                      border: '1px solid #E5DED2',
                       borderRadius: '3px',
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                       <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: selectedInterior.color }} />
-                      <span style={{ fontSize: '10px', color: '#B69A6B', letterSpacing: '0.15em', fontWeight: 600 }}>
+                      <span style={{ fontSize: '10px', color: '#8A725B', letterSpacing: '0.15em', fontWeight: 600 }}>
                         DRAWER INTERIOR
                       </span>
                     </div>
-                    <strong style={{ fontSize: '15px', color: '#FFFFFF' }}>{selectedInterior.name}</strong>
+                    <strong style={{ fontSize: '15px', color: '#262522' }}>{selectedInterior.name}</strong>
                   </div>
                 </div>
 
                 <div
                   style={{
                     padding: '16px',
-                    backgroundColor: 'rgba(182, 154, 107, 0.08)',
+                    backgroundColor: '#F7F4EE',
                     borderRadius: '2px',
-                    border: '1px solid rgba(182, 154, 107, 0.2)',
+                    border: '1px solid #E5DED2',
                     fontSize: '12px',
-                    color: 'rgba(255, 255, 255, 0.8)',
+                    color: '#66635D',
                     lineHeight: 1.5,
                   }}
                 >
@@ -758,7 +670,7 @@ export const MaterialsFinishes: React.FC = () => {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
                 {/* 1. Cabinet Choices */}
                 <div>
-                  <label style={{ fontSize: '10.5px', color: '#B69A6B', letterSpacing: '0.15em', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
+                  <label style={{ fontSize: '10.5px', color: '#8A725B', letterSpacing: '0.15em', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
                     SELECT CABINET FINISH
                   </label>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
@@ -769,9 +681,9 @@ export const MaterialsFinishes: React.FC = () => {
                         onClick={() => setSelectedCabinet(opt)}
                         style={{
                           padding: '7px 14px',
-                          backgroundColor: selectedCabinet.name === opt.name ? '#B69A6B' : 'rgba(255, 255, 255, 0.06)',
-                          color: selectedCabinet.name === opt.name ? '#FFFFFF' : 'rgba(255, 255, 255, 0.8)',
-                          border: `1px solid ${selectedCabinet.name === opt.name ? '#B69A6B' : 'rgba(255, 255, 255, 0.12)'}`,
+                          backgroundColor: selectedCabinet.name === opt.name ? '#262522' : '#F7F4EE',
+                          color: selectedCabinet.name === opt.name ? '#F7F4EE' : '#262522',
+                          border: `1px solid ${selectedCabinet.name === opt.name ? '#262522' : '#D5CDBE'}`,
                           borderRadius: '2px',
                           fontSize: '11.5px',
                           cursor: 'pointer',
@@ -785,7 +697,7 @@ export const MaterialsFinishes: React.FC = () => {
 
                 {/* 2. Countertop Choices */}
                 <div>
-                  <label style={{ fontSize: '10.5px', color: '#B69A6B', letterSpacing: '0.15em', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
+                  <label style={{ fontSize: '10.5px', color: '#8A725B', letterSpacing: '0.15em', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
                     SELECT MONOLITH COUNTERTOP
                   </label>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
@@ -796,9 +708,9 @@ export const MaterialsFinishes: React.FC = () => {
                         onClick={() => setSelectedCountertop(opt)}
                         style={{
                           padding: '7px 14px',
-                          backgroundColor: selectedCountertop.name === opt.name ? '#B69A6B' : 'rgba(255, 255, 255, 0.06)',
-                          color: selectedCountertop.name === opt.name ? '#FFFFFF' : 'rgba(255, 255, 255, 0.8)',
-                          border: `1px solid ${selectedCountertop.name === opt.name ? '#B69A6B' : 'rgba(255, 255, 255, 0.12)'}`,
+                          backgroundColor: selectedCountertop.name === opt.name ? '#262522' : '#F7F4EE',
+                          color: selectedCountertop.name === opt.name ? '#F7F4EE' : '#262522',
+                          border: `1px solid ${selectedCountertop.name === opt.name ? '#262522' : '#D5CDBE'}`,
                           borderRadius: '2px',
                           fontSize: '11.5px',
                           cursor: 'pointer',
@@ -812,7 +724,7 @@ export const MaterialsFinishes: React.FC = () => {
 
                 {/* 3. Handle Choices */}
                 <div>
-                  <label style={{ fontSize: '10.5px', color: '#B69A6B', letterSpacing: '0.15em', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
+                  <label style={{ fontSize: '10.5px', color: '#8A725B', letterSpacing: '0.15em', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
                     SELECT PROFILE / GOLA HANDLE
                   </label>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
@@ -823,9 +735,9 @@ export const MaterialsFinishes: React.FC = () => {
                         onClick={() => setSelectedHandle(opt)}
                         style={{
                           padding: '7px 14px',
-                          backgroundColor: selectedHandle.name === opt.name ? '#B69A6B' : 'rgba(255, 255, 255, 0.06)',
-                          color: selectedHandle.name === opt.name ? '#FFFFFF' : 'rgba(255, 255, 255, 0.8)',
-                          border: `1px solid ${selectedHandle.name === opt.name ? '#B69A6B' : 'rgba(255, 255, 255, 0.12)'}`,
+                          backgroundColor: selectedHandle.name === opt.name ? '#262522' : '#F7F4EE',
+                          color: selectedHandle.name === opt.name ? '#F7F4EE' : '#262522',
+                          border: `1px solid ${selectedHandle.name === opt.name ? '#262522' : '#D5CDBE'}`,
                           borderRadius: '2px',
                           fontSize: '11.5px',
                           cursor: 'pointer',
@@ -839,7 +751,7 @@ export const MaterialsFinishes: React.FC = () => {
 
                 {/* 4. Interior Choices */}
                 <div>
-                  <label style={{ fontSize: '10.5px', color: '#B69A6B', letterSpacing: '0.15em', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
+                  <label style={{ fontSize: '10.5px', color: '#8A725B', letterSpacing: '0.15em', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
                     SELECT DRAWER INTERIOR
                   </label>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
@@ -850,9 +762,9 @@ export const MaterialsFinishes: React.FC = () => {
                         onClick={() => setSelectedInterior(opt)}
                         style={{
                           padding: '7px 14px',
-                          backgroundColor: selectedInterior.name === opt.name ? '#B69A6B' : 'rgba(255, 255, 255, 0.06)',
-                          color: selectedInterior.name === opt.name ? '#FFFFFF' : 'rgba(255, 255, 255, 0.8)',
-                          border: `1px solid ${selectedInterior.name === opt.name ? '#B69A6B' : 'rgba(255, 255, 255, 0.12)'}`,
+                          backgroundColor: selectedInterior.name === opt.name ? '#262522' : '#F7F4EE',
+                          color: selectedInterior.name === opt.name ? '#F7F4EE' : '#262522',
+                          border: `1px solid ${selectedInterior.name === opt.name ? '#262522' : '#D5CDBE'}`,
                           borderRadius: '2px',
                           fontSize: '11.5px',
                           cursor: 'pointer',
@@ -869,15 +781,15 @@ export const MaterialsFinishes: React.FC = () => {
         </section>
 
         {/* =========================================================================
-            FINAL SECTION: "READY TO CHOOSE YOUR MATERIALS?"
+            FINAL SECTION: STRATEGIC DARK CONTRAST CLOSING (10% RATIO)
             ========================================================================= */}
         <section
           aria-label="Book Materials Consultation CTA"
           style={{
             position: 'relative',
-            backgroundColor: '#0F0E0D',
-            paddingTop: 'clamp(90px, 12vw, 150px)',
-            paddingBottom: 'clamp(90px, 12vw, 150px)',
+            backgroundColor: '#302D28',
+            paddingTop: 'clamp(90px, 11vw, 140px)',
+            paddingBottom: 'clamp(90px, 11vw, 140px)',
             paddingLeft: 'clamp(20px, 5.5vw, 80px)',
             paddingRight: 'clamp(20px, 5.5vw, 80px)',
             overflow: 'hidden',
@@ -887,25 +799,6 @@ export const MaterialsFinishes: React.FC = () => {
             textAlign: 'center',
           }}
         >
-          {/* Background Scrim */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: 'url(https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=2000&q=85)',
-              backgroundPosition: 'center 45%',
-              backgroundSize: 'cover',
-              opacity: 0.18,
-            }}
-          />
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'radial-gradient(circle at center, rgba(15, 14, 13, 0.7) 0%, #0F0E0D 95%)',
-            }}
-          />
-
           <div style={{ position: 'relative', zIndex: 10, maxWidth: '780px', margin: '0 auto' }}>
             <span
               style={{
@@ -914,7 +807,7 @@ export const MaterialsFinishes: React.FC = () => {
                 fontWeight: 600,
                 letterSpacing: '0.25em',
                 textTransform: 'uppercase',
-                color: '#B69A6B',
+                color: '#8A725B',
                 display: 'block',
                 marginBottom: '16px',
               }}
@@ -927,7 +820,7 @@ export const MaterialsFinishes: React.FC = () => {
                 fontFamily: 'var(--font-heading)',
                 fontSize: 'clamp(34px, 5.5vw, 64px)',
                 fontWeight: 300,
-                color: '#FFFFFF',
+                color: '#F7F4EE',
                 lineHeight: 1.08,
                 margin: '0 0 20px 0',
                 letterSpacing: '0.01em',
@@ -942,7 +835,7 @@ export const MaterialsFinishes: React.FC = () => {
               style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: 'clamp(14.5px, 1.3vw, 17.5px)',
-                color: 'rgba(255, 255, 255, 0.8)',
+                color: 'rgba(247, 244, 238, 0.8)',
                 lineHeight: 1.7,
                 marginBottom: '36px',
                 maxWidth: '620px',
@@ -961,20 +854,25 @@ export const MaterialsFinishes: React.FC = () => {
                 alignItems: 'center',
                 gap: '12px',
                 padding: '16px 36px',
-                backgroundColor: '#B69A6B',
-                color: '#FFFFFF',
+                backgroundColor: '#F7F4EE',
+                color: '#262522',
                 fontFamily: 'var(--font-body)',
-                fontSize: '12.5px',
+                fontSize: '12px',
                 fontWeight: 600,
                 letterSpacing: '0.14em',
                 textTransform: 'uppercase',
                 textDecoration: 'none',
                 borderRadius: '2px',
-                boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
                 transition: 'all 0.3s ease',
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#9F8255')}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#B69A6B')}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#8A725B';
+                e.currentTarget.style.color = '#FFFFFF';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#F7F4EE';
+                e.currentTarget.style.color = '#262522';
+              }}
             >
               <span>Book a Consultation</span>
               <ArrowRight size={15} />

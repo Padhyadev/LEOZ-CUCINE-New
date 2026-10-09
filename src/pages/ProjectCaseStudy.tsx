@@ -15,6 +15,7 @@ import {
   Award,
   Factory,
   Wrench,
+  Compass,
 } from 'lucide-react';
 
 /* Easing curve for luxury architectural motion */
@@ -50,177 +51,183 @@ export const ProjectCaseStudy: React.FC = () => {
   /* Project Execution Pillars */
   const executionPillars = [
     {
-      title: '01 / ARCHITECTURAL DESIGN',
+      step: '01',
+      title: 'ARCHITECTURAL DESIGN',
       desc: 'Meticulous 3D spatial planning establishing a seamless open-plan golden triangle between the show kitchen, concealed wet pantry, and dining salon.',
       metric: '3D CAD Millimeter Accuracy',
     },
     {
-      title: '02 / CURATED MATERIALS',
+      step: '02',
+      title: 'CURATED MATERIALS',
       desc: 'Rare Taj Mahal sintered quartzite slabs bookmatched with natural smoked European oak veneer and brushed champagne bronze metallic channels.',
       metric: 'Zero-Porosity Heat Shield',
     },
     {
-      title: '03 / FACTORY CNC PRECISION',
-      desc: 'Manufactured 100% in-house at our 20,000 sq. ft. Gandhinagar plant utilizing 5-axis CNC routing and PUR hot-melt waterproof edge banding.',
+      step: '03',
+      title: 'FACTORY CNC PRECISION',
+      desc: 'Manufactured 100% in-house at our Gandhinagar plant utilizing 5-axis CNC routing and PUR hot-melt waterproof edge banding.',
       metric: '0.1mm Joinery Tolerance',
     },
     {
-      title: '04 / WHITE-GLOVE INSTALLATION',
+      step: '04',
+      title: 'WHITE-GLOVE INSTALLATION',
       desc: 'Direct turnkey installation by LEOZ certified technicians with laser-levelled sub-bases, concealed Blum Servo-Drive, and dust-free handover.',
       metric: '10-Year Written Guarantee',
     },
   ];
 
   return (
-    <div style={{ backgroundColor: '#FAF9F6', color: '#161514', minHeight: '100vh', overflowX: 'hidden' }}>
+    <div style={{ backgroundColor: '#F7F4EE', color: '#262522', minHeight: '100vh', overflowX: 'hidden' }}>
       <Header />
 
       <main id="main-content">
         {/* =========================================================================
-            HERO: FULL-SCREEN ARCHITECTURAL COVER
+            HERO: WARM ARCHITECTURAL EDITORIAL COVER (MOBILE-FIRST SEPARATED PANEL)
             ========================================================================= */}
         <section
           aria-label="Case Study Hero"
           style={{
             position: 'relative',
             width: '100%',
-            height: '100vh',
-            minHeight: '640px',
-            display: 'flex',
-            alignItems: 'flex-end',
-            backgroundColor: '#161514',
-            overflow: 'hidden',
+            backgroundColor: '#F7F4EE',
+            paddingTop: 'clamp(100px, 12vw, 140px)',
+            paddingBottom: 'clamp(40px, 6vw, 60px)',
+            borderBottom: '1px solid #E5DED2',
           }}
         >
-          {/* Dedicated Full-Screen Case Study Hero Image */}
           <div
             style={{
-              position: 'absolute',
-              inset: 0,
-              backgroundImage: 'url(https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2400&q=90)',
-              backgroundPosition: 'center 42%',
-              backgroundSize: 'cover',
-            }}
-          />
-
-          {/* Soft Scrim (Preserving warm architectural depth with clean contrast) */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'linear-gradient(180deg, rgba(22, 21, 20, 0.2) 0%, rgba(22, 21, 20, 0.35) 45%, rgba(22, 21, 20, 0.9) 95%)',
-            }}
-          />
-
-          {/* Hero Typography & Metadata Ribbon */}
-          <div
-            style={{
-              position: 'relative',
-              zIndex: 10,
               maxWidth: '1360px',
-              width: '100%',
               margin: '0 auto',
-              paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-              paddingRight: 'clamp(20px, 5.5vw, 80px)',
-              paddingBottom: 'clamp(44px, 7vw, 76px)',
+              paddingLeft: 'clamp(20px, 5vw, 60px)',
+              paddingRight: 'clamp(20px, 5vw, 60px)',
             }}
           >
-            <div style={{ maxWidth: '920px' }}>
+            {/* Top Eyebrow & Title */}
+            <div style={{ maxWidth: '960px', marginBottom: 'clamp(24px, 4vw, 40px)' }}>
               <motion.span
-                initial={{ opacity: 0, y: 16 }}
+                initial={{ opacity: 0, y: 14 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, ease: luxuryEase }}
                 style={{
                   display: 'inline-block',
                   fontFamily: 'var(--font-body)',
                   fontSize: '11px',
-                  fontWeight: 600,
+                  fontWeight: 700,
                   letterSpacing: '0.24em',
                   textTransform: 'uppercase',
-                  color: '#B69A6B',
-                  marginBottom: '14px',
+                  color: '#8A725B',
+                  marginBottom: '12px',
                 }}
               >
                 {projectMeta.code}
               </motion.span>
 
               <motion.h1
-                initial={{ opacity: 0, y: 24 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.7, delay: 0.1, ease: luxuryEase }}
                 style={{
                   fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(36px, 6vw, 76px)',
-                  fontWeight: 300,
-                  lineHeight: 1.04,
-                  letterSpacing: '-0.01em',
-                  color: '#FFFFFF',
-                  margin: '0 0 28px 0',
+                  fontSize: 'clamp(36px, 6.5vw, 76px)',
+                  fontWeight: 400,
+                  lineHeight: 1.05,
+                  letterSpacing: '-0.02em',
+                  color: '#262522',
+                  margin: 0,
                 }}
               >
                 {projectMeta.name}
               </motion.h1>
-
-              {/* Architectural Spec Bar */}
-              <motion.div
-                initial={{ opacity: 0, y: 18 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2, ease: luxuryEase }}
-                style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
-                  gap: '20px',
-                  paddingTop: '20px',
-                  borderTop: '1px solid rgba(255, 255, 255, 0.15)',
-                }}
-              >
-                <div>
-                  <span style={{ fontSize: '10.5px', color: '#B69A6B', letterSpacing: '0.15em', display: 'block', textTransform: 'uppercase' }}>
-                    LOCATION
-                  </span>
-                  <strong style={{ fontSize: '13.5px', color: '#FFFFFF', fontWeight: 500 }}>
-                    {projectMeta.location}
-                  </strong>
-                </div>
-                <div>
-                  <span style={{ fontSize: '10.5px', color: '#B69A6B', letterSpacing: '0.15em', display: 'block', textTransform: 'uppercase' }}>
-                    PROJECT TYPE
-                  </span>
-                  <strong style={{ fontSize: '13.5px', color: '#FFFFFF', fontWeight: 500 }}>
-                    {projectMeta.type}
-                  </strong>
-                </div>
-                <div>
-                  <span style={{ fontSize: '10.5px', color: '#B69A6B', letterSpacing: '0.15em', display: 'block', textTransform: 'uppercase' }}>
-                    SCOPE
-                  </span>
-                  <strong style={{ fontSize: '13.5px', color: '#FFFFFF', fontWeight: 500 }}>
-                    {projectMeta.scope}
-                  </strong>
-                </div>
-                <div>
-                  <span style={{ fontSize: '10.5px', color: '#B69A6B', letterSpacing: '0.15em', display: 'block', textTransform: 'uppercase' }}>
-                    YEAR
-                  </span>
-                  <strong style={{ fontSize: '13.5px', color: '#FFFFFF', fontWeight: 500 }}>
-                    {projectMeta.year}
-                  </strong>
-                </div>
-              </motion.div>
             </div>
+
+            {/* Natural Bright Architectural Photography Container */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.98 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.8, delay: 0.2, ease: luxuryEase }}
+              style={{
+                width: '100%',
+                aspectRatio: '21 / 10',
+                minHeight: '280px',
+                borderRadius: '8px',
+                overflow: 'hidden',
+                backgroundColor: '#EEE9E0',
+                border: '1px solid #D5CDBE',
+                boxShadow: '0 12px 40px rgba(38,37,34,0.06)',
+                marginBottom: 'clamp(24px, 4vw, 36px)',
+              }}
+            >
+              <img
+                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2400&q=90"
+                alt="The Ahmedabad Residence Monolithic Kitchen"
+                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+              />
+            </motion.div>
+
+            {/* Architectural Spec Card (Crisp White on Soft Cream) */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3, ease: luxuryEase }}
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                gap: '20px',
+                padding: 'clamp(20px, 3vw, 28px)',
+                backgroundColor: '#FFFFFF',
+                border: '1px solid #D5CDBE',
+                borderRadius: '8px',
+                boxShadow: '0 4px 20px rgba(38,37,34,0.04)',
+              }}
+            >
+              <div>
+                <span style={{ fontSize: '10.5px', color: '#8A725B', letterSpacing: '0.15em', display: 'block', textTransform: 'uppercase', fontWeight: 700 }}>
+                  LOCATION
+                </span>
+                <strong style={{ fontSize: '14.5px', color: '#262522', fontWeight: 600, display: 'block', marginTop: '4px' }}>
+                  {projectMeta.location}
+                </strong>
+              </div>
+              <div>
+                <span style={{ fontSize: '10.5px', color: '#8A725B', letterSpacing: '0.15em', display: 'block', textTransform: 'uppercase', fontWeight: 700 }}>
+                  PROJECT TYPE
+                </span>
+                <strong style={{ fontSize: '14.5px', color: '#262522', fontWeight: 600, display: 'block', marginTop: '4px' }}>
+                  {projectMeta.type}
+                </strong>
+              </div>
+              <div>
+                <span style={{ fontSize: '10.5px', color: '#8A725B', letterSpacing: '0.15em', display: 'block', textTransform: 'uppercase', fontWeight: 700 }}>
+                  SCOPE
+                </span>
+                <strong style={{ fontSize: '14.5px', color: '#262522', fontWeight: 600, display: 'block', marginTop: '4px' }}>
+                  {projectMeta.scope}
+                </strong>
+              </div>
+              <div>
+                <span style={{ fontSize: '10.5px', color: '#8A725B', letterSpacing: '0.15em', display: 'block', textTransform: 'uppercase', fontWeight: 700 }}>
+                  COMPLETION YEAR
+                </span>
+                <strong style={{ fontSize: '14.5px', color: '#262522', fontWeight: 600, display: 'block', marginTop: '4px' }}>
+                  {projectMeta.year} ({projectMeta.area})
+                </strong>
+              </div>
+            </motion.div>
           </div>
         </section>
 
         {/* =========================================================================
-            SECTION 01: INTRODUCTORY BRAND STATEMENT
+            SECTION 01: INTRODUCTORY ARCHITECTURAL NARRATIVE (#EEE9E0)
             ========================================================================= */}
         <section
           style={{
-            paddingTop: 'clamp(80px, 10vw, 130px)',
+            paddingTop: 'clamp(70px, 9vw, 110px)',
             paddingBottom: 'clamp(60px, 8vw, 100px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            backgroundColor: '#FAF9F6',
+            paddingLeft: 'clamp(20px, 5vw, 60px)',
+            paddingRight: 'clamp(20px, 5vw, 60px)',
+            backgroundColor: '#EEE9E0',
+            borderBottom: '1px solid #E5DED2',
           }}
         >
           <div style={{ maxWidth: '1040px', margin: '0 auto' }}>
@@ -231,12 +238,12 @@ export const ProjectCaseStudy: React.FC = () => {
               style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: '11px',
-                fontWeight: 600,
+                fontWeight: 700,
                 letterSpacing: '0.24em',
                 textTransform: 'uppercase',
-                color: '#B69A6B',
+                color: '#8A725B',
                 display: 'block',
-                marginBottom: '16px',
+                marginBottom: '14px',
               }}
             >
               ARCHITECTURAL NARRATIVE
@@ -252,12 +259,12 @@ export const ProjectCaseStudy: React.FC = () => {
                 fontSize: 'clamp(30px, 4.5vw, 54px)',
                 fontWeight: 300,
                 lineHeight: 1.15,
-                color: '#161514',
-                margin: '0 0 28px 0',
+                color: '#262522',
+                margin: '0 0 24px 0',
                 letterSpacing: '-0.01em',
               }}
             >
-              “Designed for the way they live.”
+              “Designed around the rituals of culinary entertaining and quiet luxury.”
             </motion.h2>
 
             <motion.p
@@ -267,10 +274,10 @@ export const ProjectCaseStudy: React.FC = () => {
               transition={{ delay: 0.2, duration: 0.7, ease: luxuryEase }}
               style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: 'clamp(15.5px, 1.4vw, 19px)',
-                color: 'rgba(22, 21, 20, 0.78)',
+                fontSize: 'clamp(15.5px, 1.3vw, 18.5px)',
+                color: '#66635D',
                 lineHeight: 1.8,
-                maxWidth: '860px',
+                maxWidth: '880px',
                 margin: 0,
               }}
             >
@@ -280,57 +287,49 @@ export const ProjectCaseStudy: React.FC = () => {
         </section>
 
         {/* =========================================================================
-            SECTION 02: IMAGE STORYTELLING (EDITORIAL GALLERY WITH BREATHING SPACE)
+            SECTION 02: EDITORIAL GALLERY ON WARM IVORY (#F7F4EE)
             ========================================================================= */}
         <section
           aria-label="Project Image Storytelling"
           style={{
+            paddingTop: 'clamp(70px, 9vw, 110px)',
             paddingBottom: 'clamp(80px, 10vw, 130px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            backgroundColor: '#FAF9F6',
+            paddingLeft: 'clamp(20px, 5vw, 60px)',
+            paddingRight: 'clamp(20px, 5vw, 60px)',
+            backgroundColor: '#F7F4EE',
           }}
         >
-          <div style={{ maxWidth: '1360px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 'clamp(40px, 6vw, 80px)' }}>
+          <div style={{ maxWidth: '1360px', margin: '0 auto', display: 'flex', flexDirection: 'column', gap: 'clamp(40px, 6vw, 72px)' }}>
             
             {/* 1. Full-Width Architectural Panorama */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.8, ease: luxuryEase }}
+              transition={{ duration: 0.7, ease: luxuryEase }}
               style={{
-                position: 'relative',
-                width: '100%',
-                aspectRatio: '21 / 10',
-                borderRadius: '3px',
+                borderRadius: '8px',
                 overflow: 'hidden',
-                backgroundColor: '#EBE8E1',
+                backgroundColor: '#FFFFFF',
+                border: '1px solid #D5CDBE',
+                boxShadow: '0 8px 30px rgba(38,37,34,0.05)',
               }}
             >
-              <img
-                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2200&q=85"
-                alt="The Ahmedabad Residence Monolith Kitchen"
-                loading="lazy"
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              />
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: '20px',
-                  left: '20px',
-                  padding: '8px 16px',
-                  backgroundColor: 'rgba(22, 21, 20, 0.8)',
-                  backdropFilter: 'blur(10px)',
-                  color: '#FFFFFF',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '11px',
-                  letterSpacing: '0.12em',
-                  textTransform: 'uppercase',
-                  borderRadius: '2px',
-                }}
-              >
-                01 — 4.2M SINTERED QUARTZITE MONOLITH ISLAND
+              <div style={{ width: '100%', aspectRatio: '21 / 10', minHeight: '260px', overflow: 'hidden' }}>
+                <img
+                  src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2200&q=85"
+                  alt="The Ahmedabad Residence Monolith Kitchen"
+                  loading="lazy"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </div>
+              <div style={{ padding: '16px 24px', backgroundColor: '#FFFFFF', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#262522' }}>
+                  01 — 4.2M SINTERED QUARTZITE MONOLITH ISLAND
+                </span>
+                <span style={{ fontSize: '12px', color: '#8A725B', fontWeight: 600 }}>
+                  Taj Mahal Quartzite & European Smoked Oak
+                </span>
               </div>
             </motion.div>
 
@@ -349,37 +348,25 @@ export const ProjectCaseStudy: React.FC = () => {
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.7, ease: luxuryEase }}
                 style={{
-                  position: 'relative',
-                  width: '100%',
-                  aspectRatio: '4 / 3.4',
-                  borderRadius: '3px',
+                  borderRadius: '8px',
                   overflow: 'hidden',
-                  backgroundColor: '#EBE8E1',
+                  backgroundColor: '#FFFFFF',
+                  border: '1px solid #D5CDBE',
+                  boxShadow: '0 8px 30px rgba(38,37,34,0.05)',
                 }}
               >
-                <img
-                  src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=85"
-                  alt="45 Degree Mitered Edge Detail"
-                  loading="lazy"
-                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                />
-                <div
-                  style={{
-                    position: 'absolute',
-                    bottom: '16px',
-                    left: '16px',
-                    padding: '6px 12px',
-                    backgroundColor: 'rgba(22, 21, 20, 0.8)',
-                    backdropFilter: 'blur(8px)',
-                    color: '#B69A6B',
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '10.5px',
-                    letterSpacing: '0.1em',
-                    textTransform: 'uppercase',
-                    borderRadius: '2px',
-                  }}
-                >
-                  45° Mitered Edge Monolith
+                <div style={{ width: '100%', aspectRatio: '4 / 3.4', overflow: 'hidden' }}>
+                  <img
+                    src="https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=85"
+                    alt="45 Degree Mitered Edge Detail"
+                    loading="lazy"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                </div>
+                <div style={{ padding: '14px 20px', backgroundColor: '#FFFFFF', borderTop: '1px solid #E5DED2' }}>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', color: '#8A725B' }}>
+                    45° Mitered Edge Monolith Precision
+                  </span>
                 </div>
               </motion.div>
 
@@ -388,16 +375,16 @@ export const ProjectCaseStudy: React.FC = () => {
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true, amount: 0.2 }}
                 transition={{ duration: 0.7, ease: luxuryEase }}
-                style={{ padding: 'clamp(10px, 2vw, 30px)' }}
+                style={{ padding: 'clamp(10px, 2vw, 24px)' }}
               >
                 <span
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontSize: '11px',
-                    fontWeight: 600,
+                    fontWeight: 700,
                     letterSpacing: '0.2em',
                     textTransform: 'uppercase',
-                    color: '#B69A6B',
+                    color: '#8A725B',
                     display: 'block',
                     marginBottom: '12px',
                   }}
@@ -409,8 +396,9 @@ export const ProjectCaseStudy: React.FC = () => {
                     fontFamily: 'var(--font-heading)',
                     fontSize: 'clamp(24px, 3vw, 36px)',
                     fontWeight: 300,
-                    color: '#161514',
+                    color: '#262522',
                     margin: '0 0 16px 0',
+                    lineHeight: 1.2,
                   }}
                 >
                   Zero visible joint lines. Continuous stone waterfalls.
@@ -418,8 +406,8 @@ export const ProjectCaseStudy: React.FC = () => {
                 <p
                   style={{
                     fontFamily: 'var(--font-body)',
-                    fontSize: '14.5px',
-                    color: 'rgba(22, 21, 20, 0.72)',
+                    fontSize: '15px',
+                    color: '#66635D',
                     lineHeight: 1.7,
                     margin: 0,
                   }}
@@ -431,42 +419,33 @@ export const ProjectCaseStudy: React.FC = () => {
 
             {/* 3. Full-Width Wardrobe Dressing Suite Panorama */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.8, ease: luxuryEase }}
+              transition={{ duration: 0.7, ease: luxuryEase }}
               style={{
-                position: 'relative',
-                width: '100%',
-                aspectRatio: '21 / 10',
-                borderRadius: '3px',
+                borderRadius: '8px',
                 overflow: 'hidden',
-                backgroundColor: '#EBE8E1',
+                backgroundColor: '#FFFFFF',
+                border: '1px solid #D5CDBE',
+                boxShadow: '0 8px 30px rgba(38,37,34,0.05)',
               }}
             >
-              <img
-                src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=2200&q=85"
-                alt="Master Walk-In Dressing Suite"
-                loading="lazy"
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-              />
-              <div
-                style={{
-                  position: 'absolute',
-                  bottom: '20px',
-                  left: '20px',
-                  padding: '8px 16px',
-                  backgroundColor: 'rgba(22, 21, 20, 0.8)',
-                  backdropFilter: 'blur(10px)',
-                  color: '#FFFFFF',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '11px',
-                  letterSpacing: '0.12em',
-                  textTransform: 'uppercase',
-                  borderRadius: '2px',
-                }}
-              >
-                02 — MASTER DRESSING SUITE WITH CENTRAL LEATHER ISLAND
+              <div style={{ width: '100%', aspectRatio: '21 / 10', minHeight: '260px', overflow: 'hidden' }}>
+                <img
+                  src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=2200&q=85"
+                  alt="Master Walk-In Dressing Suite"
+                  loading="lazy"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+              </div>
+              <div style={{ padding: '16px 24px', backgroundColor: '#FFFFFF', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '12px', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#262522' }}>
+                  02 — MASTER DRESSING SUITE WITH CENTRAL LEATHER ISLAND
+                </span>
+                <span style={{ fontSize: '12px', color: '#8A725B', fontWeight: 600 }}>
+                  Aero Smoked Glass & Fluted Velvet Interiors
+                </span>
               </div>
             </motion.div>
 
@@ -503,19 +482,20 @@ export const ProjectCaseStudy: React.FC = () => {
                   transition={{ duration: 0.6, ease: luxuryEase }}
                   style={{
                     backgroundColor: '#FFFFFF',
-                    border: '1px solid rgba(22, 21, 20, 0.08)',
-                    borderRadius: '3px',
+                    border: '1px solid #D5CDBE',
+                    borderRadius: '8px',
                     overflow: 'hidden',
+                    boxShadow: '0 4px 20px rgba(38,37,34,0.04)',
                   }}
                 >
                   <div style={{ width: '100%', aspectRatio: '4 / 3', overflow: 'hidden' }}>
                     <img src={item.image} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                   </div>
                   <div style={{ padding: '20px' }}>
-                    <h4 style={{ fontFamily: 'var(--font-heading)', fontSize: '18px', color: '#161514', margin: '0 0 6px 0' }}>
+                    <h4 style={{ fontFamily: 'var(--font-heading)', fontSize: '19px', color: '#262522', margin: '0 0 8px 0', fontWeight: 500 }}>
                       {item.title}
                     </h4>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '12.5px', color: 'rgba(22, 21, 20, 0.7)', margin: 0, lineHeight: 1.55 }}>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '13.5px', color: '#66635D', margin: 0, lineHeight: 1.6 }}>
                       {item.caption}
                     </p>
                   </div>
@@ -526,33 +506,33 @@ export const ProjectCaseStudy: React.FC = () => {
         </section>
 
         {/* =========================================================================
-            SECTION 03: PROJECT DETAILS & EXECUTION (4 PILLARS)
+            SECTION 03: PROJECT EXECUTION (4 PILLARS ON SOFT CREAM #EEE9E0)
             ========================================================================= */}
         <section
           aria-label="Project Execution Details"
           style={{
-            backgroundColor: '#161514',
-            color: '#FFFFFF',
-            paddingTop: 'clamp(80px, 10vw, 130px)',
-            paddingBottom: 'clamp(80px, 10vw, 130px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            backgroundColor: '#EEE9E0',
+            color: '#262522',
+            paddingTop: 'clamp(70px, 9vw, 110px)',
+            paddingBottom: 'clamp(70px, 9vw, 110px)',
+            paddingLeft: 'clamp(20px, 5vw, 60px)',
+            paddingRight: 'clamp(20px, 5vw, 60px)',
+            borderTop: '1px solid #E5DED2',
+            borderBottom: '1px solid #E5DED2',
           }}
         >
           <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: 'clamp(48px, 6vw, 80px)' }}>
+            <div style={{ textAlign: 'center', marginBottom: 'clamp(40px, 5vw, 60px)' }}>
               <span
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '11px',
-                  fontWeight: 600,
+                  fontWeight: 700,
                   letterSpacing: '0.24em',
                   textTransform: 'uppercase',
-                  color: '#B69A6B',
+                  color: '#8A725B',
                   display: 'block',
-                  marginBottom: '14px',
+                  marginBottom: '12px',
                 }}
               >
                 PRECISION ARCHITECTURE IN PRACTICE
@@ -562,7 +542,7 @@ export const ProjectCaseStudy: React.FC = () => {
                   fontFamily: 'var(--font-heading)',
                   fontSize: 'clamp(28px, 3.8vw, 46px)',
                   fontWeight: 300,
-                  color: '#FFFFFF',
+                  color: '#262522',
                   margin: '0 0 16px 0',
                 }}
               >
@@ -572,7 +552,7 @@ export const ProjectCaseStudy: React.FC = () => {
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '15px',
-                  color: 'rgba(255, 255, 255, 0.75)',
+                  color: '#66635D',
                   maxWidth: '680px',
                   margin: '0 auto',
                   lineHeight: 1.7,
@@ -582,7 +562,7 @@ export const ProjectCaseStudy: React.FC = () => {
               </p>
             </div>
 
-            {/* 4 Execution Cards Grid */}
+            {/* 4 Execution Cards Grid (Crisp White with #D5CDBE border) */}
             <div
               style={{
                 display: 'grid',
@@ -594,32 +574,33 @@ export const ProjectCaseStudy: React.FC = () => {
                 <div
                   key={p.title}
                   style={{
-                    backgroundColor: '#1E1D1B',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '3px',
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid #D5CDBE',
+                    borderRadius: '8px',
                     padding: '28px 24px',
                     display: 'flex',
                     flexDirection: 'column',
+                    boxShadow: '0 4px 20px rgba(38,37,34,0.04)',
                   }}
                 >
                   <span
                     style={{
                       fontFamily: 'var(--font-body)',
                       fontSize: '11px',
-                      fontWeight: 600,
-                      letterSpacing: '0.15em',
-                      color: '#B69A6B',
+                      fontWeight: 700,
+                      letterSpacing: '0.18em',
+                      color: '#8A725B',
                       display: 'block',
-                      marginBottom: '12px',
+                      marginBottom: '10px',
                     }}
                   >
-                    {p.title}
+                    {p.step} / {p.title}
                   </span>
                   <p
                     style={{
                       fontFamily: 'var(--font-body)',
-                      fontSize: '13.5px',
-                      color: 'rgba(255, 255, 255, 0.7)',
+                      fontSize: '14px',
+                      color: '#66635D',
                       lineHeight: 1.65,
                       margin: '0 0 20px 0',
                       flexGrow: 1,
@@ -629,12 +610,12 @@ export const ProjectCaseStudy: React.FC = () => {
                   </p>
                   <div
                     style={{
-                      paddingTop: '12px',
-                      borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-                      fontSize: '11px',
+                      paddingTop: '14px',
+                      borderTop: '1px solid #E5DED2',
+                      fontSize: '11.5px',
                       fontFamily: 'var(--font-body)',
-                      color: '#B69A6B',
-                      fontWeight: 500,
+                      color: '#262522',
+                      fontWeight: 600,
                     }}
                   >
                     ✓ {p.metric}
@@ -646,17 +627,17 @@ export const ProjectCaseStudy: React.FC = () => {
         </section>
 
         {/* =========================================================================
-            FINAL SECTION: "YOUR HOME COULD BE NEXT."
+            FINAL SECTION: DELIBERATE DARK CLOSING CONTRAST (#302D28)
             ========================================================================= */}
         <section
           aria-label="Commission Your Residence"
           style={{
             position: 'relative',
-            backgroundColor: '#0F0E0D',
-            paddingTop: 'clamp(90px, 12vw, 150px)',
-            paddingBottom: 'clamp(90px, 12vw, 150px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
+            backgroundColor: '#302D28',
+            paddingTop: 'clamp(80px, 10vw, 130px)',
+            paddingBottom: 'clamp(80px, 10vw, 130px)',
+            paddingLeft: 'clamp(20px, 5vw, 60px)',
+            paddingRight: 'clamp(20px, 5vw, 60px)',
             overflow: 'hidden',
             display: 'flex',
             alignItems: 'center',
@@ -672,14 +653,14 @@ export const ProjectCaseStudy: React.FC = () => {
               backgroundImage: 'url(https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=85)',
               backgroundPosition: 'center 45%',
               backgroundSize: 'cover',
-              opacity: 0.2,
+              opacity: 0.15,
             }}
           />
           <div
             style={{
               position: 'absolute',
               inset: 0,
-              background: 'radial-gradient(circle at center, rgba(15, 14, 13, 0.7) 0%, #0F0E0D 95%)',
+              background: 'radial-gradient(circle at center, rgba(48, 45, 40, 0.7) 0%, #302D28 95%)',
             }}
           />
 
@@ -688,10 +669,10 @@ export const ProjectCaseStudy: React.FC = () => {
               style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: '11px',
-                fontWeight: 600,
+                fontWeight: 700,
                 letterSpacing: '0.25em',
                 textTransform: 'uppercase',
-                color: '#B69A6B',
+                color: '#D5CDBE',
                 display: 'block',
                 marginBottom: '16px',
               }}
@@ -704,20 +685,20 @@ export const ProjectCaseStudy: React.FC = () => {
                 fontFamily: 'var(--font-heading)',
                 fontSize: 'clamp(34px, 5.5vw, 64px)',
                 fontWeight: 300,
-                color: '#FFFFFF',
+                color: '#F7F4EE',
                 lineHeight: 1.08,
                 margin: '0 0 20px 0',
-                letterSpacing: '0.01em',
+                letterSpacing: '-0.01em',
               }}
             >
-              Your Home Could Be Next.
+              Your Residence Could Be Next.
             </h2>
 
             <p
               style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: 'clamp(14.5px, 1.3vw, 17.5px)',
-                color: 'rgba(255, 255, 255, 0.8)',
+                fontSize: 'clamp(15px, 1.3vw, 18px)',
+                color: '#E5DED2',
                 lineHeight: 1.7,
                 marginBottom: '36px',
                 maxWidth: '620px',
@@ -736,20 +717,26 @@ export const ProjectCaseStudy: React.FC = () => {
                 alignItems: 'center',
                 gap: '12px',
                 padding: '16px 36px',
-                backgroundColor: '#B69A6B',
-                color: '#FFFFFF',
+                backgroundColor: '#F7F4EE',
+                color: '#262522',
                 fontFamily: 'var(--font-body)',
-                fontSize: '12.5px',
-                fontWeight: 600,
+                fontSize: '12px',
+                fontWeight: 700,
                 letterSpacing: '0.14em',
                 textTransform: 'uppercase',
                 textDecoration: 'none',
-                borderRadius: '2px',
-                boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
+                borderRadius: '4px',
+                boxShadow: '0 10px 30px rgba(0,0,0,0.3)',
                 transition: 'all 0.3s ease',
               }}
-              onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#9F8255')}
-              onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#B69A6B')}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = '#8A725B';
+                e.currentTarget.style.color = '#FFFFFF';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = '#F7F4EE';
+                e.currentTarget.style.color = '#262522';
+              }}
             >
               <span>Book a Consultation</span>
               <ArrowRight size={15} />
@@ -764,3 +751,4 @@ export const ProjectCaseStudy: React.FC = () => {
 };
 
 export default ProjectCaseStudy;
+

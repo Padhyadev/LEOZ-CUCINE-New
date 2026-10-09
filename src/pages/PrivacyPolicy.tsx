@@ -106,7 +106,7 @@ export const PrivacyPolicy: React.FC = () => {
                     lineHeight: '1.75',
                   }}
                 >
-                  This website collects contact and project details voluntarily submitted through our consultation forms, direct email, and phone calls—including your full name, contact number, email address, city/locality, budget range, and project requirements. Where enabled, technical telemetry, cookies, or analytics may collect anonymous browser and session usage.
+                  This website may collect contact and project information voluntarily submitted through forms, email and phone calls, and technical usage information where website analytics or cookies are enabled.
                 </p>
               </div>
 
@@ -131,7 +131,7 @@ export const PrivacyPolicy: React.FC = () => {
                     lineHeight: '1.75',
                   }}
                 >
-                  Information is used exclusively to respond to your kitchen and wardrobe enquiries, arrange 3D design consultations, prepare itemized commercial proposals, coordinate factory manufacturing and site installation, and continuously improve our website experience.
+                  Information is used to respond to enquiries, arrange consultations, prepare proposals, coordinate services and improve the website.
                 </p>
               </div>
 
@@ -145,7 +145,7 @@ export const PrivacyPolicy: React.FC = () => {
                     marginBottom: '10px',
                   }}
                 >
-                  3. Data Access &amp; Protection
+                  3. Access &amp; Data Safeguarding
                 </h2>
                 <p
                   style={{
@@ -156,7 +156,7 @@ export const PrivacyPolicy: React.FC = () => {
                     lineHeight: '1.75',
                   }}
                 >
-                  Access is strictly limited to authorised LEOZ staff and essential operational partners (such as installation engineers and logistics providers) where necessary for service fulfillment or statutory compliance. We implement rigorous administrative and technological safeguards to protect your personal information against unauthorized access.
+                  Access is limited to authorised staff and relevant service providers where needed for these purposes or legal compliance. We aim to take reasonable steps to safeguard the data and retain it only as needed for legitimate business or legal purposes.
                 </p>
               </div>
 
@@ -170,7 +170,7 @@ export const PrivacyPolicy: React.FC = () => {
                     marginBottom: '10px',
                   }}
                 >
-                  4. Data Retention &amp; Your Rights
+                  4. Your Rights &amp; Access Requests
                 </h2>
                 <p
                   style={{
@@ -181,7 +181,32 @@ export const PrivacyPolicy: React.FC = () => {
                     lineHeight: '1.75',
                   }}
                 >
-                  We retain your project records only for the duration necessary for ongoing warranty service, commercial recordkeeping, or legal compliance. You may request access, correction, or deletion of your personal data at any time by contacting us directly at <a href="mailto:director@leozartofambience.com" style={{ color: '#B69A6B', textDecoration: 'underline' }}>director@leozartofambience.com</a>.
+                  You may contact <a href="mailto:director@leozartofambience.com" style={{ color: '#B69A6B', textDecoration: 'underline' }}>director@leozartofambience.com</a> to request access, correction or deletion of your information, subject to applicable requirements.
+                </p>
+              </div>
+
+              <div>
+                <h2
+                  style={{
+                    fontFamily: 'var(--font-family-serif)',
+                    fontSize: '22px',
+                    fontWeight: 400,
+                    color: '#181818',
+                    marginBottom: '10px',
+                  }}
+                >
+                  5. External Links &amp; Updates
+                </h2>
+                <p
+                  style={{
+                    fontFamily: 'var(--font-family-sans)',
+                    fontSize: '14.5px',
+                    fontWeight: 300,
+                    color: '#595959',
+                    lineHeight: '1.75',
+                  }}
+                >
+                  External links are governed by their own privacy notices. This policy may be updated; the latest revision date will always appear at the top of this page.
                 </p>
               </div>
             </div>

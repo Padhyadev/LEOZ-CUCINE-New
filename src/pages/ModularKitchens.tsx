@@ -5,19 +5,20 @@ import { Footer } from '../components/common/Footer';
 import { useDocumentMeta } from '../hooks/useDocumentMeta';
 import {
   ArrowRight,
-  ArrowUpRight,
-  ChevronLeft,
-  ChevronRight,
   Sparkles,
   Layers,
-  Maximize2,
-  Sliders,
   CheckCircle2,
-  Compass,
   Cpu,
-  Factory,
-  ShieldCheck,
-  Award,
+  Shield,
+  Plus,
+  Minus,
+  ChevronLeft,
+  ChevronRight,
+  Compass,
+  Building2,
+  Wrench,
+  Sliders,
+  Check,
 } from 'lucide-react';
 
 /* Easing curve for luxury architectural motion */
@@ -29,744 +30,505 @@ export const ModularKitchens: React.FC = () => {
   }, []);
 
   useDocumentMeta(
-    'Kitchens | LEOZ Cucine — Architectural Luxury Modular Kitchens',
-    'Bespoke luxury modular kitchens crafted with German engineering, Italian design, monolith islands, and architectural details.'
+    'Luxury Modular Kitchens | LEOZ Cucine — German Precision, Indian Sensibility',
+    'Discover bespoke luxury modular kitchens by LEOZ Cucine. German-inspired planning, German Classic & Contemporary Fusion styles, curated finishes, and in-house manufacturing in Gujarat.'
   );
 
   const navigate = (e: React.MouseEvent, path: string) => {
     e.preventDefault();
     window.history.pushState({}, '', path);
     window.dispatchEvent(new Event('popstate'));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  /* =========================================================================
-     COLLECTIONS DATA (6 CATEGORIES)
-     ========================================================================= */
+  const [activeMaterial, setActiveMaterial] = useState(0);
+  const [kitchenInterludeSlide, setKitchenInterludeSlide] = useState(0);
+  const [openFaq, setOpenFaq] = useState<number | null>(0);
+
+  const kitchenInterludePhotos = [
+    {
+      image: '/Skyline Monolithic Island.webp',
+      alt: 'LEOZ Monolithic Marble Kitchen Island Architecture',
+      tag: '01 / MONOLITHIC ISLANDS',
+      title: 'Monolithic Marble Islands',
+    },
+    {
+      image: '/Island Layout.webp',
+      alt: 'LEOZ Architectural Open Plan Island Kitchen',
+      tag: '02 / OPEN-PLAN LIVING',
+      title: 'Architectural Island Suites',
+    },
+    {
+      image: '/Italian Marble.webp',
+      alt: 'LEOZ Precision Italian Marble Worktop & Island Detailing',
+      tag: '03 / PRECISION SURFACES',
+      title: 'Calacatta & Statuario Marbles',
+    },
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setKitchenInterludeSlide((prev) => (prev + 1) % kitchenInterludePhotos.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, [kitchenInterludePhotos.length]);
+
+  const toggleFaq = (index: number) => {
+    setOpenFaq(openFaq === index ? null : index);
+  };
+
+  const kitchenFeatures = [
+    {
+      title: 'Personalised Work Zones',
+      desc: 'Scientific preparation, cooking, washing, and cold storage zones arranged in seamless architectural flow.',
+      spec: 'Custom Workflow Planning',
+    },
+    {
+      title: 'Intelligent Drawers & Pull-outs',
+      desc: 'Heavy-duty soft-close runners with magnetic dividers, internal organizers, and full-extension bottle pull-outs.',
+      spec: 'German Motion Hardware',
+    },
+    {
+      title: 'Customised Tall Units',
+      desc: 'Floor-to-ceiling appliance towers, synchronized pantry pull-outs, and pocketing doors for concealed utility.',
+      spec: 'Maximized Vertical Storage',
+    },
+    {
+      title: 'Practical Appliance Integration',
+      desc: 'Flush-mounted ovens, downdraft induction hobs, built-in dishwashers, and discreet ventilation channels.',
+      spec: 'Seamless Zero-Protrusion Fit',
+    },
+    {
+      title: 'Convenient Maintenance',
+      desc: 'Anti-fingerprint thermal coatings, sealed quartz waterfall counters, and hygienic antibacterial surfaces.',
+      spec: 'Effortless Daily Cleaning',
+    },
+    {
+      title: 'Moisture-Resistant Options',
+      desc: 'High-density moisture-resistant (HDMR) boards and marine plywood sealed with zero-glue-line PUR edge banding.',
+      spec: 'Tropical Weather Proof',
+    },
+    {
+      title: 'Curated Shutter Finishes',
+      desc: 'Curated palette of super-matte acrylics, multi-layer PU lacquer, architectural veneers, and ceramic surfaces.',
+      spec: 'Tactile Longevity',
+    },
+    {
+      title: 'Hardware to Suit Required Use',
+      desc: 'Fittings engineered for 100,000+ motion cycles, soft-damped hinges, and precision flap lift systems.',
+      spec: 'Blum & Hettich Tested',
+    },
+  ];
+
   const kitchenCollections = [
     {
-      id: 'modern',
-      title: 'Modern Kitchens',
-      subtitle: 'ARCHITECTURAL VOLUMES',
-      desc: 'Seamless handleless geometry, integrated flush appliances, and concealed functional zones designed for contemporary living.',
-      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85',
-      focalPosition: 'center 40%',
-      specs: '45° Edge • Sintered Stone • LED Recessed Plinth',
+      id: 'german-classic',
+      badge: 'TIMELESS ARCHITECTURE',
+      title: 'German Classic Kitchens',
+      desc: 'Understated forms, harmonious proportions and engineered cabinetry create a timeless expression of contemporary luxury. The emphasis is on disciplined lines, precise detailing and refined materials.',
+      image: '/modular kitchen.webp',
+      specs: ['Disciplined handleless Gola channels', 'Monolithic symmetry & balance', 'Engineered German hardware'],
     },
     {
-      id: 'contemporary',
-      title: 'Contemporary Kitchens',
-      subtitle: 'WARM TEXTURAL HARMONY',
-      desc: 'A tactile composition of smoked European oak, warm matte lacquers, and brushed champagne bronze metallic channels.',
-      image: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1200&q=85',
-      focalPosition: 'center 50%',
-      specs: 'Smoked Oak • Bronze Gola • Concealed Hardware',
+      id: 'contemporary-fusion',
+      badge: 'WARMTH & MATERIALITY',
+      title: 'Contemporary Fusion Kitchens',
+      desc: 'A contemporary design language made warmer through tactile finishes, material contrasts and details suited to Indian homes. Highly individual, visually composed and designed to live in.',
+      image: '/Island Layout.webp',
+      specs: ['Tactile timber & stone contrasts', 'Curated spice & utensil zoning', 'Concealed wet/dry preparation separation'],
+    },
+  ];
+
+  const kitchenLayouts = [
+    {
+      id: 'straight',
+      name: 'Straight Kitchen',
+      desc: 'Minimal linear horizon keeping appliances, sink, and cooktop aligned along a single architectural wall.',
+      idealFor: 'Minimalist luxury studios & compact suites',
+      image: '/Straight Layout.webp',
     },
     {
-      id: 'minimal',
-      title: 'Minimal Kitchens',
-      subtitle: 'PURE LINEAR DISCIPLINE',
-      desc: 'Zero superfluous ornamentation. Ultra-thin profile fronts, concealed pocket door walls, and silent push-to-open mechanics.',
-      image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85',
-      focalPosition: 'center 45%',
-      specs: 'Anti-Fingerprint Matte • Motorized Doors • Invisible Hood',
+      id: 'l-shape',
+      name: 'L-Shaped Kitchen',
+      desc: 'Corner efficiency connecting two perpendicular walls, allowing effortless room for dining tables or auxiliary islands.',
+      idealFor: 'Medium to large contemporary apartments',
+      image: '/L-Shape Layout.webp',
     },
     {
-      id: 'luxury',
-      title: 'Luxury Kitchens',
-      subtitle: 'PRECIOUS EXOTIC MATERIALS',
-      desc: 'Continuous bookmatched Italian quartzite, fluted glass vitrines with 3000K warm interior illumination, and integrated wine lounges.',
-      image: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=85',
-      focalPosition: 'center 55%',
-      specs: 'Taj Mahal Quartzite • Smoked Glass • Servo-Drive Drawers',
+      id: 'u-shape',
+      name: 'U-Shaped Kitchen',
+      desc: 'Surrounding three-wall continuous cabinetry providing maximum storage density and uninterrupted counter space.',
+      idealFor: 'Dedicated closed kitchens & large private residences',
+      image: '/U -Shape Layout.webp',
     },
     {
-      id: 'handleless',
-      title: 'Handleless Kitchens',
-      subtitle: '45° MITERED PRECISION',
-      desc: 'Razor-sharp 45-degree bevelled door fronts creating continuous clean horizons with German Blum motion systems.',
-      image: 'https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?auto=format&fit=crop&w=1200&q=85',
-      focalPosition: 'center 40%',
-      specs: 'Mitered Channels • Acoustic Damping • Zero Visible Hardware',
+      id: 'parallel',
+      name: 'Parallel Kitchen',
+      desc: 'Dual opposing work counters maximizing workflow efficiency and culinary capacity with zero wasted steps.',
+      idealFor: 'Gourmet home chefs & high-traffic culinary spaces',
+      image: '/Parallel Layout.webp',
     },
     {
       id: 'island',
-      title: 'Island Kitchens',
-      subtitle: 'MONOLITHIC SOCIAL CENTRES',
-      desc: 'Sculptural freestanding islands functioning as culinary workstations, cantilevered breakfast bars, and architectural anchors.',
-      image: 'https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=1200&q=85',
-      focalPosition: 'center 48%',
-      specs: 'Waterfall Countertops • Downdraft Induction • Plinth Lighting',
+      name: 'Island Kitchen',
+      desc: 'Monolithic central workstation anchoring open-plan living, combining food preparation and casual social seating.',
+      idealFor: 'Spacious villas, penthouses & open-concept residences',
+      image: '/Island Layout.webp',
+    },
+    {
+      id: 'peninsula',
+      name: 'Peninsula Kitchen',
+      desc: 'Connected peninsula counter acting as a breakfast bar while cleanly defining the boundary of the kitchen.',
+      idealFor: 'Semi-open apartments seeking defined zones',
+      image: '/Skyline Monolithic Island.webp',
     },
   ];
 
-  /* =========================================================================
-     KITCHEN CLOSE-UP DETAILS DATA
-     ========================================================================= */
-  const kitchenDetails = [
-    {
-      title: '45° Bevelled Profiles',
-      category: 'HANDLES & GOLA',
-      desc: 'Invisible, continuous handless channels CNC-milled with 0.1mm tolerance.',
-      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=85',
-    },
-    {
-      title: 'Sintered Monolith Tops',
-      category: 'COUNTERTOPS',
-      desc: 'Heat, stain, and scratch-impervious ultra-compact slabs with seamless waterfall miters.',
-      image: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=800&q=85',
-    },
-    {
-      title: 'Solid Smoked Oak Internals',
-      category: 'CABINET INTERIORS',
-      desc: 'Interior cabinetry crafted with antibacterial velvet melamine and solid wood cutlery dividers.',
-      image: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=800&q=85',
-    },
-    {
-      title: 'German Blum Legrabox',
-      category: 'DRAWER SYSTEMS',
-      desc: 'Full extension glass-sided running gear tested for 100,000 motion cycles under 70kg load.',
-      image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=800&q=85',
-    },
-    {
-      title: '3000K Architectural LED',
-      category: 'LIGHTING CHANNELS',
-      desc: 'Concealed micro-diffused ambient light lines seamlessly integrated into carcass grooves.',
-      image: 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=800&q=85',
-    },
-    {
-      title: 'Robotic Lacquer Curing',
-      category: 'FINISHES & EDGES',
-      desc: 'Multi-layer robotically applied polyurethane and UV-cured matte finishes for velvet touch.',
-      image: 'https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?auto=format&fit=crop&w=800&q=85',
-    },
-  ];
-
-  /* =========================================================================
-     INTERACTIVE MATERIALS DATA (6 TYPES)
-     ========================================================================= */
-  const materialsList = [
-    {
-      id: 'wood',
-      name: 'Natural Wood & Veneer',
-      tagline: 'European Smoked Oak & Acoustic Fluted Walnut',
-      desc: 'Sustainably sourced authentic timber veneers bookmatched by hand, stabilized against thermal expansion, and sealed with zero-VOC protective matte coats.',
-      origin: 'European Certified Forestry',
-      finish: 'Open-Pore Matte Lacquer',
-      image: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1200&q=85',
-      swatch: '#8C6847',
-      highlights: ['Deep 3D Fluting', 'Warm Acoustic Character', 'Anti-Warp Core'],
-    },
-    {
-      id: 'stone',
-      name: 'Architectural Stone & Quartzite',
-      tagline: 'Calacatta Gold, Nero Marquina & Taj Mahal Quartzite',
-      desc: 'Continuous waterfall veining engineered to resist extreme thermal shocks, citrus acids, and knife scratches while anchoring the space as a sculptural monolith.',
-      origin: 'Italian & Brazilian Quarries',
-      finish: 'Honed Silk & Leathered Touch',
-      image: 'https://images.unsplash.com/photo-1600585154526-990dced4db0d?auto=format&fit=crop&w=1200&q=85',
-      swatch: '#D5CDBE',
-      highlights: ['Non-Porous Surface', '0.1mm Waterfall Miters', 'Heat Resistant to 800°C'],
-    },
-    {
-      id: 'glass',
-      name: 'Aero Smoked Glass',
-      tagline: 'Smoked, Fluted & Back-Painted Safety Glass',
-      desc: 'Ultra-thin aluminum-framed glass shutters integrated with concealed micro-hinges and vertical 3000K diffused LED strip lighting for curating barware.',
-      origin: 'Aero Grade Aluminum & Tempered Glass',
-      finish: 'Anti-Reflective Bronze & Nero',
-      image: 'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=1200&q=85',
-      swatch: '#4A5568',
-      highlights: ['Fingerprint-Resistant Treatment', 'Soft-Damped Closure', 'Integrated Backlighting'],
-    },
-    {
-      id: 'metal',
-      name: 'Brushed Luxury Metals',
-      tagline: 'Champagne Bronze, Anodized Titanium & Gunmetal',
-      desc: 'Laser-machined metal profiles creating shadow gaps, handleless Gola channels, and structural base plinths with exceptional corrosion resistance.',
-      origin: 'Architectural Anodized Alloy',
-      finish: 'Micro-Brushed Satin',
-      image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=85',
-      swatch: '#A08055',
-      highlights: ['Zero Oxidation', 'Precision Gola Channels', 'Seamless Joinery'],
-    },
-    {
-      id: 'laminate',
-      name: 'Anti-Fingerprint Nano Laminate',
-      tagline: 'Ultra-Matte Thermal Healing Surfaces',
-      desc: 'Next-generation nanotech surfaces where micro-scratches can be thermally repaired. Features an opaque, ultra-soft tactile feel with zero light reflection.',
-      origin: 'High-Pressure Thermal Polymer',
-      finish: 'Velvet Soft-Touch Matte',
-      image: 'https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?auto=format&fit=crop&w=1200&q=85',
-      swatch: '#2D3748',
-      highlights: ['Thermal Scratch Repair', 'Anti-Bacterial Coating', 'Low Light Reflectivity'],
-    },
+  const kitchenMaterials = [
     {
       id: 'acrylic',
-      name: 'Deep Gloss & Matte Acrylics',
-      tagline: 'Multi-Coat Mirror Reflections & Seamless Laser Edges',
-      desc: 'Engineered with laser edge-banding technology for a completely seamless waterproof transition between front surface and edge, eliminating dirt lines.',
-      origin: 'Pure Optical Grade Acrylic',
-      finish: 'High-Gloss Mirror & Satin Matte',
-      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85',
-      swatch: '#E2E8F0',
-      highlights: ['Zero Glue-Line Joint', 'UV Colour Stability', 'High Moisture Resistance'],
+      name: 'Super-Matte & Gloss Acrylic',
+      category: 'SHUTTER FINISH',
+      desc: 'Velvety touch, anti-fingerprint surfaces and ultra-gloss panels offering modern durability with flawless edge joints.',
+      image: '/Matte Finish.webp',
+      swatch: '#3A3B37',
+      highlights: ['Anti-Fingerprint', 'Thermal Micro-Healing', 'Zero Glare / High Gloss'],
+    },
+    {
+      id: 'pu',
+      name: 'Multi-Layer Polyurethane (PU) Lacquer',
+      category: 'PREMIUM COATING',
+      desc: 'Deep monolithic finish achieved through automated spray coating in seamless matte or mirror-gloss palettes.',
+      image: '/Gloss Finish.webp',
+      swatch: '#E8E5DD',
+      highlights: ['Seamless Wrapped Edges', 'UV Color Stabilized', 'Custom RAL Color Matching'],
+    },
+    {
+      id: 'veneer',
+      name: 'Architectural Natural Wood Veneer',
+      category: 'NATURAL TIMBER',
+      desc: 'Book-matched European white oak, smoked walnut, and teak finished with protective open-pore matte coats.',
+      image: '/Wood Veneer.webp',
+      swatch: '#7A5E44',
+      highlights: ['Book-Matched Grain', 'Warm Tactile Feel', 'Sustainably Sourced'],
+    },
+    {
+      id: 'ceramic',
+      name: 'Sintered Stone & Ceramic Countertops',
+      category: 'WORKTOPS & SPLASHBACKS',
+      desc: 'Ultra-compact porcelain and quartz surfaces impervious to high heat, turmeric, knife scratches, and acidic food contact.',
+      image: '/Italian Marble.webp',
+      swatch: '#C2BCB2',
+      highlights: ['Heat Proof to 800°C', 'Stain & Turmeric Proof', 'Seamless Waterfall Miters'],
     },
   ];
 
-  const [activeMaterial, setActiveMaterial] = useState(0);
+  const whyChooseKitchens = [
+    {
+      num: '01',
+      title: 'Dedicated In-House Production',
+      desc: 'Fabricated at our 20,000 sq. ft. plant in Gujarat with precision CNC cutting, zero-glue-line PUR edge banding, and rigid quality checks.',
+    },
+    {
+      num: '02',
+      title: 'Design-to-Manufacturing Coordination',
+      desc: 'Every CAD drawing links directly to automated machine code, eliminating on-site manual errors and dimensional gaps.',
+    },
+    {
+      num: '03',
+      title: 'Considered Material Choices',
+      desc: 'Certified moisture-resistant HDMR/plywood cores combined with curated European shutter surfaces and genuine German hardware.',
+    },
+    {
+      num: '04',
+      title: 'Precise Customisation',
+      desc: 'No standard box sizes. Heights, depths, corner angles, and internal drawers are engineered down to the exact millimeter.',
+    },
+    {
+      num: '05',
+      title: 'Professional Installation',
+      desc: 'Turnkey fitting executed by certified LEOZ master carpenters using laser levels, documented checks, and clean site management.',
+    },
+    {
+      num: '06',
+      title: 'Documented Warranty Support',
+      desc: 'Clear warranty provisions for cabinetry and moving hardware communicated transparently with your final proposal.',
+    },
+  ];
 
-  /* =========================================================================
-     COMPLETED KITCHEN PROJECTS (CASE STUDIES)
-     ========================================================================= */
-  const completedProjects = [
+  const kitchenProcessSteps = [
+    { num: '01', title: 'Discover Requirements', desc: 'Detailed discussion of your cooking style, family habits, space, and aesthetic preferences.' },
+    { num: '02', title: 'Measure & Assess Site', desc: 'Laser millimeter survey assessing plumbing lines, electrical inlets, ventilation, and structural walls.' },
+    { num: '03', title: 'Layout & Design Proposals', desc: 'Preparation of 3D ergonomic visualizations, workflow triangle, and storage configurations.' },
+    { num: '04', title: 'Select Finish & Hardware', desc: 'Tactile curation of shutter materials, countertops, internal organizers, handles, and Gola profiles.' },
+    { num: '05', title: 'Approve Specifications & Proposal', desc: 'Finalizing transparent bill of quantities, technical drawings, warranty terms, and schedule.' },
+    { num: '06', title: 'Precision Manufacturing', desc: 'Automated fabrication at our Gujarat plant with computerized CNC milling and PUR edge sealing.' },
+    { num: '07', title: 'Install & Final Inspection', desc: 'White-glove on-site assembly, laser alignment, thorough cleaning, and multi-point handover audit.' },
+  ];
+
+  const kitchenFaqs = [
     {
-      id: 'bodakdev-villa',
-      title: 'Bodakdev Villa Residence',
-      location: 'Ahmedabad, Gujarat',
-      style: 'Monolithic Quartzite & Smoked Oak',
-      year: '2026',
-      image: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1000&q=85',
-      desc: 'A 600 sq. ft. open kitchen featuring a 4.2-metre continuous Taj Mahal quartzite island with integrated downdraft and concealed prep kitchen.',
+      q: 'Is every kitchen customised?',
+      a: 'Yes. Layout, dimensions, storage, finish and suitable hardware are planned according to the space and approved specification.',
     },
     {
-      id: 'surat-penthouse',
-      title: 'Dumas Road Sky Penthouse',
-      location: 'Surat, Gujarat',
-      style: 'Matte Velvet Nero & Champagne Metal',
-      year: '2026',
-      image: 'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1000&q=85',
-      desc: 'Dual-zone culinary architecture with pocketing appliance garage doors, motorized wall units, and an integrated temperature-controlled wine lounge.',
+      q: 'How is price calculated?',
+      a: 'By size, materials, hardware, accessories, design complexity and installation scope. A tailored quotation follows consultation.',
     },
     {
-      id: 'gandhinagar-estate',
-      title: 'Raysan Architectural Estate',
-      location: 'Gandhinagar, Gujarat',
-      style: 'Fluted Acoustic Walnut & Aero Glass',
-      year: '2025',
-      image: 'https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1000&q=85',
-      desc: 'Warm hospitality kitchen seamlessly connecting to outdoor garden pavilion, featuring 45-degree mitered stone details and European running gear.',
+      q: 'How long will it take?',
+      a: 'A project schedule is shared after design approval and material availability are confirmed.',
     },
     {
-      id: 'iscon-residence',
-      title: 'Ambli Road Luxury Residence',
-      location: 'Ahmedabad, Gujarat',
-      style: 'Pure Minimal White & Sintered Stone',
-      year: '2025',
-      image: 'https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?auto=format&fit=crop&w=1000&q=85',
-      desc: 'Clean linear composition emphasizing natural daylight, invisible touch-to-open German fittings, and zero visible joints.',
+      q: 'Do you handle installation?',
+      a: 'Yes, professional installation is included as specified in the accepted quotation.',
+    },
+    {
+      q: 'What warranty is provided?',
+      a: 'Warranty coverage and exclusions depend on selected products and hardware and will be documented in the proposal.',
+    },
+    {
+      q: 'How do I maintain the kitchen?',
+      a: 'The team will advise care based on the final surface and hardware selection.',
     },
   ];
 
   return (
-    <div style={{ backgroundColor: '#FAF9F6', color: '#161514', minHeight: '100vh', overflowX: 'hidden' }}>
+    <div style={{ backgroundColor: '#F7F7F5', color: '#20211F', minHeight: '100vh', overflowX: 'hidden' }}>
       <Header />
 
       <main id="main-content">
         {/* =========================================================================
-            HERO: EDITORIAL MAGAZINE COVER
+            SECTION 01: HERO BANNER
             ========================================================================= */}
         <section
           aria-label="LEOZ Kitchen Architecture Hero"
           style={{
             position: 'relative',
             width: '100%',
-            minHeight: 'clamp(560px, 86vh, 760px)',
+            minHeight: '100vh',
             display: 'flex',
-            alignItems: 'flex-end',
-            backgroundColor: '#161514',
+            flexDirection: 'column',
+            justifyContent: 'flex-end',
+            paddingTop: 'clamp(120px, 16vh, 200px)',
+            paddingBottom: 'clamp(48px, 8vh, 100px)',
+            paddingLeft: 'clamp(20px, 6vw, 100px)',
+            paddingRight: 'clamp(20px, 6vw, 100px)',
             overflow: 'hidden',
           }}
         >
-          {/* Dedicated Architectural Image with Mobile-Friendly Focal Point */}
-          <div
+          {/* Background Kitchen Photography */}
+          <motion.div
+            initial={{ scale: 1.05, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 1.4, ease: luxuryEase }}
             style={{
               position: 'absolute',
               inset: 0,
-              backgroundImage: 'url(https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2200&q=90)',
-              backgroundPosition: 'center 42%',
-              backgroundSize: 'cover',
+              zIndex: 1,
             }}
-          />
+          >
+            <img
+              src="/modular kitchen.webp"
+              alt="LEOZ Luxury Modular Kitchen Architecture"
+              style={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center 38%',
+                filter: 'brightness(0.92) contrast(1.02)',
+              }}
+            />
+            {/* Multi-layer readability gradient scrim */}
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background:
+                  'linear-gradient(180deg, rgba(12, 13, 11, 0.55) 0%, rgba(12, 13, 11, 0.35) 25%, rgba(12, 13, 11, 0.78) 65%, rgba(12, 13, 11, 0.95) 100%)',
+              }}
+            />
+            <div
+              style={{
+                position: 'absolute',
+                inset: 0,
+                background:
+                  'radial-gradient(circle at 20% 70%, rgba(10, 11, 10, 0.85) 0%, rgba(10, 11, 10, 0.4) 55%, transparent 80%)',
+                pointerEvents: 'none',
+              }}
+            />
+          </motion.div>
 
-          {/* Soft Luminous Scrim (Preserving image warmth while giving strong text contrast) */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'linear-gradient(180deg, rgba(22, 21, 20, 0.25) 0%, rgba(22, 21, 20, 0.3) 40%, rgba(22, 21, 20, 0.88) 95%)',
-            }}
-          />
-
-          {/* Hero Editorial Typography Card */}
+          {/* Integrated Editorial Typography */}
           <div
             style={{
               position: 'relative',
               zIndex: 10,
-              maxWidth: '1360px',
+              maxWidth: '840px',
               width: '100%',
-              margin: '0 auto',
-              paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-              paddingRight: 'clamp(20px, 5.5vw, 80px)',
-              paddingBottom: 'clamp(44px, 7vw, 76px)',
+              color: '#FFFFFF',
             }}
           >
-            <div style={{ maxWidth: '820px' }}>
-              <motion.span
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, ease: luxuryEase }}
-                style={{
-                  display: 'inline-block',
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  letterSpacing: '0.24em',
-                  textTransform: 'uppercase',
-                  color: '#B69A6B',
-                  marginBottom: '14px',
-                }}
-              >
-                LEOZ CUCINE • ARCHITECTURAL KITCHENS
-              </motion.span>
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.2, ease: luxuryEase }}
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                gap: '8px',
+                fontFamily: 'var(--font-body)',
+                fontSize: '11px',
+                fontWeight: 600,
+                letterSpacing: '0.22em',
+                textTransform: 'uppercase',
+                color: '#D4AF37',
+                backgroundColor: 'rgba(10, 11, 10, 0.55)',
+                padding: '6px 14px',
+                borderRadius: '2px',
+                border: '1px solid rgba(212, 175, 55, 0.3)',
+                backdropFilter: 'blur(8px)',
+                marginBottom: '18px',
+                textShadow: '0 2px 8px rgba(0,0,0,0.9)',
+              }}
+            >
+              <span>02 / MODULAR KITCHENS</span>
+            </motion.div>
 
-              <motion.h1
-                initial={{ opacity: 0, y: 24 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.1, ease: luxuryEase }}
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(34px, 5.5vw, 68px)',
-                  fontWeight: 300,
-                  lineHeight: 1.06,
-                  letterSpacing: '-0.01em',
-                  color: '#FFFFFF',
-                  margin: '0 0 18px 0',
-                }}
-              >
-                Kitchens, Designed Around Life.
-              </motion.h1>
+            <motion.h1
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.85, delay: 0.35, ease: luxuryEase }}
+              style={{
+                fontFamily: 'var(--font-heading)',
+                fontSize: 'clamp(32px, 4.4vw, 56px)',
+                fontWeight: 400,
+                lineHeight: 1.15,
+                letterSpacing: '-0.015em',
+                color: '#FFFFFF',
+                margin: '0 0 18px 0',
+                textShadow: '0 3px 20px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.9)',
+              }}
+            >
+              The Heart of Your Home, Reimagined.
+            </motion.h1>
 
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.2, ease: luxuryEase }}
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'clamp(14.5px, 1.3vw, 17.5px)',
-                  color: 'rgba(255, 255, 255, 0.85)',
-                  lineHeight: 1.65,
-                  maxWidth: '640px',
-                  marginBottom: '32px',
-                }}
-              >
-                Precision-crafted kitchens that combine architectural beauty, intelligent storage and everyday functionality.
-              </motion.p>
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 0.5, ease: luxuryEase }}
+              style={{
+                fontFamily: 'var(--font-body)',
+                fontSize: 'clamp(14px, 1.15vw, 16.5px)',
+                fontWeight: 400,
+                lineHeight: 1.7,
+                color: '#F4F4F0',
+                maxWidth: '660px',
+                margin: '0 0 32px 0',
+                textShadow: '0 2px 12px rgba(0,0,0,0.95), 0 1px 2px rgba(0,0,0,0.9)',
+              }}
+            >
+              LEOZ kitchens bring contemporary luxury and intelligent performance together. Each kitchen is designed around its owners, carefully combining spatial harmony, durable specifications and effortless everyday use.
+            </motion.p>
 
-              {/* Action Buttons */}
-              <motion.div
-                initial={{ opacity: 0, y: 16 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.3, ease: luxuryEase }}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '16px',
-                  flexWrap: 'wrap',
-                }}
-              >
-                <a
-                  href="/talk-to-us"
-                  onClick={(e) => navigate(e, '/talk-to-us')}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    padding: '15px 30px',
-                    backgroundColor: '#B69A6B',
-                    color: '#FFFFFF',
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    letterSpacing: '0.12em',
-                    textTransform: 'uppercase',
-                    textDecoration: 'none',
-                    borderRadius: '2px',
-                    boxShadow: '0 8px 24px rgba(0,0,0,0.25)',
-                    transition: 'all 0.3s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = '#9F8255';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = '#B69A6B';
-                  }}
-                >
-                  <span>Book a Consultation</span>
-                  <ArrowRight size={14} />
-                </a>
-
-                <a
-                  href="#collections"
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    padding: '14px 26px',
-                    backgroundColor: 'rgba(255, 255, 255, 0.1)',
-                    backdropFilter: 'blur(12px)',
-                    color: '#FFFFFF',
-                    border: '1px solid rgba(255, 255, 255, 0.3)',
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '12px',
-                    fontWeight: 500,
-                    letterSpacing: '0.12em',
-                    textTransform: 'uppercase',
-                    textDecoration: 'none',
-                    borderRadius: '2px',
-                    transition: 'all 0.3s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = '#FFFFFF';
-                    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-                    e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)';
-                  }}
-                >
-                  <span>Explore Kitchens</span>
-                </a>
-              </motion.div>
-            </div>
-          </div>
-        </section>
-
-        {/* =========================================================================
-            SECTION 01: KITCHEN COLLECTIONS (6 VISUAL CATEGORIES)
-            ========================================================================= */}
-        <section
-          id="collections"
-          aria-label="Kitchen Collections"
-          style={{
-            paddingTop: 'clamp(70px, 9vw, 120px)',
-            paddingBottom: 'clamp(70px, 9vw, 120px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            backgroundColor: '#FAF9F6',
-          }}
-        >
-          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-            <div
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.65, ease: luxuryEase }}
               style={{
                 display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-end',
-                marginBottom: 'clamp(36px, 5vw, 60px)',
+                alignItems: 'center',
+                gap: 'clamp(16px, 2.5vw, 28px)',
                 flexWrap: 'wrap',
-                gap: '20px',
               }}
             >
-              <div>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '11px',
-                    fontWeight: 600,
-                    letterSpacing: '0.22em',
-                    textTransform: 'uppercase',
-                    color: '#B69A6B',
-                    display: 'block',
-                    marginBottom: '12px',
-                  }}
-                >
-                  SIGNATURE DESIGN EXPRESSIONS
-                </span>
-                <h2
-                  style={{
-                    fontFamily: 'var(--font-heading)',
-                    fontSize: 'clamp(28px, 3.8vw, 46px)',
-                    fontWeight: 300,
-                    color: '#161514',
-                    margin: 0,
-                    letterSpacing: '0.01em',
-                  }}
-                >
-                  Kitchen Collections
-                </h2>
-              </div>
-              <p
+              <a
+                href="#layouts"
                 style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  padding: '13px 26px',
+                  backgroundColor: '#A58B62',
+                  color: '#FFFFFF',
                   fontFamily: 'var(--font-body)',
-                  fontSize: '14.5px',
-                  color: 'rgba(22, 21, 20, 0.7)',
-                  maxWidth: '480px',
-                  lineHeight: 1.6,
-                  margin: 0,
+                  fontSize: '11.5px',
+                  fontWeight: 600,
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  textDecoration: 'none',
+                  borderRadius: '2px',
+                  border: '1px solid #A58B62',
+                  boxShadow: '0 6px 20px rgba(0,0,0,0.4)',
+                  transition: 'all 0.3s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = '#8C744F';
+                  e.currentTarget.style.borderColor = '#8C744F';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = '#A58B62';
+                  e.currentTarget.style.borderColor = '#A58B62';
                 }}
               >
-                Six architectural categories tailored to the proportions of your residence, cooking style, and spatial character.
-              </p>
-            </div>
+                <span>Explore Kitchens</span>
+                <ArrowRight size={14} />
+              </a>
 
-            {/* Collections Grid (Desktop 3x2, Mobile Swipe/Stack) */}
-            <div
-              className="leoz-collections-grid"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-                gap: '30px',
-              }}
-            >
-              {kitchenCollections.map((col, idx) => (
-                <motion.div
-                  key={col.id}
-                  initial={{ opacity: 0, y: 25 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.15 }}
-                  transition={{ duration: 0.6, delay: idx * 0.08, ease: luxuryEase }}
-                  className="leoz-collection-card"
-                  style={{
-                    backgroundColor: '#FFFFFF',
-                    border: '1px solid rgba(22, 21, 20, 0.08)',
-                    borderRadius: '3px',
-                    overflow: 'hidden',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    cursor: 'pointer',
-                    transition: 'all 0.4s ease',
-                    boxShadow: '0 4px 20px rgba(0,0,0,0.03)',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(182, 154, 107, 0.5)';
-                    e.currentTarget.style.transform = 'translateY(-6px)';
-                    e.currentTarget.style.boxShadow = '0 16px 36px rgba(0,0,0,0.08)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(22, 21, 20, 0.08)';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 4px 20px rgba(0,0,0,0.03)';
-                  }}
-                  onClick={(e) => navigate(e, '/talk-to-us')}
-                >
-                  {/* Image Container with Zoom */}
-                  <div
-                    style={{
-                      position: 'relative',
-                      width: '100%',
-                      aspectRatio: '16 / 11',
-                      overflow: 'hidden',
-                      backgroundColor: '#EBE8E1',
-                    }}
-                  >
-                    <img
-                      src={col.image}
-                      alt={col.title}
-                      loading="lazy"
-                      className="collection-zoom-img"
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        objectPosition: col.focalPosition,
-                        display: 'block',
-                        transition: 'transform 0.7s cubic-bezier(0.16, 1, 0.3, 1)',
-                      }}
-                    />
-                    <div
-                      style={{
-                        position: 'absolute',
-                        top: '16px',
-                        left: '16px',
-                        padding: '6px 12px',
-                        backgroundColor: 'rgba(22, 21, 20, 0.75)',
-                        backdropFilter: 'blur(8px)',
-                        borderRadius: '2px',
-                        color: '#B69A6B',
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '10px',
-                        fontWeight: 600,
-                        letterSpacing: '0.15em',
-                        textTransform: 'uppercase',
-                      }}
-                    >
-                      {col.subtitle}
-                    </div>
-                  </div>
-
-                  {/* Content Panel */}
-                  <div
-                    style={{
-                      padding: '24px 24px 22px 24px',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      flexGrow: 1,
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'baseline',
-                        marginBottom: '8px',
-                      }}
-                    >
-                      <h3
-                        className="collection-title"
-                        style={{
-                          fontFamily: 'var(--font-heading)',
-                          fontSize: '22px',
-                          fontWeight: 400,
-                          color: '#161514',
-                          margin: 0,
-                          transition: 'transform 0.3s ease, color 0.3s ease',
-                        }}
-                      >
-                        {col.title}
-                      </h3>
-                      <ArrowUpRight
-                        size={18}
-                        className="collection-arrow"
-                        style={{
-                          color: '#B69A6B',
-                          transition: 'transform 0.3s ease',
-                        }}
-                      />
-                    </div>
-
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '13.5px',
-                        color: 'rgba(22, 21, 20, 0.72)',
-                        lineHeight: 1.6,
-                        margin: '0 0 16px 0',
-                        flexGrow: 1,
-                      }}
-                    >
-                      {col.desc}
-                    </p>
-
-                    <div
-                      style={{
-                        paddingTop: '12px',
-                        borderTop: '1px solid rgba(22, 21, 20, 0.08)',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        fontSize: '11px',
-                        fontFamily: 'var(--font-body)',
-                        color: '#8A8275',
-                        fontWeight: 500,
-                      }}
-                    >
-                      <span>{col.specs}</span>
-                      <span style={{ color: '#B69A6B', fontWeight: 600 }}>EXPLORE</span>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
+              <a
+                href="/talk-to-us"
+                onClick={(e) => navigate(e, '/talk-to-us')}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '8px',
+                  fontFamily: 'var(--font-body)',
+                  fontSize: '11.5px',
+                  fontWeight: 600,
+                  letterSpacing: '0.12em',
+                  textTransform: 'uppercase',
+                  color: '#FFFFFF',
+                  textDecoration: 'none',
+                  textShadow: '0 2px 10px rgba(0,0,0,0.9)',
+                  borderBottom: '1px solid rgba(255,255,255,0.4)',
+                  paddingBottom: '3px',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.color = '#D4AF37';
+                  e.currentTarget.style.borderBottomColor = '#D4AF37';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.color = '#FFFFFF';
+                  e.currentTarget.style.borderBottomColor = 'rgba(255,255,255,0.4)';
+                }}
+              >
+                <span>Schedule a Consultation</span>
+                <ArrowRight size={13} />
+              </a>
+            </motion.div>
           </div>
         </section>
 
         {/* =========================================================================
-            SECTION 02: DESIGN PHILOSOPHY ("WHERE FUNCTION MEETS ARCHITECTURE")
+            SECTION 02: KITCHEN PHILOSOPHY | BEAUTY IN EVERYDAY FUNCTION
             ========================================================================= */}
         <section
-          aria-label="Kitchen Design Philosophy"
+          aria-label="Kitchen Philosophy"
+          className="our-approach-section"
           style={{
-            backgroundColor: '#161514',
-            color: '#FFFFFF',
-            paddingTop: 'clamp(80px, 10vw, 130px)',
-            paddingBottom: 'clamp(80px, 10vw, 130px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+            backgroundColor: '#F7F7F5',
+            paddingTop: 'clamp(70px, 10vw, 130px)',
+            paddingBottom: 'clamp(70px, 10vw, 130px)',
+            paddingLeft: 'clamp(20px, 6vw, 100px)',
+            paddingRight: 'clamp(20px, 6vw, 100px)',
+            borderBottom: '1px solid #EBEAE5',
           }}
         >
-          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-            <div
-              className="leoz-split-philosophy"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr',
-                gap: 'clamp(40px, 7vw, 100px)',
-                alignItems: 'center',
-              }}
-            >
-              {/* Left Column: Architectural Photo with Detail Badge */}
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.25 }}
-                transition={{ duration: 0.8, ease: luxuryEase }}
-                style={{
-                  position: 'relative',
-                  aspectRatio: '4 / 3.6',
-                  borderRadius: '3px',
-                  overflow: 'hidden',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                }}
-              >
-                <img
-                  src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85"
-                  alt="LEOZ Kitchen Philosophy Monolith Detail"
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    objectPosition: 'center 45%',
-                    display: 'block',
-                  }}
-                />
-                <div
-                  style={{
-                    position: 'absolute',
-                    bottom: '20px',
-                    left: '20px',
-                    right: '20px',
-                    padding: '14px 20px',
-                    backgroundColor: 'rgba(15, 14, 13, 0.85)',
-                    backdropFilter: 'blur(12px)',
-                    border: '1px solid rgba(182, 154, 107, 0.3)',
-                    borderRadius: '2px',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                  }}
-                >
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '11px',
-                      letterSpacing: '0.15em',
-                      textTransform: 'uppercase',
-                      color: '#B69A6B',
-                      fontWeight: 600,
-                    }}
-                  >
-                    45° Mitered Edge Monolith
-                  </span>
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '11px',
-                      color: 'rgba(255, 255, 255, 0.7)',
-                    }}
-                  >
-                    0.1mm Joint Precision
-                  </span>
-                </div>
-              </motion.div>
-
-              {/* Right Column: Editorial Philosophy & 6 Pillars */}
-              <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.25 }}
-                transition={{ duration: 0.8, ease: luxuryEase }}
-              >
+          <div style={{ maxWidth: '1360px', margin: '0 auto', width: '100%' }}>
+            <div className="our-approach-grid">
+              {/* Heading Column */}
+              <div className="our-approach-heading-col">
                 <span
                   style={{
                     fontFamily: 'var(--font-body)',
@@ -774,836 +536,942 @@ export const ModularKitchens: React.FC = () => {
                     fontWeight: 600,
                     letterSpacing: '0.24em',
                     textTransform: 'uppercase',
-                    color: '#B69A6B',
+                    color: '#A58B62',
                     display: 'block',
-                    marginBottom: '14px',
+                    marginBottom: '16px',
                   }}
                 >
-                  THE LEOZ METHOD
+                  KITCHEN PHILOSOPHY
                 </span>
-
                 <h2
+                  className="our-approach-heading"
                   style={{
                     fontFamily: 'var(--font-heading)',
-                    fontSize: 'clamp(28px, 3.8vw, 46px)',
                     fontWeight: 300,
-                    lineHeight: 1.15,
-                    color: '#FFFFFF',
-                    margin: '0 0 20px 0',
-                    letterSpacing: '0.01em',
+                    letterSpacing: '-0.015em',
+                    color: '#20211F',
+                    margin: 0,
+                    textAlign: 'left',
                   }}
                 >
-                  Where Function Meets Architecture.
+                  Beauty in Everyday
+                  <br className="desktop-heading-break" />
+                  {' '}Function.
                 </h2>
+              </div>
 
+              {/* Body Content Column */}
+              <div className="our-approach-body-col">
                 <p
+                  className="our-approach-lead"
                   style={{
                     fontFamily: 'var(--font-body)',
-                    fontSize: '15px',
-                    color: 'rgba(255, 255, 255, 0.78)',
-                    lineHeight: 1.75,
-                    marginBottom: '32px',
+                    fontWeight: 400,
+                    color: '#20211F',
+                    textAlign: 'left',
+                    margin: '0 0 20px 0',
                   }}
                 >
-                  A kitchen cannot merely look exquisite in a photograph. It must operate as a highly tuned culinary machine where movement, storage, and tactile surfaces flow effortlessly together.
+                  A beautiful kitchen must work beautifully. From preparation and storage to cleaning and family movement, every zone is considered to make daily routines intuitive without diminishing the elegance of the setting.
                 </p>
-
-                {/* 6 Essential Kitchen Aspects */}
-                <div
+                <p
+                  className="our-approach-desc"
                   style={{
-                    display: 'grid',
-                    gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-                    gap: '18px 24px',
-                    marginBottom: '36px',
-                  }}
-                >
-                  {[
-                    { label: 'Intelligent Storage', desc: 'Custom drawer inserts & pull-out pantries' },
-                    { label: 'Ergonomic Workflow', desc: 'Optimized prep-cook-clean golden triangle' },
-                    { label: 'Tactile Materials', desc: 'High-density sintered stone & smoked woods' },
-                    { label: 'Architectural Lighting', desc: 'Integrated 3000K recessed warm channels' },
-                    { label: 'German Ergonomics', desc: 'Concealed Blum & Hettich motion gear' },
-                    { label: 'Master Finishing', desc: 'Multi-layer Italian lacquers & laser edges' },
-                  ].map((pillar) => (
-                    <div key={pillar.label} style={{ display: 'flex', gap: '10px' }}>
-                      <div
-                        style={{
-                          width: '6px',
-                          height: '6px',
-                          borderRadius: '50%',
-                          backgroundColor: '#B69A6B',
-                          marginTop: '8px',
-                          flexShrink: 0,
-                        }}
-                      />
-                      <div>
-                        <h4
-                          style={{
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '13px',
-                            fontWeight: 600,
-                            color: '#FFFFFF',
-                            margin: '0 0 2px 0',
-                          }}
-                        >
-                          {pillar.label}
-                        </h4>
-                        <span
-                          style={{
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '11.5px',
-                            color: 'rgba(255, 255, 255, 0.6)',
-                            lineHeight: 1.4,
-                            display: 'block',
-                          }}
-                        >
-                          {pillar.desc}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <a
-                  href="/talk-to-us"
-                  onClick={(e) => navigate(e, '/talk-to-us')}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    color: '#B69A6B',
                     fontFamily: 'var(--font-body)',
-                    fontSize: '12.5px',
-                    fontWeight: 600,
-                    letterSpacing: '0.14em',
-                    textTransform: 'uppercase',
-                    textDecoration: 'none',
-                    transition: 'color 0.25s ease',
+                    fontWeight: 400,
+                    color: '#686963',
+                    textAlign: 'left',
+                    margin: 0,
                   }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = '#FFFFFF')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = '#B69A6B')}
                 >
-                  <span>Plan Your Kitchen Architecture</span>
-                  <ArrowRight size={14} />
-                </a>
-              </motion.div>
+                  Spatial harmony, durable moisture-resistant specifications, and calibrated German movement ensure that aesthetic elegance endures through rigorous daily use.
+                </p>
+              </div>
             </div>
           </div>
         </section>
 
         {/* =========================================================================
-            SECTION 03: KITCHEN DETAILS (CLOSE-UP PHOTOGRAPHY GALLERY)
+            SECTION 03: GERMAN PRECISION. INDIAN SENSIBILITY.
             ========================================================================= */}
         <section
-          aria-label="Kitchen Precision Details"
           style={{
-            paddingTop: 'clamp(70px, 9vw, 120px)',
-            paddingBottom: 'clamp(70px, 9vw, 120px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            backgroundColor: '#FAF9F6',
-          }}
-        >
-          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: 'clamp(40px, 5vw, 64px)' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  letterSpacing: '0.24em',
-                  textTransform: 'uppercase',
-                  color: '#B69A6B',
-                  display: 'block',
-                  marginBottom: '12px',
-                }}
-              >
-                MICRO-ENGINEERING
-              </span>
-              <h2
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(28px, 3.8vw, 46px)',
-                  fontWeight: 300,
-                  color: '#161514',
-                  margin: '0 0 14px 0',
-                }}
-              >
-                Kitchen Details &amp; Hardware
-              </h2>
-              <p
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '14.5px',
-                  color: 'rgba(22, 21, 20, 0.7)',
-                  maxWidth: '620px',
-                  margin: '0 auto',
-                  lineHeight: 1.65,
-                }}
-              >
-                True luxury is found in what happens inside the drawer, behind the hinge, and at the microscopic joint.
-              </p>
-            </div>
-
-            {/* Close-Up Photography Grid */}
-            <div
-              className="leoz-details-grid"
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
-                gap: '24px',
-              }}
-            >
-              {kitchenDetails.map((item, idx) => (
-                <motion.div
-                  key={item.title}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.15 }}
-                  transition={{ duration: 0.5, delay: idx * 0.08, ease: luxuryEase }}
-                  style={{
-                    backgroundColor: '#FFFFFF',
-                    border: '1px solid rgba(22, 21, 20, 0.08)',
-                    borderRadius: '3px',
-                    overflow: 'hidden',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    transition: 'all 0.35s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(182, 154, 107, 0.5)';
-                    e.currentTarget.style.transform = 'translateY(-4px)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(22, 21, 20, 0.08)';
-                    e.currentTarget.style.transform = 'translateY(0)';
-                  }}
-                >
-                  <div
-                    style={{
-                      position: 'relative',
-                      width: '100%',
-                      aspectRatio: '1 / 0.85',
-                      overflow: 'hidden',
-                    }}
-                  >
-                    <img
-                      src={item.image}
-                      alt={item.title}
-                      loading="lazy"
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        display: 'block',
-                      }}
-                    />
-                    <div
-                      style={{
-                        position: 'absolute',
-                        top: '12px',
-                        left: '12px',
-                        padding: '4px 10px',
-                        backgroundColor: 'rgba(22, 21, 20, 0.8)',
-                        backdropFilter: 'blur(8px)',
-                        color: '#B69A6B',
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '9.5px',
-                        fontWeight: 600,
-                        letterSpacing: '0.15em',
-                        textTransform: 'uppercase',
-                        borderRadius: '2px',
-                      }}
-                    >
-                      {item.category}
-                    </div>
-                  </div>
-
-                  <div style={{ padding: '20px' }}>
-                    <h3
-                      style={{
-                        fontFamily: 'var(--font-heading)',
-                        fontSize: '18px',
-                        fontWeight: 400,
-                        color: '#161514',
-                        margin: '0 0 6px 0',
-                      }}
-                    >
-                      {item.title}
-                    </h3>
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '12.5px',
-                        color: 'rgba(22, 21, 20, 0.68)',
-                        lineHeight: 1.55,
-                        margin: 0,
-                      }}
-                    >
-                      {item.desc}
-                    </p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* =========================================================================
-            SECTION 04: INTERACTIVE MATERIAL SELECTOR
-            ========================================================================= */}
-        <section
-          id="materials"
-          aria-label="Kitchen Materials Selector"
-          style={{
-            backgroundColor: '#161514',
-            color: '#FFFFFF',
+            backgroundColor: '#ECEBE7',
             paddingTop: 'clamp(80px, 10vw, 130px)',
             paddingBottom: 'clamp(80px, 10vw, 130px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-          }}
-        >
-          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-            <div style={{ textAlign: 'center', marginBottom: 'clamp(36px, 5vw, 60px)' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  letterSpacing: '0.24em',
-                  textTransform: 'uppercase',
-                  color: '#B69A6B',
-                  display: 'block',
-                  marginBottom: '12px',
-                }}
-              >
-                CURATED FINISH PALETTE
-              </span>
-              <h2
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(28px, 3.8vw, 46px)',
-                  fontWeight: 300,
-                  color: '#FFFFFF',
-                  margin: '0 0 14px 0',
-                }}
-              >
-                Interactive Material Palette
-              </h2>
-              <p
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '14.5px',
-                  color: 'rgba(255, 255, 255, 0.7)',
-                  maxWidth: '600px',
-                  margin: '0 auto',
-                  lineHeight: 1.6,
-                }}
-              >
-                Select a material to inspect its origin, tactile finish, and architectural application.
-              </p>
-            </div>
-
-            {/* Material Selector Buttons */}
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'center',
-                gap: '10px',
-                flexWrap: 'wrap',
-                marginBottom: 'clamp(36px, 5vw, 56px)',
-              }}
-            >
-              {materialsList.map((mat, idx) => (
-                <button
-                  key={mat.id}
-                  type="button"
-                  onClick={() => setActiveMaterial(idx)}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    padding: '12px 20px',
-                    backgroundColor: activeMaterial === idx ? '#B69A6B' : 'rgba(255, 255, 255, 0.06)',
-                    color: activeMaterial === idx ? '#FFFFFF' : 'rgba(255, 255, 255, 0.8)',
-                    border: `1px solid ${activeMaterial === idx ? '#B69A6B' : 'rgba(255, 255, 255, 0.12)'}`,
-                    borderRadius: '2px',
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '12.5px',
-                    fontWeight: 500,
-                    letterSpacing: '0.08em',
-                    textTransform: 'uppercase',
-                    cursor: 'pointer',
-                    transition: 'all 0.25s ease',
-                  }}
-                >
-                  <span
-                    style={{
-                      width: '12px',
-                      height: '12px',
-                      borderRadius: '50%',
-                      backgroundColor: mat.swatch,
-                      border: '1px solid rgba(255, 255, 255, 0.3)',
-                      display: 'inline-block',
-                    }}
-                  />
-                  <span>{mat.name.split('&')[0]}</span>
-                </button>
-              ))}
-            </div>
-
-            {/* Active Material Interactive Showcase */}
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={materialsList[activeMaterial].id}
-                initial={{ opacity: 0, y: 15 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -15 }}
-                transition={{ duration: 0.45, ease: luxuryEase }}
-                className="leoz-material-preview"
-                style={{
-                  backgroundColor: '#1E1D1B',
-                  border: '1px solid rgba(182, 154, 107, 0.3)',
-                  borderRadius: '4px',
-                  overflow: 'hidden',
-                  display: 'grid',
-                  gridTemplateColumns: '1.2fr 1fr',
-                  gap: '0',
-                }}
-              >
-                {/* Large Material Imagery */}
-                <div
-                  style={{
-                    position: 'relative',
-                    minHeight: '380px',
-                    backgroundColor: '#0F0E0D',
-                  }}
-                >
-                  <img
-                    src={materialsList[activeMaterial].image}
-                    alt={materialsList[activeMaterial].name}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      display: 'block',
-                    }}
-                  />
-                  <div
-                    style={{
-                      position: 'absolute',
-                      inset: 0,
-                      background: 'linear-gradient(90deg, transparent 60%, rgba(30, 29, 27, 0.9) 100%)',
-                    }}
-                  />
-                </div>
-
-                {/* Material Specification Details */}
-                <div
-                  style={{
-                    padding: 'clamp(28px, 4.5vw, 44px)',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '10.5px',
-                      fontWeight: 600,
-                      letterSpacing: '0.2em',
-                      textTransform: 'uppercase',
-                      color: '#B69A6B',
-                      display: 'block',
-                      marginBottom: '8px',
-                    }}
-                  >
-                    MATERIAL SPECIFICATION
-                  </span>
-
-                  <h3
-                    style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: 'clamp(24px, 3vw, 32px)',
-                      fontWeight: 400,
-                      color: '#FFFFFF',
-                      margin: '0 0 6px 0',
-                    }}
-                  >
-                    {materialsList[activeMaterial].name}
-                  </h3>
-
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '13px',
-                      color: '#B69A6B',
-                      display: 'block',
-                      marginBottom: '16px',
-                    }}
-                  >
-                    {materialsList[activeMaterial].tagline}
-                  </span>
-
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      color: 'rgba(255, 255, 255, 0.75)',
-                      lineHeight: 1.7,
-                      margin: '0 0 24px 0',
-                    }}
-                  >
-                    {materialsList[activeMaterial].desc}
-                  </p>
-
-                  <div
-                    style={{
-                      display: 'grid',
-                      gridTemplateColumns: '1fr 1fr',
-                      gap: '14px',
-                      paddingTop: '16px',
-                      borderTop: '1px solid rgba(255, 255, 255, 0.1)',
-                      marginBottom: '24px',
-                    }}
-                  >
-                    <div>
-                      <span style={{ fontSize: '10px', color: '#B69A6B', letterSpacing: '0.15em', display: 'block' }}>
-                        PROVENANCE
-                      </span>
-                      <strong style={{ fontSize: '12.5px', color: '#FFFFFF', fontWeight: 500 }}>
-                        {materialsList[activeMaterial].origin}
-                      </strong>
-                    </div>
-                    <div>
-                      <span style={{ fontSize: '10px', color: '#B69A6B', letterSpacing: '0.15em', display: 'block' }}>
-                        TACTILE FINISH
-                      </span>
-                      <strong style={{ fontSize: '12.5px', color: '#FFFFFF', fontWeight: 500 }}>
-                        {materialsList[activeMaterial].finish}
-                      </strong>
-                    </div>
-                  </div>
-
-                  <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
-                    {materialsList[activeMaterial].highlights.map((tag) => (
-                      <span
-                        key={tag}
-                        style={{
-                          padding: '5px 12px',
-                          backgroundColor: 'rgba(255, 255, 255, 0.08)',
-                          borderRadius: '2px',
-                          fontFamily: 'var(--font-body)',
-                          fontSize: '11px',
-                          color: '#E0D6C3',
-                        }}
-                      >
-                        ✓ {tag}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </section>
-
-        {/* =========================================================================
-            SECTION 05: COMPLETED PROJECTS (ARCHITECTURAL CASE STUDIES)
-            ========================================================================= */}
-        <section
-          id="projects"
-          aria-label="Completed Kitchen Projects"
-          style={{
-            paddingTop: 'clamp(70px, 9vw, 120px)',
-            paddingBottom: 'clamp(70px, 9vw, 120px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
-            backgroundColor: '#FAF9F6',
+            paddingLeft: 'clamp(20px, 6vw, 100px)',
+            paddingRight: 'clamp(20px, 6vw, 100px)',
+            borderBottom: '1px solid #D9D9D4',
           }}
         >
           <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
             <div
               style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'flex-end',
-                marginBottom: 'clamp(36px, 5vw, 60px)',
-                flexWrap: 'wrap',
-                gap: '20px',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
+                gap: 'clamp(32px, 6vw, 80px)',
+                alignItems: 'center',
               }}
             >
               <div>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '11px',
-                    fontWeight: 600,
-                    letterSpacing: '0.22em',
-                    textTransform: 'uppercase',
-                    color: '#B69A6B',
-                    display: 'block',
-                    marginBottom: '12px',
-                  }}
-                >
-                  REALIZED HOMES
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#A58B62', display: 'block', marginBottom: '14px' }}>
+                  CORE PRINCIPLES
                 </span>
-                <h2
-                  style={{
-                    fontFamily: 'var(--font-heading)',
-                    fontSize: 'clamp(28px, 3.8vw, 46px)',
-                    fontWeight: 300,
-                    color: '#161514',
-                    margin: 0,
-                    letterSpacing: '0.01em',
-                  }}
-                >
-                  Completed Kitchen Projects
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(32px, 4.2vw, 54px)', fontWeight: 300, color: '#20211F', letterSpacing: '-0.015em', margin: '0 0 20px 0', lineHeight: 1.15 }}>
+                  German Precision.
+                  <br />
+                  Indian Sensibility.
                 </h2>
-              </div>
-              <p
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '14.5px',
-                  color: 'rgba(22, 21, 20, 0.7)',
-                  maxWidth: '460px',
-                  lineHeight: 1.6,
-                  margin: 0,
-                }}
-              >
-                A selection of private residences where LEOZ engineered bespoke culinary spaces from concept to turnkey handover.
-              </p>
-            </div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '16px', color: '#686963', lineHeight: 1.75, margin: '0 0 24px 0' }}>
+                  Inspired by German planning and hardware principles, LEOZ adapts ergonomic dimensions, robust fittings and thoughtful organisation to Indian cooking patterns, ingredient storage, maintenance needs and family lifestyles.
+                </p>
 
-            {/* Case Studies 2x2 Grid */}
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '18px', borderTop: '1px solid #D9D9D4', paddingTop: '24px' }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                    <Check size={18} color="#A58B62" style={{ flexShrink: 0, marginTop: '3px' }} />
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '13.5px', color: '#20211F' }}>
+                      Heavy vessel &amp; spice storage zoning
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                    <Check size={18} color="#A58B62" style={{ flexShrink: 0, marginTop: '3px' }} />
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '13.5px', color: '#20211F' }}>
+                      Tropical moisture-resistant carcass
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                    <Check size={18} color="#A58B62" style={{ flexShrink: 0, marginTop: '3px' }} />
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '13.5px', color: '#20211F' }}>
+                      100,000-cycle German motion hardware
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+                    <Check size={18} color="#A58B62" style={{ flexShrink: 0, marginTop: '3px' }} />
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '13.5px', color: '#20211F' }}>
+                      Stain &amp; heat-resistant ceramic worktops
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Visual Showcase Card */}
+              <div style={{ position: 'relative', width: '100%', aspectRatio: '16/12', borderRadius: '2px', overflow: 'hidden', backgroundColor: '#0F100E', boxShadow: '0 20px 50px rgba(32, 33, 31, 0.12)' }}>
+                <img
+                  src="/Island Layout.webp"
+                  alt="LEOZ German Precision Indian Kitchen Design"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                />
+                <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(180deg, transparent 40%, rgba(15, 16, 14, 0.85) 100%)' }} />
+                <div style={{ position: 'absolute', bottom: '24px', left: '24px', right: '24px', color: '#FFFFFF' }}>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '10px', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#D4AF37', display: 'block', marginBottom: '4px' }}>
+                    ENGINEERED HARMONY
+                  </span>
+                  <h4 style={{ fontFamily: 'var(--font-heading)', fontSize: '20px', fontWeight: 300, color: '#FFFFFF', margin: 0 }}>
+                    Ergonomic workflow adapted to Indian home routines
+                  </h4>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            SECTION 04: KITCHEN COLLECTIONS (GERMAN CLASSIC & CONTEMPORARY FUSION)
+            ========================================================================= */}
+        <section
+          id="collections"
+          style={{
+            backgroundColor: '#F7F7F5',
+            paddingTop: 'clamp(80px, 11vw, 140px)',
+            paddingBottom: 'clamp(80px, 11vw, 140px)',
+            paddingLeft: 'clamp(20px, 6vw, 100px)',
+            paddingRight: 'clamp(20px, 6vw, 100px)',
+          }}
+        >
+          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
             <div
-              className="leoz-projects-grid"
               style={{
                 display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-                gap: '32px',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
+                gap: 'clamp(24px, 5vw, 64px)',
+                alignItems: 'flex-end',
+                marginBottom: 'clamp(44px, 6vw, 70px)',
               }}
             >
-              {completedProjects.map((p, idx) => (
-                <motion.div
-                  key={p.id}
-                  initial={{ opacity: 0, y: 25 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.15 }}
-                  transition={{ duration: 0.6, delay: idx * 0.1, ease: luxuryEase }}
+              <div>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#A58B62', display: 'block', marginBottom: '12px' }}>
+                  DESIGN EXPRESSIONS
+                </span>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(32px, 4.4vw, 54px)', fontWeight: 300, color: '#20211F', letterSpacing: '-0.015em', margin: 0, lineHeight: 1.15 }}>
+                  Our Kitchen Collections
+                </h2>
+              </div>
+              <div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '15.5px', color: '#686963', lineHeight: 1.75, margin: 0 }}>
+                  Two refined architectural languages tailored to your taste — from the disciplined geometric lines of German Classicism to the warm material textures of Contemporary Fusion.
+                </p>
+              </div>
+            </div>
+
+            {/* 2 Big Architectural Collection Cards */}
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
+                gap: '36px',
+              }}
+            >
+              {kitchenCollections.map((col) => (
+                <div
+                  key={col.id}
                   style={{
                     backgroundColor: '#FFFFFF',
-                    border: '1px solid rgba(22, 21, 20, 0.08)',
-                    borderRadius: '3px',
+                    border: '1px solid #E5E4E0',
+                    borderTop: '3px solid #A58B62',
+                    borderRadius: '2px',
                     overflow: 'hidden',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    transition: 'all 0.35s ease',
+                    boxShadow: '0 8px 30px rgba(32, 33, 31, 0.05)',
+                    transition: 'all 0.3s ease',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(182, 154, 107, 0.5)';
-                    e.currentTarget.style.transform = 'translateY(-5px)';
-                    e.currentTarget.style.boxShadow = '0 16px 36px rgba(0,0,0,0.08)';
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 16px 40px rgba(165, 139, 98, 0.12)';
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = 'rgba(22, 21, 20, 0.08)';
                     e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = 'none';
+                    e.currentTarget.style.boxShadow = '0 8px 30px rgba(32, 33, 31, 0.05)';
                   }}
                 >
-                  <div
-                    style={{
-                      position: 'relative',
-                      width: '100%',
-                      aspectRatio: '16 / 10',
-                      overflow: 'hidden',
-                    }}
-                  >
+                  <div style={{ width: '100%', aspectRatio: '16/10', overflow: 'hidden', backgroundColor: '#D9D9D4' }}>
                     <img
-                      src={p.image}
-                      alt={p.title}
-                      loading="lazy"
-                      style={{
-                        width: '100%',
-                        height: '100%',
-                        objectFit: 'cover',
-                        display: 'block',
-                      }}
+                      src={col.image}
+                      alt={col.title}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.8s ease' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.03)')}
+                      onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
                     />
-                    <div
-                      style={{
-                        position: 'absolute',
-                        bottom: '14px',
-                        left: '14px',
-                        padding: '5px 12px',
-                        backgroundColor: 'rgba(22, 21, 20, 0.8)',
-                        backdropFilter: 'blur(8px)',
-                        color: '#FFFFFF',
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '11px',
-                        fontWeight: 500,
-                        borderRadius: '2px',
-                      }}
-                    >
-                      📍 {p.location}
-                    </div>
                   </div>
-
-                  <div style={{ padding: '24px', display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
-                    <span
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '11px',
-                        fontWeight: 600,
-                        color: '#B69A6B',
-                        letterSpacing: '0.15em',
-                        textTransform: 'uppercase',
-                        display: 'block',
-                        marginBottom: '6px',
-                      }}
-                    >
-                      {p.style}
+                  <div style={{ padding: '36px 30px' }}>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '10.5px', fontWeight: 600, letterSpacing: '0.2em', textTransform: 'uppercase', color: '#A58B62', display: 'block', marginBottom: '8px' }}>
+                      {col.badge}
                     </span>
-
-                    <h3
-                      style={{
-                        fontFamily: 'var(--font-heading)',
-                        fontSize: '22px',
-                        fontWeight: 400,
-                        color: '#161514',
-                        margin: '0 0 10px 0',
-                      }}
-                    >
-                      {p.title}
+                    <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '26px', fontWeight: 400, color: '#20211F', margin: '0 0 14px 0' }}>
+                      {col.title}
                     </h3>
-
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '13px',
-                        color: 'rgba(22, 21, 20, 0.7)',
-                        lineHeight: 1.6,
-                        margin: '0 0 20px 0',
-                        flexGrow: 1,
-                      }}
-                    >
-                      {p.desc}
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '14.5px', color: '#686963', lineHeight: 1.7, margin: '0 0 24px 0' }}>
+                      {col.desc}
                     </p>
 
-                    <a
-                      href="/talk-to-us"
-                      onClick={(e) => navigate(e, '/talk-to-us')}
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        gap: '8px',
-                        color: '#161514',
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        letterSpacing: '0.12em',
-                        textTransform: 'uppercase',
-                        textDecoration: 'none',
-                        transition: 'color 0.25s ease',
-                      }}
-                      onMouseEnter={(e) => (e.currentTarget.style.color = '#B69A6B')}
-                      onMouseLeave={(e) => (e.currentTarget.style.color = '#161514')}
-                    >
-                      <span>Inquire This Architecture</span>
-                      <ArrowRight size={13} />
-                    </a>
+                    <div style={{ borderTop: '1px solid #ECEBE7', paddingTop: '18px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                      {col.specs.map((item) => (
+                        <div key={item} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                          <div style={{ width: '4px', height: '4px', backgroundColor: '#A58B62', borderRadius: '50%' }} />
+                          <span style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#4A4B46' }}>
+                            {item}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </div>
         </section>
 
         {/* =========================================================================
-            SECTION 06: CINEMATIC FINAL CTA ("LET'S DESIGN YOUR KITCHEN")
+            SECTION 05: FULL-WIDTH 3-PHOTO SLIDE HERO INTERLUDE
             ========================================================================= */}
         <section
-          aria-label="Book Kitchen Consultation"
+          aria-label="Modular Kitchen Architectural Showcase"
           style={{
-            position: 'relative',
-            backgroundColor: '#0F0E0D',
-            paddingTop: 'clamp(90px, 12vw, 150px)',
-            paddingBottom: 'clamp(90px, 12vw, 150px)',
-            paddingLeft: 'clamp(20px, 5.5vw, 80px)',
-            paddingRight: 'clamp(20px, 5.5vw, 80px)',
+            width: '100%',
+            height: 'clamp(420px, 60vh, 720px)',
             overflow: 'hidden',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            textAlign: 'center',
+            position: 'relative',
+            backgroundColor: '#1E201D',
           }}
         >
-          {/* Ambient Background Image */}
+          <AnimatePresence mode="wait">
+            <motion.div
+              key={kitchenInterludeSlide}
+              initial={{ opacity: 0, scale: 1.04 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1.1, ease: luxuryEase }}
+              style={{ position: 'absolute', inset: 0 }}
+            >
+              <img
+                src={kitchenInterludePhotos[kitchenInterludeSlide].image}
+                alt={kitchenInterludePhotos[kitchenInterludeSlide].alt}
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  objectPosition: 'center 45%',
+                  filter: 'brightness(0.95) contrast(1.02)',
+                }}
+              />
+            </motion.div>
+          </AnimatePresence>
+
           <div
             style={{
               position: 'absolute',
               inset: 0,
-              backgroundImage: 'url(https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=2000&q=85)',
-              backgroundPosition: 'center 45%',
-              backgroundSize: 'cover',
-              opacity: 0.22,
-            }}
-          />
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              background: 'radial-gradient(circle at center, rgba(15, 14, 13, 0.7) 0%, #0F0E0D 95%)',
+              background:
+                'linear-gradient(180deg, transparent 50%, rgba(20, 21, 19, 0.7) 85%, rgba(20, 21, 19, 0.92) 100%)',
+              pointerEvents: 'none',
             }}
           />
 
-          <div style={{ position: 'relative', zIndex: 10, maxWidth: '780px', margin: '0 auto' }}>
-            <span
+          <div
+            style={{
+              position: 'absolute',
+              bottom: 'clamp(16px, 3vh, 32px)',
+              left: 'clamp(16px, 5vw, 80px)',
+              right: 'clamp(16px, 5vw, 80px)',
+              zIndex: 15,
+              display: 'flex',
+              alignItems: 'flex-end',
+              justifyContent: 'space-between',
+              gap: '16px',
+            }}
+          >
+            <div style={{ color: '#FFFFFF', minWidth: 0, flex: '1 1 auto', paddingRight: '8px' }}>
+              <span
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'clamp(9px, 1.1vw, 10px)',
+                  fontWeight: 600,
+                  letterSpacing: '0.18em',
+                  color: '#D4AF37',
+                  textTransform: 'uppercase',
+                  display: 'block',
+                  marginBottom: '2px',
+                  textShadow: '0 2px 8px rgba(0,0,0,0.9)',
+                }}
+              >
+                {kitchenInterludePhotos[kitchenInterludeSlide].tag}
+              </span>
+              <h4
+                style={{
+                  fontFamily: 'var(--font-heading)',
+                  fontSize: 'clamp(14px, 1.7vw, 22px)',
+                  fontWeight: 300,
+                  color: '#FFFFFF',
+                  margin: 0,
+                  lineHeight: 1.2,
+                  textShadow: '0 2px 10px rgba(0,0,0,0.9)',
+                }}
+              >
+                {kitchenInterludePhotos[kitchenInterludeSlide].title}
+              </h4>
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
+              <div style={{ display: 'flex', gap: '6px' }}>
+                {kitchenInterludePhotos.map((photo, idx) => (
+                  <button
+                    key={photo.image}
+                    type="button"
+                    aria-label={`Go to slide ${idx + 1}`}
+                    onClick={() => setKitchenInterludeSlide(idx)}
+                    style={{
+                      height: '3px',
+                      width: kitchenInterludeSlide === idx ? '28px' : '14px',
+                      backgroundColor:
+                        kitchenInterludeSlide === idx ? '#D4AF37' : 'rgba(255, 255, 255, 0.4)',
+                      border: 'none',
+                      padding: 0,
+                      cursor: 'pointer',
+                      borderRadius: '2px',
+                      boxShadow: '0 2px 6px rgba(0,0,0,0.5)',
+                      transition: 'all 0.35s ease',
+                    }}
+                  />
+                ))}
+              </div>
+
+              <div style={{ display: 'flex', gap: '5px' }}>
+                <button
+                  type="button"
+                  aria-label="Previous Slide"
+                  onClick={() =>
+                    setKitchenInterludeSlide(
+                      (prev) =>
+                        (prev - 1 + kitchenInterludePhotos.length) % kitchenInterludePhotos.length
+                    )
+                  }
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    borderRadius: '2px',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    backgroundColor: 'rgba(20, 21, 19, 0.6)',
+                    color: '#FFFFFF',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#A58B62';
+                    e.currentTarget.style.borderColor = '#A58B62';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'rgba(20, 21, 19, 0.6)';
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                  }}
+                >
+                  <ChevronLeft size={13} />
+                </button>
+                <button
+                  type="button"
+                  aria-label="Next Slide"
+                  onClick={() =>
+                    setKitchenInterludeSlide(
+                      (prev) => (prev + 1) % kitchenInterludePhotos.length
+                    )
+                  }
+                  style={{
+                    width: '30px',
+                    height: '30px',
+                    borderRadius: '2px',
+                    border: '1px solid rgba(255, 255, 255, 0.3)',
+                    backgroundColor: 'rgba(20, 21, 19, 0.6)',
+                    color: '#FFFFFF',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#A58B62';
+                    e.currentTarget.style.borderColor = '#A58B62';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'rgba(20, 21, 19, 0.6)';
+                    e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                  }}
+                >
+                  <ChevronRight size={13} />
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            SECTION 06: KITCHEN FEATURES
+            ========================================================================= */}
+        <section
+          style={{
+            backgroundColor: '#F7F7F5',
+            paddingTop: 'clamp(90px, 12vw, 150px)',
+            paddingBottom: 'clamp(90px, 12vw, 150px)',
+            paddingLeft: 'clamp(20px, 6vw, 100px)',
+            paddingRight: 'clamp(20px, 6vw, 100px)',
+          }}
+        >
+          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
+            <div
               style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '11px',
-                fontWeight: 600,
-                letterSpacing: '0.25em',
-                textTransform: 'uppercase',
-                color: '#B69A6B',
-                display: 'block',
-                marginBottom: '16px',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
+                gap: 'clamp(24px, 5vw, 64px)',
+                alignItems: 'flex-end',
+                marginBottom: 'clamp(48px, 6vw, 80px)',
               }}
             >
-              BESPOKE ARCHITECTURAL COMMISSION
+              <div>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#A58B62', display: 'block', marginBottom: '12px' }}>
+                  SPECIFICATIONS &amp; COMFORT
+                </span>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(32px, 4.5vw, 54px)', fontWeight: 300, color: '#20211F', letterSpacing: '-0.015em', margin: 0, lineHeight: 1.15 }}>
+                  Kitchen Features
+                </h2>
+              </div>
+              <div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '15.5px', color: '#686963', lineHeight: 1.75, margin: 0 }}>
+                  Expect personalised work zones, intelligent drawers and pull-outs, customised tall units, practical appliance integration, convenient maintenance, specification-led moisture-resistant options and hardware selected to suit the required use.
+                </p>
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+                gap: 'clamp(32px, 4vw, 56px)',
+              }}
+            >
+              {kitchenFeatures.map((feat, idx) => (
+                <div key={feat.title} style={{ borderTop: '2px solid #A58B62', paddingTop: '20px' }}>
+                  <span style={{ fontFamily: 'var(--font-heading)', fontSize: '32px', fontWeight: 300, color: '#A58B62', display: 'block', marginBottom: '6px' }}>
+                    0{idx + 1}
+                  </span>
+                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '21px', fontWeight: 400, color: '#20211F', margin: '0 0 10px 0' }}>
+                    {feat.title}
+                  </h3>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#686963', lineHeight: 1.65, margin: '0 0 12px 0' }}>
+                    {feat.desc}
+                  </p>
+                  <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', color: '#A58B62' }}>
+                    {feat.spec}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            SECTION 07: LAYOUTS TAILORED TO THE SPACE
+            ========================================================================= */}
+        <section
+          id="layouts"
+          style={{
+            backgroundColor: '#ECEBE7',
+            paddingTop: 'clamp(90px, 12vw, 150px)',
+            paddingBottom: 'clamp(90px, 12vw, 150px)',
+            paddingLeft: 'clamp(20px, 6vw, 100px)',
+            paddingRight: 'clamp(20px, 6vw, 100px)',
+            borderBottom: '1px solid #D9D9D4',
+          }}
+        >
+          <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
+                gap: 'clamp(24px, 5vw, 64px)',
+                alignItems: 'flex-end',
+                marginBottom: 'clamp(48px, 6vw, 80px)',
+              }}
+            >
+              <div>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#A58B62', display: 'block', marginBottom: '12px' }}>
+                  SPATIAL PLANNING
+                </span>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(32px, 4.5vw, 54px)', fontWeight: 300, color: '#20211F', letterSpacing: '-0.015em', margin: 0, lineHeight: 1.15 }}>
+                  Layouts Tailored to the Space
+                </h2>
+              </div>
+              <div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '15.5px', color: '#686963', lineHeight: 1.75, margin: 0 }}>
+                  Straight, L-shaped, U-shaped, Parallel, Island and Peninsula kitchens. The final layout is chosen after considering movement, plumbing, ventilation, appliances, storage and available floor area.
+                </p>
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 300px), 1fr))',
+                gap: 'clamp(28px, 4vw, 48px)',
+              }}
+            >
+              {kitchenLayouts.map((layout) => (
+                <div
+                  key={layout.id}
+                  style={{
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid #E5E4E0',
+                    borderRadius: '2px',
+                    overflow: 'hidden',
+                    boxShadow: '0 4px 20px rgba(32, 33, 31, 0.04)',
+                    transition: 'all 0.3s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 12px 30px rgba(165, 139, 98, 0.12)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 4px 20px rgba(32, 33, 31, 0.04)';
+                  }}
+                >
+                  <div style={{ width: '100%', aspectRatio: '16/11', overflow: 'hidden', backgroundColor: '#D9D9D4' }}>
+                    <img
+                      src={layout.image}
+                      alt={layout.name}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  </div>
+                  <div style={{ padding: '24px 20px' }}>
+                    <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '22px', fontWeight: 400, color: '#20211F', margin: '0 0 10px 0' }}>
+                      {layout.name}
+                    </h3>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '13.5px', color: '#686963', lineHeight: 1.65, margin: '0 0 14px 0' }}>
+                      {layout.desc}
+                    </p>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '11.5px', fontWeight: 600, color: '#A58B62' }}>
+                      Ideal for: {layout.idealFor}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            SECTION 08: MATERIALS & FINISHES
+            ========================================================================= */}
+        <section
+          style={{
+            backgroundColor: '#F7F7F5',
+            paddingTop: 'clamp(90px, 12vw, 150px)',
+            paddingBottom: 'clamp(90px, 12vw, 150px)',
+            paddingLeft: 'clamp(20px, 6vw, 100px)',
+            paddingRight: 'clamp(20px, 6vw, 100px)',
+          }}
+        >
+          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
+                gap: 'clamp(24px, 5vw, 64px)',
+                alignItems: 'flex-end',
+                marginBottom: 'clamp(48px, 6vw, 80px)',
+              }}
+            >
+              <div>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#A58B62', display: 'block', marginBottom: '12px' }}>
+                  SURFACES &amp; CARCASS
+                </span>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(32px, 4.5vw, 54px)', fontWeight: 300, color: '#20211F', letterSpacing: '-0.015em', margin: 0, lineHeight: 1.15 }}>
+                  Materials &amp; Finishes
+                </h2>
+              </div>
+              <div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '15.5px', color: '#686963', lineHeight: 1.75, margin: 0 }}>
+                  Choose from project-appropriate carcass specifications and a curated range of laminates, acrylic, PU, veneer and other available shutter finishes, complemented by selected countertops, profiles, handles and hardware. Samples and specifications are finalised during consultation.
+                </p>
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+                gap: '24px',
+              }}
+            >
+              {kitchenMaterials.map((mat, idx) => (
+                <div
+                  key={mat.id}
+                  style={{
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid #E5E4E0',
+                    borderRadius: '2px',
+                    overflow: 'hidden',
+                    boxShadow: '0 4px 20px rgba(32, 33, 31, 0.04)',
+                    transition: 'all 0.3s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 12px 30px rgba(165, 139, 98, 0.12)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 4px 20px rgba(32, 33, 31, 0.04)';
+                  }}
+                >
+                  <div style={{ width: '100%', aspectRatio: '16/10', overflow: 'hidden', backgroundColor: '#D9D9D4' }}>
+                    <img
+                      src={mat.image}
+                      alt={mat.name}
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                  </div>
+                  <div style={{ padding: '24px 20px' }}>
+                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '10px', fontWeight: 600, letterSpacing: '0.18em', textTransform: 'uppercase', color: '#A58B62', display: 'block', marginBottom: '6px' }}>
+                      {mat.category}
+                    </span>
+                    <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '20px', fontWeight: 400, color: '#20211F', margin: '0 0 10px 0' }}>
+                      {mat.name}
+                    </h3>
+                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '13.5px', color: '#686963', lineHeight: 1.65, margin: '0 0 16px 0' }}>
+                      {mat.desc}
+                    </p>
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
+                      {mat.highlights.map((h) => (
+                        <span key={h} style={{ fontFamily: 'var(--font-body)', fontSize: '11px', backgroundColor: '#F7F7F5', color: '#4A4B46', padding: '4px 8px', borderRadius: '2px', border: '1px solid #ECEBE7' }}>
+                          {h}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            SECTION 09: WHY CHOOSE LEOZ KITCHENS?
+            ========================================================================= */}
+        <section
+          style={{
+            backgroundColor: '#ECEBE7',
+            paddingTop: 'clamp(90px, 12vw, 150px)',
+            paddingBottom: 'clamp(90px, 12vw, 150px)',
+            paddingLeft: 'clamp(20px, 6vw, 100px)',
+            paddingRight: 'clamp(20px, 6vw, 100px)',
+            borderTop: '1px solid #D9D9D4',
+          }}
+        >
+          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
+                gap: 'clamp(24px, 5vw, 64px)',
+                alignItems: 'flex-end',
+                marginBottom: 'clamp(48px, 6vw, 80px)',
+              }}
+            >
+              <div>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#A58B62', display: 'block', marginBottom: '12px' }}>
+                  THE LEOZ ADVANTAGE
+                </span>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(32px, 4.5vw, 54px)', fontWeight: 300, color: '#20211F', letterSpacing: '-0.015em', margin: 0, lineHeight: 1.15 }}>
+                  Why Choose LEOZ Kitchens?
+                </h2>
+              </div>
+              <div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '15.5px', color: '#686963', lineHeight: 1.75, margin: 0 }}>
+                  Dedicated in-house production, design-to-manufacturing coordination, considered material choices, precise customisation, professional installation and warranty provisions communicated with the final proposal.
+                </p>
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))',
+                gap: '24px',
+              }}
+            >
+              {whyChooseKitchens.map((card) => (
+                <div
+                  key={card.num}
+                  style={{
+                    backgroundColor: '#FFFFFF',
+                    border: '1px solid #E5E4E0',
+                    borderTop: '3px solid #A58B62',
+                    padding: '32px 26px',
+                    borderRadius: '2px',
+                    boxShadow: '0 4px 20px rgba(32, 33, 31, 0.04)',
+                    transition: 'all 0.3s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-4px)';
+                    e.currentTarget.style.boxShadow = '0 12px 30px rgba(165, 139, 98, 0.12)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 4px 20px rgba(32, 33, 31, 0.04)';
+                  }}
+                >
+                  <span style={{ fontFamily: 'var(--font-heading)', fontSize: '24px', color: '#A58B62', display: 'block', marginBottom: '10px' }}>
+                    {card.num}
+                  </span>
+                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '21px', fontWeight: 400, color: '#20211F', margin: '0 0 10px 0' }}>
+                    {card.title}
+                  </h3>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#686963', lineHeight: 1.7, margin: 0 }}>
+                    {card.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            SECTION 10: KITCHEN DESIGN PROCESS (7 STEPS)
+            ========================================================================= */}
+        <section
+          style={{
+            backgroundColor: '#252623',
+            color: '#FFFFFF',
+            paddingTop: 'clamp(90px, 12vw, 150px)',
+            paddingBottom: 'clamp(90px, 12vw, 150px)',
+            paddingLeft: 'clamp(20px, 6vw, 100px)',
+            paddingRight: 'clamp(20px, 6vw, 100px)',
+          }}
+        >
+          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
+                gap: 'clamp(24px, 5vw, 64px)',
+                alignItems: 'flex-end',
+                marginBottom: 'clamp(48px, 6vw, 80px)',
+              }}
+            >
+              <div>
+                <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#D4AF37', display: 'block', marginBottom: '12px' }}>
+                  ARCHITECTURAL METHOD
+                </span>
+                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(32px, 4.5vw, 54px)', fontWeight: 300, color: '#FFFFFF', letterSpacing: '-0.015em', margin: 0, lineHeight: 1.15 }}>
+                  Kitchen Design Process
+                </h2>
+              </div>
+              <div>
+                <p style={{ fontFamily: 'var(--font-body)', fontSize: '15.5px', color: 'rgba(255, 255, 255, 0.75)', lineHeight: 1.75, margin: 0 }}>
+                  A structured seven-stage process ensuring your bespoke kitchen transitions seamlessly from initial lifestyle discovery to factory fabrication and precision on-site handover.
+                </p>
+              </div>
+            </div>
+
+            <div
+              style={{
+                display: 'grid',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
+                gap: '24px',
+              }}
+            >
+              {kitchenProcessSteps.map((step) => (
+                <div
+                  key={step.num}
+                  style={{
+                    backgroundColor: '#1E201D',
+                    borderTop: '2px solid #D4AF37',
+                    padding: '24px 20px',
+                    borderRadius: '2px',
+                  }}
+                >
+                  <span style={{ fontFamily: 'var(--font-heading)', fontSize: '20px', fontWeight: 400, color: '#D4AF37', display: 'block', marginBottom: '10px' }}>
+                    {step.num}
+                  </span>
+                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '20px', fontWeight: 400, color: '#FFFFFF', margin: '0 0 10px 0' }}>
+                    {step.title}
+                  </h3>
+                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '13.5px', color: 'rgba(255, 255, 255, 0.7)', lineHeight: 1.65, margin: 0 }}>
+                    {step.desc}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            SECTION 11: KITCHEN FAQS (INTERACTIVE ACCORDION)
+            ========================================================================= */}
+        <section
+          style={{
+            backgroundColor: '#F7F7F5',
+            paddingTop: 'clamp(90px, 12vw, 150px)',
+            paddingBottom: 'clamp(90px, 12vw, 150px)',
+            paddingLeft: 'clamp(20px, 6vw, 100px)',
+            paddingRight: 'clamp(20px, 6vw, 100px)',
+          }}
+        >
+          <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
+            <div style={{ textAlign: 'center', marginBottom: 'clamp(40px, 6vw, 64px)' }}>
+              <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#A58B62', display: 'block', marginBottom: '12px' }}>
+                FREQUENTLY ASKED QUESTIONS
+              </span>
+              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(32px, 4vw, 50px)', fontWeight: 300, color: '#20211F', letterSpacing: '-0.015em', margin: 0 }}>
+                Kitchen FAQs
+              </h2>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+              {kitchenFaqs.map((faq, idx) => {
+                const isOpen = openFaq === idx;
+                return (
+                  <div
+                    key={faq.q}
+                    style={{
+                      backgroundColor: '#FFFFFF',
+                      border: '1px solid #E5E4E0',
+                      borderRadius: '2px',
+                      overflow: 'hidden',
+                      transition: 'all 0.2s ease',
+                    }}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => toggleFaq(idx)}
+                      style={{
+                        width: '100%',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: '22px 28px',
+                        backgroundColor: 'transparent',
+                        border: 'none',
+                        textAlign: 'left',
+                        cursor: 'pointer',
+                        gap: '16px',
+                      }}
+                    >
+                      <span style={{ fontFamily: 'var(--font-heading)', fontSize: '19px', fontWeight: 400, color: '#20211F' }}>
+                        {faq.q}
+                      </span>
+                      <span style={{ color: '#A58B62', display: 'flex', alignItems: 'center' }}>
+                        {isOpen ? <Minus size={18} /> : <Plus size={18} />}
+                      </span>
+                    </button>
+
+                    <AnimatePresence>
+                      {isOpen && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: 'auto', opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.3, ease: luxuryEase }}
+                        >
+                          <div style={{ padding: '0 28px 24px 28px', borderTop: '1px solid #F0EFEA' }}>
+                            <p style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: '#686963', lineHeight: 1.7, margin: '14px 0 0 0' }}>
+                              {faq.a}
+                            </p>
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            SECTION 12: CTA | LET US DESIGN YOUR KITCHEN
+            ========================================================================= */}
+        <section
+          id="cta"
+          style={{
+            backgroundColor: '#1C1D1A',
+            color: '#FFFFFF',
+            paddingTop: 'clamp(90px, 12vw, 140px)',
+            paddingBottom: 'clamp(90px, 12vw, 140px)',
+            paddingLeft: 'clamp(20px, 6vw, 100px)',
+            paddingRight: 'clamp(20px, 6vw, 100px)',
+            position: 'relative',
+            overflow: 'hidden',
+          }}
+        >
+          <div style={{ maxWidth: '960px', margin: '0 auto', textAlign: 'center', position: 'relative', zIndex: 10 }}>
+            <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#D4AF37', display: 'block', marginBottom: '16px' }}>
+              LET US DESIGN YOUR KITCHEN
             </span>
-
-            <h2
-              style={{
-                fontFamily: 'var(--font-heading)',
-                fontSize: 'clamp(32px, 5vw, 58px)',
-                fontWeight: 300,
-                color: '#FFFFFF',
-                lineHeight: 1.1,
-                margin: '0 0 20px 0',
-                letterSpacing: '0.01em',
-              }}
-            >
-              Let’s Design Your Kitchen.
+            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(34px, 4.5vw, 60px)', fontWeight: 300, color: '#FFFFFF', letterSpacing: '-0.015em', margin: '0 0 20px 0', lineHeight: 1.15 }}>
+              Begin Your Culinary Transformation
             </h2>
-
-            <p
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: 'clamp(14.5px, 1.3vw, 17.5px)',
-                color: 'rgba(255, 255, 255, 0.8)',
-                lineHeight: 1.7,
-                marginBottom: '36px',
-                maxWidth: '620px',
-                marginLeft: 'auto',
-                marginRight: 'auto',
-              }}
-            >
-              Whether you are designing a new villa or renovating a luxury penthouse, our principal designers are ready to translate your vision into reality.
+            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'clamp(15px, 1.2vw, 18px)', color: '#D9D9D4', lineHeight: 1.75, maxWidth: '680px', margin: '0 auto 36px auto' }}>
+              Discuss your lifestyle, space and preferences with the LEOZ team. Experience German-inspired ergonomics, bespoke finishes, and precision manufacturing tailored around you.
             </p>
 
             <a
@@ -1613,8 +1481,8 @@ export const ModularKitchens: React.FC = () => {
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '12px',
-                padding: '16px 36px',
-                backgroundColor: '#B69A6B',
+                padding: '18px 38px',
+                backgroundColor: '#A58B62',
                 color: '#FFFFFF',
                 fontFamily: 'var(--font-body)',
                 fontSize: '12.5px',
@@ -1623,17 +1491,20 @@ export const ModularKitchens: React.FC = () => {
                 textTransform: 'uppercase',
                 textDecoration: 'none',
                 borderRadius: '2px',
+                border: '1px solid #A58B62',
                 boxShadow: '0 10px 30px rgba(0,0,0,0.4)',
                 transition: 'all 0.3s ease',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#9F8255';
+                e.currentTarget.style.backgroundColor = '#8C744F';
+                e.currentTarget.style.borderColor = '#8C744F';
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#B69A6B';
+                e.currentTarget.style.backgroundColor = '#A58B62';
+                e.currentTarget.style.borderColor = '#A58B62';
               }}
             >
-              <span>Book a Consultation</span>
+              <span>Book Your Kitchen Consultation</span>
               <ArrowRight size={15} />
             </a>
           </div>
@@ -1642,37 +1513,84 @@ export const ModularKitchens: React.FC = () => {
 
       <Footer />
 
-      {/* Responsive Styles */}
       <style>{`
-        .leoz-collection-card:hover .collection-zoom-img {
-          transform: scale(1.05);
-        }
-        .leoz-collection-card:hover .collection-title {
-          transform: translateY(-2px);
-          color: #B69A6B;
-        }
-        .leoz-collection-card:hover .collection-arrow {
-          transform: translate(2px, -2px);
+        /* Desktop Editorial Two-Column Layout */
+        .our-approach-grid {
+          display: grid;
+          grid-template-columns: 1fr 1.25fr;
+          gap: clamp(48px, 6.5vw, 96px);
+          align-items: baseline;
+          width: 100%;
         }
 
-        @media (max-width: 900px) {
-          .leoz-split-philosophy {
-            grid-template-columns: 1fr !important;
-            gap: 40px !important;
-          }
-          .leoz-material-preview {
-            grid-template-columns: 1fr !important;
-          }
-          .leoz-material-preview > div:first-child {
-            min-height: 260px !important;
-          }
+        .our-approach-heading {
+          font-size: clamp(38px, 4.4vw, 62px);
+          line-height: 1.05;
         }
 
+        .our-approach-lead {
+          font-size: clamp(17px, 1.35vw, 20px);
+          line-height: 1.7;
+          max-width: 620px;
+        }
+
+        .our-approach-desc {
+          font-size: 15px;
+          line-height: 1.75;
+          max-width: 620px;
+        }
+
+        /* Mobile Single-Column Layout & Typography Fix (360px - 768px) */
         @media (max-width: 768px) {
-          .leoz-collections-grid,
-          .leoz-details-grid,
-          .leoz-projects-grid {
-            grid-template-columns: 1fr !important;
+          .our-approach-section {
+            padding-left: clamp(16px, 4.5vw, 24px) !important;
+            padding-right: clamp(16px, 4.5vw, 24px) !important;
+            padding-top: clamp(54px, 8vh, 72px) !important;
+            padding-bottom: clamp(54px, 8vh, 72px) !important;
+          }
+
+          .our-approach-grid {
+            display: flex !important;
+            flex-direction: column !important;
+            gap: 24px !important;
+            width: 100% !important;
+          }
+
+          .our-approach-heading-col,
+          .our-approach-body-col {
+            width: 100% !important;
+            max-width: 100% !important;
+          }
+
+          .our-approach-heading {
+            font-size: clamp(36px, 9.5vw, 44px) !important;
+            line-height: 1.02 !important;
+            letter-spacing: normal !important;
+            text-align: left !important;
+            width: 100% !important;
+          }
+
+          .desktop-heading-break {
+            display: none !important;
+          }
+
+          .our-approach-lead {
+            font-size: 16.5px !important;
+            line-height: 1.68 !important;
+            text-align: left !important;
+            max-width: 100% !important;
+            margin-bottom: 16px !important;
+            letter-spacing: normal !important;
+            word-spacing: normal !important;
+          }
+
+          .our-approach-desc {
+            font-size: 15px !important;
+            line-height: 1.7 !important;
+            text-align: left !important;
+            max-width: 100% !important;
+            letter-spacing: normal !important;
+            word-spacing: normal !important;
           }
         }
       `}</style>
