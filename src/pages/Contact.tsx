@@ -69,7 +69,7 @@ const SectionHead = ({ eyebrow, title, center = false }: { eyebrow?: string, tit
   );
 };
 
-const MagneticButton = ({ children, className, href, onClick, target, rel }: { children: React.ReactNode, className: string, href?: string, onClick?: () => void, target?: string, rel?: string }) => {
+const MagneticButton = ({ children, className, href, onClick, target, rel }: { children: React.ReactNode, className: string, href?: string, onClick?: (e: any) => void, target?: string, rel?: string }) => {
   const reduce = useReducedMotion();
   const x = useSpring(0, { stiffness: 260, damping: 18 });
   const y = useSpring(0, { stiffness: 260, damping: 18 });
@@ -427,10 +427,39 @@ export const Contact: React.FC = () => {
         {/* ENQUIRY FORM SECTION */}
         <SpotlightContainer className="lz-contact-section bg-ivory">
           <div className="lz-contact-container">
-            <SectionHead eyebrow="Enquiry Form" title="Send an Enquiry" center />
-            <div style={{ marginTop: '64px' }}>
-              <EnquiryForm />
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', marginBottom: '32px' }}>
+              <div className="lz-contact-mask" style={{ marginBottom: '16px' }}>
+                <motion.span 
+                  className="lz-contact-eyebrow" 
+                  style={{ color: 'var(--bronze)', margin: 0 }}
+                  initial={reduce ? false : { y: '105%' }}
+                  whileInView={{ y: '0%' }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, ease: EASE }}
+                >
+                  ENQUIRY FORM
+                </motion.span>
+              </div>
+              
+              <motion.span 
+                style={{ display: 'block', width: '48px', height: '1px', backgroundColor: 'var(--gold)', transformOrigin: 'center', marginBottom: '24px' }}
+                initial={reduce ? false : { scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, ease: EASE }}
+              />
+
+              <motion.p 
+                style={{ color: 'var(--text-taupe)', maxWidth: '560px', lineHeight: 1.7, margin: '0 auto', fontSize: 'clamp(16px, 1.2vw, 18px)', padding: '0 24px' }}
+                initial={reduce ? false : { opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, ease: EASE, delay: 0.1 }}
+              >
+                Tell us a little about your space and what you envision. We will review your details and contact you to arrange the next discussion.
+              </motion.p>
             </div>
+            <EnquiryForm />
           </div>
         </SpotlightContainer>
 
