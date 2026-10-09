@@ -1,0 +1,558 @@
+/* ==========================================================================
+   CONTACT LEOZ CUCINE (Light Warm Premium Theme)
+   ========================================================================== */
+
+.lz-contact {
+  --bg-ivory: #FAF6EF;
+  --bg-cream: #F3EADB;
+  --bg-sand: #EADCC5;
+  --gold: #C99A5B;
+  --gold-light: #E0BC8A;
+  --bronze: #8A6330;
+  --text-cocoa: #3B2F25;
+  --text-taupe: #6B5A48;
+  --line-gold: rgba(201, 154, 91, 0.35);
+
+  background-color: var(--bg-ivory);
+  color: var(--text-taupe);
+  overflow-x: hidden;
+}
+
+.lz-contact * {
+  box-sizing: border-box;
+}
+
+/* Base Spacing & Typography */
+.lz-contact-section {
+  padding: clamp(64px, 8vw, 120px) 24px;
+}
+.lz-contact-container {
+  max-width: 1280px;
+  margin: 0 auto;
+}
+
+.lz-contact-eyebrow {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--bronze);
+  margin-bottom: 16px;
+}
+
+.lz-contact-h2 {
+  font-size: clamp(32px, 4vw, 56px);
+  font-weight: 400;
+  line-height: 1.15;
+  color: var(--text-cocoa);
+  margin: 0 0 24px 0;
+  letter-spacing: -0.015em;
+}
+
+.lz-contact-rule {
+  display: block;
+  width: 48px;
+  height: 1px;
+  background-color: var(--gold);
+  transform-origin: left;
+  margin-bottom: 32px;
+}
+
+/* Backgrounds */
+.bg-ivory { background-color: var(--bg-ivory); }
+.bg-cream { background-color: var(--bg-cream); }
+.bg-sand { background-color: var(--bg-sand); }
+.bg-white { background-color: #FFFFFF; }
+
+/* Buttons */
+.lz-contact-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 32px;
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  border-radius: 3px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 400ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.lz-contact-btn--primary {
+  background-color: var(--gold);
+  color: var(--text-cocoa);
+  border: 1px solid var(--gold);
+}
+.lz-contact-btn--primary:hover {
+  background-color: var(--bronze);
+  border-color: var(--bronze);
+  color: var(--bg-ivory);
+  transform: translateY(-1px);
+}
+.lz-contact-btn--primary:active {
+  transform: translateY(1px);
+}
+
+.lz-contact-btn--secondary {
+  background-color: transparent;
+  color: var(--text-cocoa);
+  border: 1px solid var(--gold);
+}
+.lz-contact-btn--secondary:hover {
+  background-color: var(--gold);
+  color: var(--bg-ivory);
+}
+
+/* Images & Effects */
+.lz-contact-img-wrap {
+  position: relative;
+  border-radius: 3px;
+  overflow: hidden;
+  isolation: isolate;
+}
+.lz-contact-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.lz-contact-img-wrap:hover img {
+  transform: scale(1.05);
+}
+
+/* Light sweep */
+.lz-contact-img-wrap::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.4) 50%, transparent 65%);
+  transform: translateX(-150%);
+}
+.lz-contact-img-wrap:hover::before {
+  transform: translateX(150%);
+  transition: transform 900ms ease-out;
+}
+
+/* Bracket Frame */
+.lz-contact-bracket {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border: 2px solid var(--gold);
+  opacity: 0.1;
+  pointer-events: none;
+  z-index: 0;
+}
+.lz-contact-bracket--tl { top: -8px; left: -8px; border-right: none; border-bottom: none; }
+.lz-contact-bracket--br { bottom: -8px; right: -8px; border-left: none; border-top: none; }
+
+/* Cards */
+.lz-contact-card {
+  background-color: var(--bg-cream);
+  border: 1px solid var(--line-gold);
+  border-radius: 3px;
+  padding: 40px;
+  box-shadow: 0 10px 30px rgba(138, 99, 48, 0.04);
+  transition: all 400ms ease-out;
+}
+.lz-contact-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(138, 99, 48, 0.12);
+}
+
+/* Mask Reveal */
+.lz-contact-mask {
+  overflow: hidden;
+  display: block;
+}
+.lz-contact-mask > span {
+  display: block;
+}
+
+/* Hero Section */
+.lz-contact-hero {
+  position: relative;
+  min-height: 80vh;
+  display: flex;
+  align-items: center;
+  padding: 120px 24px;
+}
+.lz-contact-hero__bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+.lz-contact-hero__bg img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: lzKenBurns 12s ease-out infinite alternate;
+}
+.lz-contact-hero__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+.lz-contact-hero__content {
+  position: relative;
+  z-index: 2;
+  max-width: 600px;
+}
+
+/* Added text shadow for readability over clear images */
+.lz-contact-hero-text-shadow h1,
+.lz-contact-hero-text-shadow p {
+  text-shadow:
+    0 1px 2px rgba(20, 16, 12, 0.9),
+    0 2px 12px rgba(20, 16, 12, 0.8),
+    0 0 32px rgba(20, 16, 12, 0.6);
+}
+
+@keyframes lzKenBurns {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.06); }
+}
+
+/* Floating Dust */
+.lz-dust {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--gold);
+  opacity: 0.2;
+  pointer-events: none;
+  animation: lzDustFloat 8s infinite alternate ease-in-out;
+}
+@keyframes lzDustFloat {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(20px, -30px); }
+}
+
+/* Spotlight */
+.lz-spotlight-container {
+  position: relative;
+  overflow: hidden;
+}
+.lz-spotlight {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(224,188,138,0.25) 0%, transparent 70%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+  transform: translate(-50%, -50%);
+  transition: opacity 0.3s;
+  opacity: 0;
+}
+.lz-spotlight-container:hover .lz-spotlight {
+  opacity: 1;
+}
+
+/* Contact Detail Rows */
+.lz-contact-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 16px 0;
+  position: relative;
+  text-decoration: none;
+  color: var(--text-taupe);
+  transition: color 0.3s ease;
+}
+.lz-contact-row:hover {
+  color: var(--text-cocoa);
+}
+.lz-contact-row::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 1px;
+  background-color: var(--gold);
+  transition: width 0.4s ease, left 0.4s ease;
+}
+.lz-contact-row:hover::after {
+  width: 100%;
+  left: 0;
+}
+
+/* Location Cards */
+.lz-location-card {
+  background-color: #fff;
+  border: 1px solid var(--line-gold);
+  padding: 48px;
+  border-radius: 3px;
+  box-shadow: 0 10px 30px rgba(138, 99, 48, 0.04);
+  transition: all 400ms ease-out;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+.lz-location-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 40px rgba(138, 99, 48, 0.12);
+}
+
+.lz-pin-animation {
+  animation: dropPin 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  opacity: 0;
+  transform: translateY(-20px);
+}
+
+@keyframes dropPin {
+  0% { opacity: 0; transform: translateY(-20px); }
+  60% { opacity: 1; transform: translateY(4px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+.lz-pulse {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  background-color: var(--gold);
+  border-radius: 50%;
+  opacity: 0;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 50%);
+  animation: pulsePin 1.5s ease-out forwards;
+  animation-delay: 0.6s;
+}
+
+@keyframes pulsePin {
+  0% { transform: translate(-50%, 50%) scale(0.5); opacity: 0.6; }
+  100% { transform: translate(-50%, 50%) scale(2.5); opacity: 0; }
+}
+
+/* Tooltip */
+.lz-tooltip {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--text-cocoa);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 3px;
+  font-size: 12px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s;
+  white-space: nowrap;
+}
+.lz-tooltip.show {
+  opacity: 1;
+}
+
+/* Chips */
+.lz-chip-contact {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid var(--line-gold);
+  padding: 8px 16px;
+  border-radius: 30px;
+  font-size: 14px;
+  color: var(--text-cocoa);
+}
+
+/* Form Styles */
+.lz-form-card {
+  position: relative;
+  background: #fff;
+  border: 1px solid var(--line-gold);
+  border-radius: 3px;
+  padding: 48px;
+  box-shadow: 0 10px 30px rgba(138, 99, 48, 0.08);
+  max-width: 880px;
+  margin: 0 auto;
+}
+
+.lz-form-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background-color: var(--gold);
+  transition: width 0.4s ease;
+  z-index: 10;
+}
+
+.lz-input-group {
+  position: relative;
+  margin-bottom: 24px;
+}
+
+.lz-input {
+  width: 100%;
+  padding: 24px 16px 8px 16px;
+  font-family: inherit;
+  font-size: 16px;
+  color: var(--text-cocoa);
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid var(--line-gold);
+  border-radius: 0;
+  outline: none;
+  transition: border-color 0.3s ease;
+}
+
+.lz-input:focus {
+  border-bottom-color: var(--gold);
+}
+.lz-input.error {
+  border-bottom-color: #C18C8B; /* soft rose-brown */
+}
+
+.lz-label {
+  position: absolute;
+  top: 20px;
+  left: 16px;
+  font-size: 15px;
+  color: var(--text-taupe);
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.lz-input:focus ~ .lz-label,
+.lz-input:not(:placeholder-shown) ~ .lz-label {
+  top: 4px;
+  font-size: 11px;
+  color: var(--bronze);
+}
+
+.lz-input-line {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  width: 0;
+  height: 2px;
+  background-color: var(--gold);
+  transition: width 0.4s ease, left 0.4s ease;
+}
+.lz-input:focus ~ .lz-input-line {
+  width: 100%;
+  left: 0;
+}
+
+.lz-error-text {
+  font-size: 12px;
+  color: #C18C8B;
+  margin-top: 4px;
+  margin-left: 16px;
+  display: block;
+}
+
+/* Radio Cards */
+.lz-radio-card {
+  border: 1px solid var(--line-gold);
+  padding: 16px;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background: #fff;
+  height: 100%;
+}
+.lz-radio-card.selected {
+  border-color: var(--gold);
+  background-color: var(--bg-ivory);
+  box-shadow: 0 0 15px rgba(201, 154, 91, 0.15);
+}
+
+/* Stepper */
+.lz-stepper {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  position: relative;
+  margin-top: 16px;
+}
+.lz-stepper::before {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  height: 1px;
+  background: var(--line-gold);
+  z-index: 0;
+}
+.lz-stepper-item {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  flex: 1;
+}
+.lz-stepper-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #fff;
+  border: 1px solid var(--line-gold);
+  margin-bottom: 8px;
+  transition: all 0.3s ease;
+}
+.lz-stepper-item.selected .lz-stepper-dot {
+  background: var(--gold);
+  border-color: var(--gold);
+}
+.lz-stepper-label {
+  font-size: 12px;
+  color: var(--text-taupe);
+  text-align: center;
+  max-width: 120px;
+}
+
+/* Shake Animation */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+.shake {
+  animation: shake 0.4s ease-in-out;
+}
+
+@media (max-width: 767px) {
+  .lz-contact-section {
+    padding: 64px 20px;
+  }
+  .lz-spotlight {
+    display: none !important;
+  }
+  .lz-contact-hero__content {
+    padding: 32px 24px;
+  }
+  .lz-location-card {
+    padding: 32px 24px;
+  }
+  .lz-contact-row:hover::after {
+    width: 0;
+  }
+  .lz-form-card {
+    padding: 32px 24px;
+  }
+  .lz-stepper-label {
+    font-size: 10px;
+  }
+}
