@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import heroVideo from '../assets/Leoz_hero_section.mp4';
+import heroPoster from '../assets/Leoz_hero_poster.webp';
 import { Header } from '../components/common/Header';
 import { Footer } from '../components/common/Footer';
 import { Preloader, checkShouldRunPreloader, markPreloaderSeen } from '../components/common/Preloader';
@@ -23,23 +25,8 @@ const luxuryEase = [0.16, 1, 0.3, 1];
 
 export const Home: React.FC = () => {
   const [showPreloader, setShowPreloader] = useState(() => checkShouldRunPreloader());
-  const [heroSlide, setHeroSlide] = useState(0);
   const [activeSlide, setActiveSlide] = useState(0);
-
-  const heroPhotos = [
-    {
-      image: '/modular kitchen.webp',
-      alt: 'LEOZ Luxury Modular Kitchen Architecture',
-    },
-    {
-      image: '/Master Walk-In Dressing Suite.webp',
-      alt: 'LEOZ Bespoke Master Walk-In Dressing Suite',
-    },
-    {
-      image: '/Island Layout.webp',
-      alt: 'LEOZ Monolithic Island Kitchen Architecture',
-    },
-  ];
+  const prefersReducedMotion = useReducedMotion();
 
   const productHighlights = [
     {
@@ -137,13 +124,6 @@ export const Home: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const heroTimer = setInterval(() => {
-      setHeroSlide((prev) => (prev + 1) % heroPhotos.length);
-    }, 5000);
-    return () => clearInterval(heroTimer);
-  }, [heroPhotos.length]);
-
-  useEffect(() => {
     const whyTimer = setInterval(() => {
       setActiveWhySlide((prev) => (prev + 1) % whyLeozSlides.length);
     }, 4500);
@@ -203,40 +183,40 @@ export const Home: React.FC = () => {
             overflow: 'hidden',
           }}
         >
-          {/* Full-Bleed 100% Width 3-Photo Animated Slide Background */}
+          {/* Full-Bleed 100% Width Background Video */}
           <div
             style={{
               position: 'absolute',
               inset: 0,
               zIndex: 1,
               overflow: 'hidden',
+              backgroundColor: '#1E201D',
             }}
           >
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={heroSlide}
-                initial={{ opacity: 0, scale: 1.05 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 1.2, ease: luxuryEase }}
-                style={{
-                  position: 'absolute',
-                  inset: 0,
-                }}
-              >
-                <img
-                  src={heroPhotos[heroSlide].image}
-                  alt={heroPhotos[heroSlide].alt}
-                  style={{
-                    width: '100%',
-                    height: '100%',
-                    objectFit: 'cover',
-                    objectPosition: 'center 40%',
-                    filter: 'brightness(0.92) contrast(1.02)',
-                  }}
-                />
-              </motion.div>
-            </AnimatePresence>
+            <motion.video
+              src={heroVideo}
+              poster={heroPoster}
+              autoPlay={!prefersReducedMotion}
+              muted
+              loop
+              playsInline
+              preload="auto"
+              aria-hidden="true"
+              tabIndex={-1}
+              initial={{ opacity: 0, scale: 1.05 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 1.2, ease: luxuryEase }}
+              style={{
+                position: 'absolute',
+                inset: 0,
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                objectPosition: 'center 40%',
+                filter: 'brightness(0.92) contrast(1.02)',
+                pointerEvents: 'none',
+              }}
+            />
 
             {/* Enhanced readability scrim/vignette gradient */}
             <div
@@ -257,39 +237,6 @@ export const Home: React.FC = () => {
                 pointerEvents: 'none',
               }}
             />
-
-            {/* Sleek Hero Slide Indicators */}
-            <div
-              style={{
-                position: 'absolute',
-                bottom: 'clamp(20px, 4vh, 40px)',
-                right: 'clamp(20px, 6vw, 100px)',
-                zIndex: 15,
-                display: 'flex',
-                alignItems: 'center',
-                gap: '8px',
-              }}
-            >
-              {heroPhotos.map((photo, idx) => (
-                <button
-                  key={photo.image}
-                  type="button"
-                  aria-label={`Switch to hero photo ${idx + 1}`}
-                  onClick={() => setHeroSlide(idx)}
-                  style={{
-                    height: '3px',
-                    width: heroSlide === idx ? '36px' : '18px',
-                    backgroundColor: heroSlide === idx ? '#D4AF37' : 'rgba(255, 255, 255, 0.4)',
-                    border: 'none',
-                    padding: 0,
-                    cursor: 'pointer',
-                    borderRadius: '2px',
-                    boxShadow: '0 2px 6px rgba(0,0,0,0.5)',
-                    transition: 'all 0.4s ease',
-                  }}
-                />
-              ))}
-            </div>
           </div>
 
         {/* Integrated Editorial Typography directly on composition */}

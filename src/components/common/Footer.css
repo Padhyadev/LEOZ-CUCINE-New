@@ -1,0 +1,269 @@
+/* ==========================================================================
+   LEOZ CUCINE — GLOBAL FOOTER (Dark Gold Chrome)
+   Colors come from tokens.css (--gold, --bg-dark, --text-muted, --line-gold…).
+   Typography is set inline in Footer.tsx and intentionally untouched here.
+   ========================================================================== */
+
+.lz-footer {
+  position: relative;
+  overflow: hidden;
+  background-color: var(--bg-dark);
+  color: var(--text-muted);
+  border-top: 1px solid var(--line-gold);
+}
+
+.lz-footer__main {
+  position: relative;
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: clamp(64px, 8vw, 96px) clamp(16px, 5vw, 80px) clamp(48px, 6vw, 64px);
+}
+
+.lz-footer__grid {
+  display: grid;
+  grid-template-columns: 1.4fr 0.9fr 1.2fr 1.4fr;
+  gap: clamp(32px, 4vw, 64px);
+}
+
+.lz-footer__heading {
+  display: block;
+  margin: 0 0 24px;
+  color: var(--gold);
+}
+
+.lz-footer__tagline {
+  max-width: 360px;
+  margin: 24px 0 32px;
+  color: var(--text-muted);
+}
+
+/* ---------- Social ---------- */
+.lz-social {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.lz-social__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--gold);
+  border: 1px solid var(--line-gold);
+  border-radius: 2px;
+  transition:
+    background-color 250ms ease,
+    border-color 250ms ease,
+    color 250ms ease;
+}
+
+.lz-social__link:hover {
+  background-color: var(--gold);
+  border-color: var(--gold);
+  color: var(--bg-dark);
+}
+
+/* ---------- Link lists ---------- */
+.lz-footer__list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lz-footer__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 250ms ease, transform 250ms ease;
+}
+
+.lz-footer__link:hover {
+  color: var(--gold);
+  transform: translateX(4px);
+}
+
+.lz-footer__link svg,
+.lz-footer__icon {
+  color: var(--gold);
+  flex-shrink: 0;
+}
+
+.lz-footer__link--strong {
+  color: var(--text-ivory);
+}
+
+.lz-footer__info {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 0 0 16px;
+  font-style: normal;
+  color: var(--text-muted);
+}
+
+.lz-footer__info .lz-footer__icon {
+  margin-top: 4px;
+}
+
+/* ---------- Accordion (mobile only) ---------- */
+.lz-acc__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 56px;
+  padding: 0;
+  color: var(--gold);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.lz-acc__toggle svg {
+  transition: transform 250ms ease;
+}
+
+.lz-acc__toggle[aria-expanded='true'] svg {
+  transform: rotate(180deg);
+}
+
+.lz-acc__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows 250ms ease,
+    visibility 0s linear 250ms;
+}
+
+.lz-acc__panel.is-open {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition:
+    grid-template-rows 250ms ease,
+    visibility 0s linear 0s;
+}
+
+.lz-acc__inner {
+  overflow: hidden;
+}
+
+/* ---------- Bottom bar ---------- */
+.lz-footer__bar {
+  position: relative;
+  background-color: var(--bg-charcoal);
+  border-top: 1px solid var(--line-gold);
+}
+
+.lz-footer__bar-inner {
+  max-width: 1360px;
+  margin: 0 auto;
+  padding: 24px clamp(16px, 5vw, 80px);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 16px;
+  color: var(--text-muted);
+}
+
+.lz-footer__legal {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.lz-footer__legal a {
+  color: var(--text-muted);
+  text-decoration: none;
+  transition: color 250ms ease;
+}
+
+.lz-footer__legal a:hover {
+  color: var(--gold);
+}
+
+.lz-footer__dot {
+  color: var(--gold);
+  opacity: 0.6;
+}
+
+/* ---------- Focus (keyboard) ---------- */
+.lz-footer :focus-visible {
+  outline: 1px solid var(--gold);
+  outline-offset: 4px;
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1024px) {
+  .lz-footer__grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 48px 40px;
+  }
+}
+
+/* Clear the fixed Call / WhatsApp bar shown below 768px */
+@media (max-width: 767px) {
+  .lz-footer__bar-inner {
+    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+@media (max-width: 640px) {
+  .lz-footer__grid {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .lz-footer__col--brand {
+    padding-bottom: 32px;
+  }
+  .lz-footer__col--acc {
+    border-top: 1px solid var(--line-gold);
+  }
+  .lz-footer__col--contact {
+    border-top: 1px solid var(--line-gold);
+    padding: 32px 0;
+  }
+  .lz-acc__inner .lz-footer__list {
+    padding-bottom: 16px;
+  }
+  .lz-footer__link,
+  .lz-footer__legal a {
+    min-height: 44px;
+  }
+  .lz-social__link {
+    width: 44px;
+    height: 44px;
+  }
+  .lz-footer__bar-inner {
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+  }
+  .lz-footer__legal {
+    justify-content: center;
+  }
+  .lz-footer__legal a {
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lz-social__link,
+  .lz-footer__link,
+  .lz-acc__toggle svg,
+  .lz-acc__panel,
+  .lz-footer__legal a {
+    transition: none;
+  }
+}

@@ -1,9 +1,131 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Logo } from './Logo';
-import { Phone, Mail, Instagram, Linkedin, Facebook, Youtube } from 'lucide-react';
-import { PHONE_SALES_DISPLAY, PHONE_SALES_HREF, SOCIAL_LINKS } from '../../constants/siteInfo';
+import { Phone, Mail, Globe, MapPin, Clock, Instagram, Linkedin, Facebook, Youtube, ChevronDown } from 'lucide-react';
+import {
+  EMAIL,
+  EMAIL_HREF,
+  PHONE_SALES_DISPLAY,
+  PHONE_SALES_HREF,
+  SOCIAL_LINKS,
+  WEBSITE_URL,
+} from '../../constants/siteInfo';
+import './Footer.css';
+
+const MOBILE_QUERY = '(max-width: 640px)';
+
+// Typography is carried over verbatim from the previous footer.
+const headingType: React.CSSProperties = {
+  fontFamily: 'var(--font-body)',
+  fontSize: '11px',
+  fontWeight: 600,
+  letterSpacing: '0.18em',
+  textTransform: 'uppercase',
+};
+
+const linkType: React.CSSProperties = {
+  fontFamily: 'var(--font-body)',
+  fontSize: '13.5px',
+};
+
+const navigationLinks = [
+  { label: 'Home', path: '/' },
+  { label: 'Kitchens', path: '/modular-kitchens' },
+  { label: 'Wardrobes', path: '/modular-wardrobes' },
+  { label: 'About', path: '/about' },
+  { label: 'Craftsmanship', path: '/factory' },
+  { label: 'Consultation', path: '/talk-to-us' },
+  { label: 'Franchise Enquiry', path: '/franchise-enquiry' },
+  { label: 'Contact', path: '/contact' },
+  { label: 'Privacy Policy', path: '/privacy-policy' },
+];
+
+const socialLinks = [
+  { label: 'Instagram', href: SOCIAL_LINKS.instagram, Icon: Instagram },
+  { label: 'LinkedIn', href: SOCIAL_LINKS.linkedin, Icon: Linkedin },
+  { label: 'Facebook', href: SOCIAL_LINKS.facebook, Icon: Facebook },
+  { label: 'YouTube', href: SOCIAL_LINKS.youtube, Icon: Youtube },
+];
+
+const useIsMobile = () => {
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== 'undefined' && window.matchMedia(MOBILE_QUERY).matches
+  );
+
+  useEffect(() => {
+    const mql = window.matchMedia(MOBILE_QUERY);
+    const handleChange = () => setIsMobile(mql.matches);
+    handleChange();
+    mql.addEventListener('change', handleChange);
+    return () => mql.removeEventListener('change', handleChange);
+  }, []);
+
+  return isMobile;
+};
+
+interface LinkGroupProps {
+  id: string;
+  title: string;
+  links: { label: string; path: string }[];
+  isMobile: boolean;
+  onNavigate: (e: React.MouseEvent, path: string) => void;
+}
+
+const LinkGroup: React.FC<LinkGroupProps> = ({ id, title, links, isMobile, onNavigate }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const panelId = `${id}-panel`;
+
+  const list = (
+    <ul className="lz-footer__list">
+      {links.map((item) => (
+        <li key={item.label}>
+          <a
+            href={item.path}
+            onClick={(e) => onNavigate(e, item.path)}
+            className="lz-footer__link"
+            style={linkType}
+          >
+            {item.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  );
+
+  if (!isMobile) {
+    return (
+      <div>
+        <div role="heading" aria-level={2} className="lz-footer__heading" style={headingType}>
+          {title}
+        </div>
+        {list}
+      </div>
+    );
+  }
+
+  return (
+    <div className="lz-footer__col--acc">
+      <div role="heading" aria-level={2}>
+        <button
+          type="button"
+          className="lz-acc__toggle"
+          aria-expanded={isOpen}
+          aria-controls={panelId}
+          onClick={() => setIsOpen((open) => !open)}
+        >
+          <span style={headingType}>{title}</span>
+          <ChevronDown size={16} strokeWidth={1.5} aria-hidden="true" />
+        </button>
+      </div>
+      <div id={panelId} className={`lz-acc__panel ${isOpen ? 'is-open' : ''}`}>
+        <div className="lz-acc__inner">{list}</div>
+      </div>
+    </div>
+  );
+};
 
 export const Footer: React.FC = () => {
+  const isMobile = useIsMobile();
+
   const navigate = (e: React.MouseEvent, path: string) => {
     e.preventDefault();
     window.history.pushState({}, '', path);
@@ -11,410 +133,127 @@ export const Footer: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const collectionLinks = [
-    { label: 'Home', path: '/' },
-    { label: 'Kitchens', path: '/modular-kitchens' },
-    { label: 'Wardrobes', path: '/modular-wardrobes' },
-    { label: 'Craftsmanship & Factory', path: '/factory' },
-  ];
-
-  const companyLinks = [
-    { label: 'About LEOZ', path: '/about' },
-    { label: 'Book a Consultation', path: '/consultation' },
-    { label: 'Franchise Enquiry', path: '/franchise-opportunities' },
-    { label: 'Contact Us', path: '/contact' },
-    { label: 'Privacy Policy', path: '/privacy-policy' },
-  ];
-
   return (
-    <footer
-      id="global-footer"
-      role="contentinfo"
-      style={{
-        backgroundColor: '#20211F',
-        color: '#F7F7F5',
-        position: 'relative',
-        paddingTop: 'clamp(54px, 7vw, 84px)',
-        paddingBottom: '36px',
-        paddingLeft: 'clamp(20px, 5vw, 80px)',
-        paddingRight: 'clamp(20px, 5vw, 80px)',
-        borderTop: '1px solid rgba(255, 255, 255, 0.08)',
-      }}
-    >
-      <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-        {/* Main Grid: 4 Clean Architectural Columns */}
-        <div
-          className="leoz-footer-grid"
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1.4fr 0.9fr 1.1fr 1.3fr',
-            gap: 'clamp(32px, 4vw, 54px)',
-            paddingBottom: 'clamp(36px, 5vw, 48px)',
-            borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
-          }}
-        >
-          {/* Column 1: Brand & Description */}
-          <div>
-            <div style={{ marginBottom: '20px' }}>
-              <Logo variant="dark" showTagline={false} />
-            </div>
+    <footer id="global-footer" role="contentinfo" className="lz-footer">
+      <div className="lz-footer__main">
+        <div className="lz-footer__grid">
+          {/* Column 1: Brand, tagline & social */}
+          <div className="lz-footer__col--brand">
+            <Logo variant="light" showTagline={false} />
             <p
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '14px',
-                color: 'rgba(247, 247, 245, 0.72)',
-                lineHeight: 1.65,
-                maxWidth: '360px',
-                marginBottom: '24px',
-              }}
+              className="lz-footer__tagline"
+              style={{ fontFamily: 'var(--font-body)', fontSize: '14px', lineHeight: 1.65 }}
             >
               Bespoke kitchens and wardrobes, designed with care and precision-manufactured in Gujarat.
             </p>
 
-            {/* Social Icons */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-              <a
-                href={SOCIAL_LINKS.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                style={{
-                  color: '#A58B62',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '6px',
-                  borderRadius: '4px',
-                  transition: 'color 0.2s ease, transform 0.2s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = '#FFFFFF';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = '#A58B62';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-              >
-                <Instagram size={19} />
-              </a>
-              <a
-                href={SOCIAL_LINKS.linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn"
-                style={{
-                  color: '#A58B62',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '6px',
-                  borderRadius: '4px',
-                  transition: 'color 0.2s ease, transform 0.2s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = '#FFFFFF';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = '#A58B62';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-              >
-                <Linkedin size={19} />
-              </a>
-              <a
-                href={SOCIAL_LINKS.facebook}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Facebook"
-                style={{
-                  color: '#A58B62',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '6px',
-                  borderRadius: '4px',
-                  transition: 'color 0.2s ease, transform 0.2s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = '#FFFFFF';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = '#A58B62';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-              >
-                <Facebook size={19} />
-              </a>
-              <a
-                href={SOCIAL_LINKS.youtube}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="YouTube"
-                style={{
-                  color: '#A58B62',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  padding: '6px',
-                  borderRadius: '4px',
-                  transition: 'color 0.2s ease, transform 0.2s ease',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.color = '#FFFFFF';
-                  e.currentTarget.style.transform = 'translateY(-2px)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.color = '#A58B62';
-                  e.currentTarget.style.transform = 'translateY(0)';
-                }}
-              >
-                <Youtube size={19} />
-              </a>
-            </div>
-          </div>
-
-          {/* Column 2: Collections */}
-          <div>
-            <span
-              style={{
-                display: 'block',
-                fontFamily: 'var(--font-body)',
-                fontSize: '11px',
-                fontWeight: 600,
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                color: '#A58B62',
-                marginBottom: '20px',
-              }}
-            >
-              COLLECTIONS
-            </span>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {collectionLinks.map((item) => (
+            <div className="lz-social">
+              {socialLinks.map(({ label, href, Icon }) => (
                 <a
-                  key={item.label}
-                  href={item.path}
-                  onClick={(e) => navigate(e, item.path)}
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '13.5px',
-                    color: 'rgba(247, 247, 245, 0.75)',
-                    textDecoration: 'none',
-                    transition: 'color 0.2s ease',
-                    display: 'inline-block',
-                    padding: '2px 0',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = '#A58B62')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(247, 247, 245, 0.75)')}
+                  key={label}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={label}
+                  className="lz-social__link"
                 >
-                  {item.label}
+                  <Icon size={18} strokeWidth={1.5} aria-hidden="true" />
                 </a>
               ))}
             </div>
           </div>
 
-          {/* Column 3: Company */}
-          <div>
-            <span
-              style={{
-                display: 'block',
-                fontFamily: 'var(--font-body)',
-                fontSize: '11px',
-                fontWeight: 600,
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                color: '#A58B62',
-                marginBottom: '20px',
-              }}
-            >
-              COMPANY
-            </span>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              {companyLinks.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.path}
-                  onClick={(e) => navigate(e, item.path)}
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '13.5px',
-                    color: 'rgba(247, 247, 245, 0.75)',
-                    textDecoration: 'none',
-                    transition: 'color 0.2s ease',
-                    display: 'inline-block',
-                    padding: '2px 0',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = '#A58B62')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(247, 247, 245, 0.75)')}
-                >
-                  {item.label}
-                </a>
-              ))}
+          {/* Column 2: Navigation */}
+          <LinkGroup
+            id="footer-navigation"
+            title="Navigation"
+            links={navigationLinks}
+            isMobile={isMobile}
+            onNavigate={navigate}
+          />
+
+          {/* Column 3: Get in touch */}
+          <div className="lz-footer__col--contact">
+            <div role="heading" aria-level={2} className="lz-footer__heading" style={headingType}>
+              Get in Touch
             </div>
-          </div>
 
-          {/* Column 4: Showroom & Office Contact */}
-          <div>
-            <span
-              style={{
-                display: 'block',
-                fontFamily: 'var(--font-body)',
-                fontSize: '11px',
-                fontWeight: 600,
-                letterSpacing: '0.18em',
-                textTransform: 'uppercase',
-                color: '#A58B62',
-                marginBottom: '20px',
-              }}
-            >
-              AHMEDABAD SHOWROOM
-            </span>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-              <div style={{ fontFamily: 'var(--font-body)', fontSize: '13.5px', color: 'rgba(247, 247, 245, 0.75)', lineHeight: 1.6 }}>
-                509, Sankalp Square 3B, Beside Taj Skyline, Sindhu Bhavan Road, Thaltej, Ahmedabad – 380059
-              </div>
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '4px' }}>
+            <ul className="lz-footer__list">
+              <li>
                 <a
                   href={PHONE_SALES_HREF}
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    color: '#FFFFFF',
-                    textDecoration: 'none',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    transition: 'color 0.2s ease',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = '#D4AF37')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = '#FFFFFF')}
+                  className="lz-footer__link lz-footer__link--strong"
+                  style={{ fontFamily: 'var(--font-body)', fontSize: '14px', fontWeight: 500 }}
                 >
-                  <Phone size={15} color="#A58B62" />
+                  <Phone size={15} aria-hidden="true" />
                   <span>{PHONE_SALES_DISPLAY}</span>
                 </a>
-
-                <a
-                  href="mailto:director@leozartofambience.com"
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '13.5px',
-                    color: 'rgba(247, 247, 245, 0.75)',
-                    textDecoration: 'none',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    transition: 'color 0.2s ease',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = '#A58B62')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(247, 247, 245, 0.75)')}
-                >
-                  <Mail size={15} color="#A58B62" />
-                  <span>director@leozartofambience.com</span>
+              </li>
+              <li>
+                <a href={EMAIL_HREF} className="lz-footer__link" style={linkType}>
+                  <Mail size={15} aria-hidden="true" />
+                  <span>{EMAIL}</span>
                 </a>
-
+              </li>
+              <li>
                 <a
-                  href="https://www.leozartofambience.com"
+                  href={WEBSITE_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '13.5px',
-                    color: 'rgba(247, 247, 245, 0.75)',
-                    textDecoration: 'none',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '10px',
-                    transition: 'color 0.2s ease',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = '#A58B62')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(247, 247, 245, 0.75)')}
+                  className="lz-footer__link"
+                  style={linkType}
                 >
-                  <span style={{ color: '#A58B62', fontSize: '13px', fontWeight: 600 }}>↗</span>
+                  <Globe size={15} aria-hidden="true" />
                   <span>www.leozartofambience.com</span>
                 </a>
-              </div>
+              </li>
+            </ul>
+          </div>
 
-              <div style={{ marginTop: '8px' }}>
-                <a
-                  href="https://maps.app.goo.gl/xT39MPBvZR4v923E9"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '12.5px',
-                    fontWeight: 600,
-                    color: '#A58B62',
-                    textDecoration: 'none',
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                    transition: 'color 0.2s ease',
-                  }}
-                  onMouseEnter={(e) => (e.currentTarget.style.color = '#FFFFFF')}
-                  onMouseLeave={(e) => (e.currentTarget.style.color = '#A58B62')}
-                >
-                  <span>View on Google Maps</span>
-                  <span>→</span>
-                </a>
-              </div>
+          {/* Column 4: Ahmedabad showroom */}
+          <div className="lz-footer__col--contact">
+            <div role="heading" aria-level={2} className="lz-footer__heading" style={headingType}>
+              Ahmedabad Showroom
             </div>
-          </div>
-        </div>
 
-        {/* Bottom Legal Bar */}
-        <div
-          style={{
-            paddingTop: '28px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '16px',
-            fontFamily: 'var(--font-body)',
-            fontSize: '12px',
-            color: 'rgba(247, 247, 245, 0.45)',
-          }}
-        >
-          <div>
-            © {new Date().getFullYear()} LEOZ Cucine. All rights reserved.
-          </div>
+            <address className="lz-footer__info" style={{ ...linkType, lineHeight: 1.6 }}>
+              <MapPin size={15} className="lz-footer__icon" aria-hidden="true" />
+              <span>509, Sankalp Square 3B, Beside Taj Skyline, Sindhu Bhavan Road, Thaltej, Ahmedabad – 380059.</span>
+            </address>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
+            <div className="lz-footer__info" style={{ ...linkType, lineHeight: 1.6 }}>
+              <Clock size={15} className="lz-footer__icon" aria-hidden="true" />
+              <span>Working hours: 10:00 AM – 7:00 PM</span>
+            </div>
+
             <a
-              href="/privacy-policy"
-              onClick={(e) => navigate(e, '/privacy-policy')}
-              style={{ color: 'rgba(247, 247, 245, 0.6)', textDecoration: 'none' }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#A58B62')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = 'rgba(247, 247, 245, 0.6)')}
+              href={SOCIAL_LINKS.officeMap}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="lz-footer__link"
+              style={{ fontFamily: 'var(--font-body)', fontSize: '12.5px', fontWeight: 600, color: 'var(--gold)' }}
             >
-              Privacy Policy
+              <span>View on Google Maps</span>
+              <span aria-hidden="true">→</span>
             </a>
-            <span>•</span>
-            <span>Precision Manufacturing in Gujarat</span>
           </div>
         </div>
       </div>
 
-      <style>{`
-        @media (max-width: 1024px) {
-          .leoz-footer-grid {
-            grid-template-columns: 1fr 1fr !important;
-            gap: 40px !important;
-          }
-        }
-        @media (max-width: 600px) {
-          .leoz-footer-grid {
-            grid-template-columns: 1fr !important;
-            gap: 36px !important;
-          }
-        }
-      `}</style>
+      {/* Bottom Legal Bar */}
+      <div className="lz-footer__bar">
+        <div className="lz-footer__bar-inner" style={{ fontFamily: 'var(--font-body)', fontSize: '12px' }}>
+          <div>© {new Date().getFullYear()} LEOZ Cucine. All rights reserved.</div>
+
+          <div className="lz-footer__legal">
+            <a href="/privacy-policy" onClick={(e) => navigate(e, '/privacy-policy')}>
+              Privacy Policy
+            </a>
+            <span className="lz-footer__dot" aria-hidden="true">•</span>
+            <span>Precision Manufacturing in Gujarat</span>
+          </div>
+        </div>
+      </div>
     </footer>
   );
 };

@@ -108,4 +108,17 @@
 
   --motion-ease-luxury: cubic-bezier(0.16, 1, 0.3, 1);
   --motion-ease-out: cubic-bezier(0.215, 0.61, 0.355, 1);
+
+  /* --- DARK GOLD CHROME (Header & Footer) --- */
+  --gold: #C99A5B;
+  --gold-light: #E0BC8A;
+  --gold-deep: #A67C3E;
+  --bg-dark: #14110F;
+  --bg-charcoal: #1E1A17;
+  --text-ivory: #F7F1E8;
+  --text-muted: #B8AA95;
+  --line-gold: rgba(201, 154, 91, 0.25);
+  --bg-dark-glass: rgba(20, 17, 15, 0.9);
+  --shadow-chrome: 0 8px 24px rgba(0, 0, 0, 0.28);
+  --chrome-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
 }
