@@ -390,7 +390,7 @@ export const OurMethod: React.FC = () => {
                     transition: 'all 0.3s ease',
                   }}
                 >
-                  {st.number} {st.title}
+                  {st.title}
                 </button>
               ))}
             </div>
@@ -462,16 +462,7 @@ export const OurMethod: React.FC = () => {
                           marginBottom: '14px',
                         }}
                       >
-                        <span
-                          style={{
-                            fontFamily: 'var(--font-heading)',
-                            fontSize: '36px',
-                            fontWeight: 300,
-                            color: isHighlighted ? '#8A725B' : '#66635D',
-                            transition: 'color 0.4s ease',
-                            lineHeight: 1,
-                          }}
-                        >
+                        <span style={{ display: 'none' }}>
                           {stage.number}
                         </span>
                         <div
@@ -613,7 +604,7 @@ export const OurMethod: React.FC = () => {
                           borderRadius: '2px',
                         }}
                       >
-                        STAGE {stage.number} • {stage.title}
+                        STAGE • {stage.title}
                       </div>
                     </motion.div>
                   </div>

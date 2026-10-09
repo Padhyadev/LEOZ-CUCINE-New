@@ -594,7 +594,7 @@ export const ProjectCaseStudy: React.FC = () => {
                       marginBottom: '10px',
                     }}
                   >
-                    {p.step} / {p.title}
+                    {p.title}
                   </span>
                   <p
                     style={{

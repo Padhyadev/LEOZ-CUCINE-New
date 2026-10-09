@@ -116,7 +116,7 @@ export const Contact: React.FC = () => {
           image="/contact-hero.png"
           imageAlt="LEOZ Showroom & Architectural Living"
           imagePosition="center 40%"
-          eyebrow="05 / CONTACT US"
+          eyebrow="CONTACT US"
           headline="Begin Your LEOZ Experience"
           supportingText="We welcome homeowners, architects, designers and premium residential developers to connect with us for luxury kitchen and wardrobe enquiries."
           ctaText="Send an Enquiry →"

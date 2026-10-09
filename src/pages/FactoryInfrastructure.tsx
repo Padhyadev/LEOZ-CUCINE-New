@@ -450,7 +450,7 @@ export const FactoryInfrastructure: React.FC = () => {
                   </div>
 
                   <div style={{ order: idx % 2 === 0 ? 2 : 1 }}>
-                    <span style={{ fontFamily: 'var(--font-heading)', fontSize: '48px', fontWeight: 300, color: '#A58B62', display: 'block', marginBottom: '8px' }}>
+                    <span style={{ display: 'none' }}>
                       {item.step}
                     </span>
                     <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(26px, 3vw, 38px)', fontWeight: 300, color: '#20211F', margin: '0 0 6px 0' }}>

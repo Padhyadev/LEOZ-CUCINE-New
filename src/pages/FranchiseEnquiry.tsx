@@ -915,7 +915,7 @@ export const FranchiseEnquiry: React.FC = () => {
                         borderRadius: '50%',
                         backgroundColor: '#181818',
                         border: '1px solid #B69A6B',
-                        display: 'flex',
+                        display: 'none',
                         alignItems: 'center',
                         justifyContent: 'center',
                         fontFamily: 'var(--font-family-sans)',

@@ -70,37 +70,37 @@ export const Showrooms: React.FC = () => {
   const experienceElements = [
     {
       title: 'Explore Kitchens',
-      category: '01 / FULL-SCALE ARCHITECTURE',
+      category: 'FULL-SCALE ARCHITECTURE',
       desc: 'Step into fully functional monolith islands with 45-degree mitered stone countertops and handleless Gola profiles.',
       image: '/The Opus Penthouse Kitchen.jfif',
     },
     {
       title: 'Explore Wardrobes',
-      category: '02 / DRESSING SUITES',
+      category: 'DRESSING SUITES',
       desc: 'Experience 3.0m floor-to-ceiling smoked glass vitrines, co-planar sliding tracks, and illuminated accessory islands.',
       image: '/Smoked Glass Vitrine Wardrobe.webp',
     },
     {
       title: 'Touch Materials',
-      category: '03 / TACTILE PALETTE',
+      category: 'TACTILE PALETTE',
       desc: 'Inspect genuine sintered quartzite, open-pore smoked European oak, velvet anti-fingerprint lacquers, and metals.',
       image: '/Italian Marble.webp',
     },
     {
       title: 'Understand Hardware',
-      category: '04 / GERMAN MOTION',
+      category: 'GERMAN MOTION',
       desc: 'Feel the whisper-quiet glide of Blum Servo-Drive electronic drawers and concealed heavy-duty rolling systems.',
       image: '/Metal Accents.webp',
     },
     {
       title: 'Meet Designers',
-      category: '05 / PRINCIPAL ARCHITECTS',
+      category: 'PRINCIPAL ARCHITECTS',
       desc: 'Sit down with our senior spatial planners and interior architects to analyze your floor plans and lighting orientations.',
       image: '/about.webp',
     },
     {
       title: 'Discuss Your Project',
-      category: '06 / BESPOKE ESTIMATION',
+      category: 'BESPOKE ESTIMATION',
       desc: 'Receive tailored budget scoping, 3D CAD visualization previews, and turnkey manufacturing timelines for your home.',
       image: '/Glass Vitrines.webp',
     },
