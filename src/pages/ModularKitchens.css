@@ -65,27 +65,21 @@
   object-position: center 45%;
 }
 
-/* No overlay on the photo. Text changed to dark to contrast with the light HD kitchen image. */
+/* White text with soft dark halo to match the Wardrobes page style */
 .lzk-hero__inner .lzk-crumbs,
-.lzk-hero__inner .lzk-crumbs li {
-  color: var(--text-body);
-  text-shadow: none;
-}
-
-.lzk-hero__inner .lzk-h1 {
-  color: var(--text-strong);
-  text-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
-}
-
+.lzk-hero__inner .lzk-crumbs li,
+.lzk-hero__inner .lzk-h1,
 .lzk-hero__inner .lzk-hero__text {
-  color: var(--text-strong);
-  font-weight: 500;
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+  color: #FFFFFF;
+  text-shadow:
+    0 1px 2px rgba(20, 16, 12, 0.75),
+    0 2px 12px rgba(20, 16, 12, 0.6),
+    0 0 32px rgba(20, 16, 12, 0.45);
 }
 
 .lzk-hero__inner .lzk-crumbs a {
-  color: var(--text-strong);
-  background-image: linear-gradient(var(--gold), var(--gold));
+  color: #FFFFFF;
+  background-image: linear-gradient(var(--gold-light), var(--gold-light));
 }
 
 .lzk-hero__inner .lzk-crumbs li[aria-hidden='true'] {
@@ -97,17 +91,17 @@
   background-color: var(--gold);
 }
 
-/* Secondary CTA as a dark button for contrast against the light photo */
+/* Secondary CTA as a solid ivory button */
 .lzk-hero__inner .lz-btn--secondary {
-  background-color: var(--text-strong);
-  border-color: var(--text-strong);
-  color: var(--bg-cream);
+  background-color: var(--bg-ivory);
+  border-color: var(--bg-ivory);
+  color: var(--text-strong);
 }
 
 .lzk-hero__inner .lz-btn--secondary:hover {
-  background-color: var(--gold);
-  border-color: var(--gold);
-  color: var(--text-strong);
+  background-color: var(--text-strong);
+  border-color: var(--text-strong);
+  color: var(--bg-ivory);
 }
 
 .lzk-hero__ctas .lz-btn {

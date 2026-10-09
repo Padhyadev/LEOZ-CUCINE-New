@@ -346,7 +346,7 @@ export const ModularKitchens: React.FC = () => {
         <section ref={heroRef} className="lzk-hero" aria-labelledby="kitchens-hero-title">
           <motion.div className="lzk-hero__media" style={{ y: heroY }} aria-hidden="true">
             <div className="lzk-hero__kenburns">
-              <img src="/kitchen_hero_clear_hd.png" alt="" />
+              <img src="/kitchen_hero_dark.png" alt="" />
             </div>
           </motion.div>
 
