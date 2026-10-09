@@ -1,141 +1,267 @@
-import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
+import React, { useEffect, useRef, useState } from 'react';
+import {
+  motion,
+  useInView,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+  useTransform,
+} from 'framer-motion';
 import heroVideo from '../assets/Leoz_hero_section.mp4';
 import heroPoster from '../assets/Leoz_hero_poster.webp';
 import { Header } from '../components/common/Header';
 import { Footer } from '../components/common/Footer';
 import { Preloader, checkShouldRunPreloader, markPreloaderSeen } from '../components/common/Preloader';
 import { useDocumentMeta } from '../hooks/useDocumentMeta';
+import { useLenisScroll } from '../hooks/useLenisScroll';
 import {
   ArrowRight,
-  ArrowUpRight,
-  Compass,
+  Archive,
+  Check,
+  Factory,
   Layers,
-  Building2,
-  Users,
-  ChevronLeft,
-  ChevronRight,
-  Cpu,
-  Sparkles,
-  ShieldCheck,
+  PanelsTopLeft,
+  Ruler,
+  Wrench,
 } from 'lucide-react';
+import './Home.css';
 
-/* Easing curve for luxury architectural editorial motion */
-const luxuryEase = [0.16, 1, 0.3, 1];
+/* Ease-out curve shared by every reveal on the page */
+const EASE_OUT = [0.22, 1, 0.36, 1];
+
+/* ==========================================================================
+   CONTENT
+   ========================================================================== */
+
+const collections = [
+  {
+    title: 'Kitchens',
+    path: '/modular-kitchens',
+    image: '/Quartz Stone.webp',
+    alt: 'Bright LEOZ kitchen with a quartz stone island, white cabinetry and warm pendant lights',
+    desc: 'Designed around your culinary habits, layout, storage and preferred aesthetic. Clean forms, intuitive movement and details that make daily use a pleasure.',
+  },
+  {
+    title: 'Wardrobes',
+    path: '/modular-wardrobes',
+    image: '/Master Walk-In Dressing Suite.webp',
+    alt: 'LEOZ walk-in dressing suite with open shelving, a vanity and warm ambient lighting',
+    desc: 'Storage as personal as the pieces it holds. Hinged, sliding and walk-in solutions with considered interiors and a finish that complements your room.',
+  },
+];
+
+const highlights = [
+  { title: 'Bespoke dimensions and configurations', Icon: Ruler },
+  { title: 'Ergonomic layouts', Icon: PanelsTopLeft },
+  { title: 'Curated materials and finishes', Icon: Layers },
+  { title: 'Intelligent storage and premium hardware', Icon: Archive },
+  { title: 'Precise factory production', Icon: Factory },
+  { title: 'Carefully managed installation', Icon: Wrench },
+];
+
+const whyLeoz = [
+  'A dedicated focus on kitchens and wardrobes',
+  'Leadership with 20+ years of hands-on modular experience',
+  '20,000 sq. ft. in-house production',
+  'German-inspired planning',
+  'Design flexibility',
+  'Documented product specifications',
+  'Professional fitting',
+  'Applicable warranty support',
+];
+
+type Stat =
+  | { count: number; suffix?: string; label: string }
+  | { text: string; label: string; labelFirst?: boolean };
+
+const stats: Stat[] = [
+  { count: 20, suffix: '+', label: 'years of specialist leadership experience' },
+  { count: 20000, label: 'sq. ft. manufacturing facility' },
+  { text: 'Fully', label: 'customised kitchens and wardrobes' },
+  { text: 'Gujarat', label: 'Based in', labelFirst: true },
+];
+
+const journey = [
+  'Consultation',
+  'Site measurement',
+  'Design and layout',
+  'Selection of materials and hardware',
+  'Factory manufacturing',
+  'Installation',
+  'Final inspection',
+  'After-sales coordination',
+];
+
+/* ==========================================================================
+   SMALL BUILDING BLOCKS
+   ========================================================================== */
+
+/* Fade-up on scroll; staggered via `delay`. Disabled for reduced motion. */
+const revealProps = (reduce: boolean | null, delay = 0) => {
+  return {
+    initial: reduce ? false : { opacity: 0, y: 24 },
+    whileInView: { opacity: 1, y: 0 },
+    viewport: { once: true, amount: 0.2 },
+    transition: { duration: 0.6, ease: EASE_OUT, delay },
+  } as const;
+};
+
+const Reveal: React.FC<{ delay?: number; className?: string; children: React.ReactNode }> = ({
+  delay = 0,
+  className,
+  children,
+}) => (
+  <motion.div className={className} {...revealProps(useReducedMotion(), delay)}>
+    {children}
+  </motion.div>
+);
+
+/* 48px gold line under each heading; draws in from the edge */
+const GoldRule: React.FC = () => {
+  const reduce = useReducedMotion();
+  return (
+    <motion.span
+      className="lz-rule"
+      aria-hidden="true"
+      initial={reduce ? false : { scaleX: 0 }}
+      whileInView={{ scaleX: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.2 }}
+    />
+  );
+};
+
+const SectionHead: React.FC<{ eyebrow?: string; title: string; center?: boolean; id?: string }> = ({
+  eyebrow,
+  title,
+  center = false,
+  id,
+}) => (
+  <Reveal className={`lz-section-head ${center ? 'lz-section-head--center' : ''}`}>
+    {eyebrow && <span className="lz-eyebrow">{eyebrow}</span>}
+    <h2 className="lz-h2" id={id}>
+      {title}
+    </h2>
+    <GoldRule />
+  </Reveal>
+);
+
+/* The logo's broken square frame */
+const BracketFrame: React.FC<{ className?: string }> = ({ className }) => (
+  <svg className={className} viewBox="0 0 100 100" preserveAspectRatio="none" fill="none" aria-hidden="true" focusable="false">
+    <path
+      d="M0 0H42M52 0H100V44M100 54V100H56M46 100H0V58M0 48V0"
+      stroke="currentColor"
+      strokeWidth="1"
+      vectorEffect="non-scaling-stroke"
+    />
+  </svg>
+);
+
+/* Single L-shaped corner from the same motif, used in section corners */
+const BracketCorner: React.FC<{ position: 'tl' | 'br' }> = ({ position }) => (
+  <svg className={`lz-bracket lz-bracket--${position}`} viewBox="0 0 100 100" fill="none" aria-hidden="true" focusable="false">
+    <path d="M1 100V1H100" stroke="currentColor" strokeWidth="2" vectorEffect="non-scaling-stroke" />
+  </svg>
+);
+
+/* Lazy image with a warm blur placeholder until it has loaded */
+const WarmImage: React.FC<{ src: string; alt: string; className?: string }> = ({ src, alt, className }) => {
+  const ref = useRef<HTMLImageElement>(null);
+  const [loaded, setLoaded] = useState(false);
+
+  useEffect(() => {
+    if (ref.current?.complete) setLoaded(true);
+  }, []);
+
+  return (
+    <div className={`lz-media ${className ?? ''}`}>
+      <img
+        ref={ref}
+        src={src}
+        alt={alt}
+        loading="lazy"
+        decoding="async"
+        onLoad={() => setLoaded(true)}
+        className={loaded ? 'is-loaded' : 'is-loading'}
+      />
+    </div>
+  );
+};
+
+/* Counts up once when scrolled into view. The final value is rendered
+   invisibly underneath so the block never changes width while counting. */
+const CountUp: React.FC<{ to: number; suffix?: string }> = ({ to, suffix = '' }) => {
+  const ref = useRef<HTMLSpanElement>(null);
+  const inView = useInView(ref, { once: true, amount: 0.6 });
+  const reduce = useReducedMotion();
+  const [value, setValue] = useState(0);
+  const format = (n: number) => `${n.toLocaleString('en-IN')}${suffix}`;
+
+  useEffect(() => {
+    if (!inView) return;
+    if (reduce) {
+      setValue(to);
+      return;
+    }
+    let frame = 0;
+    const start = performance.now();
+    const duration = 1600;
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - start) / duration);
+      setValue(Math.round(to * (1 - Math.pow(1 - t, 3))));
+      if (t < 1) frame = requestAnimationFrame(tick);
+    };
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [inView, reduce, to]);
+
+  return (
+    <span ref={ref} className="lz-stat__value">
+      <span className="lz-sr-only">{format(to)}</span>
+      <span className="lz-count__ghost" aria-hidden="true">
+        {format(to)}
+      </span>
+      <span className="lz-count__live" aria-hidden="true">
+        {format(value)}
+      </span>
+    </span>
+  );
+};
+
+/* ==========================================================================
+   PAGE
+   ========================================================================== */
 
 export const Home: React.FC = () => {
   const [showPreloader, setShowPreloader] = useState(() => checkShouldRunPreloader());
-  const [activeSlide, setActiveSlide] = useState(0);
   const prefersReducedMotion = useReducedMotion();
+  const { lenis } = useLenisScroll();
 
-  const productHighlights = [
-    {
-      num: '01',
-      title: 'Bespoke Dimensions & Configurations',
-      desc: 'Bespoke dimensions and configurations planned around individual requirements, room proportions and personal lifestyles.',
-      icon: <Layers size={22} color="#A58B62" />,
-    },
-    {
-      num: '02',
-      title: 'Intelligent Storage & Hardware Integration',
-      desc: 'Smart drawers, concealed larders, pull-outs, sensor lighting, and German-engineered soft-close motion mechanisms.',
-      icon: <Cpu size={22} color="#A58B62" />,
-    },
-    {
-      num: '03',
-      title: 'Curated Materials, Finishes & Textures',
-      desc: 'Synchronized European laminates, anti-fingerprint acrylics, warm natural veneers, and architectural glass vitrines.',
-      icon: <Sparkles size={22} color="#A58B62" />,
-    },
-    {
-      num: '04',
-      title: 'Durable Specifications for Daily Use',
-      desc: 'Moisture-resistant core substrates, PUR edge sealing, heavy-duty fittings, and easy-maintenance surfaces for longevity.',
-      icon: <ShieldCheck size={22} color="#A58B62" />,
-    },
-  ];
+  const heroRef = useRef<HTMLElement>(null);
+  const journeyRef = useRef<HTMLDivElement>(null);
+  const [activeSteps, setActiveSteps] = useState(0);
 
-  const [activeWhySlide, setActiveWhySlide] = useState(0);
+  // Gentle hero parallax
+  const { scrollYProgress: heroProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
+  const heroY = useTransform(heroProgress, [0, 1], [0, prefersReducedMotion ? 0 : 120]);
 
-  const whyLeozSlides = [
-    {
-      num: '01',
-      title: 'Dedicated Focus on Kitchens & Wardrobes',
-      tag: '01 / SPECIALISED FOCUS',
-      desc: 'We do not dilute our expertise. Our entire design philosophy, machinery, and craftsmanship are solely dedicated to bespoke kitchens and wardrobes.',
-      image: '/Island Layout.webp',
-      alt: 'LEOZ Kitchen and Wardrobe Specialisation',
-    },
-    {
-      num: '02',
-      title: 'Leadership with 20+ Years Experience',
-      tag: '02 / EXPERIENCED LEADERSHIP',
-      desc: 'Guided by two decades of hands-on modular expertise, understanding the nuances of ergonomics, materials, and Indian cooking environments.',
-      image: '/Wood Veneer.webp',
-      alt: 'LEOZ 20+ Years Leadership',
-    },
-    {
-      num: '03',
-      title: '20,000 Sq. Ft. In-House Gujarat Plant',
-      tag: '03 / IN-HOUSE PRODUCTION',
-      desc: 'End-to-end manufacturing control with German automated CNC machinery, European beam saws, and strict 5-stage quality assurance.',
-      image: '/factory_precision_plant.webp',
-      alt: 'LEOZ 20,000 sq ft In-House Manufacturing Facility',
-    },
-    {
-      num: '04',
-      title: 'German-Inspired Planning & Warranty Support',
-      tag: '04 / RELIABLE SUPPORT',
-      desc: 'Precision planning, complete design flexibility, documented product specifications, certified installation, and dependable warranty support.',
-      image: '/Master Walk-In Dressing Suite.webp',
-      alt: 'LEOZ Precision Planning and Installation Warranty Support',
-    },
-  ];
+  // Journey line draws with scroll; steps fill in sequence
+  const { scrollYProgress: journeyProgress } = useScroll({ target: journeyRef, offset: ['start 0.8', 'end 0.55'] });
+  const journeyLine = useTransform(journeyProgress, (v) => (prefersReducedMotion ? 1 : v));
 
-  const craftsmanshipSlides = [
-    {
-      image: '/Italian Marble.webp',
-      tag: '01 / PRECISION STONES',
-      title: 'Italian Marble & Monoliths',
-      subtitle: 'Seamless 45° mitred waterfalls and continuous vein-matched surfaces.',
-    },
-    {
-      image: '/Wood Veneer.webp',
-      tag: '02 / NATURAL TEXTURES',
-      title: 'Architectural Wood Veneers',
-      subtitle: 'Warm fluted timber and German polyurethane moisture-sealed edgebanding.',
-    },
-    {
-      image: '/Glass Vitrines.webp',
-      tag: '03 / ILLUMINATED LIVING',
-      title: 'Smoked Glass & Vitrines',
-      subtitle: 'Micro-profile anodized aluminium frames with integrated sensor LED warmth.',
-    },
-    {
-      image: '/Master Walk-In Dressing Suite.webp',
-      tag: '04 / BESPOKE STORAGE',
-      title: 'Walk-In Dressing Suites',
-      subtitle: 'Micro-velvet jewelry drawers, sensor lighting, and custom shoe galleries.',
-    },
-  ];
+  useMotionValueEvent(journeyProgress, 'change', (v) => {
+    if (prefersReducedMotion) return;
+    setActiveSteps(v <= 0 ? 0 : Math.min(journey.length, Math.floor(v * (journey.length - 1) + 0.001) + 1));
+  });
+
+  useEffect(() => {
+    if (prefersReducedMotion) setActiveSteps(journey.length);
+  }, [prefersReducedMotion]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
-
-  useEffect(() => {
-    const whyTimer = setInterval(() => {
-      setActiveWhySlide((prev) => (prev + 1) % whyLeozSlides.length);
-    }, 4500);
-    return () => clearInterval(whyTimer);
-  }, [whyLeozSlides.length]);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setActiveSlide((prev) => (prev + 1) % craftsmanshipSlides.length);
-    }, 4500);
-    return () => clearInterval(timer);
-  }, [craftsmanshipSlides.length]);
 
   useDocumentMeta(
     'LEOZ Cucine | Luxury Modular Kitchens & Bespoke Wardrobes — Gujarat, India',
@@ -149,8 +275,22 @@ export const Home: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const scrollToWelcome = () => {
+    const target = document.getElementById('welcome');
+    if (!target) return;
+    if (lenis) lenis.scrollTo(target, { offset: -68 });
+    else target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+  };
+
+  const heroReveal = (delay: number) =>
+    ({
+      initial: prefersReducedMotion ? false : { opacity: 0, y: 24 },
+      animate: { opacity: 1, y: 0 },
+      transition: { duration: 0.6, ease: EASE_OUT, delay },
+    }) as const;
+
   return (
-    <div style={{ backgroundColor: '#F7F7F5', color: '#20211F', minHeight: '100vh', overflowX: 'hidden' }}>
+    <div className="lz-home">
       {showPreloader && (
         <Preloader
           onComplete={() => {
@@ -164,1659 +304,318 @@ export const Home: React.FC = () => {
 
       <main id="main-content">
         {/* =========================================================================
-            SECTION 01: FULL-BLEED ARCHITECTURAL KITCHEN HERO (NO BOXED CARD)
+            01 HERO — LUXURY, CRAFTED AROUND YOU
             ========================================================================= */}
-        <section
-          id="hero"
-          aria-label="LEOZ Cucine Hero"
-          style={{
-            position: 'relative',
-            width: '100%',
-            minHeight: '100vh',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-end',
-            paddingTop: 'clamp(120px, 16vh, 200px)',
-            paddingBottom: 'clamp(48px, 8vh, 100px)',
-            paddingLeft: 'clamp(20px, 6vw, 100px)',
-            paddingRight: 'clamp(20px, 6vw, 100px)',
-            overflow: 'hidden',
-          }}
-        >
-          {/* Full-Bleed 100% Width Background Video */}
-          <div
-            style={{
-              position: 'absolute',
-              inset: 0,
-              zIndex: 1,
-              overflow: 'hidden',
-              backgroundColor: '#1E201D',
-            }}
-          >
-            <motion.video
-              src={heroVideo}
-              poster={heroPoster}
-              autoPlay={!prefersReducedMotion}
-              muted
-              loop
-              playsInline
-              preload="auto"
-              aria-hidden="true"
-              tabIndex={-1}
-              initial={{ opacity: 0, scale: 1.05 }}
-              animate={{ opacity: 1, scale: 1 }}
-              transition={{ duration: 1.2, ease: luxuryEase }}
-              style={{
-                position: 'absolute',
-                inset: 0,
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                objectPosition: 'center 40%',
-                filter: 'brightness(0.92) contrast(1.02)',
-                pointerEvents: 'none',
-              }}
-            />
-
-            {/* Enhanced readability scrim/vignette gradient */}
-            <div
-              style={{
-                position: 'absolute',
-                inset: 0,
-                background:
-                  'linear-gradient(180deg, rgba(14, 15, 13, 0.45) 0%, rgba(14, 15, 13, 0.2) 25%, rgba(14, 15, 13, 0.72) 65%, rgba(14, 15, 13, 0.94) 100%)',
-              }}
-            />
-            {/* Radial subtle vignette to protect text legibility on left */}
-            <div
-              style={{
-                position: 'absolute',
-                inset: 0,
-                background:
-                  'radial-gradient(circle at 20% 70%, rgba(10, 11, 10, 0.75) 0%, rgba(10, 11, 10, 0.3) 50%, transparent 75%)',
-                pointerEvents: 'none',
-              }}
-            />
-          </div>
-
-        {/* Integrated Editorial Typography directly on composition */}
-        <div
-          style={{
-            position: 'relative',
-            zIndex: 10,
-            maxWidth: '780px',
-            width: '100%',
-            color: '#FFFFFF',
-          }}
-        >
-          {/* Uppercase micro-label */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2, ease: luxuryEase }}
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              fontFamily: 'var(--font-body)',
-              fontSize: 'clamp(9.5px, 0.95vw, 11px)',
-              fontWeight: 600,
-              letterSpacing: '0.22em',
-              textTransform: 'uppercase',
-              color: '#D4AF37',
-              backgroundColor: 'rgba(10, 11, 10, 0.55)',
-              padding: '6px 14px',
-              borderRadius: '2px',
-              border: '1px solid rgba(212, 175, 55, 0.3)',
-              backdropFilter: 'blur(10px)',
-              marginBottom: '16px',
-              textShadow: '0 2px 8px rgba(0,0,0,0.85)',
-            }}
-          >
-            <span>LEOZ / BESPOKE KITCHENS &amp; WARDROBES</span>
+        <section id="hero" ref={heroRef} className="lz-hero" aria-labelledby="hero-title">
+          <motion.div className="lz-hero__media" style={{ y: heroY }} aria-hidden="true">
+            <div className="lz-hero__kenburns">
+              <video
+                src={heroVideo}
+                poster={heroPoster}
+                autoPlay={!prefersReducedMotion}
+                muted
+                loop
+                playsInline
+                preload="auto"
+                tabIndex={-1}
+              />
+            </div>
           </motion.div>
 
-          {/* Balanced Display Headline */}
-          <motion.h1
-            initial={{ opacity: 0, y: 24 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.85, delay: 0.35, ease: luxuryEase }}
-            style={{
-              fontFamily: 'var(--font-heading)',
-              fontSize: 'clamp(32px, 4.5vw, 56px)',
-              fontWeight: 300,
-              lineHeight: 1.12,
-              letterSpacing: '-0.02em',
-              color: '#FFFFFF',
-              margin: '0 0 16px 0',
-              textShadow: '0 3px 20px rgba(0,0,0,0.9), 0 1px 4px rgba(0,0,0,0.95)',
-            }}
-          >
-            Luxury, Crafted Around You.
-          </motion.h1>
+          <div className="lz-hero__content lz-container">
+            <div className="lz-hero__inner">
+              <motion.span className="lz-eyebrow lz-hero__eyebrow" {...heroReveal(0.1)}>
+                LEOZ / Bespoke Kitchens &amp; Wardrobes
+              </motion.span>
 
-          {/* Supporting Copy - Exact from Draft */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.5, ease: luxuryEase }}
-            style={{
-              fontFamily: 'var(--font-body)',
-              fontSize: 'clamp(14px, 1.2vw, 16.5px)',
-              fontWeight: 300,
-              lineHeight: 1.65,
-              color: '#ECEBE7',
-              maxWidth: '640px',
-              margin: '0 0 28px 0',
-              textShadow: '0 2px 12px rgba(0,0,0,0.9)',
-            }}
-          >
-            Discover luxury modular kitchens and bespoke wardrobes where refined design, intelligent functionality and meticulous craftsmanship come together. Designed to reflect your taste. Precision-made for the way you live.
-          </motion.p>
+              <motion.h1 id="hero-title" className="lz-h1" {...heroReveal(0.2)}>
+                Luxury, Crafted Around You.
+              </motion.h1>
 
-          {/* Editorial Action Links (3 CTAs as specified in Draft) */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.65, ease: luxuryEase }}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 'clamp(12px, 2vw, 18px)',
-              flexWrap: 'wrap',
-            }}
-          >
-            {/* Primary Action 1: Explore Kitchens */}
-            <a
-              href="/modular-kitchens"
-              onClick={(e) => navigate(e, '/modular-kitchens')}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '12px 22px',
-                backgroundColor: '#A58B62',
-                color: '#FFFFFF',
-                fontFamily: 'var(--font-body)',
-                fontSize: '11px',
-                fontWeight: 600,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                textDecoration: 'none',
-                borderRadius: '2px',
-                border: '1px solid #A58B62',
-                boxShadow: '0 4px 18px rgba(0,0,0,0.4)',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#8C744F';
-                e.currentTarget.style.borderColor = '#8C744F';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#A58B62';
-                e.currentTarget.style.borderColor = '#A58B62';
-              }}
-            >
-              <span>Explore Kitchens</span>
-              <ArrowRight size={13} />
-            </a>
+              <motion.span
+                className="lz-rule"
+                aria-hidden="true"
+                initial={prefersReducedMotion ? false : { scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.4 }}
+              />
 
-            {/* Action 2: Discover Wardrobes */}
-            <a
-              href="/modular-wardrobes"
-              onClick={(e) => navigate(e, '/modular-wardrobes')}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '11px 20px',
-                backgroundColor: 'rgba(20, 21, 19, 0.65)',
-                color: '#FFFFFF',
-                fontFamily: 'var(--font-body)',
-                fontSize: '11px',
-                fontWeight: 600,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                textDecoration: 'none',
-                borderRadius: '2px',
-                border: '1px solid rgba(255, 255, 255, 0.3)',
-                backdropFilter: 'blur(8px)',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = '#D4AF37';
-                e.currentTarget.style.color = '#D4AF37';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-                e.currentTarget.style.color = '#FFFFFF';
-              }}
-            >
-              <span>Discover Wardrobes</span>
-              <ArrowRight size={13} />
-            </a>
+              <motion.p className="lz-lead lz-hero__text" {...heroReveal(0.3)}>
+                Discover luxury modular kitchens and bespoke wardrobes where refined design, intelligent functionality and meticulous craftsmanship come together. Designed to reflect your taste. Precision-made for the way you live.
+              </motion.p>
 
-            {/* Action 3: Book a Private Consultation */}
-            <a
-              href="/talk-to-us"
-              onClick={(e) => navigate(e, '/talk-to-us')}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '8px',
-                padding: '11px 20px',
-                backgroundColor: 'transparent',
-                color: '#D4AF37',
-                fontFamily: 'var(--font-body)',
-                fontSize: '11px',
-                fontWeight: 600,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                textDecoration: 'none',
-                borderRadius: '2px',
-                border: '1px solid #D4AF37',
-                backdropFilter: 'blur(8px)',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#D4AF37';
-                e.currentTarget.style.color = '#141513';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = 'transparent';
-                e.currentTarget.style.color = '#D4AF37';
-              }}
-            >
-              <span>Book Consultation</span>
-              <ArrowRight size={13} />
-            </a>
-          </motion.div>
-        </div>
-      </section>
-
-        {/* =========================================================================
-            SECTION 02: EDITORIAL WHITESPACE — DESIGN THAT FEELS PERSONAL
-            ========================================================================= */}
-        <section
-          id="welcome"
-          aria-label="Welcome to LEOZ"
-          style={{
-            backgroundColor: '#F7F7F5',
-            paddingTop: 'clamp(90px, 12vw, 150px)',
-            paddingBottom: 'clamp(90px, 12vw, 150px)',
-            paddingLeft: 'clamp(20px, 6vw, 100px)',
-            paddingRight: 'clamp(20px, 6vw, 100px)',
-          }}
-        >
-          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1.3fr',
-                gap: 'clamp(40px, 7vw, 100px)',
-                alignItems: 'baseline',
-              }}
-              className="editorial-grid"
-            >
-              <div>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'clamp(10.5px, 1vw, 11.5px)',
-                    fontWeight: 600,
-                    letterSpacing: '0.22em',
-                    textTransform: 'uppercase',
-                    color: '#A58B62',
-                    display: 'block',
-                    marginBottom: '12px',
-                  }}
-                >
-                  WELCOME TO LEOZ
-                </span>
-                <h2
-                  style={{
-                    fontFamily: 'var(--font-heading)',
-                    fontSize: 'clamp(28px, 4.2vw, 56px)',
-                    fontWeight: 300,
-                    lineHeight: 1.15,
-                    letterSpacing: '-0.015em',
-                    color: '#20211F',
-                    margin: 0,
-                  }}
-                >
-                  Design That
-                  <br className="desktop-heading-break" />
-                  {' '}Feels Personal.
-                </h2>
-              </div>
-
-              <div>
-                <p
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'clamp(15px, 1.2vw, 19px)',
-                    fontWeight: 300,
-                    lineHeight: 1.65,
-                    color: '#20211F',
-                    marginBottom: '20px',
-                  }}
-                >
-                  LEOZ Cucine specialises exclusively in luxury kitchens and customised wardrobes. We combine German-inspired precision, individualised planning and considered material choices to create elegant, functional spaces.
-                </p>
-                <p
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: 'clamp(13.5px, 1.05vw, 15px)',
-                    lineHeight: 1.7,
-                    color: '#686963',
-                    marginBottom: '28px',
-                  }}
-                >
-                  With a 20,000 sq. ft. in-house manufacturing facility in Gujarat and two decades of specialist insight guiding the brand, every creation is approached with care from concept to installation.
-                </p>
-
-                <div style={{ display: 'flex', gap: 'clamp(20px, 4vw, 50px)', borderTop: '1px solid #D9D9D4', paddingTop: '22px', flexWrap: 'wrap' }}>
-                  <div>
-                    <span style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(28px, 3.5vw, 36px)', fontWeight: 300, color: '#A58B62', display: 'block', lineHeight: 1 }}>
-                      20+
-                    </span>
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '10.5px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#686963' }}>
-                      Years Experience
-                    </span>
-                  </div>
-                  <div>
-                    <span style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(28px, 3.5vw, 36px)', fontWeight: 300, color: '#A58B62', display: 'block', lineHeight: 1 }}>
-                      20k
-                    </span>
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '10.5px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#686963' }}>
-                      Sq. Ft. Plant
-                    </span>
-                  </div>
-                  <div>
-                    <span style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(28px, 3.5vw, 36px)', fontWeight: 300, color: '#A58B62', display: 'block', lineHeight: 1 }}>
-                      100%
-                    </span>
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '10.5px', textTransform: 'uppercase', letterSpacing: '0.08em', color: '#686963' }}>
-                      In-House Built
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* =========================================================================
-            SECTION 03: FULL-WIDTH ASYMMETRIC VISUAL RYHTHM (KITCHEN & WARDROBE REALMS)
-            ========================================================================= */}
-        <section
-          id="collections"
-          aria-label="Our Collections"
-          style={{
-            backgroundColor: '#ECEBE7',
-            paddingTop: 'clamp(80px, 10vw, 130px)',
-            paddingBottom: 'clamp(80px, 10vw, 130px)',
-          }}
-        >
-          <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 clamp(20px, 5vw, 80px)' }}>
-            <div style={{ marginBottom: 'clamp(36px, 5vw, 70px)' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: 'clamp(10.5px, 1vw, 11.5px)',
-                  fontWeight: 600,
-                  letterSpacing: '0.22em',
-                  textTransform: 'uppercase',
-                  color: '#A58B62',
-                  display: 'block',
-                  marginBottom: '10px',
-                }}
-              >
-                OUR DISCIPLINES
-              </span>
-              <h2
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(26px, 3.8vw, 54px)',
-                  fontWeight: 300,
-                  lineHeight: 1.15,
-                  color: '#20211F',
-                  letterSpacing: '-0.015em',
-                  margin: 0,
-                  maxWidth: '720px',
-                }}
-              >
-                Two Realms of Architectural Refinement
-              </h2>
-            </div>
-
-            {/* 2 Large Architectural Panels - Open Space, No Cards */}
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 320px), 1fr))',
-                gap: 'clamp(28px, 4vw, 56px)',
-              }}
-            >
-              {/* Kitchen Realm */}
-              <div>
-                <div style={{ width: '100%', aspectRatio: '16/11', overflow: 'hidden', marginBottom: '24px', backgroundColor: '#D9D9D4' }}>
-                  <img
-                    src="/Skyline Monolithic Island.webp"
-                    alt="LEOZ Luxury Modular Kitchen Island"
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      objectPosition: 'center 45%',
-                      transition: 'transform 0.8s ease',
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.03)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-                  />
-                </div>
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.18em', color: '#A58B62', textTransform: 'uppercase', display: 'block', marginBottom: '8px' }}>
-                  01 / MODULAR KITCHENS
-                </span>
-                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(28px, 3vw, 38px)', fontWeight: 300, color: '#20211F', margin: '0 0 12px 0' }}>
-                  Culinary Monoliths &amp; Spatial Precision
-                </h3>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '14.5px', color: '#686963', lineHeight: 1.7, marginBottom: '20px', maxWidth: '520px' }}>
-                  Custom planned around Indian cooking requirements, integrated appliances, and German motion hardware.
-                </p>
+              <motion.div className="lz-hero__ctas" {...heroReveal(0.4)}>
                 <a
                   href="/modular-kitchens"
                   onClick={(e) => navigate(e, '/modular-kitchens')}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '12.5px',
-                    fontWeight: 600,
-                    letterSpacing: '0.12em',
-                    textTransform: 'uppercase',
-                    color: '#20211F',
-                    textDecoration: 'none',
-                    borderBottom: '1px solid #20211F',
-                    paddingBottom: '4px',
-                  }}
+                  className="lz-btn lz-btn--light"
                 >
-                  <span>Explore Kitchen Architecture</span>
-                  <ArrowRight size={13} />
+                  <span>Explore Kitchens</span>
+                  <ArrowRight size={14} aria-hidden="true" />
                 </a>
-              </div>
-
-              {/* Wardrobe Realm */}
-              <div>
-                <div style={{ width: '100%', aspectRatio: '16/11', overflow: 'hidden', marginBottom: '24px', backgroundColor: '#D9D9D4' }}>
-                  <img
-                    src="/Master Walk-In Dressing Suite.webp"
-                    alt="LEOZ Bespoke Walk-In Wardrobe Suite"
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      objectPosition: 'center 40%',
-                      transition: 'transform 0.8s ease',
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.03)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-                  />
-                </div>
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', fontWeight: 600, letterSpacing: '0.18em', color: '#A58B62', textTransform: 'uppercase', display: 'block', marginBottom: '8px' }}>
-                  02 / BESPOKE WARDROBES
-                </span>
-                <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(28px, 3vw, 38px)', fontWeight: 300, color: '#20211F', margin: '0 0 12px 0' }}>
-                  Sanctuary Dressing Suites &amp; Glass Vitrines
-                </h3>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '14.5px', color: '#686963', lineHeight: 1.7, marginBottom: '20px', maxWidth: '520px' }}>
-                  Organized around your personal belongings, sensor LED illumination, velvet drawers, and fluted joinery.
-                </p>
                 <a
                   href="/modular-wardrobes"
                   onClick={(e) => navigate(e, '/modular-wardrobes')}
-                  style={{
-                    display: 'inline-flex',
-                    alignItems: 'center',
-                    gap: '8px',
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '12.5px',
-                    fontWeight: 600,
-                    letterSpacing: '0.12em',
-                    textTransform: 'uppercase',
-                    color: '#20211F',
-                    textDecoration: 'none',
-                    borderBottom: '1px solid #20211F',
-                    paddingBottom: '4px',
-                  }}
+                  className="lz-btn lz-btn--dark"
                 >
-                  <span>Discover Wardrobe Suites</span>
-                  <ArrowRight size={13} />
+                  <span>Discover Wardrobes</span>
+                  <ArrowRight size={14} aria-hidden="true" />
                 </a>
-              </div>
+                <a href="/talk-to-us" onClick={(e) => navigate(e, '/talk-to-us')} className="lz-btn lz-btn--light">
+                  <span>Book a Private Consultation</span>
+                  <ArrowRight size={14} aria-hidden="true" />
+                </a>
+              </motion.div>
             </div>
+          </div>
+
+          <button type="button" className="lz-scroll" onClick={scrollToWelcome} aria-label="Scroll to the next section">
+            <span className="lz-scroll__track" aria-hidden="true" />
+          </button>
+        </section>
+
+        {/* =========================================================================
+            02 WELCOME TO LEOZ — DESIGN THAT FEELS PERSONAL
+            ========================================================================= */}
+        <section id="welcome" className="lz-section lz-bg-ivory" aria-labelledby="welcome-title">
+          <BracketCorner position="tl" />
+          <div className="lz-container lz-split">
+            <div className="lz-split__text">
+              <SectionHead eyebrow="Welcome to LEOZ" title="Design That Feels Personal" id="welcome-title" />
+              <Reveal delay={0.1}>
+                <p className="lz-body">
+                  LEOZ Cucine specialises exclusively in luxury kitchens and customised wardrobes. We combine German-inspired precision, individualised planning and considered material choices to create elegant, functional spaces. With a 20,000 sq. ft. in-house manufacturing facility in Gujarat and two decades of specialist insight guiding the brand, every creation is approached with care from concept to installation.
+                </p>
+              </Reveal>
+            </div>
+
+            <Reveal delay={0.15} className="lz-offset lz-zoom">
+              <BracketFrame className="lz-offset__frame" />
+              <WarmImage
+                src="/i_am_leoz_perfect.jpg"
+                alt="I am Leoz — the LEOZ lion mascot in black and gold armour wearing the LEOZ emblem"
+                className="lz-media--mascot"
+              />
+            </Reveal>
           </div>
         </section>
 
         {/* =========================================================================
-            SECTION 04: ARCHITECTURAL CRAFTSMANSHIP & MATERIAL MASTERY
+            03 OUR COLLECTIONS — TWO EXPRESSIONS OF REFINED LIVING
             ========================================================================= */}
-        <section
-          id="craftsmanship"
-          aria-label="The LEOZ Standard of Craftsmanship"
-          style={{
-            backgroundColor: '#F7F7F5',
-            paddingTop: 'clamp(90px, 12vw, 150px)',
-            paddingBottom: 'clamp(90px, 12vw, 150px)',
-            paddingLeft: 'clamp(20px, 6vw, 100px)',
-            paddingRight: 'clamp(20px, 6vw, 100px)',
-            borderBottom: '1px solid #D9D9D4',
-          }}
-        >
-          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1.1fr 1.2fr',
-                gap: 'clamp(40px, 6vw, 80px)',
-                alignItems: 'center',
-              }}
-              className="editorial-grid"
-            >
-              {/* Left Column: Architectural Statement & Philosophy */}
-              <div>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '11.5px',
-                    fontWeight: 600,
-                    letterSpacing: '0.24em',
-                    textTransform: 'uppercase',
-                    color: '#A58B62',
-                    display: 'block',
-                    marginBottom: '16px',
-                  }}
-                >
-                  THE LEOZ STANDARD
-                </span>
-                <h2
-                  style={{
-                    fontFamily: 'var(--font-heading)',
-                    fontSize: 'clamp(34px, 4.5vw, 56px)',
-                    fontWeight: 300,
-                    lineHeight: 1.12,
-                    letterSpacing: '-0.015em',
-                    color: '#20211F',
-                    margin: '0 0 24px 0',
-                  }}
-                >
-                  "Precision is not just what we make. It is how we work."
-                </h2>
-                <p
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '15px',
-                    color: '#686963',
-                    lineHeight: 1.75,
-                    marginBottom: '20px',
-                  }}
-                >
-                  Every millimeter in our cabinetry is guided by discipline and pride. From microscopic 0.1mm tolerances in our 20,000 sq. ft. Gujarat facility to white-glove installation in your home, the LEOZ seal stands for unyielding quality.
-                </p>
-                <p
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '14.5px',
-                    color: '#686963',
-                    lineHeight: 1.75,
-                    marginBottom: '32px',
-                  }}
-                >
-                  We blend Austrian Blum and German motion hardware, PUR zero-glue-line moisture barriers, and hand-selected natural veneers to ensure timeless architectural endurance.
-                </p>
+        <section className="lz-section lz-bg-cream" aria-labelledby="collections-title">
+          <div className="lz-container">
+            <SectionHead
+              eyebrow="Our Collections"
+              title="Two Expressions of Refined Living"
+              id="collections-title"
+              center
+            />
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '24px', flexWrap: 'wrap' }}>
+            <div className="lz-collections">
+              {collections.map((item, idx) => (
+                <Reveal key={item.title} delay={idx * 0.1}>
                   <a
-                    href="/about#our-method"
-                    onClick={(e) => navigate(e, '/about#our-method')}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '12.5px',
-                      fontWeight: 600,
-                      letterSpacing: '0.12em',
-                      textTransform: 'uppercase',
-                      color: '#20211F',
-                      textDecoration: 'none',
-                      borderBottom: '1px solid #20211F',
-                      paddingBottom: '4px',
-                      transition: 'color 0.2s ease',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.color = '#A58B62';
-                      e.currentTarget.style.borderColor = '#A58B62';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.color = '#20211F';
-                      e.currentTarget.style.borderColor = '#20211F';
-                    }}
+                    href={item.path}
+                    onClick={(e) => navigate(e, item.path)}
+                    className="lz-collection lz-card lz-zoom"
                   >
-                    <span>Our Craftsmanship Method</span>
-                    <ArrowRight size={13} />
-                  </a>
-                </div>
-              </div>
-
-              {/* Right Column: Architectural Photography Slider */}
-              <div
-                style={{
-                  position: 'relative',
-                  width: '100%',
-                  borderRadius: '2px',
-                  overflow: 'hidden',
-                  backgroundColor: '#E5E4E0',
-                  boxShadow: '0 16px 48px rgba(32, 33, 31, 0.12)',
-                }}
-              >
-                {/* Main Slide Image with Smooth Fade/Slide Transition */}
-                <div style={{ position: 'relative', width: '100%', aspectRatio: '16/11', overflow: 'hidden' }}>
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={activeSlide}
-                      initial={{ opacity: 0, scale: 1.04 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0 }}
-                      transition={{ duration: 0.7, ease: luxuryEase }}
-                      style={{ position: 'absolute', inset: 0 }}
-                    >
-                      <img
-                        src={craftsmanshipSlides[activeSlide].image}
-                        alt={craftsmanshipSlides[activeSlide].title}
-                        style={{
-                          width: '100%',
-                          height: '100%',
-                          objectFit: 'cover',
-                          objectPosition: 'center 45%',
-                        }}
-                      />
-                      {/* Gradient overlay for text legibility at bottom */}
-                      <div
-                        style={{
-                          position: 'absolute',
-                          inset: 0,
-                          background:
-                            'linear-gradient(180deg, transparent 40%, rgba(20, 21, 19, 0.75) 85%, rgba(20, 21, 19, 0.95) 100%)',
-                        }}
-                      />
-                    </motion.div>
-                  </AnimatePresence>
-
-                  {/* On-Image Minimal 1-Line Caption */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      bottom: '16px',
-                      left: '18px',
-                      right: '90px',
-                      zIndex: 10,
-                      color: '#FFFFFF',
-                    }}
-                  >
-                    <div
-                      style={{
-                        display: 'inline-flex',
-                        alignItems: 'center',
-                        backgroundColor: 'rgba(15, 16, 14, 0.75)',
-                        border: '1px solid rgba(212, 175, 55, 0.4)',
-                        padding: '3px 8px',
-                        borderRadius: '2px',
-                        backdropFilter: 'blur(8px)',
-                        marginBottom: '6px',
-                      }}
-                    >
-                      <span
-                        style={{
-                          fontFamily: 'var(--font-body)',
-                          fontSize: '9.5px',
-                          fontWeight: 600,
-                          letterSpacing: '0.18em',
-                          color: '#D4AF37',
-                          textTransform: 'uppercase',
-                          display: 'block',
-                          lineHeight: 1.2,
-                        }}
-                      >
-                        {craftsmanshipSlides[activeSlide].tag}
+                    <div style={{ position: 'relative' }}>
+                      <WarmImage src={item.image} alt={item.alt} />
+                      <span className="lz-collection__veil" aria-hidden="true" />
+                    </div>
+                    <div className="lz-collection__body">
+                      <h3 className="lz-h3">{item.title}</h3>
+                      <p className="lz-body">{item.desc}</p>
+                      <span className="lz-collection__explore">
+                        Explore
+                        <ArrowRight size={14} aria-hidden="true" />
                       </span>
                     </div>
-                    <h4
-                      style={{
-                        fontFamily: 'var(--font-heading)',
-                        fontSize: 'clamp(16px, 1.8vw, 22px)',
-                        fontWeight: 300,
-                        color: '#FFFFFF',
-                        margin: 0,
-                        whiteSpace: 'nowrap',
-                        overflow: 'hidden',
-                        textOverflow: 'ellipsis',
-                        textShadow: '0 2px 10px rgba(0,0,0,0.9)',
-                      }}
-                    >
-                      {craftsmanshipSlides[activeSlide].title}
-                    </h4>
-                  </div>
-
-                  {/* Navigation Arrows */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      bottom: '16px',
-                      right: '16px',
-                      zIndex: 15,
-                      display: 'flex',
-                      gap: '6px',
-                    }}
-                  >
-                    <button
-                      type="button"
-                      aria-label="Previous Slide"
-                      onClick={() =>
-                        setActiveSlide(
-                          (prev) => (prev - 1 + craftsmanshipSlides.length) % craftsmanshipSlides.length
-                        )
-                      }
-                      style={{
-                        width: '32px',
-                        height: '32px',
-                        borderRadius: '2px',
-                        border: '1px solid rgba(255, 255, 255, 0.3)',
-                        backgroundColor: 'rgba(20, 21, 19, 0.6)',
-                        color: '#FFFFFF',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease',
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#A58B62';
-                        e.currentTarget.style.borderColor = '#A58B62';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'rgba(20, 21, 19, 0.6)';
-                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-                      }}
-                    >
-                      <ChevronLeft size={16} />
-                    </button>
-                    <button
-                      type="button"
-                      aria-label="Next Slide"
-                      onClick={() =>
-                        setActiveSlide((prev) => (prev + 1) % craftsmanshipSlides.length)
-                      }
-                      style={{
-                        width: '32px',
-                        height: '32px',
-                        borderRadius: '2px',
-                        border: '1px solid rgba(255, 255, 255, 0.3)',
-                        backgroundColor: 'rgba(20, 21, 19, 0.6)',
-                        color: '#FFFFFF',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease',
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#A58B62';
-                        e.currentTarget.style.borderColor = '#A58B62';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'rgba(20, 21, 19, 0.6)';
-                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.3)';
-                      }}
-                    >
-                      <ChevronRight size={16} />
-                    </button>
-                  </div>
-                </div>
-
-                {/* Bottom Slide Indicators Bar */}
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    gap: '8px',
-                    padding: '12px 16px',
-                    backgroundColor: '#ECEBE7',
-                    borderTop: '1px solid #D9D9D4',
-                  }}
-                >
-                  {craftsmanshipSlides.map((slide, idx) => (
-                    <button
-                      key={slide.tag}
-                      type="button"
-                      aria-label={`Go to slide ${idx + 1}`}
-                      onClick={() => setActiveSlide(idx)}
-                      style={{
-                        height: '3px',
-                        width: activeSlide === idx ? '32px' : '16px',
-                        backgroundColor: activeSlide === idx ? '#A58B62' : 'rgba(32, 33, 31, 0.25)',
-                        border: 'none',
-                        padding: 0,
-                        cursor: 'pointer',
-                        borderRadius: '2px',
-                        transition: 'all 0.3s ease',
-                      }}
-                    />
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* =========================================================================
-            SECTION 05: PRODUCT HIGHLIGHTS
-            ========================================================================= */}
-        <section
-          id="product-highlights"
-          aria-label="Product Highlights"
-          style={{
-            backgroundColor: '#ECEBE7',
-            paddingTop: 'clamp(90px, 12vw, 140px)',
-            paddingBottom: 'clamp(90px, 12vw, 140px)',
-            paddingLeft: 'clamp(20px, 6vw, 100px)',
-            paddingRight: 'clamp(20px, 6vw, 100px)',
-            borderBottom: '1px solid #D9D9D4',
-          }}
-        >
-          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-            <div style={{ maxWidth: '780px', marginBottom: 'clamp(36px, 5vw, 64px)' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '11.5px',
-                  fontWeight: 600,
-                  letterSpacing: '0.24em',
-                  textTransform: 'uppercase',
-                  color: '#A58B62',
-                  display: 'block',
-                  marginBottom: '12px',
-                }}
-              >
-                FEATURES &amp; ENGINEERING
-              </span>
-              <h2
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(34px, 4.5vw, 56px)',
-                  fontWeight: 300,
-                  color: '#20211F',
-                  letterSpacing: '-0.015em',
-                  margin: '0 0 16px 0',
-                }}
-              >
-                Product Highlights
-              </h2>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '16px', color: '#686963', lineHeight: 1.7, margin: 0 }}>
-                Every kitchen and wardrobe is engineered with modular intelligence, durable specifications, and tailored spatial ergonomics.
-              </p>
-            </div>
-
-            {/* 4 Feature Highlights Grid */}
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                gap: '28px',
-              }}
-            >
-              {productHighlights.map((item) => (
-                <div
-                  key={item.num}
-                  style={{
-                    backgroundColor: '#FFFFFF',
-                    padding: 'clamp(32px, 4vw, 40px)',
-                    border: '1px solid #D9D9D4',
-                    borderRadius: '2px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'flex-start',
-                    boxShadow: '0 8px 24px rgba(32, 33, 31, 0.03)',
-                  }}
-                >
-                  <div
-                    style={{
-                      width: '48px',
-                      height: '48px',
-                      borderRadius: '2px',
-                      backgroundColor: '#ECEBE7',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginBottom: '20px',
-                    }}
-                  >
-                    {item.icon}
-                  </div>
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '11px',
-                      fontWeight: 600,
-                      letterSpacing: '0.18em',
-                      color: '#A58B62',
-                      marginBottom: '10px',
-                    }}
-                  >
-                    {item.num}
-                  </span>
-                  <h3
-                    style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: '22px',
-                      fontWeight: 400,
-                      color: '#20211F',
-                      margin: '0 0 12px 0',
-                    }}
-                  >
-                    {item.title}
-                  </h3>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#686963', lineHeight: 1.65, margin: 0 }}>
-                    {item.desc}
-                  </p>
-                </div>
+                  </a>
+                </Reveal>
               ))}
             </div>
           </div>
         </section>
 
         {/* =========================================================================
-            SECTION 06: WHY LEOZ CUCINE (INTERACTIVE SLIDE-BY-SLIDE SHOWCASE)
+            04 PRODUCT HIGHLIGHTS — EXCELLENCE IN EVERY DETAIL
             ========================================================================= */}
-        <section
-          id="why-leoz"
-          aria-label="Why LEOZ Cucine"
-          style={{
-            backgroundColor: '#F7F7F5',
-            paddingTop: 'clamp(90px, 12vw, 150px)',
-            paddingBottom: 'clamp(90px, 12vw, 150px)',
-            paddingLeft: 'clamp(20px, 6vw, 100px)',
-            paddingRight: 'clamp(20px, 6vw, 100px)',
-          }}
-        >
-          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
-                gap: 'clamp(24px, 5vw, 64px)',
-                alignItems: 'flex-end',
-                marginBottom: 'clamp(36px, 5vw, 56px)',
-              }}
-            >
-              <div>
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: '11.5px', fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#A58B62', display: 'block', marginBottom: '12px' }}>
-                  BRAND LEADERSHIP &amp; PROMISE
-                </span>
-                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(34px, 4.5vw, 56px)', fontWeight: 300, color: '#20211F', letterSpacing: '-0.015em', margin: 0 }}>
-                  Why LEOZ Cucine?
-                </h2>
-              </div>
-              <div>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '15.5px', color: '#686963', lineHeight: 1.75, margin: 0 }}>
-                  A dedicated focus on kitchens and wardrobes; leadership with 20+ years of hands-on modular experience; 20,000 sq. ft. in-house production; German-inspired planning; design flexibility; documented product specifications; professional fitting and applicable warranty support.
-                </p>
-              </div>
-            </div>
-
-            {/* Slide-by-Slide Full Architectural Image Showcase with Integrated Text */}
-            <div
-              style={{
-                position: 'relative',
-                width: '100%',
-                minHeight: 'clamp(480px, 60vh, 680px)',
-                borderRadius: '4px',
-                overflow: 'hidden',
-                backgroundColor: '#0F100E',
-                boxShadow: '0 25px 65px rgba(32, 33, 31, 0.18)',
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'flex-end',
-              }}
-            >
-              {/* Full Background Slide Image with Smooth Transition */}
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeWhySlide}
-                  initial={{ opacity: 0, scale: 1.04 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.7, ease: luxuryEase }}
-                  style={{ position: 'absolute', inset: 0 }}
-                >
-                  <img
-                    src={whyLeozSlides[activeWhySlide].image}
-                    alt={whyLeozSlides[activeWhySlide].alt}
-                    style={{
-                      width: '100%',
-                      height: '100%',
-                      objectFit: 'cover',
-                      objectPosition: 'center 40%',
-                    }}
-                  />
-                  {/* Rich multi-layer dark scrim overlay to make text crystal clear */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      inset: 0,
-                      background:
-                        'linear-gradient(180deg, rgba(15, 16, 14, 0.2) 0%, rgba(15, 16, 14, 0.45) 40%, rgba(15, 16, 14, 0.88) 80%, rgba(15, 16, 14, 0.96) 100%)',
-                    }}
-                  />
-                  {/* Subtle radial vignette protecting bottom-left text */}
-                  <div
-                    style={{
-                      position: 'absolute',
-                      inset: 0,
-                      background:
-                        'radial-gradient(circle at 25% 85%, rgba(15, 16, 14, 0.85) 0%, rgba(15, 16, 14, 0.4) 50%, transparent 75%)',
-                      pointerEvents: 'none',
-                    }}
-                  />
-                </motion.div>
-              </AnimatePresence>
-
-              {/* Integrated Content Directly Inside Image */}
-              <div
-                style={{
-                  position: 'relative',
-                  zIndex: 10,
-                  width: '100%',
-                  boxSizing: 'border-box',
-                  padding: 'clamp(28px, 4.5vw, 56px)',
-                  color: '#FFFFFF',
-                  display: 'flex',
-                  flexDirection: 'column',
-                }}
-              >
-                {/* Text Content Block */}
-                <div style={{ maxWidth: '850px' }}>
-                  {/* Micro Tag with Gold accent */}
-                  <div
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '8px',
-                      backgroundColor: 'rgba(10, 11, 10, 0.65)',
-                      padding: '6px 14px',
-                      borderRadius: '2px',
-                      border: '1px solid rgba(212, 175, 55, 0.3)',
-                      backdropFilter: 'blur(8px)',
-                      marginBottom: '14px',
-                    }}
-                  >
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '10.5px', fontWeight: 600, letterSpacing: '0.22em', color: '#D4AF37', textTransform: 'uppercase' }}>
-                      {whyLeozSlides[activeWhySlide].tag}
-                    </span>
-                  </div>
-
-                  {/* Main Heading */}
-                  <h3
-                    style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: 'clamp(24px, 3.5vw, 44px)',
-                      fontWeight: 300,
-                      lineHeight: 1.15,
-                      color: '#FFFFFF',
-                      margin: '0 0 14px 0',
-                      textShadow: '0 3px 20px rgba(0,0,0,0.95)',
-                    }}
-                  >
-                    {whyLeozSlides[activeWhySlide].title}
-                  </h3>
-
-                  {/* Main Description */}
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: 'clamp(14px, 1.2vw, 16.5px)',
-                      lineHeight: 1.7,
-                      color: '#EAEAE6',
-                      margin: '0 0 24px 0',
-                      maxWidth: '760px',
-                      textShadow: '0 2px 12px rgba(0,0,0,0.95)',
-                    }}
-                  >
-                    {whyLeozSlides[activeWhySlide].desc}
-                  </p>
-                </div>
-
-                {/* Clean Full-Width Luxury Controls Bar (Stretches 100% across the bottom) */}
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    width: '100%',
-                    boxSizing: 'border-box',
-                    borderTop: '1px solid rgba(255, 255, 255, 0.15)',
-                    paddingTop: '20px',
-                    marginTop: '8px',
-                  }}
-                >
-                  {/* Left: Minimalist Slide Indicator Counter & Dash Lines */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <span style={{ fontFamily: 'var(--font-heading)', fontSize: '18px', color: '#D4AF37', fontWeight: 400 }}>
-                      {whyLeozSlides[activeWhySlide].num}
-                    </span>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                      {whyLeozSlides.map((slide, idx) => (
-                        <button
-                          key={slide.num}
-                          type="button"
-                          aria-label={`Go to slide ${idx + 1}`}
-                          onClick={() => setActiveWhySlide(idx)}
-                          style={{
-                            height: '3px',
-                            width: activeWhySlide === idx ? '32px' : '14px',
-                            backgroundColor: activeWhySlide === idx ? '#D4AF37' : 'rgba(255, 255, 255, 0.3)',
-                            border: 'none',
-                            padding: 0,
-                            borderRadius: '2px',
-                            cursor: 'pointer',
-                            transition: 'all 0.3s ease',
-                          }}
-                        />
-                      ))}
-                    </div>
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '11px', color: 'rgba(255, 255, 255, 0.5)', letterSpacing: '0.1em' }}>
-                      / 04
-                    </span>
-                  </div>
-
-                  {/* Right: Sleek Minimalist Arrows at Far Right Edge */}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', flexShrink: 0 }}>
-                    <button
-                      type="button"
-                      aria-label="Previous slide"
-                      onClick={() =>
-                        setActiveWhySlide(
-                          (prev) => (prev - 1 + whyLeozSlides.length) % whyLeozSlides.length
-                        )
-                      }
-                      style={{
-                        width: '38px',
-                        height: '38px',
-                        borderRadius: '2px',
-                        border: '1px solid rgba(255, 255, 255, 0.25)',
-                        backgroundColor: 'rgba(20, 21, 19, 0.65)',
-                        color: '#FFFFFF',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                        backdropFilter: 'blur(8px)',
-                        transition: 'all 0.2s ease',
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#A58B62';
-                        e.currentTarget.style.borderColor = '#A58B62';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'rgba(20, 21, 19, 0.65)';
-                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.25)';
-                      }}
-                    >
-                      <ChevronLeft size={16} />
-                    </button>
-                    <button
-                      type="button"
-                      aria-label="Next slide"
-                      onClick={() =>
-                        setActiveWhySlide((prev) => (prev + 1) % whyLeozSlides.length)
-                      }
-                      style={{
-                        width: '38px',
-                        height: '38px',
-                        borderRadius: '2px',
-                        border: '1px solid rgba(255, 255, 255, 0.25)',
-                        backgroundColor: 'rgba(20, 21, 19, 0.65)',
-                        color: '#FFFFFF',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        cursor: 'pointer',
-                        backdropFilter: 'blur(8px)',
-                        transition: 'all 0.2s ease',
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = '#A58B62';
-                        e.currentTarget.style.borderColor = '#A58B62';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = 'rgba(20, 21, 19, 0.65)';
-                        e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.25)';
-                      }}
-                    >
-                      <ChevronRight size={16} />
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* =========================================================================
-            SECTION 06: CINEMATIC FULL-WIDTH FACTORY HERO
-            ========================================================================= */}
-        <section
-          style={{
-            position: 'relative',
-            width: '100%',
-            minHeight: '65vh',
-            display: 'flex',
-            alignItems: 'center',
-            padding: 'clamp(80px, 10vh, 120px) clamp(20px, 6vw, 100px)',
-            backgroundColor: '#181917',
-            color: '#FFFFFF',
-            overflow: 'hidden',
-          }}
-        >
-          <div style={{ position: 'absolute', inset: 0, zIndex: 1 }}>
-            <img
-              src="/factory_precision_plant.webp"
-              alt="LEOZ 20,000 Sq. Ft. Precision Plant in Gujarat"
-              style={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                opacity: 0.35,
-                filter: 'contrast(1.1) brightness(0.8)',
-              }}
+        <section className="lz-section lz-bg-white" aria-labelledby="highlights-title">
+          <div className="lz-container">
+            <SectionHead
+              eyebrow="Product Highlights"
+              title="Excellence in Every Detail"
+              id="highlights-title"
+              center
             />
-            <div
-              style={{
-                position: 'absolute',
-                inset: 0,
-                background:
-                  'linear-gradient(180deg, rgba(20, 21, 19, 0.75) 0%, rgba(20, 21, 19, 0.85) 50%, rgba(20, 21, 19, 0.95) 100%)',
-              }}
-            />
-          </div>
 
-          <div style={{ position: 'relative', zIndex: 10, maxWidth: '780px' }}>
-            <span
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: '12px',
-                fontWeight: 600,
-                letterSpacing: '0.24em',
-                textTransform: 'uppercase',
-                color: '#D4AF37',
-                display: 'block',
-                marginBottom: '16px',
-                textShadow: '0 2px 8px rgba(0,0,0,0.8)',
-              }}
-            >
-              AT A GLANCE
-            </span>
-            <h2
-              style={{
-                fontFamily: 'var(--font-heading)',
-                fontSize: 'clamp(34px, 4.5vw, 56px)',
-                fontWeight: 400,
-                lineHeight: 1.15,
-                letterSpacing: '-0.015em',
-                color: '#FFFFFF',
-                margin: '0 0 20px 0',
-                textShadow: '0 3px 18px rgba(0,0,0,0.85)',
-              }}
-            >
-              20+ Years Leadership. 20,000 Sq. Ft. Facility.
-            </h2>
-            <p
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: 'clamp(15px, 1.25vw, 17px)',
-                color: '#F0F0EC',
-                lineHeight: 1.7,
-                marginBottom: '32px',
-                textShadow: '0 2px 10px rgba(0,0,0,0.8)',
-              }}
-            >
-              20+ years of specialist leadership experience | 20,000 sq. ft. manufacturing facility | Fully customised kitchens and wardrobes | Based in Gujarat.
-            </p>
-            <a
-              href="/factory"
-              onClick={(e) => navigate(e, '/factory')}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '14px 28px',
-                backgroundColor: '#A58B62',
-                color: '#FFFFFF',
-                fontFamily: 'var(--font-body)',
-                fontSize: '12px',
-                fontWeight: 600,
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                textDecoration: 'none',
-                borderRadius: '2px',
-                border: '1px solid #A58B62',
-                boxShadow: '0 6px 20px rgba(0,0,0,0.4)',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#8C744F';
-                e.currentTarget.style.borderColor = '#8C744F';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#A58B62';
-                e.currentTarget.style.borderColor = '#A58B62';
-              }}
-            >
-              <span>Explore Factory &amp; Machinery</span>
-              <ArrowRight size={14} />
-            </a>
-          </div>
-        </section>
-
-        {/* =========================================================================
-            SECTION 07: THE LEOZ JOURNEY (EXACT 8-STEP PROCESS RIBBON)
-            ========================================================================= */}
-        <section
-          id="the-journey"
-          style={{
-            backgroundColor: '#ECEBE7',
-            paddingTop: 'clamp(80px, 10vw, 120px)',
-            paddingBottom: 'clamp(80px, 10vw, 120px)',
-            paddingLeft: 'clamp(20px, 6vw, 100px)',
-            paddingRight: 'clamp(20px, 6vw, 100px)',
-            borderBottom: '1px solid #D9D9D4',
-          }}
-        >
-          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-            <div style={{ marginBottom: 'clamp(40px, 6vw, 64px)', maxWidth: '750px' }}>
-              <span style={{ fontFamily: 'var(--font-body)', fontSize: '11.5px', fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#A58B62', display: 'block', marginBottom: '12px' }}>
-                SEAMLESS EXECUTION
-              </span>
-              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(32px, 4.5vw, 56px)', fontWeight: 300, color: '#20211F', letterSpacing: '-0.015em', margin: 0 }}>
-                The LEOZ Journey
-              </h2>
-            </div>
-
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-                gap: '24px',
-              }}
-            >
-              {[
-                { step: '01', title: 'Consultation', desc: 'Understanding your lifestyle, space, and aesthetic preferences.' },
-                { step: '02', title: 'Site Measurement', desc: 'Laser assessment of site constraints, walls, and service points.' },
-                { step: '03', title: 'Design & Layout', desc: 'Ergonomic 3D visualizations and spatial workflow planning.' },
-                { step: '04', title: 'Materials & Hardware', desc: 'Selection of curated finishes, carcass specs, and German fittings.' },
-                { step: '05', title: 'Factory Manufacturing', desc: 'Computerized CNC cutting, PUR edge sealing, and pre-assembly.' },
-                { step: '06', title: 'Installation', desc: 'Meticulous on-site fitting by certified LEOZ master carpenters.' },
-                { step: '07', title: 'Final Inspection', desc: 'Multi-point handover audit verifying plumb alignment and spotless finish.' },
-                { step: '08', title: 'After-Sales Coordination', desc: 'Documented warranty support and dedicated relationship care.' },
-              ].map((item) => (
-                <div
-                  key={item.step}
-                  style={{
-                    backgroundColor: '#F7F7F5',
-                    padding: '24px 20px',
-                    borderTop: '2px solid #A58B62',
-                  }}
-                >
-                  <span style={{ fontFamily: 'var(--font-heading)', fontSize: '28px', fontWeight: 300, color: '#A58B62', display: 'block', marginBottom: '6px' }}>
-                    {item.step}
-                  </span>
-                  <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '18px', fontWeight: 400, color: '#20211F', margin: '0 0 8px 0' }}>
-                    {item.title}
-                  </h3>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '13px', color: '#686963', lineHeight: 1.6, margin: 0 }}>
-                    {item.desc}
-                  </p>
-                </div>
+            <ul className="lz-highlights">
+              {highlights.map(({ title, Icon }, idx) => (
+                <motion.li key={title} {...revealProps(prefersReducedMotion, idx * 0.1)}>
+                  <div className="lz-highlight lz-card">
+                    <Icon size={32} strokeWidth={1.25} aria-hidden="true" />
+                    <h3 className="lz-h3">{title}</h3>
+                  </div>
+                </motion.li>
               ))}
+            </ul>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            05 WHY LEOZ CUCINE?
+            ========================================================================= */}
+        <section className="lz-section lz-bg-ivory" aria-labelledby="why-title">
+          <BracketCorner position="br" />
+          <div className="lz-container lz-why">
+            <div className="lz-why__aside">
+              <SectionHead title="Why LEOZ Cucine?" id="why-title" />
+              <Reveal delay={0.1} className="lz-zoom">
+                <WarmImage
+                  src="/Grand Villa Estate.webp"
+                  alt="LEOZ open-plan villa kitchen with a marble waterfall island and warm brass accents"
+                />
+              </Reveal>
+            </div>
+
+            <ul className="lz-checklist">
+              {whyLeoz.map((item, idx) => (
+                <motion.li key={item} {...revealProps(prefersReducedMotion, idx * 0.08)}>
+                  <span className="lz-check" aria-hidden="true">
+                    <Check size={18} strokeWidth={1.5} />
+                  </span>
+                  <span className="lz-body">{item}</span>
+                </motion.li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            06 AT A GLANCE
+            ========================================================================= */}
+        <section className="lz-section lz-bg-sand" aria-labelledby="glance-title">
+          <div className="lz-container">
+            <SectionHead title="At a Glance" id="glance-title" center />
+
+            <ul className="lz-stats">
+              {stats.map((stat, idx) => (
+                <motion.li key={stat.label} className="lz-stat" {...revealProps(prefersReducedMotion, idx * 0.1)}>
+                  {'count' in stat ? (
+                    <>
+                      <CountUp to={stat.count} suffix={stat.suffix} />
+                      <span className="lz-stat__label">{stat.label}</span>
+                    </>
+                  ) : stat.labelFirst ? (
+                    <>
+                      <span className="lz-stat__label lz-stat__label--top">{stat.label}</span>
+                      <span className="lz-stat__value">{stat.text}</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="lz-stat__value">{stat.text}</span>
+                      <span className="lz-stat__label">{stat.label}</span>
+                    </>
+                  )}
+                </motion.li>
+              ))}
+            </ul>
+          </div>
+        </section>
+
+        {/* =========================================================================
+            07 THE LEOZ JOURNEY
+            ========================================================================= */}
+        <section className="lz-section lz-bg-white" aria-labelledby="journey-title">
+          <div className="lz-container">
+            <SectionHead title="The LEOZ Journey" id="journey-title" center />
+
+            <div ref={journeyRef} className="lz-journey-wrap">
+              <span className="lz-journey__track" aria-hidden="true" />
+              <motion.span
+                className="lz-journey__progress"
+                aria-hidden="true"
+                style={{ '--p': journeyLine } as unknown as React.CSSProperties}
+              />
+              <ol className="lz-journey">
+                {journey.map((step, idx) => (
+                  <li key={step} className={`lz-step ${idx < activeSteps ? 'is-active' : ''}`}>
+                    <span className="lz-step__dot" aria-hidden="true">
+                      {String(idx + 1).padStart(2, '0')}
+                    </span>
+                    <h3 className="lz-step__label">{step}</h3>
+                  </li>
+                ))}
+              </ol>
             </div>
           </div>
         </section>
 
         {/* =========================================================================
-            SECTION 08: FOR DESIGN PROFESSIONALS (ARCHITECTS & DESIGNERS)
+            08 FOR DESIGN PROFESSIONALS
             ========================================================================= */}
-        <section
-          style={{
-            backgroundColor: '#F7F7F5',
-            paddingTop: 'clamp(90px, 12vw, 150px)',
-            paddingBottom: 'clamp(90px, 12vw, 150px)',
-            paddingLeft: 'clamp(20px, 6vw, 100px)',
-            paddingRight: 'clamp(20px, 6vw, 100px)',
-            borderTop: '1px solid #D9D9D4',
-          }}
-        >
-          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
-                gap: 'clamp(24px, 5vw, 64px)',
-                alignItems: 'flex-end',
-                marginBottom: 'clamp(48px, 6vw, 80px)',
-              }}
-            >
-              <div>
-                <span style={{ fontFamily: 'var(--font-body)', fontSize: '11.5px', fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#A58B62', display: 'block', marginBottom: '12px' }}>
-                  FOR DESIGN PROFESSIONALS
-                </span>
-                <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(32px, 4.5vw, 54px)', fontWeight: 300, color: '#20211F', letterSpacing: '-0.015em', margin: 0, lineHeight: 1.15 }}>
-                  Architectural Partnerships &amp; Development
+        <section className="lz-section lz-bg-ivory" aria-labelledby="pros-title">
+          <div className="lz-container lz-pros">
+            <Reveal className="lz-zoom">
+              <WarmImage
+                src="/Italian Marble.webp"
+                alt="Bright LEOZ kitchen with Italian marble surfaces, a long island and integrated lighting"
+              />
+            </Reveal>
+
+            <Reveal delay={0.15}>
+              <div className="lz-pros__card">
+                <h2 className="lz-h2" id="pros-title">
+                  For Design Professionals
                 </h2>
-              </div>
-              <div>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '15.5px', color: '#686963', lineHeight: 1.75, margin: 0 }}>
+                <GoldRule />
+                <p className="lz-body">
                   We work with architects, interior designers and premium residential developers to realise customised kitchen and wardrobe specifications. Our team supports technical coordination, material selection, controlled manufacturing and site installation for individual and multi-home requirements.
                 </p>
+                <a href="/contact" onClick={(e) => navigate(e, '/contact')} className="lz-btn lz-btn--secondary">
+                  <span>Partner With Us</span>
+                  <ArrowRight size={14} aria-hidden="true" />
+                </a>
               </div>
-            </div>
-
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
-                gap: '24px',
-              }}
-            >
-              {[
-                {
-                  icon: <Compass size={24} color="#A58B62" />,
-                  title: 'Architects',
-                  desc: 'Bespoke technical joinery drawings, CAD integration, and factory-level execution for residential projects.',
-                  tag: 'TECHNICAL JOINERY',
-                },
-                {
-                  icon: <Layers size={24} color="#A58B62" />,
-                  title: 'Interior Designers',
-                  desc: 'Tactile surface archives, bespoke veneer matching, and custom glass vitrines without creative restrictions.',
-                  tag: 'MATERIAL ARCHIVES',
-                },
-                {
-                  icon: <Building2 size={24} color="#A58B62" />,
-                  title: 'Developers',
-                  desc: 'Scalable manufacturing capacity and turnkey precision installation for luxury penthouses and estates.',
-                  tag: 'SCALE & TURNKEY',
-                },
-                {
-                  icon: <Users size={24} color="#A58B62" />,
-                  title: 'Homeowners',
-                  desc: 'Personal 1-on-1 consultation, transparent quotations, and white-glove after-sales support.',
-                  tag: 'BESPOKE LIVING',
-                },
-              ].map((card) => (
-                <div
-                  key={card.title}
-                  style={{
-                    backgroundColor: '#FFFFFF',
-                    border: '1px solid #E5E4E0',
-                    borderTop: '3px solid #A58B62',
-                    padding: '32px 24px',
-                    borderRadius: '2px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'space-between',
-                    boxShadow: '0 4px 20px rgba(32, 33, 31, 0.04)',
-                    transition: 'all 0.3s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.transform = 'translateY(-4px)';
-                    e.currentTarget.style.boxShadow = '0 12px 32px rgba(165, 139, 98, 0.12)';
-                    e.currentTarget.style.borderColor = '#A58B62';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.transform = 'translateY(0)';
-                    e.currentTarget.style.boxShadow = '0 4px 20px rgba(32, 33, 31, 0.04)';
-                    e.currentTarget.style.borderColor = '#E5E4E0';
-                  }}
-                >
-                  <div>
-                    <div
-                      style={{
-                        width: '48px',
-                        height: '48px',
-                        borderRadius: '2px',
-                        backgroundColor: '#F7F7F5',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        marginBottom: '20px',
-                        border: '1px solid #ECEBE7',
-                      }}
-                    >
-                      {card.icon}
-                    </div>
-                    <span
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '10px',
-                        fontWeight: 600,
-                        letterSpacing: '0.18em',
-                        textTransform: 'uppercase',
-                        color: '#A58B62',
-                        display: 'block',
-                        marginBottom: '8px',
-                      }}
-                    >
-                      {card.tag}
-                    </span>
-                    <h3
-                      style={{
-                        fontFamily: 'var(--font-heading)',
-                        fontSize: '22px',
-                        fontWeight: 400,
-                        color: '#20211F',
-                        margin: '0 0 12px 0',
-                      }}
-                    >
-                      {card.title}
-                    </h3>
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '14px',
-                        color: '#686963',
-                        lineHeight: 1.7,
-                        margin: 0,
-                      }}
-                    >
-                      {card.desc}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            </Reveal>
           </div>
         </section>
 
         {/* =========================================================================
-            SECTION 09: FINAL CALL TO ACTION (BEGIN YOUR LEOZ EXPERIENCE)
+            09 FINAL CALL TO ACTION — BEGIN YOUR LEOZ EXPERIENCE
             ========================================================================= */}
-        <section
-          id="final-cta"
-          style={{
-            backgroundColor: '#1C1D1A',
-            color: '#FFFFFF',
-            paddingTop: 'clamp(80px, 10vw, 120px)',
-            paddingBottom: 'clamp(80px, 10vw, 120px)',
-            paddingLeft: 'clamp(20px, 6vw, 100px)',
-            paddingRight: 'clamp(20px, 6vw, 100px)',
-            textAlign: 'center',
-          }}
-        >
-          <div style={{ maxWidth: '820px', margin: '0 auto' }}>
-            <span style={{ fontFamily: 'var(--font-body)', fontSize: '11.5px', fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#D4AF37', display: 'block', marginBottom: '16px' }}>
-              BEGIN YOUR LEOZ EXPERIENCE
-            </span>
-            <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(34px, 4.5vw, 56px)', fontWeight: 300, lineHeight: 1.15, color: '#FFFFFF', letterSpacing: '-0.015em', margin: '0 0 20px 0' }}>
-              Your next kitchen or wardrobe begins with a conversation.
-            </h2>
-            <p style={{ fontFamily: 'var(--font-body)', fontSize: 'clamp(15px, 1.25vw, 17px)', color: '#D9D9D4', lineHeight: 1.7, margin: '0 0 36px 0' }}>
-              Share your vision and let our team develop a solution around your home, habits and aesthetic preferences.
-            </p>
-            <a
-              href="/talk-to-us"
-              onClick={(e) => navigate(e, '/talk-to-us')}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                padding: '16px 36px',
-                backgroundColor: '#A58B62',
-                color: '#FFFFFF',
-                fontFamily: 'var(--font-body)',
-                fontSize: '12px',
-                fontWeight: 600,
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                textDecoration: 'none',
-                borderRadius: '2px',
-                boxShadow: '0 6px 24px rgba(0,0,0,0.5)',
-                transition: 'all 0.3s ease',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = '#8C744F';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = '#A58B62';
-              }}
-            >
-              <span>Book a Private Consultation</span>
-              <ArrowRight size={14} />
-            </a>
+        <section className="lz-final" aria-labelledby="final-title">
+          <WarmImage
+            src="/U -Shape Layout.webp"
+            alt="Warm-lit LEOZ U-shaped kitchen with soft grey cabinetry and a central island"
+          />
+          <div className="lz-final__veil" aria-hidden="true" />
+
+          <div className="lz-container">
+            <Reveal className="lz-final__panel">
+              <h2 className="lz-h2" id="final-title">
+                Begin Your LEOZ Experience
+              </h2>
+              <GoldRule />
+              <p className="lz-lead">
+                Your next kitchen or wardrobe begins with a conversation. Share your vision and let our team develop a solution around your home, habits and aesthetic preferences.
+              </p>
+              <a
+                href="/talk-to-us"
+                onClick={(e) => navigate(e, '/talk-to-us')}
+                className="lz-btn lz-btn--primary lz-btn--lg lz-btn--shimmer"
+              >
+                <span>Book a Private Consultation</span>
+                <ArrowRight size={16} aria-hidden="true" />
+              </a>
+            </Reveal>
           </div>
         </section>
       </main>
 
       <Footer />
-
-      <style>{`
-        @media (max-width: 900px) {
-          .editorial-grid {
-            grid-template-columns: 1fr !important;
-            gap: 32px !important;
-          }
-        }
-      `}</style>
     </div>
   );
 };

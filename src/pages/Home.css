@@ -1,0 +1,1120 @@
+/* ==========================================================================
+   LEOZ CUCINE — HOME PAGE (Light Warm Theme)
+   Tokens are scoped to .lz-home so the shared Header & Footer are untouched.
+   Font families, weights, letter-spacing and text-transform follow the
+   existing Home page; only sizes, line-heights and spacing are tuned here.
+   ========================================================================== */
+
+.lz-home {
+  --bg-ivory: #FAF6EF;
+  --bg-cream: #F3EADB;
+  --bg-sand: #EADCC5;
+  --gold: #C99A5B;
+  --gold-light: #E0BC8A;
+  --bronze: #8A6330;
+  --text-cocoa: #3B2F25;
+  --text-taupe: #6B5A48;
+  --text-body: #3F3227;          /* Readable body copy (≈11:1 on ivory) */
+  --text-strong: #2A2018;        /* Headings */
+  --line-gold: rgba(201, 154, 91, 0.35);
+  --glass: rgba(250, 246, 239, 0.86);
+  --shadow-card: 0 10px 30px rgba(138, 99, 48, 0.08);
+  --shadow-card-hover: 0 18px 40px rgba(138, 99, 48, 0.13);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  background-color: var(--bg-ivory);
+  color: var(--text-cocoa);
+  min-height: 100vh;
+  overflow-x: clip;
+}
+
+.lz-home :focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+.lz-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Layout ---------- */
+.lz-container {
+  width: 100%;
+  max-width: 1240px;
+  margin: 0 auto;
+  padding-inline: clamp(20px, 5vw, 48px);
+}
+
+.lz-section {
+  position: relative;
+  padding-block: clamp(64px, 9vw, 120px);
+  overflow-x: clip;
+}
+
+.lz-bg-ivory { background-color: var(--bg-ivory); }
+.lz-bg-cream { background-color: var(--bg-cream); }
+.lz-bg-white { background-color: #FFFFFF; }
+.lz-bg-sand  { background-color: var(--bg-sand); }
+
+.lz-section-head {
+  margin-bottom: clamp(40px, 5vw, 64px);
+}
+
+.lz-section-head--center {
+  text-align: center;
+  max-width: 720px;
+  margin-inline: auto;
+}
+
+/* ---------- Typography ---------- */
+.lz-eyebrow {
+  display: block;
+  margin: 0 0 16px;
+  font-family: var(--font-body);
+  font-size: 12.5px;
+  font-weight: 600;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--bronze);
+}
+
+.lz-h1 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(38px, 5.2vw, 68px);
+  font-weight: 300;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  color: var(--text-strong);
+}
+
+.lz-h2 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(32px, 4.2vw, 52px);
+  font-weight: 300;
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  color: var(--text-strong);
+}
+
+.lz-h3 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(22px, 2vw, 26px);
+  font-weight: 400;
+  line-height: 1.25;
+  color: var(--text-strong);
+}
+
+.lz-rule {
+  display: block;
+  width: 48px;
+  height: 1px;
+  margin-top: 24px;
+  background-color: var(--gold);
+  transform-origin: left center;
+}
+
+.lz-section-head--center .lz-rule,
+.lz-final__panel .lz-rule,
+.lz-rule--center {
+  margin-inline: auto;
+  transform-origin: center;
+}
+
+.lz-lead {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: clamp(17px, 1.4vw, 19.5px);
+  font-weight: 300;
+  line-height: 1.75;
+  color: var(--text-body);
+}
+
+.lz-body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.8;
+  color: var(--text-body);
+}
+
+/* ---------- Buttons ---------- */
+.lz-btn {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 14px 28px;
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: 2px;
+  cursor: pointer;
+  transition:
+    background-color 250ms var(--ease-out),
+    border-color 250ms var(--ease-out),
+    color 250ms var(--ease-out),
+    transform 250ms var(--ease-out),
+    box-shadow 250ms var(--ease-out);
+}
+
+.lz-btn svg,
+.lz-link svg {
+  flex-shrink: 0;
+  transition: transform 250ms var(--ease-out);
+}
+
+.lz-btn:hover svg,
+.lz-link:hover svg {
+  transform: translateX(4px);
+}
+
+.lz-btn--primary {
+  background-color: var(--gold);
+  border-color: var(--gold);
+  color: var(--text-cocoa);
+}
+
+.lz-btn--primary:hover {
+  background-color: var(--bronze);
+  border-color: var(--bronze);
+  color: var(--bg-ivory);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(138, 99, 48, 0.2);
+}
+
+.lz-btn--secondary {
+  background-color: transparent;
+  border-color: var(--gold);
+  color: var(--text-cocoa);
+}
+
+.lz-btn--secondary:hover {
+  background-color: var(--gold);
+  color: var(--text-cocoa);
+  transform: translateY(-1px);
+}
+
+.lz-btn--lg {
+  min-height: 56px;
+  padding: 18px 40px;
+  font-size: 12px;
+}
+
+/* Subtle light sweep across the large CTA on hover */
+.lz-btn--shimmer {
+  overflow: hidden;
+}
+
+.lz-btn--shimmer > * {
+  position: relative;
+  z-index: 1;
+}
+
+.lz-btn--shimmer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -120%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(110deg, transparent, rgba(255, 255, 255, 0.45), transparent);
+  transform: skewX(-20deg);
+  transition: left 600ms var(--ease-out);
+}
+
+.lz-btn--shimmer:hover::before {
+  left: 140%;
+}
+
+/* Tertiary text link with animated underline */
+.lz-link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-decoration: none;
+  color: var(--bronze);
+}
+
+.lz-link::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 22px;
+  bottom: 10px;
+  height: 1px;
+  background-color: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 300ms var(--ease-out);
+}
+
+.lz-link:hover::after {
+  transform: scaleX(1);
+}
+
+/* ---------- Cards ---------- */
+.lz-card {
+  background-color: #FFFFFF;
+  border: 1px solid var(--line-gold);
+  border-radius: 2px;
+  box-shadow: var(--shadow-card);
+  transition:
+    transform 300ms var(--ease-out),
+    box-shadow 300ms var(--ease-out);
+}
+
+.lz-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* ---------- Images ---------- */
+.lz-media {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  background-color: var(--bg-sand);
+}
+
+.lz-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition:
+    transform 600ms var(--ease-out),
+    filter 600ms var(--ease-out),
+    opacity 600ms var(--ease-out);
+}
+
+/* Warm blur placeholder until the photo arrives */
+.lz-media img.is-loading {
+  opacity: 0.4;
+  filter: blur(16px);
+}
+
+/* Soft cream wash — never a dark overlay */
+.lz-media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(180deg, rgba(250, 246, 239, 0) 55%, rgba(250, 246, 239, 0.18) 100%);
+}
+
+.lz-zoom:hover .lz-media img {
+  transform: scale(1.05);
+}
+
+/* ---------- Logo bracket motif ---------- */
+.lz-bracket {
+  position: absolute;
+  width: clamp(72px, 9vw, 128px);
+  height: clamp(72px, 9vw, 128px);
+  color: var(--gold);
+  opacity: 0.08;
+  pointer-events: none;
+}
+
+.lz-bracket--tl { top: 32px; left: 32px; }
+.lz-bracket--br { right: 32px; bottom: 32px; transform: rotate(180deg); }
+
+/* ==========================================================================
+   01 HERO
+   ========================================================================== */
+.lz-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: max(640px, 100svh);
+  overflow: hidden;
+  background-color: var(--bg-cream);
+}
+
+.lz-hero__media {
+  position: absolute;
+  inset: 0 0 -120px 0;
+  z-index: 0;
+}
+
+.lz-hero__kenburns {
+  position: absolute;
+  inset: 0;
+  animation: lzKenBurns 12s var(--ease-out) infinite alternate;
+  will-change: transform;
+}
+
+.lz-hero__kenburns video {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 40%;
+}
+
+@keyframes lzKenBurns {
+  from { transform: scale(1); }
+  to   { transform: scale(1.06); }
+}
+
+.lz-hero__content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding-top: 136px;
+  padding-bottom: 112px;
+}
+
+/* Text sits directly on the original video — no panel or overlay.
+   A soft ivory glow around the letters keeps them legible on any frame. */
+.lz-hero__inner {
+  max-width: 840px;
+}
+
+.lz-hero__inner .lz-eyebrow,
+.lz-hero__inner .lz-h1,
+.lz-hero__inner .lz-lead {
+  text-shadow:
+    0 1px 2px rgba(250, 246, 239, 0.95),
+    0 0 18px rgba(250, 246, 239, 0.9),
+    0 0 36px rgba(250, 246, 239, 0.7);
+}
+
+.lz-hero__inner .lz-lead {
+  color: var(--text-strong);
+}
+
+.lz-hero__inner .lz-rule {
+  height: 2px;
+  background-color: var(--bronze);
+}
+
+/* Hero CTAs: gold · black · gold, each swapping to the other colour on hover */
+.lz-btn--light {
+  background-color: var(--gold);
+  border-color: var(--gold);
+  color: var(--text-strong);
+}
+
+.lz-btn--light:hover {
+  background-color: #1A1612;
+  border-color: #1A1612;
+  color: #FFFFFF;
+  transform: translateY(-1px);
+}
+
+.lz-btn--dark {
+  background-color: #1A1612;
+  border-color: #1A1612;
+  color: #FFFFFF;
+}
+
+.lz-btn--dark:hover {
+  background-color: var(--gold);
+  border-color: var(--gold);
+  color: var(--text-strong);
+  transform: translateY(-1px);
+}
+
+.lz-hero__ctas .lz-btn {
+  box-shadow: 0 6px 18px rgba(26, 22, 18, 0.22);
+}
+
+.lz-hero .lz-h1 {
+  font-size: clamp(36px, 4.4vw, 56px);
+}
+
+.lz-hero__eyebrow {
+  letter-spacing: 0.22em;
+}
+
+.lz-hero__text {
+  margin: 24px 0 40px;
+  max-width: 560px;
+}
+
+.lz-hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px 24px;
+}
+
+.lz-scroll {
+  position: absolute;
+  left: 50%;
+  bottom: 24px;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  width: 44px;
+  height: 64px;
+  padding: 8px 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transform: translateX(-50%);
+}
+
+.lz-scroll__track {
+  position: relative;
+  display: block;
+  width: 1px;
+  height: 100%;
+  overflow: hidden;
+  background-color: rgba(138, 99, 48, 0.25);
+}
+
+.lz-scroll__track::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -16px;
+  width: 1px;
+  height: 16px;
+  background-color: var(--bronze);
+  animation: lzScrollCue 1.8s var(--ease-out) infinite;
+}
+
+@keyframes lzScrollCue {
+  from { transform: translateY(0); }
+  to   { transform: translateY(64px); }
+}
+
+/* ==========================================================================
+   02 WELCOME
+   ========================================================================== */
+.lz-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: clamp(48px, 7vw, 96px);
+}
+
+.lz-split__text .lz-section-head {
+  margin-bottom: 0;
+}
+
+.lz-split__text .lz-body {
+  margin-top: 32px;
+  max-width: 520px;
+}
+
+.lz-offset {
+  position: relative;
+  padding: 0 24px 24px 0;
+}
+
+.lz-offset__frame {
+  position: absolute;
+  inset: 24px 0 0 24px;
+  color: var(--gold);
+  opacity: 0.55;
+  pointer-events: none;
+}
+
+.lz-offset .lz-media {
+  position: relative;
+  z-index: 1;
+  aspect-ratio: 4 / 5;
+}
+
+/* Mascot artwork keeps its native ratio so the figure and title are never cropped */
+.lz-offset .lz-media--mascot {
+  aspect-ratio: 684 / 768;
+}
+
+.lz-media--mascot::after {
+  display: none;
+}
+
+/* ==========================================================================
+   03 COLLECTIONS
+   ========================================================================== */
+.lz-collections {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(24px, 4vw, 48px);
+}
+
+.lz-collection {
+  display: flex;
+  flex-direction: column;
+  color: inherit;
+  text-decoration: none;
+}
+
+.lz-collection .lz-media {
+  aspect-ratio: 4 / 5;
+  border-radius: 2px 2px 0 0;
+}
+
+.lz-collection__veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background-color: rgba(250, 246, 239, 0.22);
+  opacity: 0;
+  transition: opacity 400ms var(--ease-out);
+}
+
+.lz-collection:hover .lz-collection__veil {
+  opacity: 1;
+}
+
+.lz-collection__body {
+  padding: clamp(24px, 3vw, 40px);
+}
+
+.lz-collection__body .lz-body {
+  margin-top: 16px;
+}
+
+.lz-collection__explore {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 24px;
+  font-family: var(--font-body);
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--bronze);
+  opacity: 0;
+  transform: translateX(-12px);
+  transition:
+    opacity 300ms var(--ease-out),
+    transform 300ms var(--ease-out);
+}
+
+.lz-collection:hover .lz-collection__explore,
+.lz-collection:focus-visible .lz-collection__explore {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@media (hover: none) {
+  .lz-collection__explore {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* ==========================================================================
+   04 PRODUCT HIGHLIGHTS
+   ========================================================================== */
+.lz-highlights {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lz-highlight {
+  position: relative;
+  height: 100%;
+  min-height: 208px;
+  padding: 40px 32px;
+  overflow: hidden;
+}
+
+.lz-highlight::after {
+  content: '';
+  position: absolute;
+  left: 32px;
+  right: 32px;
+  bottom: 0;
+  height: 1px;
+  background-color: var(--gold);
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 400ms var(--ease-out);
+}
+
+.lz-highlight:hover::after {
+  transform: scaleX(1);
+}
+
+.lz-highlight svg {
+  display: block;
+  margin-bottom: 32px;
+  color: var(--gold);
+}
+
+/* ==========================================================================
+   05 WHY LEOZ
+   ========================================================================== */
+.lz-why {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  align-items: start;
+  gap: clamp(48px, 7vw, 96px);
+}
+
+.lz-why__aside {
+  position: sticky;
+  top: 112px;
+}
+
+.lz-why__aside .lz-media {
+  margin-top: 40px;
+  aspect-ratio: 4 / 5;
+  max-height: 56vh;
+  width: 100%;
+}
+
+.lz-checklist {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--line-gold);
+}
+
+.lz-checklist li {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  min-height: 80px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--line-gold);
+}
+
+.lz-check {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  color: var(--gold);
+  border: 1px solid var(--line-gold);
+  border-radius: 50%;
+}
+
+.lz-checklist .lz-body {
+  font-size: clamp(17px, 1.35vw, 19px);
+  line-height: 1.5;
+  color: var(--text-strong);
+}
+
+/* ==========================================================================
+   06 AT A GLANCE
+   ========================================================================== */
+.lz-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lz-stat {
+  padding: 16px clamp(16px, 3vw, 40px);
+  text-align: center;
+}
+
+.lz-stat + .lz-stat {
+  border-left: 1px solid rgba(201, 154, 91, 0.6);
+}
+
+.lz-stat__value {
+  position: relative;
+  display: inline-block;
+  font-family: var(--font-heading);
+  font-size: clamp(40px, 4.8vw, 64px);
+  font-weight: 300;
+  line-height: 1;
+  color: var(--bronze);
+}
+
+/* Final value reserves the width so counting never shifts the layout */
+.lz-count__ghost {
+  visibility: hidden;
+}
+
+.lz-count__live {
+  position: absolute;
+  inset: 0;
+  text-align: center;
+}
+
+.lz-stat__label {
+  display: block;
+  max-width: 220px;
+  margin: 16px auto 0;
+  font-family: var(--font-body);
+  font-size: 13px;
+  line-height: 1.6;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-body);
+}
+
+.lz-stat__label--top {
+  margin: 0 auto 16px;
+}
+
+/* Eyebrow on sand uses taupe to keep AA contrast */
+.lz-bg-sand .lz-eyebrow {
+  color: var(--text-body);
+}
+
+/* ==========================================================================
+   07 THE LEOZ JOURNEY
+   ========================================================================== */
+.lz-journey-wrap {
+  position: relative;
+}
+
+.lz-journey {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lz-journey__track,
+.lz-journey__progress {
+  position: absolute;
+  top: 28px;
+  left: 6.25%;
+  right: 6.25%;
+  height: 1px;
+}
+
+.lz-journey__track {
+  background-color: var(--line-gold);
+}
+
+.lz-journey__progress {
+  background-color: var(--gold);
+  transform: scaleX(var(--p, 0));
+  transform-origin: left center;
+}
+
+.lz-step {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 8px;
+  text-align: center;
+  cursor: default;
+}
+
+.lz-step__dot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 300;
+  color: var(--bronze);
+  background-color: #FFFFFF;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  transition:
+    background-color 400ms var(--ease-out),
+    color 400ms var(--ease-out),
+    box-shadow 400ms var(--ease-out);
+}
+
+.lz-step.is-active .lz-step__dot,
+.lz-step:hover .lz-step__dot {
+  background-color: var(--gold);
+  color: var(--text-cocoa);
+  box-shadow: 0 6px 18px rgba(138, 99, 48, 0.18);
+}
+
+.lz-step__label {
+  margin: 24px 0 0;
+  font-family: var(--font-heading);
+  font-size: 19px;
+  font-weight: 400;
+  line-height: 1.35;
+  color: var(--text-strong);
+  transition: transform 300ms var(--ease-out);
+}
+
+.lz-step:hover .lz-step__label {
+  transform: translateY(-4px);
+}
+
+/* ==========================================================================
+   08 DESIGN PROFESSIONALS
+   ========================================================================== */
+.lz-pros {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  align-items: center;
+}
+
+.lz-pros .lz-media {
+  aspect-ratio: 5 / 4;
+}
+
+.lz-pros__card {
+  position: relative;
+  z-index: 1;
+  margin-left: -96px;
+  padding: clamp(40px, 5vw, 64px);
+  background-color: var(--bg-cream);
+  border: 1px solid var(--line-gold);
+  border-radius: 2px;
+  box-shadow: var(--shadow-card);
+}
+
+/* Logo-style bracket on the card's top-right corner */
+.lz-pros__card::before,
+.lz-pros__card::after {
+  content: '';
+  position: absolute;
+  top: -12px;
+  right: -12px;
+  background-color: var(--gold);
+}
+
+.lz-pros__card::before { width: 56px; height: 1px; }
+.lz-pros__card::after  { width: 1px; height: 56px; }
+
+.lz-pros__card .lz-body {
+  margin: 32px 0 40px;
+}
+
+/* ==========================================================================
+   09 FINAL CTA
+   ========================================================================== */
+.lz-final {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: clamp(560px, 70vh, 720px);
+  overflow: hidden;
+}
+
+.lz-final > .lz-media {
+  position: absolute;
+  inset: 0;
+  border-radius: 0;
+}
+
+.lz-final__veil {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(250, 246, 239, 0.6) 0%,
+    rgba(250, 246, 239, 0.35) 55%,
+    rgba(250, 246, 239, 0.15) 100%
+  );
+}
+
+.lz-final__panel {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+  margin: 0 auto;
+  padding: clamp(40px, 6vw, 72px) clamp(24px, 5vw, 64px);
+  text-align: center;
+  background-color: var(--glass);
+  -webkit-backdrop-filter: blur(16px) saturate(120%);
+  backdrop-filter: blur(16px) saturate(120%);
+  border: 1px solid var(--line-gold);
+  border-radius: 4px;
+  box-shadow: var(--shadow-card);
+}
+
+#main-content .lz-final__panel p {
+  margin: 32px auto 40px;
+  max-width: 560px;
+  text-align: center;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+@media (max-width: 1023px) {
+  .lz-highlights {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lz-why {
+    grid-template-columns: 1fr;
+  }
+
+  .lz-why__aside {
+    position: static;
+  }
+
+  .lz-why__aside .lz-media {
+    aspect-ratio: 16 / 10;
+    max-height: none;
+  }
+
+  /* Journey turns vertical */
+  .lz-journey {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .lz-journey__track,
+  .lz-journey__progress {
+    top: 28px;
+    bottom: 28px;
+    left: 28px;
+    right: auto;
+    width: 1px;
+    height: auto;
+  }
+
+  .lz-journey__progress {
+    transform: scaleY(var(--p, 0));
+    transform-origin: center top;
+  }
+
+  .lz-step {
+    flex-direction: row;
+    gap: 24px;
+    padding: 0;
+    text-align: left;
+  }
+
+  .lz-step__dot {
+    flex-shrink: 0;
+  }
+
+  .lz-step__label {
+    margin: 0;
+  }
+
+  .lz-step:hover .lz-step__label {
+    transform: translateX(4px);
+  }
+
+  .lz-pros {
+    grid-template-columns: 1fr;
+  }
+
+  .lz-pros__card {
+    margin: -48px 16px 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .lz-home .lz-body,
+  .lz-home .lz-lead {
+    font-size: 16px !important;
+    line-height: 1.75 !important;
+  }
+
+  .lz-hero {
+    align-items: flex-end;
+  }
+
+  .lz-hero__content {
+    padding-bottom: 88px;
+  }
+
+
+  .lz-hero__ctas .lz-btn {
+    width: 100%;
+  }
+
+  .lz-split {
+    grid-template-columns: 1fr;
+  }
+
+  .lz-collections,
+  .lz-highlights {
+    grid-template-columns: 1fr;
+  }
+
+  .lz-highlight {
+    min-height: 0;
+    padding: 32px 24px;
+  }
+
+  .lz-highlight svg {
+    margin-bottom: 24px;
+  }
+
+  .lz-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: 0;
+  }
+
+  .lz-stat {
+    padding-block: 32px;
+  }
+
+  .lz-stat + .lz-stat {
+    border-left: none;
+  }
+
+  .lz-stat:nth-child(even) {
+    border-left: 1px solid rgba(201, 154, 91, 0.6);
+  }
+
+  .lz-stat:nth-child(n + 3) {
+    border-top: 1px solid rgba(201, 154, 91, 0.6);
+  }
+
+  .lz-pros__card {
+    margin: -32px 8px 0;
+  }
+
+  .lz-bracket {
+    display: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lz-hero__kenburns,
+  .lz-scroll__track::after {
+    animation: none;
+  }
+
+  .lz-home *,
+  .lz-home *::before,
+  .lz-home *::after {
+    transition: none !important;
+  }
+
+  .lz-card:hover,
+  .lz-btn:hover,
+  .lz-zoom:hover .lz-media img {
+    transform: none;
+  }
+}
