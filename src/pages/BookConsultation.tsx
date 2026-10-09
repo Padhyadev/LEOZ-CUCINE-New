@@ -1,865 +1,724 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useRef, useState } from 'react';
+import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
 import { Header } from '../components/common/Header';
 import { Footer } from '../components/common/Footer';
-import { UniversalHero } from '../components/common/UniversalHero';
 import { useDocumentMeta } from '../hooks/useDocumentMeta';
-import { CheckCircle, ArrowRight, Sparkles, PhoneCall } from 'lucide-react';
-import { PHONE_SALES_DISPLAY, PHONE_SALES_HREF } from '../constants/siteInfo';
+import { useLenisScroll } from '../hooks/useLenisScroll';
 import { submitEnquiryForm } from '../lib/submitEnquiryForm';
+import {
+  BracketFrame,
+  EASE_OUT,
+  MaskHeading,
+  Reveal,
+  WarmImage,
+  revealProps,
+} from '../components/lux/LuxPrimitives';
+import { ArrowRight, Check, CookingPot, DraftingCompass, Layers, RotateCcw, Shirt } from 'lucide-react';
+import './Home.css';
+import './BookConsultation.css';
 
-const luxuryEase = [0.16, 1, 0.3, 1];
+/* ==========================================================================
+   CONTENT — new client copy only
+   ========================================================================== */
+
+const nextSteps = [
+  'Review your requirement',
+  'Reach out to understand the scope',
+  'Arrange a consultation or office visit',
+];
+
+const projectTypes = [
+  { value: 'Kitchen', Icon: CookingPot },
+  { value: 'Wardrobe', Icon: Shirt },
+  { value: 'Both', Icon: Layers },
+  { value: 'Architect or Developer Enquiry', Icon: DraftingCompass },
+];
+
+const projectStages = ['Planning', 'Construction', 'Renovation', 'Ready for Measurement'];
+
+const SUCCESS_TEXT =
+  'Thank you for contacting LEOZ Cucine. We have received your enquiry and our team will be in touch.';
+
+const ERROR_TEXT = 'We could not send your enquiry. Please check your connection and try again — your details are still here.';
+
+/* Payload keys are unchanged from the previous form so the existing
+   /api/enquiry integration keeps receiving exactly the same shape. */
+type FormData = {
+  name: string;
+  mobile: string;
+  email: string;
+  projectLocation: string;
+  projectType: string;
+  approximateBudget: string;
+  projectStage: string;
+  message: string;
+};
+
+type FieldName = keyof FormData;
+
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+/* Same rules as the previous form, plus a required Project Type */
+const getFieldError = (name: FieldName, data: FormData): string => {
+  switch (name) {
+    case 'name':
+      if (!data.name.trim()) return 'Please enter your name.';
+      if (data.name.trim().length < 2) return 'Please enter a valid full name.';
+      return '';
+    case 'mobile': {
+      const cleanPhone = data.mobile.replace(/\D/g, '');
+      if (!data.mobile.trim()) return 'Please enter your preferred contact number.';
+      if (cleanPhone.length < 10) return 'Please enter a valid 10-digit mobile number.';
+      return '';
+    }
+    case 'email':
+      if (!data.email.trim()) return 'Please enter your email address.';
+      if (!emailRegex.test(data.email.trim())) return 'Please enter a valid email address.';
+      return '';
+    case 'projectLocation':
+      if (!data.projectLocation.trim()) return 'Please enter your project location (city / locality).';
+      return '';
+    case 'projectType':
+      if (!data.projectType) return 'Please select a project type.';
+      return '';
+    default:
+      return '';
+  }
+};
+
+const REQUIRED: FieldName[] = ['name', 'mobile', 'email', 'projectLocation', 'projectType'];
+
+/* ==========================================================================
+   SMALL PIECES
+   ========================================================================== */
+
+/* Submit button that drifts up to 8px toward the cursor */
+const MagneticButton: React.FC<{ disabled: boolean; children: React.ReactNode }> = ({ disabled, children }) => {
+  const reduce = useReducedMotion();
+  const x = useSpring(0, { stiffness: 260, damping: 18 });
+  const y = useSpring(0, { stiffness: 260, damping: 18 });
+  const clamp = (v: number) => Math.max(-8, Math.min(8, v));
+
+  const reset = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <motion.button
+      type="submit"
+      className="lz-btn lz-btn--primary lz-btn--lg lz-btn--shimmer lzc-submit"
+      disabled={disabled}
+      aria-disabled={disabled}
+      onMouseMove={(e) => {
+        if (reduce || disabled) return;
+        const r = e.currentTarget.getBoundingClientRect();
+        x.set(clamp((e.clientX - (r.left + r.width / 2)) * 0.2));
+        y.set(clamp((e.clientY - (r.top + r.height / 2)) * 0.35));
+      }}
+      onMouseLeave={reset}
+      onBlur={reset}
+      style={{ x, y }}
+    >
+      {children}
+    </motion.button>
+  );
+};
+
+/* Gold circle that draws a check mark */
+const SuccessMark: React.FC = () => {
+  const reduce = useReducedMotion();
+  return (
+    <svg className="lzc-success__mark" width="88" height="88" viewBox="0 0 88 88" fill="none" aria-hidden="true">
+      <motion.circle
+        cx="44"
+        cy="44"
+        r="40"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        initial={reduce ? false : { pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 0.8, ease: EASE_OUT }}
+      />
+      <motion.path
+        d="M28 45.5 39.5 57 61 33"
+        stroke="currentColor"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        initial={reduce ? false : { pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 0.5, ease: EASE_OUT, delay: 0.7 }}
+      />
+    </svg>
+  );
+};
+
+/* Very soft burst of gold dust behind the check */
+const GoldBurst: React.FC = () => {
+  const reduce = useReducedMotion();
+  if (reduce) return null;
+  return (
+    <div className="lzc-burst" aria-hidden="true">
+      {Array.from({ length: 12 }, (_, i) => {
+        const angle = (i / 12) * Math.PI * 2;
+        const radius = 70 + (i % 3) * 18;
+        return (
+          <motion.span
+            key={i}
+            initial={{ x: 0, y: 0, opacity: 0.9, scale: 1 }}
+            animate={{ x: Math.cos(angle) * radius, y: Math.sin(angle) * radius, opacity: 0, scale: 0.4 }}
+            transition={{ duration: 1.3, ease: EASE_OUT, delay: 0.55 }}
+          />
+        );
+      })}
+    </div>
+  );
+};
+
+/* Soft warm radial glow that follows the cursor (desktop only) */
+const spotlightHandlers = {
+  onMouseMove: (e: React.MouseEvent<HTMLElement>) => {
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    e.currentTarget.style.setProperty('--mx', `${e.clientX - r.left}px`);
+    e.currentTarget.style.setProperty('--my', `${e.clientY - r.top}px`);
+    e.currentTarget.style.setProperty('--spot', '1');
+  },
+  onMouseLeave: (e: React.MouseEvent<HTMLElement>) => {
+    e.currentTarget.style.setProperty('--spot', '0');
+  },
+};
+
+/* ==========================================================================
+   PAGE
+   ========================================================================== */
 
 export const BookConsultation: React.FC = () => {
+  const prefersReducedMotion = useReducedMotion();
+  const { lenis } = useLenisScroll();
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   useDocumentMeta(
-    'Book a Consultation | LEOZ Cucine — Your Space. Our Expertise.',
-    'Begin your personal consultation with LEOZ Cucine. Plan your statement kitchen or beautifully organised wardrobe with our architectural specialists in Gujarat.'
+    'Talk to Us | LEOZ Cucine — Your Space. Our Expertise.',
+    'Whether you are planning a statement kitchen, a beautifully organised wardrobe or both, we invite you to begin with a personal consultation.'
   );
 
-  // Form State matching all required fields
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     mobile: '',
     email: '',
     projectLocation: '',
-    projectType: 'Kitchen',
-    approximateBudget: '₹15L – ₹25L',
-    projectStage: 'Planning',
+    projectType: '',
+    approximateBudget: '',
+    projectStage: '',
     message: '',
   });
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'submitting' | 'error'>('idle');
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [focused, setFocused] = useState<FieldName | null>(null);
 
+  const heroRef = useRef<HTMLElement>(null);
+  const successRef = useRef<HTMLDivElement>(null);
+  const messageRef = useRef<HTMLTextAreaElement>(null);
+
+  const navigate = (e: React.MouseEvent, path: string) => {
+    e.preventDefault();
+    window.history.pushState({}, '', path);
+    window.dispatchEvent(new Event('popstate'));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const scrollToId = (id: string) => {
+    const target = document.getElementById(id);
+    if (!target) return;
+    if (lenis) lenis.scrollTo(target, { offset: -68 });
+    else target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
+  };
+
+  /* ---------- Validation (existing rules) ---------- */
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = 'Please enter your name.';
-    } else if (formData.name.trim().length < 2) {
-      newErrors.name = 'Please enter a valid full name.';
-    }
-
-    const cleanPhone = formData.mobile.replace(/\D/g, '');
-    if (!formData.mobile.trim()) {
-      newErrors.mobile = 'Please enter your preferred contact number.';
-    } else if (cleanPhone.length < 10) {
-      newErrors.mobile = 'Please enter a valid 10-digit mobile number.';
-    }
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email.trim()) {
-      newErrors.email = 'Please enter your email address.';
-    } else if (!emailRegex.test(formData.email.trim())) {
-      newErrors.email = 'Please enter a valid email address.';
-    }
-
-    if (!formData.projectLocation.trim()) {
-      newErrors.projectLocation = 'Please enter your project location (city / locality).';
-    }
-
+    REQUIRED.forEach((field) => {
+      const message = getFieldError(field, formData);
+      if (message) newErrors[field] = message;
+    });
     setErrors(newErrors);
+    setTouched((prev) => ({ ...prev, ...Object.fromEntries(REQUIRED.map((f) => [f, true])) }));
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-    const { name, value } = e.target;
-    
-    if (name === 'mobile') {
-      const sanitized = value.replace(/[^\d+\s-]/g, '').slice(0, 15);
-      setFormData((prev) => ({ ...prev, [name]: sanitized }));
-      if (errors.mobile) setErrors((prev) => ({ ...prev, mobile: '' }));
-      return;
-    }
-
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) {
-      setErrors((prev) => ({ ...prev, [name]: '' }));
+  const updateField = (name: FieldName, rawValue: string) => {
+    // Existing mobile sanitising: digits, +, spaces and dashes, max 15 chars
+    const value = name === 'mobile' ? rawValue.replace(/[^\d+\s-]/g, '').slice(0, 15) : rawValue;
+    const next = { ...formData, [name]: value };
+    setFormData(next);
+    // Live validation once a field has been visited
+    if (errors[name] || touched[name]) {
+      setErrors((prev) => ({ ...prev, [name]: getFieldError(name, next) }));
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!validateForm()) {
-      return;
-    }
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    updateField(e.target.name as FieldName, e.target.value);
+  };
+
+  const handleBlur = (name: FieldName) => {
+    setFocused(null);
+    setTouched((prev) => ({ ...prev, [name]: true }));
+    setErrors((prev) => ({ ...prev, [name]: getFieldError(name, formData) }));
+  };
+
+  /* Auto-grow the message box */
+  const growMessage = () => {
+    const el = messageRef.current;
+    if (!el) return;
+    el.style.height = 'auto';
+    el.style.height = `${el.scrollHeight}px`;
+  };
+
+  /* ---------- Submit (existing API call, unchanged) ---------- */
+  const submit = async () => {
+    if (submitStatus === 'submitting') return; // prevent double submission
+    if (!validateForm()) return;
     setSubmitStatus('submitting');
     const result = await submitEnquiryForm('consultation', formData);
     if (result.ok) {
       setSubmitStatus('idle');
       setIsSubmitted(true);
     } else {
-      setSubmitStatus('error');
+      setSubmitStatus('error'); // entered values are kept
     }
   };
 
-  const nextSteps = [
-    {
-      num: '01',
-      title: 'Review Your Requirement',
-      desc: 'After receiving your details, our senior design team evaluates your space parameters, inventory, and floor blueprints.',
-    },
-    {
-      num: '02',
-      title: 'Understand the Scope',
-      desc: 'Our consultation coordinator reaches out directly to understand your specific lifestyle needs, appliance choices, and finishes.',
-    },
-    {
-      num: '03',
-      title: 'Arrange Consultation or Office Visit',
-      desc: 'We arrange a suitable consultation session or an exclusive visit to our Ahmedabad corporate office & design lounge.',
-    },
-  ];
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    submit();
+  };
+
+  useEffect(() => {
+    if (isSubmitted) successRef.current?.focus();
+  }, [isSubmitted]);
+
+  /* ---------- Progress thread ---------- */
+  const completed =
+    REQUIRED.filter((f) => !getFieldError(f, formData)).length +
+    (['approximateBudget', 'projectStage', 'message'] as FieldName[]).filter((f) => formData[f].trim()).length;
+  const progress = completed / 8;
+
+  /* ---------- Hero parallax ---------- */
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, prefersReducedMotion ? 0 : 100]);
+
+  const heroReveal = (delay: number) =>
+    ({
+      initial: prefersReducedMotion ? false : { opacity: 0, y: 24 },
+      animate: { opacity: 1, y: 0 },
+      transition: { duration: 0.6, ease: EASE_OUT, delay },
+    }) as const;
+
+  /* ---------- Field renderer (floating label) ---------- */
+  const renderField = (
+    name: FieldName,
+    label: string,
+    placeholder: string,
+    options: { type?: string; inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode']; autoComplete?: string; required?: boolean; optional?: boolean; textarea?: boolean; span?: boolean; delay?: number } = {}
+  ) => {
+    const value = formData[name];
+    const error = errors[name];
+    const raised = focused === name || value.length > 0;
+    const isValid = options.required && touched[name] && value.trim() !== '' && !getFieldError(name, formData);
+    const id = `consult-${name}`;
+    const errorId = `${id}-error`;
+
+    return (
+      <motion.div
+        className={`lzc-field ${raised ? 'is-raised' : ''} ${error ? 'has-error' : ''} ${options.span ? 'lzc-span' : ''}`}
+        {...revealProps(prefersReducedMotion, options.delay ?? 0)}
+      >
+        <div className="lzc-field__box">
+          <label className="lzc-label" htmlFor={id}>
+            {label}
+            {options.required && (
+              <span className="lzc-req" aria-hidden="true">
+                *
+              </span>
+            )}
+            {options.optional && <span className="lzc-opt">Optional</span>}
+          </label>
+          {options.textarea ? (
+            <textarea
+              ref={messageRef}
+              id={id}
+              name={name}
+              rows={3}
+              className="lzc-control"
+              placeholder={placeholder}
+              value={value}
+              onChange={handleInputChange}
+              onInput={growMessage}
+              onFocus={() => setFocused(name)}
+              onBlur={() => setFocused(null)}
+            />
+          ) : (
+            <input
+              id={id}
+              name={name}
+              type={options.type ?? 'text'}
+              inputMode={options.inputMode}
+              autoComplete={options.autoComplete}
+              className="lzc-control"
+              placeholder={placeholder}
+              value={value}
+              required={options.required}
+              aria-required={options.required || undefined}
+              aria-invalid={error ? true : undefined}
+              aria-describedby={error ? errorId : undefined}
+              onChange={handleInputChange}
+              onFocus={() => setFocused(name)}
+              onBlur={() => (options.required ? handleBlur(name) : setFocused(null))}
+            />
+          )}
+          <span className="lzc-field__line" aria-hidden="true" />
+          {isValid && (
+            <motion.span
+              className="lzc-valid"
+              aria-hidden="true"
+              initial={prefersReducedMotion ? false : { opacity: 0, scale: 0.6 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3, ease: EASE_OUT }}
+            >
+              <Check size={18} strokeWidth={2} />
+            </motion.span>
+          )}
+        </div>
+        {error && (
+          <p key={error} id={errorId} className="lzc-error lzc-shake">
+            {error}
+          </p>
+        )}
+      </motion.div>
+    );
+  };
 
   return (
-    <div style={{ backgroundColor: '#F7F7F5', color: '#20211F', minHeight: '100vh', overflowX: 'hidden' }}>
+    <div className="lz-home lzc">
       <Header />
 
       <main id="main-content">
         {/* =========================================================================
-            SECTION 01: HERO BANNER
+            HERO — YOUR SPACE. OUR EXPERTISE.
             ========================================================================= */}
-        <UniversalHero
-          image="/Glass Vitrines.webp"
-          imageAlt="LEOZ Private Architectural Consultation"
-          imagePosition="center 40%"
-          eyebrow="06 / TALK TO US / BOOK A CONSULTATION"
-          headline="Your Space. Our Expertise."
-          supportingText="Whether you are planning a statement kitchen, a beautifully organised wardrobe or both, we invite you to begin with a personal consultation."
-          ctaText="Book a Consultation →"
-          ctaHref="#consultation-form"
-          brightness={0.88}
-        />
-
-        {/* =========================================================================
-            SECTION 02: WHAT HAPPENS NEXT
-            ========================================================================= */}
-        <section
-          aria-label="What Happens Next"
-          style={{
-            backgroundColor: '#ECEBE7',
-            paddingTop: 'clamp(70px, 9vw, 110px)',
-            paddingBottom: 'clamp(70px, 9vw, 110px)',
-            paddingLeft: 'clamp(20px, 6vw, 100px)',
-            paddingRight: 'clamp(20px, 6vw, 100px)',
-            borderBottom: '1px solid #D9D9D4',
-          }}
-        >
-          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 480px), 1fr))',
-                gap: 'clamp(24px, 5vw, 64px)',
-                alignItems: 'flex-end',
-                marginBottom: 'clamp(44px, 6vw, 70px)',
-              }}
-            >
-              <div>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '11px',
-                    fontWeight: 600,
-                    letterSpacing: '0.24em',
-                    textTransform: 'uppercase',
-                    color: '#A58B62',
-                    display: 'block',
-                    marginBottom: '12px',
-                  }}
-                >
-                  THE PROCESS
-                </span>
-                <h2
-                  style={{
-                    fontFamily: 'var(--font-heading)',
-                    fontSize: 'clamp(32px, 4.4vw, 54px)',
-                    fontWeight: 300,
-                    color: '#20211F',
-                    letterSpacing: '-0.015em',
-                    margin: 0,
-                    lineHeight: 1.15,
-                  }}
-                >
-                  What Happens Next
-                </h2>
-              </div>
-              <div>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '15.5px', color: '#686963', lineHeight: 1.75, margin: 0 }}>
-                  After receiving your details, our team will review your requirement, reach out to understand the scope and arrange a suitable consultation or office visit.
-                </p>
-              </div>
+        <section ref={heroRef} className="lzc-hero" aria-labelledby="consult-hero-title">
+          <motion.div className="lzc-hero__media" style={{ y: heroY }} aria-hidden="true">
+            <div className="lzc-hero__kenburns">
+              <img src="/Italian Marble.webp" alt="" />
             </div>
+          </motion.div>
 
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 340px), 1fr))',
-                gap: '24px',
-              }}
-            >
-              {nextSteps.map((step, idx) => (
-                <div
-                  key={step.num}
-                  style={{
-                    backgroundColor: '#FFFFFF',
-                    border: '1px solid #E5E4E0',
-                    borderTop: '3px solid #A58B62',
-                    padding: '32px 26px',
-                    borderRadius: '2px',
-                    boxShadow: '0 4px 20px rgba(32, 33, 31, 0.04)',
-                  }}
-                >
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: '28px',
-                      fontWeight: 300,
-                      color: '#A58B62',
-                      display: 'block',
-                      marginBottom: '12px',
-                    }}
-                  >
-                    {step.num}
-                  </span>
-                  <h3
-                    style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: '21px',
-                      fontWeight: 400,
-                      color: '#20211F',
-                      margin: '0 0 10px 0',
-                    }}
-                  >
-                    {step.title}
-                  </h3>
-                  <p
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '14px',
-                      color: '#686963',
-                      lineHeight: 1.65,
-                      margin: 0,
-                    }}
-                  >
-                    {step.desc}
-                  </p>
-                </div>
-              ))}
+          <div className="lzc-hero__content lz-container">
+            <div className="lzc-hero__inner">
+              <motion.nav aria-label="Breadcrumb" {...heroReveal(0.05)}>
+                <ol className="lzc-crumbs">
+                  <li>
+                    <a href="/" onClick={(e) => navigate(e, '/')}>
+                      Home
+                    </a>
+                  </li>
+                  <li aria-hidden="true">/</li>
+                  <li aria-current="page">Talk to Us</li>
+                </ol>
+              </motion.nav>
+
+              <motion.h1 id="consult-hero-title" className="lzc-h1" {...heroReveal(0.15)}>
+                Your Space. Our Expertise.
+              </motion.h1>
+
+              <motion.span
+                className="lz-rule"
+                aria-hidden="true"
+                initial={prefersReducedMotion ? false : { scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.35 }}
+              />
+
+              <motion.p className="lzc-hero__text" {...heroReveal(0.25)}>
+                Whether you are planning a statement kitchen, a beautifully organised wardrobe or both, we invite you to begin with a personal consultation.
+              </motion.p>
             </div>
           </div>
+
+          <button type="button" className="lz-scroll" onClick={() => scrollToId('consultation')} aria-label="Scroll to the consultation form">
+            <span className="lz-scroll__track" aria-hidden="true" />
+          </button>
         </section>
 
         {/* =========================================================================
-            SECTION 03: CONSULTATION FORM
+            WHAT HAPPENS NEXT + CONSULTATION FORM
             ========================================================================= */}
         <section
-          id="consultation-form"
-          aria-label="Consultation Form"
-          style={{
-            backgroundColor: '#F7F7F5',
-            paddingTop: 'clamp(80px, 10vw, 130px)',
-            paddingBottom: 'clamp(90px, 11vw, 150px)',
-            paddingLeft: 'clamp(20px, 6vw, 100px)',
-            paddingRight: 'clamp(20px, 6vw, 100px)',
-          }}
+          id="consultation"
+          className="lz-section lz-bg-ivory lzc-spot"
+          aria-labelledby="next-title"
+          {...spotlightHandlers}
         >
-          <div style={{ maxWidth: '960px', margin: '0 auto' }}>
-            <div
-              style={{
-                backgroundColor: '#FFFFFF',
-                border: '1px solid #E5E4E0',
-                borderTop: '3px solid #A58B62',
-                padding: 'clamp(32px, 5vw, 64px)',
-                borderRadius: '2px',
-                boxShadow: '0 12px 32px rgba(32, 33, 31, 0.04)',
-              }}
-            >
-              {/* Form Title & Introduction */}
-              <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto clamp(32px, 4vw, 48px) auto' }}>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '11px',
-                    fontWeight: 600,
-                    letterSpacing: '0.24em',
-                    textTransform: 'uppercase',
-                    color: '#A58B62',
-                    display: 'block',
-                    marginBottom: '10px',
-                  }}
-                >
-                  RESERVATION &amp; SCOPE
-                </span>
-                <h2
-                  style={{
-                    fontFamily: 'var(--font-heading)',
-                    fontSize: 'clamp(28px, 4vw, 42px)',
-                    fontWeight: 300,
-                    color: '#20211F',
-                    letterSpacing: '-0.01em',
-                    margin: '0 0 14px 0',
-                  }}
-                >
-                  Consultation Form
-                </h2>
-                <p
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '14.5px',
-                    color: '#686963',
-                    lineHeight: 1.65,
-                    margin: 0,
-                  }}
-                >
-                  Please provide details about your space. Our senior design team will prepare tailored recommendations for our initial discussion.
+          <div className="lz-container lzc-layout">
+            {/* ---------- LEFT: what happens next ---------- */}
+            <div className="lzc-aside">
+              <Reveal className="lz-section-head" >
+                <MaskHeading id="next-title">What Happens Next</MaskHeading>
+                <motion.span
+                  className="lz-rule"
+                  aria-hidden="true"
+                  initial={prefersReducedMotion ? false : { scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.25 }}
+                />
+              </Reveal>
+              <Reveal delay={0.1}>
+                <p className="lz-body">
+                  After receiving your details, our team will review your requirement, reach out to understand the scope and arrange a suitable consultation or office visit.
                 </p>
+              </Reveal>
+
+              <div className="lzc-steps">
+                <motion.span
+                  className="lzc-steps__line"
+                  aria-hidden="true"
+                  initial={prefersReducedMotion ? false : { scaleY: 0 }}
+                  whileInView={{ scaleY: 1 }}
+                  viewport={{ once: true, amount: 0.6 }}
+                  transition={{ duration: 0.9, ease: EASE_OUT, delay: 0.2 }}
+                />
+                <ol className="lzc-steps__list">
+                {nextSteps.map((step, idx) => (
+                  <motion.li key={step} {...revealProps(prefersReducedMotion, 0.2 + idx * 0.12)}>
+                    <span className="lzc-steps__dot" aria-hidden="true">
+                      {idx + 1}
+                    </span>
+                    <span className="lzc-steps__text">{step}</span>
+                  </motion.li>
+                ))}
+                </ol>
               </div>
 
-              {/* Form or Confirmation Message */}
-              <AnimatePresence mode="wait">
-                {isSubmitted ? (
-                  <motion.div
-                    key="success"
-                    initial={{ opacity: 0, scale: 0.98 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0 }}
-                    transition={{ duration: 0.5, ease: luxuryEase }}
-                    style={{
-                      textAlign: 'center',
-                      padding: 'clamp(40px, 6vw, 60px) 20px',
-                      backgroundColor: '#F7F7F5',
-                      border: '1px solid #D9D9D4',
-                      borderRadius: '2px',
-                    }}
-                  >
-                    <div
-                      style={{
-                        width: '64px',
-                        height: '64px',
-                        borderRadius: '50%',
-                        backgroundColor: '#20211F',
-                        color: '#FFFFFF',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        margin: '0 auto 24px auto',
-                      }}
+              <Reveal delay={0.15} className="lz-offset lz-zoom">
+                <BracketFrame className="lz-offset__frame" />
+                <WarmImage
+                  src="/Quartz Stone.webp"
+                  alt="Bright LEOZ kitchen with a quartz stone island, white cabinetry and warm pendant lights"
+                />
+              </Reveal>
+            </div>
+
+            {/* ---------- RIGHT: form card ---------- */}
+            <div className="lzc-card-wrap">
+              <div className="lzc-card">
+                <div className="lzc-progress" aria-hidden="true">
+                  <span style={{ '--progress': isSubmitted ? 1 : progress } as React.CSSProperties} />
+                </div>
+
+                {/* Announces success and failure to screen readers */}
+                <div className="lzc-sr-only" role="status" aria-live="polite">
+                  {isSubmitted ? SUCCESS_TEXT : submitStatus === 'error' ? ERROR_TEXT : ''}
+                </div>
+
+                <AnimatePresence mode="wait" initial={false}>
+                  {isSubmitted ? (
+                    <motion.div
+                      key="success"
+                      ref={successRef}
+                      tabIndex={-1}
+                      className="lzc-success"
+                      initial={prefersReducedMotion ? false : { opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ duration: 0.5, ease: EASE_OUT }}
                     >
-                      <CheckCircle size={32} />
-                    </div>
-
-                    <h3
-                      style={{
-                        fontFamily: 'var(--font-heading)',
-                        fontSize: 'clamp(24px, 3.5vw, 34px)',
-                        fontWeight: 300,
-                        color: '#20211F',
-                        margin: '0 0 16px 0',
-                      }}
-                    >
-                      Thank you for contacting LEOZ Cucine.
-                    </h3>
-
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '16px',
-                        color: '#686963',
-                        lineHeight: 1.7,
-                        maxWidth: '520px',
-                        margin: '0 auto 32px auto',
-                      }}
-                    >
-                      We have received your enquiry and our team will be in touch.
-                    </p>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsSubmitted(false);
-                        setFormData({
-                          name: '',
-                          mobile: '',
-                          email: '',
-                          projectLocation: '',
-                          projectType: 'Kitchen',
-                          approximateBudget: '₹15L – ₹25L',
-                          projectStage: 'Planning',
-                          message: '',
-                        });
-                      }}
-                      style={{
-                        padding: '14px 28px',
-                        backgroundColor: '#20211F',
-                        color: '#FFFFFF',
-                        border: 'none',
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        letterSpacing: '0.1em',
-                        textTransform: 'uppercase',
-                        cursor: 'pointer',
-                        borderRadius: '2px',
-                      }}
-                    >
-                      Submit Another Requirement
-                    </button>
-                  </motion.div>
-                ) : (
-                  <form onSubmit={handleSubmit} noValidate>
-                    <div
-                      style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 260px), 1fr))',
-                        gap: '20px',
-                        marginBottom: '20px',
-                      }}
-                    >
-                      {/* Full Name */}
-                      <div>
-                        <label
-                          htmlFor="fullName"
-                          style={{
-                            display: 'block',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '11px',
-                            fontWeight: 700,
-                            letterSpacing: '0.12em',
-                            textTransform: 'uppercase',
-                            color: '#686963',
-                            marginBottom: '6px',
-                          }}
-                        >
-                          Full Name *
-                        </label>
-                        <input
-                          id="fullName"
-                          type="text"
-                          name="name"
-                          value={formData.name}
-                          onChange={handleInputChange}
-                          placeholder="Your name"
-                          style={{
-                            width: '100%',
-                            boxSizing: 'border-box',
-                            padding: '14px 16px',
-                            backgroundColor: '#FFFFFF',
-                            border: errors.name ? '1px solid #D9534F' : '1px solid #D9D9D4',
-                            borderRadius: '2px',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '14.5px',
-                            color: '#20211F',
-                            outline: 'none',
-                          }}
-                        />
-                        {errors.name && (
-                          <span style={{ display: 'block', color: '#D9534F', fontSize: '11px', marginTop: '4px' }}>
-                            {errors.name}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Mobile Number */}
-                      <div>
-                        <label
-                          htmlFor="mobileNumber"
-                          style={{
-                            display: 'block',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '11px',
-                            fontWeight: 700,
-                            letterSpacing: '0.12em',
-                            textTransform: 'uppercase',
-                            color: '#686963',
-                            marginBottom: '6px',
-                          }}
-                        >
-                          Mobile Number *
-                        </label>
-                        <input
-                          id="mobileNumber"
-                          type="tel"
-                          name="mobile"
-                          value={formData.mobile}
-                          onChange={handleInputChange}
-                          placeholder="Preferred contact number"
-                          style={{
-                            width: '100%',
-                            boxSizing: 'border-box',
-                            padding: '14px 16px',
-                            backgroundColor: '#FFFFFF',
-                            border: errors.mobile ? '1px solid #D9534F' : '1px solid #D9D9D4',
-                            borderRadius: '2px',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '14.5px',
-                            color: '#20211F',
-                            outline: 'none',
-                          }}
-                        />
-                        {errors.mobile && (
-                          <span style={{ display: 'block', color: '#D9534F', fontSize: '11px', marginTop: '4px' }}>
-                            {errors.mobile}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Email Address */}
-                      <div>
-                        <label
-                          htmlFor="emailAddress"
-                          style={{
-                            display: 'block',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '11px',
-                            fontWeight: 700,
-                            letterSpacing: '0.12em',
-                            textTransform: 'uppercase',
-                            color: '#686963',
-                            marginBottom: '6px',
-                          }}
-                        >
-                          Email Address *
-                        </label>
-                        <input
-                          id="emailAddress"
-                          type="email"
-                          name="email"
-                          value={formData.email}
-                          onChange={handleInputChange}
-                          placeholder="Your email"
-                          style={{
-                            width: '100%',
-                            boxSizing: 'border-box',
-                            padding: '14px 16px',
-                            backgroundColor: '#FFFFFF',
-                            border: errors.email ? '1px solid #D9534F' : '1px solid #D9D9D4',
-                            borderRadius: '2px',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '14.5px',
-                            color: '#20211F',
-                            outline: 'none',
-                          }}
-                        />
-                        {errors.email && (
-                          <span style={{ display: 'block', color: '#D9534F', fontSize: '11px', marginTop: '4px' }}>
-                            {errors.email}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Project Location */}
-                      <div>
-                        <label
-                          htmlFor="projectLocation"
-                          style={{
-                            display: 'block',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '11px',
-                            fontWeight: 700,
-                            letterSpacing: '0.12em',
-                            textTransform: 'uppercase',
-                            color: '#686963',
-                            marginBottom: '6px',
-                          }}
-                        >
-                          Project Location *
-                        </label>
-                        <input
-                          id="projectLocation"
-                          type="text"
-                          name="projectLocation"
-                          value={formData.projectLocation}
-                          onChange={handleInputChange}
-                          placeholder="City / locality"
-                          style={{
-                            width: '100%',
-                            boxSizing: 'border-box',
-                            padding: '14px 16px',
-                            backgroundColor: '#FFFFFF',
-                            border: errors.projectLocation ? '1px solid #D9534F' : '1px solid #D9D9D4',
-                            borderRadius: '2px',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '14.5px',
-                            color: '#20211F',
-                            outline: 'none',
-                          }}
-                        />
-                        {errors.projectLocation && (
-                          <span style={{ display: 'block', color: '#D9534F', fontSize: '11px', marginTop: '4px' }}>
-                            {errors.projectLocation}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Project Type */}
-                      <div>
-                        <label
-                          htmlFor="projectType"
-                          style={{
-                            display: 'block',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '11px',
-                            fontWeight: 700,
-                            letterSpacing: '0.12em',
-                            textTransform: 'uppercase',
-                            color: '#686963',
-                            marginBottom: '6px',
-                          }}
-                        >
-                          Project Type
-                        </label>
-                        <select
-                          id="projectType"
-                          name="projectType"
-                          value={formData.projectType}
-                          onChange={handleInputChange}
-                          style={{
-                            width: '100%',
-                            boxSizing: 'border-box',
-                            padding: '14px 16px',
-                            backgroundColor: '#FFFFFF',
-                            border: '1px solid #D9D9D4',
-                            borderRadius: '2px',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '14.5px',
-                            color: '#20211F',
-                            outline: 'none',
-                            cursor: 'pointer',
-                          }}
-                        >
-                          <option value="Kitchen">Kitchen</option>
-                          <option value="Wardrobe">Wardrobe</option>
-                          <option value="Both">Both</option>
-                          <option value="Architect or Developer Enquiry">Architect or Developer Enquiry</option>
-                        </select>
-                      </div>
-
-                      {/* Approximate Budget */}
-                      <div>
-                        <label
-                          htmlFor="approximateBudget"
-                          style={{
-                            display: 'block',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '11px',
-                            fontWeight: 700,
-                            letterSpacing: '0.12em',
-                            textTransform: 'uppercase',
-                            color: '#686963',
-                            marginBottom: '6px',
-                          }}
-                        >
-                          Approximate Budget
-                        </label>
-                        <select
-                          id="approximateBudget"
-                          name="approximateBudget"
-                          value={formData.approximateBudget}
-                          onChange={handleInputChange}
-                          style={{
-                            width: '100%',
-                            boxSizing: 'border-box',
-                            padding: '14px 16px',
-                            backgroundColor: '#FFFFFF',
-                            border: '1px solid #D9D9D4',
-                            borderRadius: '2px',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '14.5px',
-                            color: '#20211F',
-                            outline: 'none',
-                            cursor: 'pointer',
-                          }}
-                        >
-                          <option value="₹10L – ₹15L">₹10L – ₹15L</option>
-                          <option value="₹15L – ₹25L">₹15L – ₹25L</option>
-                          <option value="₹25L – ₹40L">₹25L – ₹40L</option>
-                          <option value="₹40L+ (Bespoke Villa / Estate)">₹40L+ (Bespoke Villa / Estate)</option>
-                          <option value="To Be Decided with Architect">To Be Decided with Architect</option>
-                        </select>
-                      </div>
-
-                      {/* Project Stage */}
-                      <div>
-                        <label
-                          htmlFor="projectStage"
-                          style={{
-                            display: 'block',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '11px',
-                            fontWeight: 700,
-                            letterSpacing: '0.12em',
-                            textTransform: 'uppercase',
-                            color: '#686963',
-                            marginBottom: '6px',
-                          }}
-                        >
-                          Project Stage
-                        </label>
-                        <select
-                          id="projectStage"
-                          name="projectStage"
-                          value={formData.projectStage}
-                          onChange={handleInputChange}
-                          style={{
-                            width: '100%',
-                            boxSizing: 'border-box',
-                            padding: '14px 16px',
-                            backgroundColor: '#FFFFFF',
-                            border: '1px solid #D9D9D4',
-                            borderRadius: '2px',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '14.5px',
-                            color: '#20211F',
-                            outline: 'none',
-                            cursor: 'pointer',
-                          }}
-                        >
-                          <option value="Planning">Planning</option>
-                          <option value="Construction">Construction</option>
-                          <option value="Renovation">Renovation</option>
-                          <option value="Ready for Measurement">Ready for Measurement</option>
-                        </select>
-                      </div>
-                    </div>
-
-                    {/* Direct Contact Phone Box */}
-                    <div
-                      style={{
-                        backgroundColor: '#ECEBE7',
-                        padding: '14px 18px',
-                        borderRadius: '2px',
-                        border: '1px solid #D9D9D4',
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: '12px',
-                        marginBottom: '20px',
-                      }}
-                    >
-                      <PhoneCall size={18} color="#A58B62" />
-                      <div>
-                        <div style={{ fontFamily: 'var(--font-body)', fontSize: '10.5px', textTransform: 'uppercase', letterSpacing: '0.1em', color: '#686963' }}>
-                          Prefer to speak directly with our team?
-                        </div>
+                      <GoldBurst />
+                      <SuccessMark />
+                      <p>{SUCCESS_TEXT}</p>
+                      {/*
+                        TODO: Response timeline — add only once operationally committed.
+                        e.g. <p className="lz-body">…confirmed response timeline…</p>
+                      */}
+                      <div className="lzc-success__actions">
+                        <a href="/" onClick={(e) => navigate(e, '/')} className="lz-btn lz-btn--secondary">
+                          <span>Back to Home</span>
+                          <ArrowRight size={14} aria-hidden="true" />
+                        </a>
                         <a
-                          href={PHONE_SALES_HREF}
-                          style={{
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '13.5px',
-                            fontWeight: 600,
-                            color: '#20211F',
-                            textDecoration: 'none',
-                          }}
+                          href="/modular-kitchens"
+                          onClick={(e) => navigate(e, '/modular-kitchens')}
+                          className="lz-link"
                         >
-                          {PHONE_SALES_DISPLAY}
+                          <span>Explore Kitchens</span>
+                          <ArrowRight size={14} aria-hidden="true" />
                         </a>
                       </div>
-                    </div>
+                    </motion.div>
+                  ) : (
+                    <motion.form
+                      key="form"
+                      className="lzc-form"
+                      noValidate
+                      onSubmit={handleSubmit}
+                      aria-busy={submitStatus === 'submitting'}
+                      exit={prefersReducedMotion ? undefined : { opacity: 0, y: -12 }}
+                      transition={{ duration: 0.35, ease: EASE_OUT }}
+                    >
+                      <div className="lzc-grid">
+                        {renderField('name', 'Full Name', 'Your name', { autoComplete: 'name', required: true, delay: 0 })}
+                        {renderField('mobile', 'Mobile Number', 'Preferred contact number', {
+                          type: 'tel',
+                          inputMode: 'numeric',
+                          autoComplete: 'tel',
+                          required: true,
+                          delay: 0.08,
+                        })}
+                        {renderField('email', 'Email Address', 'Your email', {
+                          type: 'email',
+                          inputMode: 'email',
+                          autoComplete: 'email',
+                          required: true,
+                          delay: 0.16,
+                        })}
+                        {renderField('projectLocation', 'Project Location', 'City / locality', {
+                          autoComplete: 'address-level2',
+                          required: true,
+                          delay: 0.24,
+                        })}
 
-                    {/* Message */}
-                    <div style={{ marginBottom: '28px' }}>
-                      <label
-                        htmlFor="message"
-                        style={{
-                          display: 'block',
-                          fontFamily: 'var(--font-body)',
-                          fontSize: '11px',
-                          fontWeight: 700,
-                          letterSpacing: '0.12em',
-                          textTransform: 'uppercase',
-                          color: '#686963',
-                          marginBottom: '6px',
-                        }}
-                      >
-                        Message
-                      </label>
-                      <textarea
-                        id="message"
-                        name="message"
-                        rows={4}
-                        value={formData.message}
-                        onChange={handleInputChange}
-                        placeholder="Tell us about your preferences and requirements..."
-                        style={{
-                          width: '100%',
-                          boxSizing: 'border-box',
-                          padding: '14px 16px',
-                          backgroundColor: '#FFFFFF',
-                          border: '1px solid #D9D9D4',
-                          borderRadius: '2px',
-                          fontFamily: 'var(--font-body)',
-                          fontSize: '14.5px',
-                          color: '#20211F',
-                          outline: 'none',
-                          resize: 'vertical',
-                          lineHeight: 1.6,
-                        }}
-                      />
-                    </div>
+                        {/* Project Type — real radios styled as cards */}
+                        <motion.fieldset
+                          className="lzc-fieldset lzc-span"
+                          aria-describedby={errors.projectType ? 'consult-projectType-error' : undefined}
+                          {...revealProps(prefersReducedMotion, 0.3)}
+                        >
+                          <legend className="lzc-legend">
+                            Project Type
+                            <span className="lzc-req" aria-hidden="true">
+                              *
+                            </span>
+                          </legend>
+                          <div className={`lzc-types ${errors.projectType ? 'has-error' : ''}`}>
+                            {projectTypes.map(({ value, Icon }) => {
+                              const checked = formData.projectType === value;
+                              return (
+                                <label key={value} className={`lzc-type ${checked ? 'is-checked' : ''}`}>
+                                  <input
+                                    type="radio"
+                                    name="projectType"
+                                    value={value}
+                                    className="lzc-radio"
+                                    checked={checked}
+                                    required
+                                    aria-invalid={errors.projectType ? true : undefined}
+                                    onChange={() => {
+                                      setTouched((prev) => ({ ...prev, projectType: true }));
+                                      updateField('projectType', value);
+                                      setErrors((prev) => ({ ...prev, projectType: '' }));
+                                    }}
+                                  />
+                                  <Icon size={26} strokeWidth={1.25} className="lzc-type__icon" aria-hidden="true" />
+                                  <span>{value}</span>
+                                  <AnimatePresence>
+                                    {checked && (
+                                      <motion.span
+                                        className="lzc-type__check"
+                                        aria-hidden="true"
+                                        initial={prefersReducedMotion ? false : { scale: 0, rotate: -45 }}
+                                        animate={{ scale: 1, rotate: 0 }}
+                                        exit={{ scale: 0 }}
+                                        transition={{ duration: 0.3, ease: EASE_OUT }}
+                                      >
+                                        <Check size={14} strokeWidth={2.5} />
+                                      </motion.span>
+                                    )}
+                                  </AnimatePresence>
+                                </label>
+                              );
+                            })}
+                          </div>
+                          {errors.projectType && (
+                            <p key={errors.projectType} id="consult-projectType-error" className="lzc-error lzc-shake">
+                              {errors.projectType}
+                            </p>
+                          )}
+                        </motion.fieldset>
 
-                    {submitStatus === 'error' && (
-                      <div
-                        style={{
-                          padding: '14px 18px',
-                          backgroundColor: '#FDF2F2',
-                          border: '1px solid #F8B4B4',
-                          borderRadius: '2px',
-                          color: '#9B1C1C',
-                          fontSize: '14px',
-                          marginBottom: '20px',
-                        }}
-                      >
-                        There was an issue submitting your request. Please try again or reach us directly at {PHONE_SALES_DISPLAY}.
+                        {renderField('approximateBudget', 'Approximate Budget', 'Optional range', {
+                          optional: true,
+                          span: true,
+                          delay: 0.36,
+                        })}
+
+                        {/* Project Stage — real radios styled as a stepper */}
+                        <motion.fieldset className="lzc-fieldset lzc-span" {...revealProps(prefersReducedMotion, 0.42)}>
+                          <legend className="lzc-legend">Project Stage</legend>
+                          <div className="lzc-stages">
+                            {projectStages.map((stage) => {
+                              const checked = formData.projectStage === stage;
+                              return (
+                                <label key={stage} className={`lzc-stage ${checked ? 'is-checked' : ''}`}>
+                                  <input
+                                    type="radio"
+                                    name="projectStage"
+                                    value={stage}
+                                    className="lzc-radio"
+                                    checked={checked}
+                                    onChange={() => updateField('projectStage', stage)}
+                                  />
+                                  <span className="lzc-stage__dot" aria-hidden="true" />
+                                  <span>{stage}</span>
+                                </label>
+                              );
+                            })}
+                          </div>
+                        </motion.fieldset>
+
+                        {renderField('message', 'Message', 'Tell us about your preferences and requirements', {
+                          textarea: true,
+                          span: true,
+                          delay: 0.48,
+                        })}
                       </div>
-                    )}
 
-                    {/* Submit CTA */}
-                    <div style={{ textAlign: 'center' }}>
-                      <button
-                        type="submit"
-                        disabled={submitStatus === 'submitting'}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '12px',
-                          width: '100%',
-                          maxWidth: '380px',
-                          padding: '18px 36px',
-                          backgroundColor: '#20211F',
-                          color: '#FFFFFF',
-                          border: '1px solid #20211F',
-                          fontFamily: 'var(--font-body)',
-                          fontSize: '13px',
-                          fontWeight: 600,
-                          letterSpacing: '0.12em',
-                          textTransform: 'uppercase',
-                          cursor: submitStatus === 'submitting' ? 'wait' : 'pointer',
-                          borderRadius: '2px',
-                          transition: 'all 0.3s ease',
-                          opacity: submitStatus === 'submitting' ? 0.7 : 1,
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = '#A58B62';
-                          e.currentTarget.style.borderColor = '#A58B62';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = '#20211F';
-                          e.currentTarget.style.borderColor = '#20211F';
-                        }}
-                      >
-                        <span>{submitStatus === 'submitting' ? 'Processing...' : 'Book a Consultation'}</span>
-                        <ArrowRight size={15} />
-                      </button>
-                    </div>
-                  </form>
-                )}
-              </AnimatePresence>
+                      <div className="lzc-actions">
+                        <MagneticButton disabled={submitStatus === 'submitting'}>
+                          {submitStatus === 'submitting' ? (
+                            <>
+                              <span className="lzc-spinner" aria-hidden="true" />
+                              <span>Submitting...</span>
+                            </>
+                          ) : (
+                            <>
+                              <span>Book a Consultation</span>
+                              <ArrowRight size={16} aria-hidden="true" />
+                            </>
+                          )}
+                        </MagneticButton>
+                      </div>
+
+                      {submitStatus === 'error' && (
+                        <div className="lzc-alert lzc-shake">
+                          <span>{ERROR_TEXT}</span>
+                          <button type="button" className="lz-btn lz-btn--secondary" onClick={submit}>
+                            <RotateCcw size={14} aria-hidden="true" />
+                            <span>Try Again</span>
+                          </button>
+                        </div>
+                      )}
+                    </motion.form>
+                  )}
+                </AnimatePresence>
+              </div>
             </div>
           </div>
         </section>

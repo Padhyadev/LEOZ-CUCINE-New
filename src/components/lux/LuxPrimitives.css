@@ -1,0 +1,10 @@
+/* Clip line for MaskHeading — the heading text slides up inside it */
+.lux-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+
+.lux-mask > span {
+  display: block;
+}

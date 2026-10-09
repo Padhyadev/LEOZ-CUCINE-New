@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion, useSpring } from 'framer-motion';
+import './LuxPrimitives.css';
 
 /* ==========================================================================
    LEOZ light-warm design primitives
