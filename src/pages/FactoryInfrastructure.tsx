@@ -1,16 +1,112 @@
-import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useState, useRef } from 'react';
+import { motion, AnimatePresence, useScroll, useTransform, useSpring, useInView, useReducedMotion } from 'framer-motion';
 import { Header } from '../components/common/Header';
 import { Footer } from '../components/common/Footer';
 import { useDocumentMeta } from '../hooks/useDocumentMeta';
 import { ArrowRight } from 'lucide-react';
 import { factoryAssets } from '../assets/images';
 
+const TOKENS = {
+  bgIvory: '#FAF6EF',
+  bgCream: '#F3EADB',
+  bgSand: '#EADCC5',
+  gold: '#C99A5B',
+  goldLight: '#E0BC8A',
+  bronze: '#8A6330',
+  textCocoa: '#3B2F25',
+  textTaupe: '#6B5A48',
+  lineGold: 'rgba(201,154,91,0.35)',
+};
+
 const luxuryEase = [0.16, 1, 0.3, 1];
 
+const AdvantageCard = ({ num, title, desc, reduce, isDesktop }: any) => {
+  const ref = useRef(null);
+  const [rotateX, setRotateX] = useState(0);
+  const [rotateY, setRotateY] = useState(0);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isDesktop || reduce) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+    setRotateX(-y / 20); // max ~4 degrees
+    setRotateY(x / 30);
+  };
+
+  const handleMouseLeave = () => {
+    if (!isDesktop || reduce) return;
+    setRotateX(0);
+    setRotateY(0);
+  };
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={reduce ? false : { opacity: 0, y: 24 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ 
+        default: { duration: 0.6, ease: luxuryEase },
+        rotateX: { type: 'spring', stiffness: 300, damping: 30 },
+        rotateY: { type: 'spring', stiffness: 300, damping: 30 }
+      }}
+      whileHover={reduce || !isDesktop ? undefined : { y: -6, transition: { duration: 0.3, ease: 'easeOut' } }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        backgroundColor: '#FFFFFF',
+        padding: '24px 28px',
+        borderRadius: '4px',
+        border: `1px solid ${TOKENS.lineGold}`,
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: '16px',
+        boxShadow: '0 10px 30px rgba(138,99,48,0.08)',
+        perspective: 1000,
+      }}
+      animate={{ rotateX: reduce ? 0 : rotateX, rotateY: reduce ? 0 : rotateY }}
+    >
+      <div
+        style={{
+          width: '32px',
+          height: '32px',
+          borderRadius: '50%',
+          backgroundColor: 'rgba(201,154,91,0.15)', // gold 15%
+          color: TOKENS.bronze,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          fontFamily: 'var(--font-heading)',
+          fontSize: '15px',
+          fontWeight: 500,
+          flexShrink: 0,
+        }}
+      >
+        {num}
+      </div>
+      <div>
+        <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '19px', fontWeight: 400, color: TOKENS.textCocoa, margin: '0 0 4px 0' }}>
+          {title}
+        </h3>
+        <p style={{ fontFamily: 'var(--font-body)', fontSize: '13.5px', color: TOKENS.textTaupe, lineHeight: 1.6, margin: 0 }}>
+          {desc}
+        </p>
+      </div>
+    </motion.div>
+  );
+};
+
 export const FactoryInfrastructure: React.FC = () => {
+  const reduce = useReducedMotion();
+  const [isDesktop, setIsDesktop] = useState(true);
+
   useEffect(() => {
     window.scrollTo(0, 0);
+    const check = () => setIsDesktop(window.innerWidth >= 1024);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
   }, []);
 
   useDocumentMeta(
@@ -98,13 +194,46 @@ export const FactoryInfrastructure: React.FC = () => {
     },
   ];
 
+  /* ── Page effects ──────────────────────────────────────────────────────── */
+  const { scrollYProgress } = useScroll();
+  const scaleY = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
+  
+  const [mousePos, setMousePos] = useState({ x: -1000, y: -1000 });
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!isDesktop || reduce) return;
+    setMousePos({ x: e.pageX, y: e.pageY });
+  };
+
   return (
-    <div style={{ backgroundColor: '#F7F7F5', color: '#20211F', minHeight: '100vh', overflowX: 'hidden' }}>
+    <div onMouseMove={handleMouseMove} style={{ backgroundColor: TOKENS.bgIvory, color: TOKENS.textCocoa, minHeight: '100vh', overflowX: 'hidden' }}>
+      
+      {/* Soft spotlight overlay */}
+      {isDesktop && !reduce && (
+        <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 50, overflow: 'hidden' }}>
+          <div style={{
+            position: 'absolute', left: mousePos.x, top: mousePos.y, width: '40vw', height: '40vw',
+            transform: 'translate(-50%, -50%)',
+            background: 'radial-gradient(circle, rgba(224,188,138,0.2) 0%, transparent 70%)',
+            mixBlendMode: 'multiply',
+            transition: 'opacity 0.2s ease',
+          }} />
+        </div>
+      )}
+
+      {/* Progress Line */}
+      {isDesktop && !reduce && (
+        <motion.div style={{
+          position: 'fixed', right: '32px', top: '20vh', bottom: '20vh', width: '2px', backgroundColor: TOKENS.lineGold, zIndex: 60, transformOrigin: 'top',
+        }}>
+          <motion.div style={{ width: '100%', height: '100%', backgroundColor: TOKENS.gold, scaleY, transformOrigin: 'top' }} />
+        </motion.div>
+      )}
+
       <Header />
 
       <main id="main-content">
         {/* =========================================================================
-            SECTION 01: FULL-BLEED CINEMATIC FACTORY HERO (NO BOXED CARD)
+            SECTION 01: HERO
             ========================================================================= */}
         <section
           aria-label="Factory Hero"
@@ -113,8 +242,7 @@ export const FactoryInfrastructure: React.FC = () => {
             width: '100%',
             minHeight: '90vh',
             display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'flex-end',
+            alignItems: 'center',
             paddingTop: 'clamp(120px, 16vh, 200px)',
             paddingBottom: 'clamp(48px, 8vh, 100px)',
             paddingLeft: 'clamp(20px, 6vw, 100px)',
@@ -123,356 +251,355 @@ export const FactoryInfrastructure: React.FC = () => {
           }}
         >
           <motion.div
-            initial={{ scale: 1.05, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 1.4, ease: luxuryEase }}
-            style={{ position: 'absolute', inset: 0, zIndex: 1 }}
+            initial={reduce ? false : { scale: 1 }}
+            animate={reduce ? false : { scale: 1.06 }}
+            transition={{ duration: 12, ease: 'linear' }}
+            style={{ position: 'absolute', inset: 0, zIndex: 1, overflow: 'hidden' }}
           >
             <img
               src={factoryAssets.hero.desktop}
               alt="LEOZ 20,000 Sq. Ft. Manufacturing Plant in Gujarat"
-              style={{ width: '100%', height: '100%', objectFit: 'cover', filter: 'brightness(0.92)' }}
+              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
             />
-            <div
-              style={{
-                position: 'absolute',
-                inset: 0,
-                background:
-                  'linear-gradient(180deg, rgba(14, 15, 13, 0.4) 0%, rgba(14, 15, 13, 0.25) 30%, rgba(14, 15, 13, 0.8) 70%, rgba(14, 15, 13, 0.96) 100%)',
-              }}
-            />
-            <div
-              style={{
-                position: 'absolute',
-                inset: 0,
-                background:
-                  'radial-gradient(circle at 20% 75%, rgba(10, 11, 10, 0.8) 0%, rgba(10, 11, 10, 0.35) 50%, transparent 75%)',
-                pointerEvents: 'none',
-              }}
-            />
+            {/* Soft cream gradient into next section */}
+            <div style={{
+              position: 'absolute', left: 0, right: 0, bottom: 0, height: '120px',
+              background: `linear-gradient(to top, ${TOKENS.bgIvory} 0%, transparent 100%)`
+            }} />
           </motion.div>
 
-          <div style={{ position: 'relative', zIndex: 10, maxWidth: '920px', color: '#FFFFFF' }}>
+          <div style={{ position: 'relative', zIndex: 10, maxWidth: '1440px', width: '100%', margin: '0 auto' }}>
             <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.7, delay: 0.2, ease: luxuryEase }}
+              initial={reduce ? false : { opacity: 0, x: -32 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, ease: luxuryEase }}
               style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                fontFamily: 'var(--font-body)',
-                fontSize: 'clamp(9.5px, 0.95vw, 11px)',
-                fontWeight: 600,
-                letterSpacing: '0.22em',
-                textTransform: 'uppercase',
-                color: '#D4AF37',
-                backgroundColor: 'rgba(10, 11, 10, 0.55)',
-                padding: '6px 14px',
-                borderRadius: '2px',
-                border: '1px solid rgba(212, 175, 55, 0.3)',
-                backdropFilter: 'blur(10px)',
-                marginBottom: '18px',
-                textShadow: '0 2px 8px rgba(0,0,0,0.85)',
+                maxWidth: '680px',
+                padding: 'clamp(32px, 5vw, 48px) 0',
               }}
             >
-              20,000 SQ. FT. IN-HOUSE MANUFACTURING
+
+
+              <motion.h1
+                initial={reduce ? false : { opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.85, delay: 0.35, ease: luxuryEase }}
+                style={{
+                  fontFamily: 'var(--font-heading)',
+                  fontSize: 'clamp(38px, 6vw, 84px)',
+                  fontWeight: 300,
+                  lineHeight: 1.08,
+                  letterSpacing: '-0.02em',
+                  color: '#FFFFFF',
+                  margin: '0 0 20px 0',
+                  textShadow: '0 2px 16px rgba(0,0,0,0.7)'
+                }}
+              >
+                Precision Behind
+                <br />
+                Every Detail.
+              </motion.h1>
+
+              <motion.p
+                initial={reduce ? false : { opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.5, ease: luxuryEase }}
+                style={{
+                  fontFamily: 'var(--font-body)',
+                  fontSize: 'clamp(14.5px, 1.25vw, 18px)',
+                  fontWeight: 300,
+                  lineHeight: 1.65,
+                  color: 'rgba(255,255,255,0.95)',
+                  margin: 0,
+                  textShadow: '0 2px 12px rgba(0,0,0,0.7)'
+                }}
+              >
+                Where thoughtful architectural design becomes precisely manufactured reality in our dedicated facility in Gandhinagar, Gujarat.
+              </motion.p>
             </motion.div>
-
-            <motion.h1
-              initial={{ opacity: 0, y: 24 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.85, delay: 0.35, ease: luxuryEase }}
-              style={{
-                fontFamily: 'var(--font-heading)',
-                fontSize: 'clamp(38px, 6vw, 84px)',
-                fontWeight: 300,
-                lineHeight: 1.08,
-                letterSpacing: '-0.02em',
-                color: '#FFFFFF',
-                margin: '0 0 20px 0',
-                textShadow: '0 3px 20px rgba(0,0,0,0.9), 0 1px 4px rgba(0,0,0,0.95)',
-              }}
-            >
-              Precision Behind
-              <br />
-              Every Detail.
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.5, ease: luxuryEase }}
-              style={{
-                fontFamily: 'var(--font-body)',
-                fontSize: 'clamp(14.5px, 1.25vw, 18px)',
-                fontWeight: 300,
-                lineHeight: 1.65,
-                color: '#ECEBE7',
-                maxWidth: '640px',
-                margin: 0,
-                textShadow: '0 2px 12px rgba(0,0,0,0.9)',
-              }}
-            >
-              Where thoughtful architectural design becomes precisely manufactured reality in our dedicated facility in Gandhinagar, Gujarat.
-            </motion.p>
           </div>
+
+
         </section>
 
         {/* =========================================================================
-            SECTION 02: WHAT MAKES IT "FACTORY-FINISHED"? (EDITORIAL INSIGHT)
+            SECTION 02: THE FACTORY ADVANTAGE
             ========================================================================= */}
         <section
           style={{
-            backgroundColor: '#ECEBE7',
+            backgroundColor: TOKENS.bgCream,
             paddingTop: 'clamp(70px, 9vw, 110px)',
             paddingBottom: 'clamp(70px, 9vw, 110px)',
             paddingLeft: 'clamp(20px, 6vw, 100px)',
             paddingRight: 'clamp(20px, 6vw, 100px)',
-            borderBottom: '1px solid #D9D9D4',
+            position: 'relative',
+            zIndex: 2,
           }}
         >
           <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
             <div
               style={{
                 display: 'grid',
-                gridTemplateColumns: '1.2fr 1fr',
+                gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
                 gap: 'clamp(36px, 6vw, 80px)',
                 alignItems: 'center',
               }}
               className="editorial-grid"
             >
-              <div>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '11.5px',
-                    fontWeight: 600,
-                    letterSpacing: '0.24em',
-                    textTransform: 'uppercase',
-                    color: '#A58B62',
-                    display: 'block',
-                    marginBottom: '14px',
-                  }}
+              <div style={{ overflow: 'hidden' }}>
+                <motion.div
+                  initial={reduce ? false : { y: '110%' }}
+                  whileInView={{ y: '0%' }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, ease: luxuryEase }}
                 >
-                  THE FACTORY ADVANTAGE
-                </span>
-                <h2
-                  style={{
-                    fontFamily: 'var(--font-heading)',
-                    fontSize: 'clamp(32px, 4.2vw, 56px)',
-                    fontWeight: 300,
-                    lineHeight: 1.15,
-                    color: '#20211F',
-                    letterSpacing: '-0.015em',
-                    margin: '0 0 20px 0',
-                  }}
-                >
-                  What Makes It
-                  <br />
-                  "Factory-Finished"?
-                </h2>
-                <p
+                  <span
+                    style={{
+                      fontFamily: 'var(--font-body)',
+                      fontSize: '11.5px',
+                      fontWeight: 600,
+                      letterSpacing: '0.24em',
+                      textTransform: 'uppercase',
+                      color: TOKENS.bronze,
+                      display: 'block',
+                      marginBottom: '14px',
+                    }}
+                  >
+                    THE FACTORY ADVANTAGE
+                  </span>
+                </motion.div>
+                <div style={{ overflow: 'hidden' }}>
+                  <motion.h2
+                    initial={reduce ? false : { y: '110%' }}
+                    whileInView={{ y: '0%' }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.8, delay: 0.1, ease: luxuryEase }}
+                    style={{
+                      fontFamily: 'var(--font-heading)',
+                      fontSize: 'clamp(32px, 4.2vw, 56px)',
+                      fontWeight: 300,
+                      lineHeight: 1.15,
+                      color: TOKENS.textCocoa,
+                      letterSpacing: '-0.015em',
+                      margin: '0 0 20px 0',
+                    }}
+                  >
+                    What Makes It
+                    <br />
+                    "Factory-Finished"?
+                  </motion.h2>
+                </div>
+                <motion.div
+                  initial={reduce ? false : { scaleX: 0 }}
+                  whileInView={{ scaleX: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, ease: luxuryEase }}
+                  style={{ width: '48px', height: '1px', backgroundColor: TOKENS.gold, marginBottom: '24px', transformOrigin: 'left' }}
+                />
+                <motion.p
+                  initial={reduce ? false : { opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: 0.2, ease: luxuryEase }}
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontSize: 'clamp(15px, 1.2vw, 18px)',
-                    color: '#20211F',
+                    color: TOKENS.textTaupe,
                     lineHeight: 1.7,
                     margin: 0,
                   }}
                 >
                   It is not just about aesthetics or blueprint drawings — true luxury furniture is born when <strong>heavy industrial machines</strong> meet a <strong>strictly calibrated precision process</strong>.
-                </p>
+                </motion.p>
               </div>
 
               {/* 3 Core Pillars */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                <div
-                  style={{
-                    backgroundColor: '#F7F7F5',
-                    padding: '24px 28px',
-                    borderRadius: '2px',
-                    border: '1px solid #D9D9D4',
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '16px',
-                  }}
-                >
-                  <div
-                    style={{
-                      width: '32px',
-                      height: '32px',
-                      borderRadius: '50%',
-                      backgroundColor: 'rgba(165, 139, 98, 0.15)',
-                      color: '#A58B62',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: '15px',
-                      fontWeight: 500,
-                      flexShrink: 0,
-                    }}
-                  >
-                    01
-                  </div>
-                  <div>
-                    <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '19px', fontWeight: 400, color: '#20211F', margin: '0 0 4px 0' }}>
-                      Better Finish
-                    </h3>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '13.5px', color: '#686963', lineHeight: 1.6, margin: 0 }}>
-                      Dual-blade scoring panel saws and hot-melt edge banders guarantee 100% chip-free surfaces and invisible hairline joints.
-                    </p>
-                  </div>
-                </div>
-
-                <div
-                  style={{
-                    backgroundColor: '#F7F7F5',
-                    padding: '24px 28px',
-                    borderRadius: '2px',
-                    border: '1px solid #D9D9D4',
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '16px',
-                  }}
-                >
-                  <div
-                    style={{
-                      width: '32px',
-                      height: '32px',
-                      borderRadius: '50%',
-                      backgroundColor: 'rgba(165, 139, 98, 0.15)',
-                      color: '#A58B62',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: '15px',
-                      fontWeight: 500,
-                      flexShrink: 0,
-                    }}
-                  >
-                    02
-                  </div>
-                  <div>
-                    <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '19px', fontWeight: 400, color: '#20211F', margin: '0 0 4px 0' }}>
-                      Better Alignment
-                    </h3>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '13.5px', color: '#686963', lineHeight: 1.6, margin: 0 }}>
-                      Multi-spindle boring machines drill with zero manual error, producing silky-smooth drawer motion and razor-sharp shadow gaps.
-                    </p>
-                  </div>
-                </div>
-
-                <div
-                  style={{
-                    backgroundColor: '#F7F7F5',
-                    padding: '24px 28px',
-                    borderRadius: '2px',
-                    border: '1px solid #D9D9D4',
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    gap: '16px',
-                  }}
-                >
-                  <div
-                    style={{
-                      width: '32px',
-                      height: '32px',
-                      borderRadius: '50%',
-                      backgroundColor: 'rgba(165, 139, 98, 0.15)',
-                      color: '#A58B62',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: '15px',
-                      fontWeight: 500,
-                      flexShrink: 0,
-                    }}
-                  >
-                    03
-                  </div>
-                  <div>
-                    <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '19px', fontWeight: 400, color: '#20211F', margin: '0 0 4px 0' }}>
-                      Better Durability
-                    </h3>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '13.5px', color: '#686963', lineHeight: 1.6, margin: 0 }}>
-                      150-ton hydraulic cold-press bonding and airtight moisture-barrier sealing prevent bubbling and peeling for decades.
-                    </p>
-                  </div>
-                </div>
+                <AdvantageCard 
+                  num="01" reduce={reduce} isDesktop={isDesktop}
+                  title="Better Finish" 
+                  desc="Dual-blade scoring panel saws and hot-melt edge banders guarantee 100% chip-free surfaces and invisible hairline joints." 
+                />
+                <AdvantageCard 
+                  num="02" reduce={reduce} isDesktop={isDesktop}
+                  title="Better Alignment" 
+                  desc="Multi-spindle boring machines drill with zero manual error, producing silky-smooth drawer motion and razor-sharp shadow gaps." 
+                />
+                <AdvantageCard 
+                  num="03" reduce={reduce} isDesktop={isDesktop}
+                  title="Better Durability" 
+                  desc="150-ton hydraulic cold-press bonding and airtight moisture-barrier sealing prevent bubbling and peeling for decades." 
+                />
               </div>
             </div>
           </div>
         </section>
 
         {/* =========================================================================
-            SECTION 03: 5-STEP AUTOMATED FACTORY MACHINERY SETUP
+            SECTION 03: MACHINERY SETUP
             ========================================================================= */}
         <section
           style={{
-            backgroundColor: '#F7F7F5',
+            backgroundColor: TOKENS.bgIvory,
             paddingTop: 'clamp(90px, 12vw, 150px)',
             paddingBottom: 'clamp(90px, 12vw, 150px)',
             paddingLeft: 'clamp(20px, 6vw, 100px)',
             paddingRight: 'clamp(20px, 6vw, 100px)',
+            position: 'relative',
           }}
         >
           <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
             <div style={{ marginBottom: 'clamp(50px, 7vw, 90px)' }}>
-              <span style={{ fontFamily: 'var(--font-body)', fontSize: '11.5px', fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: '#A58B62', display: 'block', marginBottom: '12px' }}>
-                MACHINERY SETUP &amp; RIGOROUS PROCESS
-              </span>
-              <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(36px, 4.8vw, 68px)', fontWeight: 300, color: '#20211F', letterSpacing: '-0.02em', margin: 0 }}>
-                5 Automated Manufacturing Machines
-              </h2>
+              <div style={{ overflow: 'hidden' }}>
+                <motion.span
+                  initial={reduce ? false : { y: '110%' }}
+                  whileInView={{ y: '0%' }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, ease: luxuryEase }}
+                  style={{ fontFamily: 'var(--font-body)', fontSize: '11.5px', fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: TOKENS.bronze, display: 'block', marginBottom: '12px' }}
+                >
+                  MACHINERY SETUP &amp; RIGOROUS PROCESS
+                </motion.span>
+              </div>
+              <div style={{ overflow: 'hidden' }}>
+                <motion.h2
+                  initial={reduce ? false : { y: '110%' }}
+                  whileInView={{ y: '0%' }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.8, delay: 0.1, ease: luxuryEase }}
+                  style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(36px, 4.8vw, 68px)', fontWeight: 300, color: TOKENS.textCocoa, letterSpacing: '-0.02em', margin: 0 }}
+                >
+                  5 Automated Manufacturing Machines
+                </motion.h2>
+              </div>
+              <motion.div
+                initial={reduce ? false : { scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, delay: 0.2, ease: luxuryEase }}
+                style={{ width: '48px', height: '1px', backgroundColor: TOKENS.gold, marginTop: '24px', transformOrigin: 'left' }}
+              />
             </div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 'clamp(70px, 10vw, 140px)' }}>
               {productionSequence.map((item, idx) => (
-                <div
-                  key={item.step}
-                  style={{
-                    display: 'grid',
-                    gridTemplateColumns: idx % 2 === 0 ? '1.2fr 1fr' : '1fr 1.2fr',
-                    gap: 'clamp(36px, 6vw, 80px)',
-                    alignItems: 'center',
-                  }}
-                  className="editorial-grid"
-                >
-                  <div style={{ order: idx % 2 === 0 ? 1 : 2, width: '100%', aspectRatio: '16/10', overflow: 'hidden', backgroundColor: '#D9D9D4' }}>
-                    <img
-                      src={item.image}
-                      alt={item.alt}
-                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-                    />
-                  </div>
+                <div key={item.step} style={{ position: 'relative' }}>
+                  {/* Light sand band every second block */}
+                  {idx % 2 !== 0 && (
+                    <div style={{ position: 'absolute', top: '-40px', bottom: '-40px', left: '-10vw', right: '-10vw', backgroundColor: TOKENS.bgSand, zIndex: 0 }} />
+                  )}
 
-                  <div style={{ order: idx % 2 === 0 ? 2 : 1 }}>
-                    <span style={{ display: 'none' }}>
-                      {item.step}
-                    </span>
-                    <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(26px, 3vw, 38px)', fontWeight: 300, color: '#20211F', margin: '0 0 6px 0' }}>
-                      {item.title}
-                    </h3>
-                    <div style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#A58B62', marginBottom: '14px' }}>
-                      {item.subtitle}
+                  <div
+                    style={{
+                      position: 'relative', zIndex: 1,
+                      display: 'grid',
+                      gridTemplateColumns: !isDesktop ? '1fr' : (idx % 2 === 0 ? '1.2fr 1fr' : '1fr 1.2fr'),
+                      gap: 'clamp(36px, 6vw, 80px)',
+                      alignItems: 'center',
+                    }}
+                    className="editorial-grid"
+                  >
+                    {/* Image Column */}
+                    <div style={{ order: !isDesktop ? 1 : (idx % 2 === 0 ? 1 : 2), position: 'relative' }}>
+                      {/* Offset bracket frame */}
+                      <div style={{ position: 'absolute', inset: '16px -16px -16px 16px', border: `1px solid ${TOKENS.gold}`, opacity: 0.1, zIndex: 0, borderRadius: '2px' }} />
+                      
+                      <div style={{ position: 'relative', width: '100%', aspectRatio: '16/10', overflow: 'hidden', backgroundColor: TOKENS.bgCream, boxShadow: '0 20px 40px rgba(138,99,48,0.1)', borderRadius: '2px' }}>
+                        <motion.img
+                          src={item.image}
+                          alt={item.alt}
+                          loading="lazy"
+                          whileHover={reduce || !isDesktop ? undefined : { scale: 1.05 }}
+                          transition={{ duration: 1.5, ease: 'easeOut' }}
+                          style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                        />
+                        {/* Slide away reveal */}
+                        <motion.div
+                          initial={reduce ? false : { x: '0%' }}
+                          whileInView={{ x: '100%' }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.9, ease: luxuryEase }}
+                          style={{ position: 'absolute', inset: 0, backgroundColor: TOKENS.bgCream, zIndex: 2 }}
+                        />
+                        {/* Light sweep on hover */}
+                        {!reduce && isDesktop && (
+                          <motion.div
+                            initial={{ x: '-150%', y: '-150%', opacity: 0 }}
+                            whileHover={{ x: '150%', y: '150%', opacity: 0.2 }}
+                            transition={{ duration: 1, ease: 'linear' }}
+                            style={{
+                              position: 'absolute', inset: '-100%', background: 'linear-gradient(45deg, transparent 40%, rgba(255,255,255,1) 50%, transparent 60%)', zIndex: 3, pointerEvents: 'none'
+                            }}
+                          />
+                        )}
+                      </div>
                     </div>
-                    <p style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: '#686963', lineHeight: 1.75, margin: '0 0 20px 0' }}>
-                      {item.desc}
-                    </p>
 
-                    {/* Technical Highlights */}
-                    <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', borderTop: '1px solid #D9D9D4', paddingTop: '16px' }}>
-                      {item.specs.map((spec, sIdx) => (
-                        <div key={sIdx} style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                          <span style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#A58B62', flexShrink: 0 }} />
-                          <span style={{ fontFamily: 'var(--font-body)', fontSize: '13.5px', color: '#20211F' }}>
-                            {spec}
-                          </span>
-                        </div>
-                      ))}
+                    {/* Text Column */}
+                    <div style={{ order: !isDesktop ? 2 : (idx % 2 === 0 ? 2 : 1), position: 'relative' }}>
+                      {/* Decorative number */}
+                      <div aria-hidden="true" style={{ position: 'absolute', top: '-40px', left: '-20px', fontSize: '120px', fontFamily: 'var(--font-heading)', color: TOKENS.gold, opacity: 0.15, lineHeight: 1, pointerEvents: 'none', userSelect: 'none' }}>
+                        {item.step}
+                      </div>
+
+                      <span style={{ display: 'none' }}>{item.step}</span>
+
+                      <div style={{ overflow: 'hidden', position: 'relative', zIndex: 1 }}>
+                        <motion.h3
+                          initial={reduce ? false : { y: '110%' }}
+                          whileInView={{ y: '0%' }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.6, ease: luxuryEase }}
+                          style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(26px, 3vw, 38px)', fontWeight: 300, color: TOKENS.textCocoa, margin: '0 0 6px 0' }}
+                        >
+                          {item.title}
+                        </motion.h3>
+                      </div>
+
+                      <motion.div
+                        initial={reduce ? false : { opacity: 0, y: 16 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.1, ease: luxuryEase }}
+                        style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: TOKENS.bronze, marginBottom: '14px', position: 'relative', zIndex: 1 }}
+                      >
+                        {item.subtitle}
+                      </motion.div>
+
+                      <motion.p
+                        initial={reduce ? false : { opacity: 0, y: 16 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6, delay: 0.2, ease: luxuryEase }}
+                        style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: TOKENS.textTaupe, lineHeight: 1.75, margin: '0 0 20px 0', position: 'relative', zIndex: 1 }}
+                      >
+                        {item.desc}
+                      </motion.p>
+
+                      {/* Technical Highlights */}
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', borderTop: `1px solid ${TOKENS.lineGold}`, paddingTop: '16px', position: 'relative', zIndex: 1 }}>
+                        {item.specs.map((spec, sIdx) => (
+                          <motion.div
+                            key={sIdx}
+                            initial={reduce ? false : { opacity: 0, x: -16 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ duration: 0.5, delay: 0.3 + (sIdx * 0.1), ease: luxuryEase }}
+                            style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
+                          >
+                            <motion.span
+                              initial={reduce ? false : { scale: 0 }}
+                              whileInView={{ scale: 1 }}
+                              viewport={{ once: true }}
+                              transition={{ duration: 0.4, delay: 0.3 + (sIdx * 0.1), type: 'spring' }}
+                              style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: TOKENS.gold, flexShrink: 0 }}
+                            />
+                            <span style={{ fontFamily: 'var(--font-body)', fontSize: '13.5px', color: TOKENS.textCocoa }}>
+                              {spec}
+                            </span>
+                          </motion.div>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 </div>

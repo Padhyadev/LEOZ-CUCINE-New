@@ -203,7 +203,7 @@ export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showH
     { label: 'Kitchens', path: '/modular-kitchens' },
     { label: 'Wardrobes', path: '/modular-wardrobes' },
     // { label: 'Projects', path: '/projects' },
-    { label: 'Factory', path: '/factory' },
+    { label: 'Craftsmanship', path: '/factory' },
     { label: 'About', path: '/about' },
     { label: 'Franchise', path: '/franchise-opportunities' },
     { label: 'Contact', path: '/contact' },
