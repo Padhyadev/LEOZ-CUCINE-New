@@ -17,7 +17,7 @@ const Showrooms = lazy(() => import('./pages/Showrooms'));
 const MaterialsFinishes = lazy(() => import('./pages/MaterialsFinishes'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
-import { CinematicPageTransition } from './components/common/CinematicPageTransition';
+
 import { LenisProvider } from './providers/LenisProvider';
 import { MobileActionBar } from './components/common/MobileActionBar';
 import { Analytics } from './components/common/Analytics';
@@ -117,11 +117,9 @@ export const App: React.FC = () => {
   return (
     <LenisProvider>
       <Analytics />
-      <CinematicPageTransition>
         <Suspense fallback={<div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F7F5F1' }}></div>}>
           {renderPage()}
         </Suspense>
-      </CinematicPageTransition>
       <MobileActionBar />
     </LenisProvider>
   );
