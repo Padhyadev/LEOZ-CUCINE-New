@@ -1,49 +1,124 @@
-import React, { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useEffect, useState, useRef } from 'react';
+import { motion, useReducedMotion, useSpring, useInView, AnimatePresence } from 'framer-motion';
 import { Header } from '../components/common/Header';
 import { Footer } from '../components/common/Footer';
 import { UniversalHero } from '../components/common/UniversalHero';
-import { useDocumentMeta } from '../hooks/useDocumentMeta';
-import {
-  ArrowRight,
-  ShieldCheck,
-  Building,
-  Layers,
-  Sparkles,
-  Compass,
-  CheckCircle,
-  Users,
-  Briefcase,
-  Store,
-  PhoneCall
-} from 'lucide-react';
+import { images } from '../assets/images';
 import { submitEnquiryForm } from '../lib/submitEnquiryForm';
-import { PHONE_SALES_DISPLAY, PHONE_SALES_HREF } from '../constants/siteInfo';
+import {
+  Store,
+  Settings,
+  Factory,
+  Check,
+  ChevronDown,
+} from 'lucide-react';
+import './FranchiseEnquiry.css';
 
-/* Easing curve for luxury architectural motion */
-const luxuryEase = [0.16, 1, 0.3, 1];
+/* ── Constants ──────────────────────────────────────────────────────────── */
+const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
-export const FranchiseOpportunities: React.FC = () => {
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+/* ── Magnetic Button ────────────────────────────────────────────────────── */
+const MagneticButton = ({
+  children,
+  className,
+  onClick,
+  disabled,
+  type = 'button',
+}: {
+  children: React.ReactNode;
+  className: string;
+  onClick?: (e: any) => void;
+  disabled?: boolean;
+  type?: 'button' | 'submit';
+}) => {
+  const reduce = useReducedMotion();
+  const x = useSpring(0, { stiffness: 260, damping: 18 });
+  const y = useSpring(0, { stiffness: 260, damping: 18 });
 
-  useDocumentMeta(
-    'Franchise Opportunities | LEOZ Cucine — Luxury Modular Kitchen & Wardrobe Partnership',
-    'An invitation to grow with LEOZ Cucine. Exploring the appointment of two franchise partners for our luxury kitchen and wardrobe brand.'
-  );
-
-  const scrollToForm = (e: React.MouseEvent) => {
-    e.preventDefault();
-    const el = document.getElementById('how-to-enquire');
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
-    }
+  const handleMouse = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (reduce || disabled) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    x.set((e.clientX - rect.left - rect.width / 2) * 0.15);
+    y.set((e.clientY - rect.top - rect.height / 2) * 0.15);
   };
 
-  /* =========================================================================
-     FORM STATE & VALIDATION
-     ========================================================================= */
+  return (
+    <motion.button
+      type={type}
+      className={className}
+      onClick={onClick}
+      onMouseMove={handleMouse}
+      onMouseLeave={() => { x.set(0); y.set(0); }}
+      style={{ x, y }}
+      disabled={disabled}
+      whileTap={reduce || disabled ? undefined : { scale: 0.97 }}
+    >
+      {children}
+    </motion.button>
+  );
+};
+
+/* ── Section Head ───────────────────────────────────────────────────────── */
+const SectionHead = ({ eyebrow, title, center }: { eyebrow: string; title: string; center?: boolean }) => {
+  const reduce = useReducedMotion();
+  return (
+    <div style={{ marginBottom: '40px', textAlign: center ? 'center' : undefined }}>
+      <div className="lz-f-mask">
+        <motion.span
+          className="lz-f-eyebrow"
+          initial={reduce ? false : { y: '110%' }}
+          whileInView={{ y: '0%' }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease: EASE }}
+        >
+          {eyebrow}
+        </motion.span>
+      </div>
+      <motion.h2
+        className="lz-f-h2"
+        initial={reduce ? false : { opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, ease: EASE, delay: 0.08 }}
+      >
+        {title}
+      </motion.h2>
+      <motion.span
+        className={`lz-f-rule${center ? ' lz-f-rule--center' : ''}`}
+        initial={reduce ? false : { scaleX: 0 }}
+        whileInView={{ scaleX: 1 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.8, ease: EASE }}
+      />
+    </div>
+  );
+};
+
+/* ── Spotlight wrapper ──────────────────────────────────────────────────── */
+const SpotlightWrap = ({ children, className }: { children: React.ReactNode; className?: string }) => {
+  const spotRef = useRef<HTMLDivElement>(null);
+  const handleMove = (e: React.MouseEvent) => {
+    if (!spotRef.current) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    spotRef.current.style.left = `${e.clientX - rect.left}px`;
+    spotRef.current.style.top = `${e.clientY - rect.top}px`;
+  };
+  return (
+    <div className={`lz-f-spotlight-wrap ${className || ''}`} onMouseMove={handleMove}>
+      <div ref={spotRef} className="lz-f-spotlight" />
+      {children}
+    </div>
+  );
+};
+
+/* ======================================================================== */
+/*  FRANCHISE OPPORTUNITIES PAGE                                            */
+/* ======================================================================== */
+
+export const FranchiseOpportunities: React.FC = () => {
+  const reduce = useReducedMotion();
+
+  /* ── Form state ───────────────────────────────────────────────────────── */
   const [formData, setFormData] = useState({
     fullName: '',
     mobile: '',
@@ -58,8 +133,12 @@ export const FranchiseOpportunities: React.FC = () => {
 
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
+  useEffect(() => { window.scrollTo(0, 0); }, []);
+
+  /* ── Validation ───────────────────────────────────────────────────────── */
   const validateForm = () => {
     const errs: Record<string, string> = {};
     if (!formData.fullName.trim()) errs.fullName = 'Please enter your full name.';
@@ -80,23 +159,26 @@ export const FranchiseOpportunities: React.FC = () => {
     return Object.keys(errs).length === 0;
   };
 
+  /* ── Input handling ───────────────────────────────────────────────────── */
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     if (name === 'mobile') {
       const sanitized = value.replace(/[^\d+\s-]/g, '').slice(0, 15);
-      setFormData((prev) => ({ ...prev, [name]: sanitized }));
-      if (errors.mobile) setErrors((prev) => ({ ...prev, mobile: '' }));
+      setFormData(prev => ({ ...prev, [name]: sanitized }));
+      if (errors.mobile) setErrors(prev => ({ ...prev, mobile: '' }));
       return;
     }
-    setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name]) setErrors((prev) => ({ ...prev, [name]: '' }));
+    setFormData(prev => ({ ...prev, [name]: value }));
+    if (errors[name]) setErrors(prev => ({ ...prev, [name]: '' }));
   };
 
+  /* ── Submit (EXISTING API – unchanged) ────────────────────────────────── */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!validateForm()) return;
+    if (!validateForm() || isSubmitting) return;
 
     setIsSubmitting(true);
+    setSubmitError(false);
     try {
       const res = await submitEnquiryForm('franchise', {
         fullName: formData.fullName,
@@ -112,1049 +194,421 @@ export const FranchiseOpportunities: React.FC = () => {
       if (res.ok) {
         setIsSubmitted(true);
       } else {
-        setIsSubmitted(true); // Graceful fallback
+        setSubmitError(true);
       }
     } catch {
-      setIsSubmitted(true);
+      setSubmitError(true);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  /* The 6 Experience Pillars */
-  const experiencePillars = [
-    {
-      title: 'Brand',
-      desc: 'Architectural positioning, refined editorial identity, and an uncompromising reputation in the luxury interior sector.',
-    },
-    {
-      title: 'Design',
-      desc: 'German-inspired spatial planning, monolithic kitchen topologies, and bespoke wardrobe configuration systems.',
-    },
-    {
-      title: 'Product',
-      desc: 'Curated European surface materials, synchronized textures, integrated architectural vitrines, and custom joinery.',
-    },
-    {
-      title: 'Manufacturing',
-      desc: 'Direct backing from our dedicated 20,000 sq. ft. precision facility in Gujarat with automated CNC workflows.',
-    },
-    {
-      title: 'Consultation',
-      desc: 'Structured 1-on-1 client consultation methodologies, 3D CAD visualization protocols, and spatial presentation toolkits.',
-    },
-    {
-      title: 'Customer Experience',
-      desc: 'White-glove project coordination, calibrated factory tolerances, and professional installation standards.',
-    },
-  ];
+  /* ── Progress calculation ─────────────────────────────────────────────── */
+  const calculateProgress = () => {
+    const required = ['fullName', 'mobile', 'email', 'city', 'businessBackground'];
+    const filled = required.filter(f => formData[f as keyof typeof formData].trim().length > 0).length;
+    return (filled / required.length) * 100;
+  };
 
-  /* Profiles we would like to meet - exactly aligned with the 07 draft criteria */
-  const partnerProfiles = [
-    {
-      icon: <Building size={22} color="#A58B62" />,
-      title: 'Local Premium Market Understanding',
-      desc: 'Professionals with a strong understanding of their local premium residential market and architectural landscape.',
-    },
-    {
-      icon: <Users size={22} color="#A58B62" />,
-      title: 'Customer Relationships',
-      desc: 'Established relationships with high-net-worth homeowners, architects, interior designers, and luxury developers.',
-    },
-    {
-      icon: <Store size={22} color="#A58B62" />,
-      title: 'Experience Centre Space',
-      desc: 'Space to establish an appropriate experience centre in a prominent design district or high-street location.',
-    },
-    {
-      icon: <Briefcase size={22} color="#A58B62" />,
-      title: 'Active Business Involvement',
-      desc: 'Entrepreneurs and design-industry leaders committed to active, hands-on business involvement and service excellence.',
-    },
-  ];
+  const scrollToForm = () => {
+    document.getElementById('franchise-form')?.scrollIntoView({ behavior: 'smooth' });
+  };
 
+  /* ── Pillar icon drawing ──────────────────────────────────────────────── */
+  const PillarIcon = ({ icon: Icon, label }: { icon: React.ElementType; label: string }) => {
+    const ref = useRef(null);
+    const inView = useInView(ref, { once: true, margin: '-40px' });
+    return (
+      <div className="lz-f-pillar" ref={ref}>
+        <motion.div
+          initial={reduce ? false : { scale: 0, rotate: -30 }}
+          animate={inView ? { scale: 1, rotate: 0 } : undefined}
+          transition={{ duration: 0.5, ease: EASE }}
+        >
+          <Icon size={24} color="var(--gold)" strokeWidth={1.5} />
+        </motion.div>
+        <span style={{ fontSize: '15px', fontWeight: 500, color: 'var(--text-cocoa)' }}>{label}</span>
+      </div>
+    );
+  };
+
+  /* ── Render ────────────────────────────────────────────────────────────── */
   return (
-    <div style={{ backgroundColor: '#F7F7F5', color: '#20211F', minHeight: '100vh', overflowX: 'hidden' }}>
+    <div className="lz-franchise">
       <Header />
 
-      <main id="main-content">
-        {/* =========================================================================
-            UNIVERSAL HERO SECTION: LEOZ / FRANCHISE ENQUIRY (DRAFT 07)
-            ========================================================================= */}
+      <main>
+
+        {/* ================================================================
+            01 HERO — An Invitation to Grow with LEOZ
+            ================================================================ */}
         <UniversalHero
-          image="/franchise-hero.png"
-          mobileImage="/franchise-hero.png"
+          image="/franchise-showroom-hero.png"
+          mobileImage="/franchise-showroom-hero.png"
           imageAlt="LEOZ Luxury Showroom Kitchen and Wardrobe Consultation Space"
           imagePosition="center 50%"
           eyebrow="LEOZ / FRANCHISE ENQUIRY"
           headline="An Invitation to Grow with LEOZ"
           supportingText="LEOZ Cucine is exploring the appointment of two franchise partners for its luxury kitchen and wardrobe brand. We welcome expressions of interest from entrepreneurs and design-industry professionals who share our appreciation for refined products and customer experience."
-          ctaText="Express Franchise Interest →"
-          ctaHref="#how-to-enquire"
+          ctaText="Express Franchise Interest"
+          ctaHref="#franchise-form"
           onCtaClick={scrollToForm}
           brightness={0.88}
         />
 
-        {/* =========================================================================
-            SECTION: THE OPPORTUNITY (DRAFT 07)
-            ========================================================================= */}
-        <section
-          aria-label="The Opportunity"
-          style={{
-            backgroundColor: '#ECEBE7',
-            paddingTop: 'clamp(70px, 9vw, 120px)',
-            paddingBottom: 'clamp(70px, 9vw, 120px)',
-            paddingLeft: 'clamp(20px, 5vw, 80px)',
-            paddingRight: 'clamp(20px, 5vw, 80px)',
-            borderBottom: '1px solid #D9D9D4',
-          }}
-        >
-          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-            <div style={{ maxWidth: '820px', marginBottom: 'clamp(40px, 5vw, 64px)' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  letterSpacing: '0.22em',
-                  textTransform: 'uppercase',
-                  color: '#A58B62',
-                  display: 'block',
-                  marginBottom: '12px',
-                }}
-              >
-                THE PROPOSITION
-              </span>
-              <h2
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(30px, 4.2vw, 50px)',
-                  fontWeight: 300,
-                  color: '#20211F',
-                  letterSpacing: '-0.01em',
-                  lineHeight: 1.1,
-                  margin: '0 0 20px 0',
-                }}
-              >
-                The Opportunity
-              </h2>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '18px', color: '#20211F', lineHeight: 1.6, margin: 0, fontWeight: 400 }}>
-                A focused retail and consultation concept dedicated to luxury modular kitchens and bespoke wardrobes, backed by the brand’s manufacturing know-how and in-house production capability.
-              </p>
-            </div>
+        {/* ================================================================
+            02 THE OPPORTUNITY
+            ================================================================ */}
+        <SpotlightWrap className="lz-f-section bg-ivory">
+          <div className="lz-f-container">
+            <SectionHead eyebrow="The Opportunity" title="A Focused Retail Concept" />
 
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-                gap: '32px',
-              }}
-            >
-              {/* Card 1: Dedicated Concept */}
-              <div
-                style={{
-                  backgroundColor: '#FFFFFF',
-                  padding: 'clamp(32px, 4vw, 44px)',
-                  border: '1px solid #D9D9D4',
-                  borderRadius: '2px',
-                }}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '48px', alignItems: 'center' }}>
+              {/* Left: text + pillars */}
+              <motion.div
+                initial={reduce ? false : { opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, ease: EASE }}
               >
-                <span
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '11px',
-                    fontWeight: 600,
-                    letterSpacing: '0.2em',
-                    textTransform: 'uppercase',
-                    color: '#A58B62',
-                    display: 'block',
-                    marginBottom: '16px',
-                  }}
-                >
-                  SPECIALISATION
-                </span>
-                <h3
-                  style={{
-                    fontFamily: 'var(--font-heading)',
-                    fontSize: '24px',
-                    fontWeight: 300,
-                    color: '#20211F',
-                    margin: '0 0 16px 0',
-                  }}
-                >
-                  Retail & Consultation Concept
-                </h3>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '14.5px', color: '#686963', lineHeight: 1.7, marginBottom: '24px' }}>
-                  A focused, monobrand design environment tailored exclusively to luxury fitted interiors:
+                <p style={{ fontSize: '16px', lineHeight: 1.8, marginBottom: '32px', color: 'var(--text-taupe)' }}>
+                  A focused retail and consultation concept dedicated to luxury modular kitchens and bespoke wardrobes, backed by the brand's manufacturing know-how and in-house production capability.
                 </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ width: '6px', height: '6px', backgroundColor: '#A58B62', borderRadius: '50%' }} />
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', fontWeight: 500, color: '#20211F' }}>
-                      Luxury Modular Kitchens
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ width: '6px', height: '6px', backgroundColor: '#A58B62', borderRadius: '50%' }} />
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', fontWeight: 500, color: '#20211F' }}>
-                      Bespoke Wardrobes & Dressing Suites
-                    </span>
-                  </div>
-                </div>
-              </div>
 
-              {/* Card 2: Backed by In-House Production */}
-              <div
-                style={{
-                  backgroundColor: '#FFFFFF',
-                  padding: 'clamp(32px, 4vw, 44px)',
-                  border: '1px solid #D9D9D4',
-                  borderRadius: '2px',
-                }}
+                <PillarIcon icon={Store} label="Retail and consultation concept" />
+                <PillarIcon icon={Settings} label="Manufacturing know-how" />
+                <PillarIcon icon={Factory} label="In-house production capability" />
+              </motion.div>
+
+              {/* Right: bracket-framed image */}
+              <motion.div
+                initial={reduce ? false : { opacity: 0, scale: 0.96 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, ease: EASE }}
+                className="lz-f-img-wrap"
+                style={{ aspectRatio: '4/3', position: 'relative' }}
               >
-                <span
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '11px',
-                    fontWeight: 600,
-                    letterSpacing: '0.2em',
-                    textTransform: 'uppercase',
-                    color: '#A58B62',
-                    display: 'block',
-                    marginBottom: '16px',
-                  }}
-                >
-                  MANUFACTURING
-                </span>
-                <h3
-                  style={{
-                    fontFamily: 'var(--font-heading)',
-                    fontSize: '24px',
-                    fontWeight: 300,
-                    color: '#20211F',
-                    margin: '0 0 16px 0',
-                  }}
-                >
-                  In-House Production Capability
-                </h3>
-                <p style={{ fontFamily: 'var(--font-body)', fontSize: '14.5px', color: '#686963', lineHeight: 1.7, marginBottom: '24px' }}>
-                  Backed directly by brand-owned manufacturing infrastructure and decades of joinery mastery:
-                </p>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ width: '6px', height: '6px', backgroundColor: '#A58B62', borderRadius: '50%' }} />
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', fontWeight: 500, color: '#20211F' }}>
-                      Decades of Technical & Manufacturing Know-How
-                    </span>
-                  </div>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <div style={{ width: '6px', height: '6px', backgroundColor: '#A58B62', borderRadius: '50%' }} />
-                    <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', fontWeight: 500, color: '#20211F' }}>
-                      20,000 sq. ft. Precision Facility in Gujarat
-                    </span>
-                  </div>
-                </div>
-              </div>
+                <div className="lz-f-bracket lz-f-bracket--tl" />
+                <div className="lz-f-bracket lz-f-bracket--br" />
+                <img src={images.consultationBg} alt="Luxury retail consultation space" loading="lazy" />
+              </motion.div>
             </div>
           </div>
-        </section>
+        </SpotlightWrap>
 
-        {/* =========================================================================
-            SECTION: WHO WE WOULD LIKE TO MEET (DRAFT 07)
-            ========================================================================= */}
-        <section
-          aria-label="Who We Would Like To Meet"
-          style={{
-            backgroundColor: '#F7F7F5',
-            paddingTop: 'clamp(70px, 9vw, 120px)',
-            paddingBottom: 'clamp(70px, 9vw, 120px)',
-            paddingLeft: 'clamp(20px, 5vw, 80px)',
-            paddingRight: 'clamp(20px, 5vw, 80px)',
-            borderBottom: '1px solid #D9D9D4',
-          }}
-        >
-          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-            <div style={{ maxWidth: '820px', marginBottom: 'clamp(40px, 5vw, 64px)' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  letterSpacing: '0.22em',
-                  textTransform: 'uppercase',
-                  color: '#A58B62',
-                  display: 'block',
-                  marginBottom: '12px',
-                }}
+        {/* ================================================================
+            03 WHO WE WOULD LIKE TO MEET
+            ================================================================ */}
+        <section className="lz-f-section bg-cream">
+          <div className="lz-f-container">
+            <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto 56px auto' }}>
+              <SectionHead eyebrow="Partnership" title="Who We Would Like to Meet" center />
+              <motion.p
+                initial={reduce ? false : { opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, ease: EASE }}
+                style={{ fontSize: '16px', lineHeight: 1.8, color: 'var(--text-taupe)' }}
               >
-                PARTNER SUITABILITY
-              </span>
-              <h2
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(30px, 4.2vw, 50px)',
-                  fontWeight: 300,
-                  color: '#20211F',
-                  letterSpacing: '-0.01em',
-                  margin: '0 0 16px 0',
-                }}
-              >
-                Who We Would Like to Meet
-              </h2>
-              <p style={{ fontFamily: 'var(--font-body)', fontSize: '16px', color: '#686963', lineHeight: 1.7, margin: 0 }}>
                 Professionals with a strong understanding of their local premium residential market, customer relationships, space to establish an appropriate experience centre, and a commitment to active business involvement.
-              </p>
+              </motion.p>
             </div>
 
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                gap: '24px',
-              }}
-            >
-              {partnerProfiles.map((profile) => (
-                <div
-                  key={profile.title}
-                  style={{
-                    backgroundColor: '#FFFFFF',
-                    padding: 'clamp(30px, 3.5vw, 38px)',
-                    border: '1px solid #D9D9D4',
-                    borderRadius: '2px',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    justifyContent: 'flex-start',
-                  }}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '24px' }}>
+              {[
+                'Strong understanding of the local premium residential market',
+                'Customer relationships',
+                'Space to establish an appropriate experience centre',
+                'Commitment to active business involvement',
+              ].map((text, i) => (
+                <motion.div
+                  key={i}
+                  className="lz-f-profile"
+                  initial={reduce ? false : { opacity: 0, y: 24 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.6, delay: i * 0.1, ease: EASE }}
                 >
-                  <div
-                    style={{
-                      width: '48px',
-                      height: '48px',
-                      borderRadius: '2px',
-                      backgroundColor: '#ECEBE7',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      marginBottom: '20px',
-                    }}
-                  >
-                    {profile.icon}
-                  </div>
-                  <h3
-                    style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: '20px',
-                      fontWeight: 400,
-                      color: '#20211F',
-                      margin: '0 0 12px 0',
-                    }}
-                  >
-                    {profile.title}
-                  </h3>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#686963', lineHeight: 1.65, margin: 0 }}>
-                    {profile.desc}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        {/* =========================================================================
-            SECTION: THE LEOZ EXPERIENCE (6 PILLARS)
-            ========================================================================= */}
-        <section
-          aria-label="The LEOZ Experience"
-          style={{
-            backgroundColor: '#252623',
-            color: '#F7F7F5',
-            paddingTop: 'clamp(70px, 9vw, 120px)',
-            paddingBottom: 'clamp(70px, 9vw, 120px)',
-            paddingLeft: 'clamp(20px, 5vw, 80px)',
-            paddingRight: 'clamp(20px, 5vw, 80px)',
-          }}
-        >
-          <div style={{ maxWidth: '1360px', margin: '0 auto' }}>
-            <div style={{ maxWidth: '720px', marginBottom: 'clamp(40px, 5vw, 64px)' }}>
-              <span
-                style={{
-                  fontFamily: 'var(--font-body)',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  letterSpacing: '0.22em',
-                  textTransform: 'uppercase',
-                  color: '#A58B62',
-                  display: 'block',
-                  marginBottom: '12px',
-                }}
-              >
-                ECOSYSTEM & INFRASTRUCTURE
-              </span>
-              <h2
-                style={{
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(30px, 4.2vw, 50px)',
-                  fontWeight: 300,
-                  color: '#FFFFFF',
-                  letterSpacing: '-0.01em',
-                  margin: 0,
-                }}
-              >
-                THE LEOZ EXPERIENCE
-              </h2>
-            </div>
-
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-                gap: '28px',
-              }}
-            >
-              {experiencePillars.map((pillar, idx) => (
-                <div
-                  key={pillar.title}
-                  style={{
-                    backgroundColor: 'rgba(255, 255, 255, 0.04)',
-                    padding: 'clamp(28px, 3.5vw, 36px)',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    borderRadius: '2px',
-                  }}
-                >
-                  <span
-                    style={{
-                      fontFamily: 'var(--font-body)',
-                      fontSize: '11px',
-                      fontWeight: 600,
-                      letterSpacing: '0.18em',
-                      textTransform: 'uppercase',
-                      color: '#A58B62',
-                      display: 'block',
-                      marginBottom: '12px',
-                    }}
-                  >
-                    0{idx + 1}
+                  <Check className="lz-f-profile__check" size={22} color="var(--gold)" />
+                  <span style={{ fontSize: '15px', lineHeight: 1.65, color: 'var(--text-cocoa)', fontWeight: 500, marginTop: 'auto' }}>
+                    {text}
                   </span>
-                  <h3
-                    style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: '22px',
-                      fontWeight: 300,
-                      color: '#FFFFFF',
-                      margin: '0 0 12px 0',
-                    }}
-                  >
-                    {pillar.title}
-                  </h3>
-                  <p style={{ fontFamily: 'var(--font-body)', fontSize: '14px', color: '#A0A09B', lineHeight: 1.65, margin: 0 }}>
-                    {pillar.desc}
-                  </p>
-                </div>
+                </motion.div>
               ))}
             </div>
           </div>
         </section>
 
-        {/* =========================================================================
-            SECTION: HOW TO ENQUIRE (FORM SECTION)
-            ========================================================================= */}
-        <section
-          id="how-to-enquire"
-          aria-label="How to Enquire"
-          style={{
-            backgroundColor: '#F7F7F5',
-            paddingTop: 'clamp(70px, 9vw, 120px)',
-            paddingBottom: 'clamp(80px, 10vw, 140px)',
-            paddingLeft: 'clamp(20px, 5vw, 80px)',
-            paddingRight: 'clamp(20px, 5vw, 80px)',
-          }}
-        >
-          <div style={{ maxWidth: '1000px', margin: '0 auto' }}>
-            <div
-              style={{
-                backgroundColor: '#FFFFFF',
-                border: '1px solid #D9D9D4',
-                padding: 'clamp(32px, 6vw, 70px)',
-                borderRadius: '2px',
-                boxShadow: '0 12px 32px rgba(32, 33, 31, 0.03)',
-              }}
-            >
-              {/* Form Title & Introduction */}
-              <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto clamp(36px, 5vw, 54px) auto' }}>
-                <span
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '11px',
-                    fontWeight: 600,
-                    letterSpacing: '0.24em',
-                    textTransform: 'uppercase',
-                    color: '#A58B62',
-                    display: 'block',
-                    marginBottom: '12px',
-                  }}
-                >
-                  PARTNERSHIP APPLICATION
-                </span>
-                <h2
-                  style={{
-                    fontFamily: 'var(--font-heading)',
-                    fontSize: 'clamp(28px, 4vw, 42px)',
-                    fontWeight: 300,
-                    color: '#20211F',
-                    letterSpacing: '-0.01em',
-                    margin: '0 0 16px 0',
-                  }}
-                >
-                  How to Enquire
-                </h2>
-                <p
-                  style={{
-                    fontFamily: 'var(--font-body)',
-                    fontSize: '15px',
-                    color: '#686963',
-                    lineHeight: 1.7,
-                    margin: 0,
-                  }}
-                >
-                  Submit your city, business background, proposed location, available area and indicative investment capacity. The LEOZ team will discuss suitability and share the franchise model subject to approval.
-                </p>
-              </div>
+        {/* ================================================================
+            04 HOW TO ENQUIRE + FORM
+            ================================================================ */}
+        <SpotlightWrap className="lz-f-section bg-ivory">
+          <section id="franchise-form" className="lz-f-container">
+            <div style={{ textAlign: 'center', maxWidth: '640px', margin: '0 auto' }}>
+              <SectionHead eyebrow="Application" title="How to Enquire" center />
+              <motion.p
+                initial={reduce ? false : { opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8, ease: EASE }}
+                style={{ fontSize: '16px', lineHeight: 1.8, color: 'var(--text-taupe)' }}
+              >
+                Submit your city, business background, proposed location, available area and indicative investment capacity. The LEOZ team will discuss suitability and share the franchise model subject to approval.
+              </motion.p>
+            </div>
 
-              {/* Form or Success State */}
+            {/* 5-step guide */}
+            <div className="lz-f-guide">
+              {['City', 'Business background', 'Proposed location', 'Available area', 'Indicative investment capacity'].map((step, i) => (
+                <div key={i} className="lz-f-guide__step">
+                  <div className={`lz-f-guide__dot ${calculateProgress() > i * 20 ? 'filled' : ''}`} />
+                  <span style={{ fontSize: '13px', fontWeight: 500, color: 'var(--text-taupe)' }}>{step}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Form card */}
+            <motion.div
+              className="lz-f-form-card"
+              initial={reduce ? false : { opacity: 0, y: 32 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8, ease: EASE }}
+            >
+              <div className="lz-f-bracket lz-f-bracket--tl" />
+              <div className="lz-f-progress" style={{ width: `${calculateProgress()}%` }} />
+
               <AnimatePresence mode="wait">
                 {isSubmitted ? (
+                  /* ── Success state ─────────────────────────────────────── */
                   <motion.div
                     key="success"
-                    initial={{ opacity: 0, scale: 0.98 }}
-                    animate={{ opacity: 1, scale: 1 }}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 0.5, ease: luxuryEase }}
-                    style={{
-                      textAlign: 'center',
-                      padding: 'clamp(40px, 6vw, 60px) 20px',
-                      backgroundColor: '#F7F7F5',
-                      border: '1px solid #D9D9D4',
-                      borderRadius: '2px',
-                    }}
+                    className="lz-f-success"
+                    role="status"
+                    aria-live="polite"
                   >
-                    <div
-                      style={{
-                        width: '64px',
-                        height: '64px',
-                        borderRadius: '50%',
-                        backgroundColor: '#20211F',
-                        color: '#FFFFFF',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        margin: '0 auto 24px auto',
-                      }}
+                    <motion.div
+                      className="lz-f-success__circle"
+                      initial={{ scale: 0 }}
+                      animate={{ scale: 1 }}
+                      transition={{ type: 'spring', delay: 0.2 }}
                     >
-                      <CheckCircle size={32} />
-                    </div>
-
-                    <h3
-                      style={{
-                        fontFamily: 'var(--font-heading)',
-                        fontSize: 'clamp(24px, 3.5vw, 34px)',
-                        fontWeight: 300,
-                        color: '#20211F',
-                        margin: '0 0 16px 0',
-                      }}
-                    >
-                      Thank you for contacting LEOZ Cucine.
+                      <Check size={32} color="var(--gold)" />
+                    </motion.div>
+                    <h3 style={{ fontSize: '24px', color: 'var(--text-cocoa)', marginBottom: '16px' }}>
+                      Enquiry Received
                     </h3>
-
-                    <p
-                      style={{
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '16px',
-                        color: '#686963',
-                        lineHeight: 1.7,
-                        maxWidth: '520px',
-                        margin: '0 auto 32px auto',
-                      }}
-                    >
+                    <p style={{ color: 'var(--text-taupe)', lineHeight: 1.7 }}>
                       We have received your franchise enquiry and our leadership team will be in touch.
                     </p>
-
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setIsSubmitted(false);
-                        setFormData({
-                          fullName: '',
-                          mobile: '',
-                          email: '',
-                          city: '',
-                          businessBackground: '',
-                          proposedLocation: '',
-                          availableArea: '1,500 – 2,500 sq. ft.',
-                          indicativeInvestment: '₹75 Lakhs – ₹1.5 Crore',
-                          message: '',
-                        });
-                      }}
-                      style={{
-                        padding: '14px 28px',
-                        backgroundColor: '#20211F',
-                        color: '#FFFFFF',
-                        border: 'none',
-                        fontFamily: 'var(--font-body)',
-                        fontSize: '13px',
-                        fontWeight: 500,
-                        letterSpacing: '0.08em',
-                        textTransform: 'uppercase',
-                        cursor: 'pointer',
-                        borderRadius: '2px',
-                      }}
-                    >
-                      Submit Another Application
-                    </button>
                   </motion.div>
                 ) : (
-                  <form onSubmit={handleSubmit} noValidate>
-                    <div
-                      style={{
-                        display: 'grid',
-                        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                        gap: '28px',
-                        marginBottom: '28px',
-                      }}
-                    >
+                  /* ── Form ──────────────────────────────────────────────── */
+                  <motion.form
+                    key="form"
+                    onSubmit={handleSubmit}
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    noValidate
+                  >
+                    <div className="lz-f-form-grid">
+
                       {/* Full Name */}
-                      <div>
-                        <label
-                          htmlFor="fullName"
-                          style={{
-                            display: 'block',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '12px',
-                            fontWeight: 600,
-                            letterSpacing: '0.12em',
-                            textTransform: 'uppercase',
-                            color: '#20211F',
-                            marginBottom: '8px',
-                          }}
-                        >
-                          Full Name *
-                        </label>
+                      <div className="lz-f-field">
                         <input
-                          id="fullName"
-                          type="text"
-                          name="fullName"
-                          value={formData.fullName}
+                          id="f_name" type="text" name="fullName"
+                          className={`lz-f-input ${errors.fullName ? 'error shake' : ''}`}
+                          placeholder=" " value={formData.fullName}
                           onChange={handleInputChange}
-                          placeholder="e.g. Vikram Singhania"
-                          style={{
-                            width: '100%',
-                            padding: '16px 18px',
-                            backgroundColor: '#F7F7F5',
-                            border: errors.fullName ? '1px solid #D9534F' : '1px solid #D9D9D4',
-                            borderRadius: '2px',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '15px',
-                            color: '#20211F',
-                            outline: 'none',
-                          }}
+                          aria-invalid={!!errors.fullName}
+                          aria-describedby={errors.fullName ? 'err_name' : undefined}
                         />
-                        {errors.fullName && (
-                          <span style={{ display: 'block', color: '#D9534F', fontSize: '12px', marginTop: '6px' }}>
-                            {errors.fullName}
-                          </span>
-                        )}
+                        <label htmlFor="f_name" className="lz-f-label">Your name <span style={{ fontSize: '10px' }}>(Required)</span></label>
+                        <div className="lz-f-input-line" />
+                        {errors.fullName
+                          ? <span id="err_name" className="lz-f-error">{errors.fullName}</span>
+                          : (formData.fullName.trim() && <Check size={14} color="var(--gold)" style={{ position: 'absolute', right: 16, top: 22 }} />)}
                       </div>
 
                       {/* Mobile Number */}
-                      <div>
-                        <label
-                          htmlFor="mobileNumber"
-                          style={{
-                            display: 'block',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '12px',
-                            fontWeight: 600,
-                            letterSpacing: '0.12em',
-                            textTransform: 'uppercase',
-                            color: '#20211F',
-                            marginBottom: '8px',
-                          }}
-                        >
-                          Mobile Number *
-                        </label>
+                      <div className="lz-f-field">
                         <input
-                          id="mobileNumber"
-                          type="tel"
-                          name="mobile"
-                          value={formData.mobile}
+                          id="f_mobile" type="tel" name="mobile" inputMode="numeric"
+                          className={`lz-f-input ${errors.mobile ? 'error shake' : ''}`}
+                          placeholder=" " value={formData.mobile}
                           onChange={handleInputChange}
-                          placeholder="+91 98765 43210"
-                          style={{
-                            width: '100%',
-                            padding: '16px 18px',
-                            backgroundColor: '#F7F7F5',
-                            border: errors.mobile ? '1px solid #D9534F' : '1px solid #D9D9D4',
-                            borderRadius: '2px',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '15px',
-                            color: '#20211F',
-                            outline: 'none',
-                          }}
+                          aria-invalid={!!errors.mobile}
+                          aria-describedby={errors.mobile ? 'err_mobile' : undefined}
                         />
-                        {errors.mobile && (
-                          <span style={{ display: 'block', color: '#D9534F', fontSize: '12px', marginTop: '6px' }}>
-                            {errors.mobile}
-                          </span>
-                        )}
+                        <label htmlFor="f_mobile" className="lz-f-label">Your mobile number <span style={{ fontSize: '10px' }}>(Required)</span></label>
+                        <div className="lz-f-input-line" />
+                        {errors.mobile
+                          ? <span id="err_mobile" className="lz-f-error">{errors.mobile}</span>
+                          : (formData.mobile.replace(/\D/g, '').length >= 10 && <Check size={14} color="var(--gold)" style={{ position: 'absolute', right: 16, top: 22 }} />)}
                       </div>
 
-                      {/* Email Address */}
-                      <div>
-                        <label
-                          htmlFor="emailAddress"
-                          style={{
-                            display: 'block',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '12px',
-                            fontWeight: 600,
-                            letterSpacing: '0.12em',
-                            textTransform: 'uppercase',
-                            color: '#20211F',
-                            marginBottom: '8px',
-                          }}
-                        >
-                          Email Address *
-                        </label>
+                      {/* Email */}
+                      <div className="lz-f-field">
                         <input
-                          id="emailAddress"
-                          type="email"
-                          name="email"
-                          value={formData.email}
+                          id="f_email" type="email" name="email"
+                          className={`lz-f-input ${errors.email ? 'error shake' : ''}`}
+                          placeholder=" " value={formData.email}
                           onChange={handleInputChange}
-                          placeholder="vikram@enterprise.com"
-                          style={{
-                            width: '100%',
-                            padding: '16px 18px',
-                            backgroundColor: '#F7F7F5',
-                            border: errors.email ? '1px solid #D9534F' : '1px solid #D9D9D4',
-                            borderRadius: '2px',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '15px',
-                            color: '#20211F',
-                            outline: 'none',
-                          }}
+                          aria-invalid={!!errors.email}
+                          aria-describedby={errors.email ? 'err_email' : undefined}
                         />
-                        {errors.email && (
-                          <span style={{ display: 'block', color: '#D9534F', fontSize: '12px', marginTop: '6px' }}>
-                            {errors.email}
-                          </span>
-                        )}
+                        <label htmlFor="f_email" className="lz-f-label">Your email <span style={{ fontSize: '10px' }}>(Required)</span></label>
+                        <div className="lz-f-input-line" />
+                        {errors.email
+                          ? <span id="err_email" className="lz-f-error">{errors.email}</span>
+                          : (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) && <Check size={14} color="var(--gold)" style={{ position: 'absolute', right: 16, top: 22 }} />)}
                       </div>
 
                       {/* City */}
-                      <div>
-                        <label
-                          htmlFor="city"
-                          style={{
-                            display: 'block',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '12px',
-                            fontWeight: 600,
-                            letterSpacing: '0.12em',
-                            textTransform: 'uppercase',
-                            color: '#20211F',
-                            marginBottom: '8px',
-                          }}
-                        >
-                          City *
-                        </label>
+                      <div className="lz-f-field">
                         <input
-                          id="city"
-                          type="text"
-                          name="city"
-                          value={formData.city}
+                          id="f_city" type="text" name="city"
+                          className={`lz-f-input ${errors.city ? 'error shake' : ''}`}
+                          placeholder=" " value={formData.city}
                           onChange={handleInputChange}
-                          placeholder="e.g. Pune / Hyderabad / Bengaluru"
-                          style={{
-                            width: '100%',
-                            padding: '16px 18px',
-                            backgroundColor: '#F7F7F5',
-                            border: errors.city ? '1px solid #D9534F' : '1px solid #D9D9D4',
-                            borderRadius: '2px',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '15px',
-                            color: '#20211F',
-                            outline: 'none',
-                          }}
+                          aria-invalid={!!errors.city}
+                          aria-describedby={errors.city ? 'err_city' : undefined}
                         />
-                        {errors.city && (
-                          <span style={{ display: 'block', color: '#D9534F', fontSize: '12px', marginTop: '6px' }}>
-                            {errors.city}
-                          </span>
-                        )}
+                        <label htmlFor="f_city" className="lz-f-label">Your city <span style={{ fontSize: '10px' }}>(Required)</span></label>
+                        <div className="lz-f-input-line" />
+                        {errors.city
+                          ? <span id="err_city" className="lz-f-error">{errors.city}</span>
+                          : (formData.city.trim() && <Check size={14} color="var(--gold)" style={{ position: 'absolute', right: 16, top: 22 }} />)}
+                      </div>
+
+                      {/* Business Background – full width */}
+                      <div className="lz-f-field lz-f-form-grid--full">
+                        <input
+                          id="f_biz" type="text" name="businessBackground"
+                          className={`lz-f-input ${errors.businessBackground ? 'error shake' : ''}`}
+                          placeholder=" " value={formData.businessBackground}
+                          onChange={handleInputChange}
+                          aria-invalid={!!errors.businessBackground}
+                          aria-describedby={errors.businessBackground ? 'err_biz' : undefined}
+                        />
+                        <label htmlFor="f_biz" className="lz-f-label">Your business background <span style={{ fontSize: '10px' }}>(Required)</span></label>
+                        <div className="lz-f-input-line" />
+                        {errors.businessBackground
+                          ? <span id="err_biz" className="lz-f-error">{errors.businessBackground}</span>
+                          : (formData.businessBackground.trim() && <Check size={14} color="var(--gold)" style={{ position: 'absolute', right: 16, top: 22 }} />)}
                       </div>
 
                       {/* Proposed Location */}
-                      <div>
-                        <label
-                          htmlFor="proposedLocation"
-                          style={{
-                            display: 'block',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '12px',
-                            fontWeight: 600,
-                            letterSpacing: '0.12em',
-                            textTransform: 'uppercase',
-                            color: '#20211F',
-                            marginBottom: '8px',
-                          }}
-                        >
-                          Proposed Location
-                        </label>
+                      <div className="lz-f-field">
                         <input
-                          id="proposedLocation"
-                          type="text"
-                          name="proposedLocation"
+                          id="f_loc" type="text" name="proposedLocation"
+                          className="lz-f-input" placeholder=" "
                           value={formData.proposedLocation}
                           onChange={handleInputChange}
-                          placeholder="e.g. High Street / Design District / Own Commercial Space"
-                          style={{
-                            width: '100%',
-                            padding: '16px 18px',
-                            backgroundColor: '#F7F7F5',
-                            border: '1px solid #D9D9D4',
-                            borderRadius: '2px',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '15px',
-                            color: '#20211F',
-                            outline: 'none',
-                          }}
                         />
+                        <label htmlFor="f_loc" className="lz-f-label">Proposed location <span style={{ fontSize: '10px' }}>(Optional)</span></label>
+                        <div className="lz-f-input-line" />
                       </div>
 
-                      {/* Available Area */}
-                      <div>
-                        <label
-                          htmlFor="availableArea"
-                          style={{
-                            display: 'block',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '12px',
-                            fontWeight: 600,
-                            letterSpacing: '0.12em',
-                            textTransform: 'uppercase',
-                            color: '#20211F',
-                            marginBottom: '8px',
-                          }}
-                        >
-                          Available Area
-                        </label>
+                      {/* Available Area – dropdown with EXACT original values */}
+                      <div className="lz-f-field">
                         <select
-                          id="availableArea"
-                          name="availableArea"
+                          id="f_area" name="availableArea"
+                          className="lz-f-input"
                           value={formData.availableArea}
                           onChange={handleInputChange}
-                          style={{
-                            width: '100%',
-                            padding: '16px 18px',
-                            backgroundColor: '#F7F7F5',
-                            border: '1px solid #D9D9D4',
-                            borderRadius: '2px',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '15px',
-                            color: '#20211F',
-                            outline: 'none',
-                            cursor: 'pointer',
-                          }}
+                          style={{ appearance: 'none', cursor: 'pointer' }}
                         >
                           <option value="1,000 – 1,500 sq. ft.">1,000 – 1,500 sq. ft.</option>
-                          <option value="1,500 – 2,500 sq. ft.">1,500 – 2,500 sq. ft. (Flagship Recommendation)</option>
-                          <option value="2,500 – 4,000 sq. ft.">2,500 – 4,000 sq. ft. (Multi-Suite Experience)</option>
+                          <option value="1,500 – 2,500 sq. ft.">1,500 – 2,500 sq. ft.</option>
+                          <option value="2,500 – 4,000 sq. ft.">2,500 – 4,000 sq. ft.</option>
                           <option value="Space Identification in Progress">Space Identification in Progress</option>
                         </select>
+                        <label htmlFor="f_area" className="lz-f-label" style={{ top: '4px', fontSize: '11px', color: 'var(--bronze)' }}>
+                          Available area <span style={{ fontSize: '10px' }}>(Optional)</span>
+                        </label>
+                        <div className="lz-f-input-line" />
+                        <ChevronDown size={14} color="var(--gold)" style={{ position: 'absolute', right: 16, top: 24, pointerEvents: 'none' }} />
                       </div>
 
-                      {/* Indicative Investment Capacity */}
-                      <div style={{ gridColumn: '1 / -1' }}>
-                        <label
-                          htmlFor="indicativeInvestment"
-                          style={{
-                            display: 'block',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '12px',
-                            fontWeight: 600,
-                            letterSpacing: '0.12em',
-                            textTransform: 'uppercase',
-                            color: '#20211F',
-                            marginBottom: '8px',
-                          }}
-                        >
-                          Indicative Investment Capacity
-                        </label>
+                      {/* Indicative Investment – dropdown with EXACT original values */}
+                      <div className="lz-f-field">
                         <select
-                          id="indicativeInvestment"
-                          name="indicativeInvestment"
+                          id="f_inv" name="indicativeInvestment"
+                          className="lz-f-input"
                           value={formData.indicativeInvestment}
                           onChange={handleInputChange}
-                          style={{
-                            width: '100%',
-                            padding: '16px 18px',
-                            backgroundColor: '#F7F7F5',
-                            border: '1px solid #D9D9D4',
-                            borderRadius: '2px',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '15px',
-                            color: '#20211F',
-                            outline: 'none',
-                            cursor: 'pointer',
-                          }}
+                          style={{ appearance: 'none', cursor: 'pointer' }}
                         >
                           <option value="₹50 Lakhs – ₹75 Lakhs">₹50 Lakhs – ₹75 Lakhs</option>
-                          <option value="₹75 Lakhs – ₹1.5 Crore">₹75 Lakhs – ₹1.5 Crore (Recommended for Flagship Studio)</option>
-                          <option value="₹1.5 Crore – ₹3 Crore">₹1.5 Crore – ₹3 Crore (Multi-City / Regional Hub)</option>
+                          <option value="₹75 Lakhs – ₹1.5 Crore">₹75 Lakhs – ₹1.5 Crore</option>
+                          <option value="₹1.5 Crore – ₹3 Crore">₹1.5 Crore – ₹3 Crore</option>
                           <option value="Custom Enterprise Allocation">Custom Enterprise Allocation</option>
                         </select>
+                        <label htmlFor="f_inv" className="lz-f-label" style={{ top: '4px', fontSize: '11px', color: 'var(--bronze)' }}>
+                          Indicative investment capacity <span style={{ fontSize: '10px' }}>(Optional)</span>
+                        </label>
+                        <div className="lz-f-input-line" />
+                        <ChevronDown size={14} color="var(--gold)" style={{ position: 'absolute', right: 16, top: 24, pointerEvents: 'none' }} />
                       </div>
 
-                      {/* Business Background */}
-                      <div style={{ gridColumn: '1 / -1' }}>
-                        <label
-                          htmlFor="businessBackground"
-                          style={{
-                            display: 'block',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '12px',
-                            fontWeight: 600,
-                            letterSpacing: '0.12em',
-                            textTransform: 'uppercase',
-                            color: '#20211F',
-                            marginBottom: '8px',
-                          }}
-                        >
-                          Business Background *
-                        </label>
-                        <input
-                          id="businessBackground"
-                          type="text"
-                          name="businessBackground"
-                          value={formData.businessBackground}
-                          onChange={handleInputChange}
-                          placeholder="e.g. Existing Luxury Retailer / Architectural Practice / Real Estate Developer"
-                          style={{
-                            width: '100%',
-                            padding: '16px 18px',
-                            backgroundColor: '#F7F7F5',
-                            border: errors.businessBackground ? '1px solid #D9534F' : '1px solid #D9D9D4',
-                            borderRadius: '2px',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '15px',
-                            color: '#20211F',
-                            outline: 'none',
-                          }}
-                        />
-                        {errors.businessBackground && (
-                          <span style={{ display: 'block', color: '#D9534F', fontSize: '12px', marginTop: '6px' }}>
-                            {errors.businessBackground}
-                          </span>
-                        )}
-                      </div>
-
-                      {/* Additional Notes */}
-                      <div style={{ gridColumn: '1 / -1' }}>
-                        <label
-                          htmlFor="message"
-                          style={{
-                            display: 'block',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '12px',
-                            fontWeight: 600,
-                            letterSpacing: '0.12em',
-                            textTransform: 'uppercase',
-                            color: '#20211F',
-                            marginBottom: '8px',
-                          }}
-                        >
-                          Additional Scope / Message (Optional)
-                        </label>
+                      {/* Additional Scope / Message – full width, auto-grow */}
+                      <div className="lz-f-field lz-f-form-grid--full">
                         <textarea
-                          id="message"
-                          name="message"
-                          rows={4}
+                          id="f_msg" name="message"
+                          className="lz-f-input" placeholder=" "
                           value={formData.message}
                           onChange={handleInputChange}
-                          placeholder="Share any additional context regarding your regional reach, existing designer network, or timeline..."
-                          style={{
-                            width: '100%',
-                            padding: '16px 18px',
-                            backgroundColor: '#F7F7F5',
-                            border: '1px solid #D9D9D4',
-                            borderRadius: '2px',
-                            fontFamily: 'var(--font-body)',
-                            fontSize: '15px',
-                            color: '#20211F',
-                            outline: 'none',
-                            resize: 'vertical',
-                            lineHeight: 1.6,
-                          }}
+                          rows={3}
+                          style={{ resize: 'vertical' }}
                         />
+                        <label htmlFor="f_msg" className="lz-f-label">Share any additional context <span style={{ fontSize: '10px' }}>(Optional)</span></label>
+                        <div className="lz-f-input-line" />
                       </div>
+
                     </div>
 
-                    {/* Submit CTA */}
-                    <div style={{ textAlign: 'center' }}>
-                      <button
+                    {/* Submit */}
+                    <div style={{ marginTop: '48px', textAlign: 'center' }}>
+                      <MagneticButton
+                        className="lz-f-btn lz-f-btn--primary"
                         type="submit"
+                        onClick={handleSubmit}
                         disabled={isSubmitting}
-                        style={{
-                          display: 'inline-flex',
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                          gap: '12px',
-                          width: '100%',
-                          maxWidth: '380px',
-                          padding: '20px 36px',
-                          backgroundColor: '#20211F',
-                          color: '#FFFFFF',
-                          border: '1px solid #20211F',
-                          fontFamily: 'var(--font-body)',
-                          fontSize: '14px',
-                          fontWeight: 500,
-                          letterSpacing: '0.14em',
-                          textTransform: 'uppercase',
-                          cursor: isSubmitting ? 'wait' : 'pointer',
-                          borderRadius: '2px',
-                          transition: 'all 0.3s ease',
-                          opacity: isSubmitting ? 0.7 : 1,
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = '#A58B62';
-                          e.currentTarget.style.borderColor = '#A58B62';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = '#20211F';
-                          e.currentTarget.style.borderColor = '#20211F';
-                        }}
                       >
-                        <span>{isSubmitting ? 'Processing...' : 'Express Franchise Interest'}</span>
-                        <ArrowRight size={16} />
-                      </button>
+                        {isSubmitting ? 'Submitting...' : 'Express Franchise Interest'}
+                      </MagneticButton>
+
+                      {submitError && (
+                        <div role="alert" aria-live="assertive" style={{ marginTop: '16px' }}>
+                          <span style={{ color: '#C18C8B', fontSize: '14px', display: 'block', marginBottom: '8px' }}>
+                            Something went wrong. Please try again.
+                          </span>
+                          <button
+                            type="button"
+                            onClick={handleSubmit}
+                            style={{ background: 'none', border: 'none', color: 'var(--bronze)', textDecoration: 'underline', cursor: 'pointer', fontSize: '14px' }}
+                          >
+                            Try Again
+                          </button>
+                        </div>
+                      )}
                     </div>
-                  </form>
+                  </motion.form>
                 )}
               </AnimatePresence>
-            </div>
-          </div>
-        </section>
+            </motion.div>
+          </section>
+        </SpotlightWrap>
+
       </main>
 
       <Footer />
-
-      <style>{`
-        @media (max-width: 900px) {
-          .franchise-hero-grid {
-            grid-template-columns: 1fr !important;
-          }
-        }
-      `}</style>
     </div>
   );
 };
