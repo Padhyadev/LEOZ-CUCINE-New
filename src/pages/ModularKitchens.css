@@ -1,0 +1,562 @@
+/* ==========================================================================
+   LEOZ CUCINE — MODULAR KITCHENS PAGE (Light Warm Theme)
+   Builds on the shared design system in Home.css (tokens, buttons, cards,
+   media, timeline), scoped by the .lz-home wrapper. Page-specific pieces
+   use the .lzk- prefix. Fonts follow the previous Kitchens page; only sizes,
+   line-heights and spacing are tuned.
+   ========================================================================== */
+
+/* ---------- Mask-reveal headings ---------- */
+.lzk-mask {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+
+.lzk-mask > span {
+  display: block;
+}
+
+/* ---------- Light sweep across images on hover (passes once) ---------- */
+.lzk .lz-media::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(115deg, transparent 35%, rgba(255, 255, 255, 0.45) 50%, transparent 65%);
+  transform: translateX(-120%);
+}
+
+.lzk .lz-zoom:hover .lz-media::before {
+  transform: translateX(120%);
+  transition: transform 900ms var(--ease-out);
+}
+
+/* ==========================================================================
+   01 HERO
+   ========================================================================== */
+.lzk-hero {
+  position: relative;
+  display: flex;
+  align-items: center;
+  min-height: max(640px, 100svh);
+  overflow: hidden;
+  background-color: var(--bg-cream);
+}
+
+.lzk-hero__media {
+  position: absolute;
+  inset: 0 0 -120px 0;
+}
+
+.lzk-hero__kenburns {
+  position: absolute;
+  inset: 0;
+  animation: lzKenBurns 12s var(--ease-out) infinite alternate;
+  will-change: transform;
+}
+
+.lzk-hero__kenburns img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 45%;
+}
+
+/* No overlay on the photo. Text changed to dark to contrast with the light HD kitchen image. */
+.lzk-hero__inner .lzk-crumbs,
+.lzk-hero__inner .lzk-crumbs li {
+  color: var(--text-body);
+  text-shadow: none;
+}
+
+.lzk-hero__inner .lzk-h1 {
+  color: var(--text-strong);
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.7);
+}
+
+.lzk-hero__inner .lzk-hero__text {
+  color: var(--text-strong);
+  font-weight: 500;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+}
+
+.lzk-hero__inner .lzk-crumbs a {
+  color: var(--text-strong);
+  background-image: linear-gradient(var(--gold), var(--gold));
+}
+
+.lzk-hero__inner .lzk-crumbs li[aria-hidden='true'] {
+  color: var(--gold-light);
+}
+
+.lzk-hero__inner .lz-rule {
+  height: 2px;
+  background-color: var(--gold);
+}
+
+/* Secondary CTA as a dark button for contrast against the light photo */
+.lzk-hero__inner .lz-btn--secondary {
+  background-color: var(--text-strong);
+  border-color: var(--text-strong);
+  color: var(--bg-cream);
+}
+
+.lzk-hero__inner .lz-btn--secondary:hover {
+  background-color: var(--gold);
+  border-color: var(--gold);
+  color: var(--text-strong);
+}
+
+.lzk-hero__ctas .lz-btn {
+  box-shadow: 0 6px 18px rgba(26, 22, 18, 0.14);
+}
+
+.lzk-hero__content {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  padding-top: 136px;
+  padding-bottom: 112px;
+}
+
+.lzk-hero__inner {
+  max-width: 680px;
+}
+
+.lzk-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin: 0 0 32px;
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-body);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-body);
+}
+
+.lzk-crumbs a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--bronze);
+  text-decoration: none;
+  background-image: linear-gradient(var(--gold), var(--gold));
+  background-size: 0 1px;
+  background-position: 0 calc(100% - 12px);
+  background-repeat: no-repeat;
+  transition: background-size 300ms var(--ease-out);
+}
+
+.lzk-crumbs a:hover {
+  background-size: 100% 1px;
+}
+
+.lzk-crumbs li[aria-hidden='true'] {
+  color: var(--gold);
+}
+
+.lzk-h1 {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(38px, 5vw, 64px);
+  font-weight: 400;
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  color: var(--text-strong);
+}
+
+.lzk-hero__text {
+  margin: 24px 0 40px;
+  max-width: 560px;
+  font-family: var(--font-body);
+  font-size: clamp(16.5px, 1.3vw, 18.5px);
+  font-weight: 400;
+  line-height: 1.75;
+  color: var(--text-body);
+}
+
+.lzk-hero__ctas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+/* ==========================================================================
+   02 PHILOSOPHY (uses shared .lz-split / .lz-offset)
+   03 GERMAN PRECISION — centred quote
+   ========================================================================== */
+.lzk-quote {
+  position: relative;
+  max-width: 920px;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.lzk-quote__mark {
+  display: block;
+  margin: 0 auto 32px;
+  color: var(--gold);
+}
+
+#main-content .lzk-quote p {
+  margin: 40px auto 0;
+  max-width: 820px;
+  font-family: var(--font-body);
+  font-size: clamp(19px, 1.9vw, 24px);
+  line-height: 1.7;
+  color: var(--text-strong);
+  text-align: center;
+}
+
+.lzk-quote__lines {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 40px;
+}
+
+.lzk-quote__lines span {
+  display: block;
+  width: 64px;
+  height: 1px;
+  background-color: var(--line-gold);
+}
+
+.lzk-quote__lines i {
+  display: block;
+  width: 6px;
+  height: 6px;
+  background-color: var(--gold);
+  transform: rotate(45deg);
+}
+
+/* ==========================================================================
+   04 FEATURES
+   ========================================================================== */
+#main-content .lzk-intro {
+  max-width: 760px;
+  margin: -16px auto clamp(40px, 5vw, 64px);
+  text-align: center;
+}
+
+.lzk-features {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lzk-features > li {
+  flex: 0 1 calc((100% - 72px) / 4);
+}
+
+.lzk-feature {
+  height: 100%;
+  padding: 36px 28px;
+}
+
+.lzk-feature svg {
+  display: block;
+  margin-bottom: 24px;
+  color: var(--gold);
+}
+
+.lzk-feature .lz-h3 {
+  font-size: 21px;
+}
+
+/* ==========================================================================
+   KITCHEN STYLES — German Classic · Contemporary Fusion
+   ========================================================================== */
+.lzk-styles {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(24px, 4vw, 48px);
+}
+
+.lzk-style {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.lzk-style .lz-media {
+  aspect-ratio: 4 / 3;
+  border-radius: 2px 2px 0 0;
+}
+
+.lzk-style__body {
+  padding: clamp(28px, 3.5vw, 44px);
+}
+
+.lzk-style__title {
+  font-size: clamp(28px, 2.8vw, 38px);
+}
+
+.lzk-style__body .lz-body {
+  margin-top: 24px;
+}
+
+/* ==========================================================================
+   LAYOUTS — captioned gallery
+   ========================================================================== */
+.lzk-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.lzk-gallery__item {
+  margin: 0;
+}
+
+.lzk-gallery__item .lz-media {
+  aspect-ratio: 4 / 3;
+}
+
+.lzk-gallery__item figcaption {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  font-family: var(--font-heading);
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--text-strong);
+}
+
+.lzk-gallery__item figcaption::before {
+  content: '';
+  display: block;
+  width: 24px;
+  height: 1px;
+  background-color: var(--gold);
+  transition: width 300ms var(--ease-out);
+}
+
+.lzk-gallery__item:hover figcaption::before {
+  width: 40px;
+}
+
+/* ==========================================================================
+   MATERIALS & FINISHES — hover / focus reveal between two finishes
+   ========================================================================== */
+.lzk-reveal {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.lzk-reveal .lz-media {
+  position: absolute;
+  inset: 0;
+}
+
+/* Top finish wipes away diagonally to reveal the one beneath */
+.lzk-reveal__top {
+  clip-path: inset(0 0 0 0);
+  transition: clip-path 700ms var(--ease-out);
+}
+
+.lzk-reveal:hover .lzk-reveal__top,
+.lzk-reveal:focus-visible .lzk-reveal__top {
+  clip-path: inset(0 0 0 100%);
+}
+
+/* ==========================================================================
+   WHY CHOOSE — split with the image first on desktop
+   ========================================================================== */
+.lzk-split--reverse .lz-offset {
+  order: -1;
+}
+
+/* ==========================================================================
+   KITCHEN DESIGN PROCESS (extends the shared .lz-journey timeline)
+   ========================================================================== */
+.lzk-process .lz-journey {
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.lzk-process .lz-journey__track,
+.lzk-process .lz-journey__progress {
+  left: calc(100% / 14);
+  right: calc(100% / 14);
+}
+
+/* ==========================================================================
+   10 FAQ
+   ========================================================================== */
+.lzk-faq {
+  display: grid;
+  grid-template-columns: 5fr 7fr;
+  align-items: start;
+  gap: clamp(40px, 6vw, 96px);
+}
+
+.lzk-faq__list {
+  border-top: 1px solid var(--line-gold);
+}
+
+.lzk-faq__item {
+  border-bottom: 1px solid var(--line-gold);
+}
+
+.lzk-faq__q {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  min-height: 80px;
+  padding: 20px 0;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.lzk-faq__q span:first-child {
+  font-family: var(--font-heading);
+  font-size: clamp(19px, 1.6vw, 22px);
+  font-weight: 400;
+  line-height: 1.35;
+  color: var(--text-strong);
+}
+
+.lzk-faq__icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  color: var(--bronze);
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  transition:
+    transform 400ms var(--ease-out),
+    background-color 300ms var(--ease-out),
+    color 300ms var(--ease-out);
+}
+
+.lzk-faq__q[aria-expanded='true'] .lzk-faq__icon {
+  transform: rotate(45deg);
+  background-color: var(--gold);
+  color: var(--text-strong);
+}
+
+.lzk-faq__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows 400ms var(--ease-out),
+    visibility 0s linear 400ms;
+}
+
+.lzk-faq__panel.is-open {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition:
+    grid-template-rows 400ms var(--ease-out),
+    visibility 0s linear 0s;
+}
+
+.lzk-faq__panel > div {
+  overflow: hidden;
+}
+
+.lzk-faq__panel .lz-body {
+  padding: 0 60px 28px 0;
+}
+
+/* ==========================================================================
+   RESPONSIVE
+   ========================================================================== */
+@media (max-width: 1023px) {
+  .lzk-features > li {
+    flex-basis: calc((100% - 24px) / 2);
+  }
+
+  .lzk-gallery {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .lzk-faq {
+    grid-template-columns: 1fr;
+  }
+
+  .lzk-process .lz-journey {
+    grid-template-columns: 1fr;
+  }
+
+  .lzk-process .lz-journey__track,
+  .lzk-process .lz-journey__progress {
+    left: 28px;
+    right: auto;
+  }
+
+  .lzk-process .lz-step {
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 767px) {
+  .lzk-hero {
+    align-items: flex-end;
+  }
+
+  .lzk-hero__content {
+    padding-bottom: 104px;
+  }
+
+  .lzk-hero__ctas .lz-btn {
+    width: 100%;
+  }
+
+  .lzk-features > li {
+    flex-basis: 100%;
+  }
+
+  .lzk-styles,
+  .lzk-gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .lzk-split--reverse .lz-offset {
+    order: 0;
+  }
+
+  .lzk-reveal {
+    aspect-ratio: 4 / 3;
+  }
+
+  .lzk-faq__panel .lz-body {
+    padding-right: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lzk-hero__kenburns {
+    animation: none;
+  }
+
+  .lzk .lz-media::before {
+    display: none;
+  }
+}
