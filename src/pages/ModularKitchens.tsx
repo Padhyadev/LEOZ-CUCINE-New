@@ -352,17 +352,7 @@ export const ModularKitchens: React.FC = () => {
 
           <div className="lzk-hero__content lz-container">
             <div className="lzk-hero__inner">
-              <motion.nav aria-label="Breadcrumb" {...heroReveal(0.05)}>
-                <ol className="lzk-crumbs">
-                  <li>
-                    <a href="/" onClick={(e) => navigate(e, '/')}>
-                      Home
-                    </a>
-                  </li>
-                  <li aria-hidden="true">/</li>
-                  <li aria-current="page">Modular Kitchens</li>
-                </ol>
-              </motion.nav>
+
 
               <motion.h1 id="kitchens-hero-title" className="lzk-h1" {...heroReveal(0.15)}>
                 The Heart of Your Home, Reimagined

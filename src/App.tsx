@@ -1,4 +1,6 @@
 import React, { useState, useEffect, Suspense, lazy } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Logo } from './components/common/Logo';
 
 const Home = lazy(() => import('./pages/Home'));
 const ModularKitchens = lazy(() => import('./pages/ModularKitchens'));
@@ -117,9 +119,59 @@ export const App: React.FC = () => {
   return (
     <LenisProvider>
       <Analytics />
-        <Suspense fallback={<div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F7F5F1' }}></div>}>
-          {renderPage()}
-        </Suspense>
+      <AnimatePresence mode="wait">
+        <motion.div key={currentPath} style={{ width: '100%', height: '100%' }}>
+          <Suspense fallback={<div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F7F5F1' }}></div>}>
+            {renderPage()}
+          </Suspense>
+
+          {/* Left Door */}
+          <motion.div
+            initial={{ x: '0%' }}
+            animate={{ x: '-100%' }}
+            exit={{ x: '0%' }}
+            transition={{ duration: 0.5, ease: [0.65, 0, 0.35, 1] }}
+            style={{
+              position: 'fixed',
+              top: 0,
+              bottom: 0,
+              left: 0,
+              width: '50vw',
+              backgroundColor: '#3B2F25',
+              zIndex: 99999,
+              borderRight: '1px solid rgba(201,154,91,0.2)',
+              overflow: 'hidden'
+            }}
+          >
+            <div style={{ position: 'absolute', top: '50%', right: 0, transform: 'translate(50%, -50%)', width: '260px', display: 'flex', justifyContent: 'center' }}>
+              <Logo variant="dark" showTagline={false} />
+            </div>
+          </motion.div>
+          
+          {/* Right Door */}
+          <motion.div
+            initial={{ x: '0%' }}
+            animate={{ x: '100%' }}
+            exit={{ x: '0%' }}
+            transition={{ duration: 0.5, ease: [0.65, 0, 0.35, 1] }}
+            style={{
+              position: 'fixed',
+              top: 0,
+              bottom: 0,
+              right: 0,
+              width: '50vw',
+              backgroundColor: '#3B2F25',
+              zIndex: 99999,
+              borderLeft: '1px solid rgba(201,154,91,0.2)',
+              overflow: 'hidden'
+            }}
+          >
+            <div style={{ position: 'absolute', top: '50%', left: 0, transform: 'translate(-50%, -50%)', width: '260px', display: 'flex', justifyContent: 'center' }}>
+              <Logo variant="dark" showTagline={false} />
+            </div>
+          </motion.div>
+        </motion.div>
+      </AnimatePresence>
       <MobileActionBar />
     </LenisProvider>
   );

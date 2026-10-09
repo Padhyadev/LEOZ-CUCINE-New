@@ -213,7 +213,7 @@
   display: flex;
   flex-direction: column;
   padding: 24px 24px 32px;
-  background-color: var(--bg-dark);
+  background-color: var(--bg-cocoa, #3B2F25);
   color: var(--text-ivory);
   border-left: 1px solid var(--line-gold);
   box-shadow: -24px 0 48px rgba(0, 0, 0, 0.35);

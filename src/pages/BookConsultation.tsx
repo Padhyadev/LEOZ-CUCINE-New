@@ -424,17 +424,7 @@ export const BookConsultation: React.FC = () => {
 
           <div className="lzc-hero__content lz-container">
             <div className="lzc-hero__inner">
-              <motion.nav aria-label="Breadcrumb" {...heroReveal(0.05)}>
-                <ol className="lzc-crumbs">
-                  <li>
-                    <a href="/" onClick={(e) => navigate(e, '/')}>
-                      Home
-                    </a>
-                  </li>
-                  <li aria-hidden="true">/</li>
-                  <li aria-current="page">Talk to Us</li>
-                </ol>
-              </motion.nav>
+
 
               <motion.h1 id="consult-hero-title" className="lzc-h1" {...heroReveal(0.15)}>
                 Your Space. Our Expertise.

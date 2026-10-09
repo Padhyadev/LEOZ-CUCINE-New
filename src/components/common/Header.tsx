@@ -322,7 +322,7 @@ export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showH
           >
             {/* Top Bar: Logo left, Close icon right */}
             <div className="lz-drawer__top">
-              <Logo variant="light" showTagline={false} />
+              <Logo variant="dark" showTagline={false} />
               <button
                 type="button"
                 className="lz-burger"

@@ -266,7 +266,6 @@ export const ModularWardrobes: React.FC = () => {
   const prefersReducedMotion = useReducedMotion();
   const { lenis } = useLenisScroll();
 
-  const [doorsDone, setDoorsDone] = useState(false);
   const [activeSpot, setActiveSpot] = useState<number | null>(null);
   const [activeFinish, setActiveFinish] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
@@ -310,8 +309,7 @@ export const ModularWardrobes: React.FC = () => {
   /* ---------- Hero parallax ---------- */
   const { scrollYProgress: heroProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const heroY = useTransform(heroProgress, [0, 1], [0, prefersReducedMotion ? 0 : 120]);
-  const doorsActive = !prefersReducedMotion && !doorsDone;
-  const heroDelay = doorsActive ? 0.7 : 0;
+  const heroDelay = 0;
 
   const heroReveal = (delay: number) =>
     ({
@@ -393,38 +391,9 @@ export const ModularWardrobes: React.FC = () => {
           </motion.div>
           <GoldDust />
 
-          {/* Door-open reveal */}
-          {doorsActive && (
-            <div className="lzw-doors" aria-hidden="true">
-              <motion.div
-                className="lzw-door lzw-door--left"
-                initial={{ x: 0 }}
-                animate={{ x: '-101%' }}
-                transition={{ duration: 1.2, ease: [0.65, 0, 0.35, 1], delay: 0.3 }}
-              />
-              <motion.div
-                className="lzw-door lzw-door--right"
-                initial={{ x: 0 }}
-                animate={{ x: '101%' }}
-                transition={{ duration: 1.2, ease: [0.65, 0, 0.35, 1], delay: 0.3 }}
-                onAnimationComplete={() => setDoorsDone(true)}
-              />
-            </div>
-          )}
-
           <div className="lzw-hero__content lz-container">
             <div className="lzw-hero__inner">
-              <motion.nav aria-label="Breadcrumb" {...heroReveal(0.05)}>
-                <ol className="lzw-crumbs">
-                  <li>
-                    <a href="/" onClick={(e) => navigate(e, '/')}>
-                      Home
-                    </a>
-                  </li>
-                  <li aria-hidden="true">/</li>
-                  <li aria-current="page">Customised Wardrobes</li>
-                </ol>
-              </motion.nav>
+
 
               <motion.h1 id="wardrobes-hero-title" className="lzw-h1" {...heroReveal(0.15)}>
                 Beyond Storage. An Expression of You.
