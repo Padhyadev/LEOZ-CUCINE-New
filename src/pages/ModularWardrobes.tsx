@@ -235,7 +235,7 @@ const LedGlow: React.FC = () => {
       aria-hidden="true"
       initial={reduce ? false : { opacity: 0 }}
       whileInView={{ opacity: 1 }}
-      viewport={{ once: true, amount: 0.4 }}
+      viewport={{ once: false, amount: 0.4 }}
       transition={{ duration: 1.2, ease: EASE_OUT, delay: 0.2 }}
     />
   );

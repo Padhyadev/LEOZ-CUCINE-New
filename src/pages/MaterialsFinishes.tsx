@@ -251,7 +251,7 @@ export const MaterialsFinishes: React.FC = () => {
       { name: 'Calacatta Gold Vein', color: '#F7F5F1' },
     ],
     handles: [
-      { name: 'Champagne Brushed Bronze', color: '#8A725B' },
+      { name: 'Champagne Brushed Bronze', color: '#6B5434' },
       { name: 'Titanium Gunmetal Profile', color: '#4A5568' },
       { name: 'Handleless 45° Miter', color: '#262522' },
     ],
@@ -463,7 +463,7 @@ export const MaterialsFinishes: React.FC = () => {
                         style={{
                           fontFamily: 'var(--font-body)',
                           fontSize: '11.5px',
-                          color: '#8A725B',
+                          color: '#6B5434',
                           fontWeight: 600,
                           display: 'block',
                           marginBottom: '10px',
@@ -481,7 +481,7 @@ export const MaterialsFinishes: React.FC = () => {
                           borderTop: '1px solid #E5DED2',
                           fontSize: '11px',
                           fontFamily: 'var(--font-body)',
-                          color: '#66635D',
+                          color: '#3F3227',
                         }}
                       >
                         <div>
@@ -528,7 +528,7 @@ export const MaterialsFinishes: React.FC = () => {
                   fontWeight: 600,
                   letterSpacing: '0.24em',
                   textTransform: 'uppercase',
-                  color: '#8A725B',
+                  color: '#6B5434',
                   display: 'block',
                   marginBottom: '12px',
                 }}
@@ -550,7 +550,7 @@ export const MaterialsFinishes: React.FC = () => {
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '14.5px',
-                  color: '#66635D',
+                  color: '#3F3227',
                   maxWidth: '640px',
                   margin: '0 auto',
                   lineHeight: 1.6,
@@ -589,7 +589,7 @@ export const MaterialsFinishes: React.FC = () => {
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                       <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: selectedCabinet.color }} />
-                      <span style={{ fontSize: '10px', color: '#8A725B', letterSpacing: '0.15em', fontWeight: 600 }}>
+                      <span style={{ fontSize: '10px', color: '#6B5434', letterSpacing: '0.15em', fontWeight: 600 }}>
                         PRIMARY CABINET
                       </span>
                     </div>
@@ -607,7 +607,7 @@ export const MaterialsFinishes: React.FC = () => {
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                       <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: selectedCountertop.color }} />
-                      <span style={{ fontSize: '10px', color: '#8A725B', letterSpacing: '0.15em', fontWeight: 600 }}>
+                      <span style={{ fontSize: '10px', color: '#6B5434', letterSpacing: '0.15em', fontWeight: 600 }}>
                         MONOLITH TOP
                       </span>
                     </div>
@@ -625,7 +625,7 @@ export const MaterialsFinishes: React.FC = () => {
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                       <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: selectedHandle.color }} />
-                      <span style={{ fontSize: '10px', color: '#8A725B', letterSpacing: '0.15em', fontWeight: 600 }}>
+                      <span style={{ fontSize: '10px', color: '#6B5434', letterSpacing: '0.15em', fontWeight: 600 }}>
                         METALLIC GOLA
                       </span>
                     </div>
@@ -643,7 +643,7 @@ export const MaterialsFinishes: React.FC = () => {
                   >
                     <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
                       <div style={{ width: '12px', height: '12px', borderRadius: '50%', backgroundColor: selectedInterior.color }} />
-                      <span style={{ fontSize: '10px', color: '#8A725B', letterSpacing: '0.15em', fontWeight: 600 }}>
+                      <span style={{ fontSize: '10px', color: '#6B5434', letterSpacing: '0.15em', fontWeight: 600 }}>
                         DRAWER INTERIOR
                       </span>
                     </div>
@@ -658,7 +658,7 @@ export const MaterialsFinishes: React.FC = () => {
                     borderRadius: '2px',
                     border: '1px solid #E5DED2',
                     fontSize: '12px',
-                    color: '#66635D',
+                    color: '#3F3227',
                     lineHeight: 1.5,
                   }}
                 >
@@ -670,7 +670,7 @@ export const MaterialsFinishes: React.FC = () => {
               <div style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
                 {/* 1. Cabinet Choices */}
                 <div>
-                  <label style={{ fontSize: '10.5px', color: '#8A725B', letterSpacing: '0.15em', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
+                  <label style={{ fontSize: '10.5px', color: '#6B5434', letterSpacing: '0.15em', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
                     SELECT CABINET FINISH
                   </label>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
@@ -697,7 +697,7 @@ export const MaterialsFinishes: React.FC = () => {
 
                 {/* 2. Countertop Choices */}
                 <div>
-                  <label style={{ fontSize: '10.5px', color: '#8A725B', letterSpacing: '0.15em', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
+                  <label style={{ fontSize: '10.5px', color: '#6B5434', letterSpacing: '0.15em', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
                     SELECT MONOLITH COUNTERTOP
                   </label>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
@@ -724,7 +724,7 @@ export const MaterialsFinishes: React.FC = () => {
 
                 {/* 3. Handle Choices */}
                 <div>
-                  <label style={{ fontSize: '10.5px', color: '#8A725B', letterSpacing: '0.15em', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
+                  <label style={{ fontSize: '10.5px', color: '#6B5434', letterSpacing: '0.15em', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
                     SELECT PROFILE / GOLA HANDLE
                   </label>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
@@ -751,7 +751,7 @@ export const MaterialsFinishes: React.FC = () => {
 
                 {/* 4. Interior Choices */}
                 <div>
-                  <label style={{ fontSize: '10.5px', color: '#8A725B', letterSpacing: '0.15em', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
+                  <label style={{ fontSize: '10.5px', color: '#6B5434', letterSpacing: '0.15em', fontWeight: 600, display: 'block', marginBottom: '8px' }}>
                     SELECT DRAWER INTERIOR
                   </label>
                   <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
@@ -807,7 +807,7 @@ export const MaterialsFinishes: React.FC = () => {
                 fontWeight: 600,
                 letterSpacing: '0.25em',
                 textTransform: 'uppercase',
-                color: '#8A725B',
+                color: '#6B5434',
                 display: 'block',
                 marginBottom: '16px',
               }}

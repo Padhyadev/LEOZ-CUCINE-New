@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Logo } from './Logo';
 import { Menu, X, ArrowRight } from 'lucide-react';
 import { useLenisScroll } from '../../hooks/useLenisScroll';
+import { SCROLL_CONFIG } from '../../lib/scroll/config';
 import './Header.css';
 
 interface HeaderProps {
@@ -12,7 +13,7 @@ interface HeaderProps {
 
 const MOBILE_NAV_PANEL_ID = 'mobile-nav-panel';
 const luxuryEase = [0.16, 1, 0.3, 1];
-const SCROLL_THRESHOLD = 40;
+const { solidAfter, hideOnScroll, hideAfter, directionTolerance } = SCROLL_CONFIG.header;
 
 // Pages whose hero is a full-bleed dark photograph. Only these get the
 // transparent header at the top of the page; light-topped pages (privacy,
@@ -43,14 +44,28 @@ const FULL_BLEED_HERO_PATHS = new Set([
 
 export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showHeader = true }) => {
   const [scrolled, setScrolled] = useState(false);
+  const [tucked, setTucked] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const { lenis } = useLenisScroll();
+  const headerRef = useRef<HTMLElement>(null);
   const hamburgerBtnRef = useRef<HTMLButtonElement>(null);
   const mobileNavPanelRef = useRef<HTMLDivElement>(null);
 
+  /* Solid + slim after a short scroll; tucks away while scrolling down and
+     returns on any scroll up. Never hides near the top or while keyboard
+     focus is inside the header. */
   useEffect(() => {
+    let lastY = window.scrollY;
     const handleScroll = () => {
-      setScrolled(window.scrollY > SCROLL_THRESHOLD);
+      const y = window.scrollY;
+      setScrolled(y > solidAfter);
+      if (!hideOnScroll) return;
+
+      const delta = y - lastY;
+      if (Math.abs(delta) < directionTolerance) return;
+      const focusInside = !!headerRef.current?.contains(document.activeElement);
+      setTucked(delta > 0 && y > hideAfter && !focusInside);
+      lastY = y;
     };
     handleScroll();
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -216,6 +231,7 @@ export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showH
     'leoz-global-header',
     isTransparent ? 'is-transparent' : 'is-solid',
     scrolled ? 'is-compact' : '',
+    tucked && !isMobileMenuOpen ? 'is-tucked' : '',
     isVisible ? '' : 'is-hidden',
   ]
     .filter(Boolean)
@@ -223,7 +239,12 @@ export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showH
 
   return (
     <>
-      <header role="banner" className={headerClassName}>
+      <header
+        ref={headerRef}
+        role="banner"
+        className={headerClassName}
+        onFocus={() => setTucked(false)}
+      >
         {/* LEFT: LEOZ LOGO */}
         <div className="lz-header__logo">
           <Logo variant="light" showTagline={false} />

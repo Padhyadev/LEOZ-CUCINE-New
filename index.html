@@ -4,6 +4,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Scroll animations only hide content when JS is running; without JS
+       (or if it fails to load) everything renders visible. -->
+  <script>document.documentElement.classList.add('js-enabled');</script>
   <title>LEOZ Cucine | Premium Kitchens & Wardrobes</title>
   <meta name="description"
     content="LEOZ Cucine designs premium modular kitchens and wardrobes for modern homes, with clean design, thoughtful planning and refined finishes." />

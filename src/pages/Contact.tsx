@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from 'react';
-import { motion, useReducedMotion, useSpring, useInView } from 'framer-motion';
+import React, { useEffect, useRef, useState } from 'react';
+import { useMagnetic } from '../lib/scroll';
+import { motion, useReducedMotion, useInView } from 'framer-motion';
 import { Header } from '../components/common/Header';
 import { Footer } from '../components/common/Footer';
 import { useDocumentMeta } from '../hooks/useDocumentMeta';
@@ -43,17 +44,14 @@ const SectionHead = ({ eyebrow, title, center = false }: { eyebrow?: string, tit
     <motion.div 
       initial={reduce ? false : { opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.2 }}
+      viewport={{ once: false, amount: 0.2 }}
       transition={{ duration: 0.6, ease: EASE }}
       style={{ textAlign: center ? 'center' : 'left', display: 'flex', flexDirection: 'column', alignItems: center ? 'center' : 'flex-start' }}
     >
       {eyebrow && <span className="lz-contact-eyebrow">{eyebrow}</span>}
       <h2 className="lz-contact-h2 lz-contact-mask">
         <motion.span
-          initial={reduce ? false : { y: '105%' }}
-          whileInView={{ y: '0%' }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.8, ease: EASE }}
+          data-mask-slide=""
         >
           {title}
         </motion.span>
@@ -62,38 +60,31 @@ const SectionHead = ({ eyebrow, title, center = false }: { eyebrow?: string, tit
         className="lz-contact-rule"
         initial={reduce ? false : { scaleX: 0 }}
         whileInView={{ scaleX: 1 }}
-        viewport={{ once: true, amount: 0.2 }}
+        viewport={{ once: false, amount: 0.2 }}
         transition={{ duration: 0.8, ease: EASE, delay: 0.2 }}
       />
     </motion.div>
   );
 };
 
+/* Link or button that drifts up to 8px toward the cursor (shared GSAP useMagnetic) */
 const MagneticButton = ({ children, className, href, onClick, target, rel }: { children: React.ReactNode, className: string, href?: string, onClick?: (e: any) => void, target?: string, rel?: string }) => {
-  const reduce = useReducedMotion();
-  const x = useSpring(0, { stiffness: 260, damping: 18 });
-  const y = useSpring(0, { stiffness: 260, damping: 18 });
-  
-  const handleMove = (e: React.MouseEvent<HTMLAnchorElement | HTMLButtonElement>) => {
-    if (reduce) return;
-    const r = e.currentTarget.getBoundingClientRect();
-    x.set(Math.max(-8, Math.min(8, (e.clientX - (r.left + r.width / 2)) * 0.2)));
-    y.set(Math.max(-8, Math.min(8, (e.clientY - (r.top + r.height / 2)) * 0.35)));
-  };
-
-  const reset = () => { x.set(0); y.set(0); };
+  const linkRef = useRef<HTMLAnchorElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  useMagnetic(linkRef);
+  useMagnetic(buttonRef);
 
   if (href) {
     return (
-      <motion.a href={href} className={className} onMouseMove={handleMove} onMouseLeave={reset} style={{ x, y }} target={target} rel={rel}>
+      <a ref={linkRef} href={href} className={className} target={target} rel={rel}>
         {children}
-      </motion.a>
+      </a>
     );
   }
   return (
-    <motion.button className={className} onMouseMove={handleMove} onMouseLeave={reset} onClick={onClick} style={{ x, y }}>
+    <button ref={buttonRef} className={className} onClick={onClick}>
       {children}
-    </motion.button>
+    </button>
   );
 };
 
@@ -130,7 +121,7 @@ const CopyableRow = ({ icon: Icon, text, link, copyText }: { icon: any, text: st
       className="lz-contact-row"
       initial={{ opacity: 0, x: -10 }}
       whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true }}
+      viewport={{ once: false }}
       target={link.startsWith('http') ? '_blank' : '_self'}
       rel={link.startsWith('http') ? 'noopener' : undefined}
     >
@@ -232,28 +223,28 @@ const EnquiryForm = () => {
       <form onSubmit={handleSubmit} noValidate>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '0 32px' }}>
           
-          <motion.div className="lz-input-group" initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
+          <motion.div className="lz-input-group" initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false }} transition={{ delay: 0.1 }}>
             <input id="f_name" type="text" className={`lz-input ${errors.fullName ? 'error shake' : ''}`} placeholder=" " value={formData.fullName} onChange={e => { setFormData({...formData, fullName: e.target.value}); if(errors.fullName) setErrors({...errors, fullName: ''}); }} />
             <label htmlFor="f_name" className="lz-label">Your name</label>
             <div className="lz-input-line" />
             {errors.fullName ? <span className="lz-error-text">{errors.fullName}</span> : (formData.fullName.trim() && <Check size={14} color="var(--gold)" style={{ position: 'absolute', right: '16px', top: '24px' }} />)}
           </motion.div>
 
-          <motion.div className="lz-input-group" initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.15 }}>
+          <motion.div className="lz-input-group" initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false }} transition={{ delay: 0.15 }}>
             <input id="f_phone" type="tel" inputMode="numeric" className={`lz-input ${errors.phone ? 'error shake' : ''}`} placeholder=" " value={formData.phone} onChange={e => { setFormData({...formData, phone: e.target.value}); if(errors.phone) setErrors({...errors, phone: ''}); }} />
             <label htmlFor="f_phone" className="lz-label">Preferred contact number</label>
             <div className="lz-input-line" />
             {errors.phone ? <span className="lz-error-text">{errors.phone}</span> : (formData.phone.replace(/\D/g, '').length >= 10 && <Check size={14} color="var(--gold)" style={{ position: 'absolute', right: '16px', top: '24px' }} />)}
           </motion.div>
 
-          <motion.div className="lz-input-group" initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}>
+          <motion.div className="lz-input-group" initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false }} transition={{ delay: 0.2 }}>
             <input id="f_email" type="email" className={`lz-input ${errors.email ? 'error shake' : ''}`} placeholder=" " value={formData.email} onChange={e => { setFormData({...formData, email: e.target.value}); if(errors.email) setErrors({...errors, email: ''}); }} />
             <label htmlFor="f_email" className="lz-label">Your email</label>
             <div className="lz-input-line" />
             {errors.email ? <span className="lz-error-text">{errors.email}</span> : (/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) && <Check size={14} color="var(--gold)" style={{ position: 'absolute', right: '16px', top: '24px' }} />)}
           </motion.div>
 
-          <motion.div className="lz-input-group" initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.25 }}>
+          <motion.div className="lz-input-group" initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false }} transition={{ delay: 0.25 }}>
             <input id="f_city" type="text" className={`lz-input ${errors.location ? 'error shake' : ''}`} placeholder=" " value={formData.location} onChange={e => { setFormData({...formData, location: e.target.value}); if(errors.location) setErrors({...errors, location: ''}); }} />
             <label htmlFor="f_city" className="lz-label">City / locality</label>
             <div className="lz-input-line" />
@@ -261,7 +252,7 @@ const EnquiryForm = () => {
           </motion.div>
         </div>
 
-        <motion.div className="lz-input-group" style={{ marginTop: '16px' }} initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.3 }}>
+        <motion.div className="lz-input-group" style={{ marginTop: '16px' }} initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false }} transition={{ delay: 0.3 }}>
           <span style={{ display: 'block', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--bronze)', marginBottom: '16px' }}>Project Type <span style={{ color: '#C18C8B' }}>*</span></span>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '16px' }}>
             {['Kitchen', 'Wardrobe', 'Both', 'Architect or Developer Enquiry'].map(type => (
@@ -275,7 +266,7 @@ const EnquiryForm = () => {
           {errors.projectType && <span className="lz-error-text shake" style={{ marginLeft: 0 }}>{errors.projectType}</span>}
         </motion.div>
 
-        <motion.div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px', marginTop: '32px' }} initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.35 }}>
+        <motion.div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '32px', marginTop: '32px' }} initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false }} transition={{ delay: 0.35 }}>
           <div className="lz-input-group">
             <span style={{ display: 'block', fontSize: '13px', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--bronze)', marginBottom: '8px' }}>Approximate Budget</span>
             <select className="lz-input" value={formData.budget} onChange={e => setFormData({...formData, budget: e.target.value})} style={{ paddingLeft: 0, paddingTop: '16px' }}>
@@ -300,13 +291,13 @@ const EnquiryForm = () => {
           </div>
         </motion.div>
 
-        <motion.div className="lz-input-group" style={{ marginTop: '16px' }} initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.4 }}>
+        <motion.div className="lz-input-group" style={{ marginTop: '16px' }} initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false }} transition={{ delay: 0.4 }}>
           <textarea id="f_msg" className="lz-input" placeholder=" " value={formData.message} onChange={e => setFormData({...formData, message: e.target.value})} rows={3} style={{ resize: 'vertical' }} />
           <label htmlFor="f_msg" className="lz-label">Tell us about your preferences and requirements (Optional)</label>
           <div className="lz-input-line" />
         </motion.div>
 
-        <motion.div style={{ marginTop: '48px', textAlign: 'center' }} initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.45 }}>
+        <motion.div style={{ marginTop: '48px', textAlign: 'center' }} initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false }} transition={{ delay: 0.45 }}>
           <MagneticButton className="lz-contact-btn lz-contact-btn--primary" onClick={handleSubmit}>
             {isSubmitting ? 'Submitting...' : 'Send Enquiry'}
           </MagneticButton>
@@ -336,7 +327,7 @@ export const Contact: React.FC = () => {
         {/* 01 HERO */}
         <section className="lz-contact-hero">
           <div className="lz-contact-hero__bg">
-            <img src="/contact_hero_clean.png" alt="LEOZ Cucine Luxury Showroom" />
+            <img src="/contact_hero.png" alt="LEOZ Cucine Luxury Showroom" />
           </div>
           <div className="lz-contact-hero__overlay" />
           
@@ -369,7 +360,7 @@ export const Contact: React.FC = () => {
                   className="lz-chip-contact"
                   initial={reduce ? false : { opacity: 0, y: 10 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false }}
                   transition={{ delay: i * 0.1 }}
                 >
                   <Check size={14} color="var(--gold)" /> {chip}
@@ -387,14 +378,14 @@ export const Contact: React.FC = () => {
               <p style={{ fontSize: '16px', lineHeight: 1.8, marginBottom: '40px' }}>
                 Explore your requirements and discuss finishes, layout possibilities and product specifications with the team. Visits are recommended by appointment.
               </p>
-              <motion.div className="lz-contact-img-wrap" style={{ aspectRatio: '16/9' }} initial={reduce ? false : { opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.8 }}>
+              <motion.div className="lz-contact-img-wrap" style={{ aspectRatio: '16/9' }} initial={reduce ? false : { opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: false }} transition={{ duration: 0.8 }}>
                 <div className="lz-contact-bracket lz-contact-bracket--tl" />
                 <div className="lz-contact-bracket lz-contact-bracket--br" />
                 <img src="/contact-hero.png" alt="LEOZ Cucine Ahmedabad Office" />
               </motion.div>
             </div>
             
-            <motion.div className="lz-contact-card" style={{ position: 'relative' }} initial={reduce ? false : { opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ duration: 0.6 }}>
+            <motion.div className="lz-contact-card" style={{ position: 'relative' }} initial={reduce ? false : { opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false }} transition={{ duration: 0.6 }}>
               <div className="lz-contact-bracket lz-contact-bracket--tr" style={{ opacity: 0.2 }} />
               
               <h3 style={{ fontSize: '20px', fontWeight: 500, color: 'var(--text-cocoa)', marginBottom: '8px' }}>Mr. Piyush Gahlot</h3>
@@ -413,7 +404,7 @@ export const Contact: React.FC = () => {
                   className="lz-contact-row"
                   initial={{ opacity: 0, x: -10 }}
                   whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false }}
                 >
                   <Globe size={20} color="var(--gold)" />
                   <span style={{ fontSize: '15px', flex: 1 }}>www.leozartofambience.com</span>
@@ -432,10 +423,7 @@ export const Contact: React.FC = () => {
                 <motion.span 
                   className="lz-contact-eyebrow" 
                   style={{ color: 'var(--bronze)', margin: 0 }}
-                  initial={reduce ? false : { y: '105%' }}
-                  whileInView={{ y: '0%' }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, ease: EASE }}
+                  data-mask-slide=""
                 >
                   ENQUIRY FORM
                 </motion.span>
@@ -445,7 +433,7 @@ export const Contact: React.FC = () => {
                 style={{ display: 'block', width: '48px', height: '1px', backgroundColor: 'var(--gold)', transformOrigin: 'center', marginBottom: '24px' }}
                 initial={reduce ? false : { scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}
-                viewport={{ once: true }}
+                viewport={{ once: false }}
                 transition={{ duration: 0.8, ease: EASE }}
               />
 
@@ -453,7 +441,7 @@ export const Contact: React.FC = () => {
                 style={{ color: 'var(--text-taupe)', maxWidth: '560px', lineHeight: 1.7, margin: '0 auto', fontSize: 'clamp(16px, 1.2vw, 18px)', padding: '0 24px' }}
                 initial={reduce ? false : { opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={{ once: false }}
                 transition={{ duration: 0.8, ease: EASE, delay: 0.1 }}
               >
                 Tell us a little about your space and what you envision. We will review your details and contact you to arrange the next discussion.
@@ -471,9 +459,9 @@ export const Contact: React.FC = () => {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '32px', marginTop: '48px' }}>
               
               {/* Corporate Office */}
-              <motion.div className="lz-location-card" initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }}>
+              <motion.div className="lz-location-card" initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false }} transition={{ delay: 0.1 }}>
                 <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '32px', position: 'relative' }}>
-                  <motion.div className="lz-pin-animation" whileInView={{ animationPlayState: 'running' }} viewport={{ once: true }}>
+                  <motion.div className="lz-pin-animation" whileInView={{ animationPlayState: 'running' }} viewport={{ once: false }}>
                     <MapPin size={48} strokeWidth={1} color="var(--gold)" />
                   </motion.div>
                   <div className="lz-pulse" />
@@ -490,9 +478,9 @@ export const Contact: React.FC = () => {
               </motion.div>
 
               {/* Manufacturing Unit */}
-              <motion.div className="lz-location-card" initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }}>
+              <motion.div className="lz-location-card" initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false }} transition={{ delay: 0.2 }}>
                 <div style={{ display: 'flex', justifyContent: 'center', marginBottom: '32px', position: 'relative' }}>
-                  <motion.div className="lz-pin-animation" whileInView={{ animationPlayState: 'running' }} viewport={{ once: true }}>
+                  <motion.div className="lz-pin-animation" whileInView={{ animationPlayState: 'running' }} viewport={{ once: false }}>
                     <MapPin size={48} strokeWidth={1} color="var(--gold)" />
                   </motion.div>
                   <div className="lz-pulse" />

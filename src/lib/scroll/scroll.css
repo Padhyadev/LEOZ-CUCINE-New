@@ -1,0 +1,110 @@
+/* ==========================================================================
+   LEOZ — scroll system styles (progress bar, line masks, reveal states)
+   ========================================================================== */
+
+/* Thin bronze reading-progress bar */
+.lz-scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1001; /* just above the fixed header */
+  height: 2px;
+  background: linear-gradient(90deg, var(--gold-deep), var(--gold), var(--gold-light));
+  transform: scaleX(0);
+  transform-origin: left center;
+  pointer-events: none;
+}
+
+/* Line masks created by SplitText (linesClass "lz-line" → "lz-line-mask"):
+   each line is clipped so its text can slide up from underneath. The
+   padding/negative margin pair keeps descenders (g, y, p) unclipped. */
+.lz-line-mask {
+  padding-bottom: 0.08em;
+  margin-bottom: -0.08em;
+}
+
+/* Magnetic buttons (useMagnetic): drift via `translate`, which composes
+   with any transform-based reveal on the same element */
+[data-magnetic] {
+  translate: var(--lz-mx, 0px) var(--lz-my, 0px);
+}
+
+/* ==========================================================================
+   Section colour transitions
+   Soft gradient overlap (feathering) between adjacent light-warm sections.
+   ========================================================================== */
+:root {
+  --lz-seam-height: 64px;
+}
+
+/* Ensure sections establish a positioning context for the top seam */
+.lz-section,
+.lz-about-section,
+.lz-contact-section,
+.lz-f-section {
+  position: relative;
+}
+
+/* Base top seam pseudo-element */
+.lz-section[class*="lz-bg-"] + .lz-section[class*="lz-bg-"]::before,
+.lz-about-section[class*="bg-"] + .lz-about-section[class*="bg-"]::before,
+.lz-contact-section[class*="bg-"] + .lz-contact-section[class*="bg-"]::before,
+.lz-f-section[class*="bg-"] + .lz-f-section[class*="bg-"]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: clamp(48px, 6vw, var(--lz-seam-height, 64px));
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Soft overlap gradients matching the preceding section's color */
+/* Preceding: Ivory */
+.lz-bg-ivory + .lz-bg-cream::before,
+.bg-ivory + .bg-cream::before,
+.lz-bg-ivory + .lz-bg-sand::before,
+.bg-ivory + .bg-sand::before,
+.lz-bg-ivory + .lz-bg-white::before,
+.bg-ivory + .bg-white::before {
+  background: linear-gradient(to bottom, var(--bg-ivory, #FAF6EF) 0%, transparent 100%);
+}
+
+/* Preceding: Cream */
+.lz-bg-cream + .lz-bg-white::before,
+.bg-cream + .bg-white::before,
+.lz-bg-cream + .lz-bg-ivory::before,
+.bg-cream + .bg-ivory::before,
+.lz-bg-cream + .lz-bg-sand::before,
+.bg-cream + .bg-sand::before {
+  background: linear-gradient(to bottom, var(--bg-cream, #F3EADB) 0%, transparent 100%);
+}
+
+/* Preceding: White */
+.lz-bg-white + .lz-bg-ivory::before,
+.bg-white + .bg-ivory::before,
+.lz-bg-white + .lz-bg-cream::before,
+.bg-white + .bg-cream::before,
+.lz-bg-white + .lz-bg-sand::before,
+.bg-white + .bg-sand::before {
+  /* --lz-white lets a page soften its "white" (About sets it); defaults to pure white */
+  background: linear-gradient(to bottom, var(--lz-white, #FFFFFF) 0%, transparent 100%);
+}
+
+/* Preceding: Sand */
+.lz-bg-sand + .lz-bg-white::before,
+.bg-sand + .bg-white::before,
+.lz-bg-sand + .lz-bg-ivory::before,
+.bg-sand + .bg-ivory::before,
+.lz-bg-sand + .lz-bg-cream::before,
+.bg-sand + .bg-cream::before {
+  background: linear-gradient(to bottom, var(--bg-sand, #EADCC5) 0%, transparent 100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lz-scroll-progress {
+    display: none;
+  }
+}

@@ -20,8 +20,11 @@ const MaterialsFinishes = lazy(() => import('./pages/MaterialsFinishes'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 
 
-import { LenisProvider } from './providers/LenisProvider';
+import { SmoothScroll } from './lib/scroll/SmoothScroll';
+import { ScrollProgress } from './lib/scroll/ScrollProgress';
+import { AutoReveal } from './lib/scroll/AutoReveal';
 import { MobileActionBar } from './components/common/MobileActionBar';
+import { BackToTop } from './components/common/BackToTop';
 import { Analytics } from './components/common/Analytics';
 
 
@@ -29,6 +32,10 @@ export const App: React.FC = () => {
   const [currentPath, setCurrentPath] = useState(() => {
     return typeof window !== 'undefined' ? window.location.pathname : '/';
   });
+  /* The route whose page is actually on screen: it only changes once the
+     page-transition doors have closed, so scroll-to-top and scroll
+     measurements happen behind the doors rather than on the old page. */
+  const [settledPath, setSettledPath] = useState(currentPath);
 
   useEffect(() => {
     const handleLocationChange = () => {
@@ -117,9 +124,15 @@ export const App: React.FC = () => {
   };
 
   return (
-    <LenisProvider>
+    <SmoothScroll routeKey={settledPath}>
       <Analytics />
-      <AnimatePresence mode="wait" initial={false}>
+      <ScrollProgress routeKey={settledPath} />
+      <AutoReveal routeKey={settledPath} />
+      <AnimatePresence
+        mode="wait"
+        initial={false}
+        onExitComplete={() => setSettledPath(window.location.pathname)}
+      >
         <motion.div key={currentPath} style={{ width: '100%', height: '100%' }}>
           <Suspense fallback={<div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#F7F5F1' }}></div>}>
             {renderPage()}
@@ -173,7 +186,8 @@ export const App: React.FC = () => {
         </motion.div>
       </AnimatePresence>
       <MobileActionBar />
-    </LenisProvider>
+      <BackToTop />
+    </SmoothScroll>
   );
 };
 

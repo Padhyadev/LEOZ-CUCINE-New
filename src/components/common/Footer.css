@@ -216,6 +216,33 @@
 }
 
 /* ---------- Responsive ---------- */
+/* ---------- Embedded office map ---------- */
+.lz-footer__map {
+  margin-top: 20px;
+  width: 100%;
+  max-width: 360px;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border: 1px solid var(--line-gold);
+  border-radius: 2px;
+  background-color: var(--bg-charcoal);
+}
+
+.lz-footer__map iframe {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 0;
+  /* Dark, warm-toned map to sit quietly in the footer; full colour on hover */
+  filter: invert(90%) hue-rotate(180deg) grayscale(0.4) sepia(0.2) contrast(0.9);
+  transition: filter 400ms ease;
+}
+
+.lz-footer__map:hover iframe,
+.lz-footer__map:focus-within iframe {
+  filter: none;
+}
+
 @media (max-width: 1024px) {
   .lz-footer__grid {
     grid-template-columns: 1fr 1fr;
@@ -235,35 +262,48 @@
     grid-template-columns: 1fr;
     gap: 0;
   }
+
   .lz-footer__col--brand {
     padding-bottom: 32px;
   }
+
+  .lz-footer__map {
+    max-width: none;
+  }
+
   .lz-footer__col--acc {
     border-top: 1px solid var(--line-gold);
   }
+
   .lz-footer__col--contact {
     border-top: 1px solid var(--line-gold);
     padding: 32px 0;
   }
+
   .lz-acc__inner .lz-footer__list {
     padding-bottom: 16px;
   }
+
   .lz-footer__link,
   .lz-footer__legal a {
     min-height: 44px;
   }
+
   .lz-social__link {
     width: 44px;
     height: 44px;
   }
+
   .lz-footer__bar-inner {
     flex-direction: column;
     justify-content: center;
     text-align: center;
   }
+
   .lz-footer__legal {
     justify-content: center;
   }
+
   .lz-footer__legal a {
     display: inline-flex;
     align-items: center;
@@ -271,6 +311,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .lz-social__link,
   .lz-footer__link,
   .lz-acc__toggle svg,

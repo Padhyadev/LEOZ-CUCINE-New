@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Logo } from './Logo';
 import { Phone, Mail, Globe, MapPin, Clock, Instagram, Linkedin, Facebook, Youtube, ChevronDown } from 'lucide-react';
 import {
+  ADDRESS_LINE,
   EMAIL,
   EMAIL_HREF,
   PHONE_SALES_DISPLAY,
@@ -9,9 +10,13 @@ import {
   SOCIAL_LINKS,
   WEBSITE_URL,
 } from '../../constants/siteInfo';
+import { useReveal } from '../../lib/scroll';
 import './Footer.css';
 
 const MOBILE_QUERY = '(max-width: 640px)';
+
+/* The goo.gl share link can't be framed, so the embed is built from the address */
+const OFFICE_MAP_EMBED = `https://maps.google.com/maps?q=${encodeURIComponent(ADDRESS_LINE)}&z=15&output=embed`;
 
 // Typography is carried over verbatim from the previous footer.
 const headingType: React.CSSProperties = {
@@ -125,6 +130,14 @@ const LinkGroup: React.FC<LinkGroupProps> = ({ id, title, links, isMobile, onNav
 
 export const Footer: React.FC = () => {
   const isMobile = useIsMobile();
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  useReveal(gridRef, {
+    targets: ':scope > *',
+    y: 28,
+    duration: 0.8,
+    stagger: 0.1,
+  });
 
   const navigate = (e: React.MouseEvent, path: string) => {
     e.preventDefault();
@@ -136,7 +149,7 @@ export const Footer: React.FC = () => {
   return (
     <footer id="global-footer" role="contentinfo" className="lz-footer">
       <div className="lz-footer__main">
-        <div className="lz-footer__grid">
+        <div ref={gridRef} className="lz-footer__grid">
           {/* Column 1: Brand, tagline & social */}
           <div className="lz-footer__col--brand">
             <Logo variant="light" showTagline={false} />
@@ -234,9 +247,17 @@ export const Footer: React.FC = () => {
               className="lz-footer__link"
               style={{ fontFamily: 'var(--font-body)', fontSize: '12.5px', fontWeight: 600, color: 'var(--gold)' }}
             >
-              <span>View on Google Maps</span>
-              <span aria-hidden="true">→</span>
             </a>
+
+            {/* Embedded office map (keyless Google Maps embed of the office address) */}
+            <div className="lz-footer__map">
+              <iframe
+                src={OFFICE_MAP_EMBED}
+                title="LEOZ Cucine Ahmedabad office location on Google Maps"
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+              />
+            </div>
           </div>
         </div>
       </div>

@@ -303,7 +303,7 @@ export const Projects: React.FC = () => {
             />
           </motion.div>
 
-          <div style={{ position: 'relative', zIndex: 10, maxWidth: '860px', color: '#FFFFFF' }}>
+          <div style={{ position: 'relative', zIndex: 10, maxWidth: '600px', color: '#FFFFFF' }}>
             <motion.div
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
@@ -328,13 +328,14 @@ export const Projects: React.FC = () => {
               transition={{ duration: 0.8, delay: 0.28, ease: luxuryEase }}
               style={{
                 fontFamily: 'var(--font-heading)',
-                fontSize: 'clamp(36px, 5vw, 64px)',
+                fontSize: 'clamp(32px, 4vw, 56px)',
                 fontWeight: 400,
-                lineHeight: 1.12,
+                lineHeight: 1.15,
                 letterSpacing: '-0.015em',
                 color: '#FFFFFF',
-                margin: '0 0 18px 0',
-                textShadow: '0 3px 18px rgba(0,0,0,0.75)',
+                margin: '0 0 24px 0',
+                textShadow:
+                  '0 1px 2px rgba(20, 16, 12, 0.9), 0 2px 12px rgba(20, 16, 12, 0.8), 0 0 32px rgba(20, 16, 12, 0.6)',
               }}
             >
               Spaces, Designed Around You.
@@ -346,13 +347,14 @@ export const Projects: React.FC = () => {
               transition={{ duration: 0.75, delay: 0.42, ease: luxuryEase }}
               style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: 'clamp(15px, 1.25vw, 17.5px)',
+                fontSize: '16px',
                 fontWeight: 400,
-                lineHeight: 1.7,
-                color: '#F0F0EC',
-                maxWidth: '620px',
-                margin: '0 0 28px 0',
-                textShadow: '0 2px 10px rgba(0,0,0,0.8)',
+                lineHeight: 1.8,
+                color: '#FFFFFF',
+                maxWidth: '600px',
+                margin: '0 0 32px 0',
+                textShadow:
+                  '0 1px 2px rgba(20, 16, 12, 0.9), 0 2px 12px rgba(20, 16, 12, 0.8), 0 0 32px rgba(20, 16, 12, 0.6)',
               }}
             >
               Explore selected kitchens and wardrobes created for distinctive homes.
@@ -642,14 +644,14 @@ export const Projects: React.FC = () => {
                           >
                             {project.title}
                           </h3>
-                          <ArrowUpRight size={18} style={{ color: '#8A725B' }} />
+                          <ArrowUpRight size={18} style={{ color: '#6B5434' }} />
                         </div>
 
                         <p
                           style={{
                             fontFamily: 'var(--font-body)',
                             fontSize: '13.5px',
-                            color: '#66635D',
+                            color: '#3F3227',
                             lineHeight: 1.6,
                             margin: '0 0 16px 0',
                             flexGrow: 1,
@@ -667,11 +669,11 @@ export const Projects: React.FC = () => {
                             justifyContent: 'space-between',
                             fontSize: '11.5px',
                             fontFamily: 'var(--font-body)',
-                            color: '#66635D',
+                            color: '#3F3227',
                           }}
                         >
                           <span>{project.area}</span>
-                          <span style={{ color: '#8A725B', fontWeight: 600 }}>VIEW CASE STUDY →</span>
+                          <span style={{ color: '#6B5434', fontWeight: 600 }}>VIEW CASE STUDY →</span>
                         </div>
                       </div>
                     </motion.div>
@@ -781,7 +783,7 @@ export const Projects: React.FC = () => {
                         fontWeight: 600,
                         letterSpacing: '0.2em',
                         textTransform: 'uppercase',
-                        color: '#8A725B',
+                        color: '#6B5434',
                         display: 'block',
                         marginBottom: '8px',
                       }}
@@ -829,7 +831,7 @@ export const Projects: React.FC = () => {
                         style={{
                           fontFamily: 'var(--font-body)',
                           fontSize: '15px',
-                          color: '#66635D',
+                          color: '#3F3227',
                           lineHeight: 1.75,
                           marginBottom: '16px',
                         }}
@@ -853,7 +855,7 @@ export const Projects: React.FC = () => {
                           fontWeight: 600,
                           letterSpacing: '0.15em',
                           textTransform: 'uppercase',
-                          color: '#8A725B',
+                          color: '#6B5434',
                           margin: '0 0 16px 0',
                         }}
                       >
@@ -861,13 +863,13 @@ export const Projects: React.FC = () => {
                       </h4>
                       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
                         <div>
-                          <span style={{ fontSize: '11px', color: '#66635D', display: 'block' }}>SPATIAL AREA</span>
+                          <span style={{ fontSize: '11px', color: '#3F3227', display: 'block' }}>SPATIAL AREA</span>
                           <strong style={{ fontSize: '13.5px', color: '#262522', fontWeight: 600 }}>
                             {selectedProject.area}
                           </strong>
                         </div>
                         <div>
-                          <span style={{ fontSize: '11px', color: '#66635D', display: 'block' }}>PRIMARY MATERIALS</span>
+                          <span style={{ fontSize: '11px', color: '#3F3227', display: 'block' }}>PRIMARY MATERIALS</span>
                           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '4px' }}>
                             {selectedProject.materials.map((mat) => (
                               <span
@@ -924,11 +926,11 @@ export const Projects: React.FC = () => {
                             <img src={g.image} alt={g.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                           </div>
                           <div style={{ padding: '16px' }}>
-                            <span style={{ fontSize: '10px', color: '#8A725B', fontWeight: 600, letterSpacing: '0.12em' }}>
+                            <span style={{ fontSize: '10px', color: '#6B5434', fontWeight: 600, letterSpacing: '0.12em' }}>
                               {g.category}
                             </span>
                             <h4 style={{ fontSize: '15px', margin: '4px 0 6px 0', color: '#262522' }}>{g.title}</h4>
-                            <p style={{ fontSize: '12.5px', color: '#66635D', margin: 0, lineHeight: 1.5 }}>
+                            <p style={{ fontSize: '12.5px', color: '#3F3227', margin: 0, lineHeight: 1.5 }}>
                               {g.caption}
                             </p>
                           </div>
@@ -1042,7 +1044,7 @@ export const Projects: React.FC = () => {
                 fontWeight: 600,
                 letterSpacing: '0.25em',
                 textTransform: 'uppercase',
-                color: '#8A725B',
+                color: '#6B5434',
                 display: 'block',
                 marginBottom: '16px',
               }}

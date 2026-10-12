@@ -219,8 +219,8 @@ export const factoryAssets = {
   hero: {
     id: 'factory-hero',
     category: 'factory' as const,
-    desktop: '/factory_precision_plant.webp',
-    mobile: '/factory_precision_plant.webp',
+    desktop: '/factory.webp',
+    mobile: '/factory_mobile.webp',
     alt: 'LEOZ 20,000 Sq. Ft. Precision Manufacturing Plant in Gandhinagar, Gujarat',
     objectPosition: 'center center',
     section: 'Factory & Craftsmanship Hero',

@@ -14,11 +14,17 @@ const TOKENS = {
   goldLight: '#E0BC8A',
   bronze: '#8A6330',
   textCocoa: '#3B2F25',
-  textTaupe: '#6B5A48',
+  textBody: '#3F3227', // readable body copy — same as the Home page
   lineGold: 'rgba(201,154,91,0.35)',
 };
 
 const luxuryEase = [0.16, 1, 0.3, 1];
+
+/* Dark glow behind the white hero text — the dark counterpart of the light
+   glow on the Home hero: a tight edge, a soft glow and a wide halo, so the
+   text reads on any part of the photo without darkening the image itself. */
+const HERO_TEXT_GLOW =
+  '0 1px 2px rgba(20, 16, 12, 0.9), 0 2px 12px rgba(20, 16, 12, 0.8), 0 0 32px rgba(20, 16, 12, 0.6)';
 
 const AdvantageCard = ({ num, title, desc, reduce, isDesktop }: any) => {
   const ref = useRef(null);
@@ -45,7 +51,7 @@ const AdvantageCard = ({ num, title, desc, reduce, isDesktop }: any) => {
       ref={ref}
       initial={reduce ? false : { opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
+      viewport={{ once: false }}
       transition={{
         default: { duration: 0.6, ease: luxuryEase },
         rotateX: { type: 'spring', stiffness: 300, damping: 30 },
@@ -89,7 +95,7 @@ const AdvantageCard = ({ num, title, desc, reduce, isDesktop }: any) => {
         <h3 style={{ fontFamily: 'var(--font-heading)', fontSize: '19px', fontWeight: 400, color: TOKENS.textCocoa, margin: '0 0 4px 0' }}>
           {title}
         </h3>
-        <p style={{ fontFamily: 'var(--font-body)', fontSize: '13.5px', color: TOKENS.textTaupe, lineHeight: 1.6, margin: 0 }}>
+        <p style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: TOKENS.textBody, lineHeight: 1.65, margin: 0 }}>
           {desc}
         </p>
       </div>
@@ -198,27 +204,8 @@ export const FactoryInfrastructure: React.FC = () => {
   const { scrollYProgress } = useScroll();
   const scaleY = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
 
-  const [mousePos, setMousePos] = useState({ x: -1000, y: -1000 });
-  const handleMouseMove = (e: React.MouseEvent) => {
-    if (!isDesktop || reduce) return;
-    setMousePos({ x: e.pageX, y: e.pageY });
-  };
-
   return (
-    <div onMouseMove={handleMouseMove} style={{ backgroundColor: TOKENS.bgIvory, color: TOKENS.textCocoa, minHeight: '100vh', overflowX: 'hidden' }}>
-
-      {/* Soft spotlight overlay */}
-      {isDesktop && !reduce && (
-        <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 50, overflow: 'hidden' }}>
-          <div style={{
-            position: 'absolute', left: mousePos.x, top: mousePos.y, width: '40vw', height: '40vw',
-            transform: 'translate(-50%, -50%)',
-            background: 'radial-gradient(circle, rgba(224,188,138,0.2) 0%, transparent 70%)',
-            mixBlendMode: 'multiply',
-            transition: 'opacity 0.2s ease',
-          }} />
-        </div>
-      )}
+    <div style={{ backgroundColor: TOKENS.bgIvory, color: TOKENS.textCocoa, minHeight: '100vh', overflowX: 'hidden' }}>
 
       {/* Progress Line */}
       {isDesktop && !reduce && (
@@ -256,16 +243,21 @@ export const FactoryInfrastructure: React.FC = () => {
             transition={{ duration: 12, ease: 'linear' }}
             style={{ position: 'absolute', inset: 0, zIndex: 1, overflow: 'hidden' }}
           >
-            <img
-              src={factoryAssets.hero.desktop}
-              alt="LEOZ 20,000 Sq. Ft. Manufacturing Plant in Gujarat"
-              style={{ width: '100%', height: '100%', objectFit: 'cover' }}
-            />
-            {/* Soft cream gradient into next section */}
-            <div style={{
-              position: 'absolute', left: 0, right: 0, bottom: 0, height: '120px',
-              background: `linear-gradient(to top, ${TOKENS.bgIvory} 0%, transparent 100%)`
-            }} />
+            <picture style={{ width: '100%', height: '100%', display: 'block' }}>
+              <source media="(max-width: 768px)" srcSet={factoryAssets.hero.mobile} />
+              <img
+                src={factoryAssets.hero.desktop}
+                alt="LEOZ 20,000 Sq. Ft. Manufacturing Plant in Gujarat"
+                style={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                  objectPosition: factoryAssets.hero.objectPosition || 'center center',
+                }}
+              />
+            </picture>
+
+
           </motion.div>
 
           <div style={{ position: 'relative', zIndex: 10, maxWidth: '1440px', width: '100%', margin: '0 auto' }}>
@@ -274,7 +266,7 @@ export const FactoryInfrastructure: React.FC = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, ease: luxuryEase }}
               style={{
-                maxWidth: '680px',
+                maxWidth: '600px',
                 padding: 'clamp(32px, 5vw, 48px) 0',
               }}
             >
@@ -286,16 +278,16 @@ export const FactoryInfrastructure: React.FC = () => {
                 transition={{ duration: 0.85, delay: 0.35, ease: luxuryEase }}
                 style={{
                   fontFamily: 'var(--font-heading)',
-                  fontSize: 'clamp(38px, 6vw, 84px)',
-                  fontWeight: 300,
-                  lineHeight: 1.08,
-                  letterSpacing: '-0.02em',
+                  fontSize: 'clamp(32px, 4vw, 56px)',
+                  fontWeight: 400,
+                  lineHeight: 1.15,
+                  letterSpacing: '-0.015em',
                   color: '#FFFFFF',
-                  margin: '0 0 20px 0',
-                  textShadow: '0 2px 16px rgba(0,0,0,0.7)'
+                  margin: '0 0 24px 0',
+                  textShadow: HERO_TEXT_GLOW
                 }}
               >
-                Precision Behind
+                Precision Behind{' '}
                 <br />
                 Every Detail.
               </motion.h1>
@@ -306,12 +298,12 @@ export const FactoryInfrastructure: React.FC = () => {
                 transition={{ duration: 0.8, delay: 0.5, ease: luxuryEase }}
                 style={{
                   fontFamily: 'var(--font-body)',
-                  fontSize: 'clamp(14.5px, 1.25vw, 18px)',
-                  fontWeight: 300,
-                  lineHeight: 1.65,
-                  color: 'rgba(255,255,255,0.95)',
-                  margin: 0,
-                  textShadow: '0 2px 12px rgba(0,0,0,0.7)'
+                  fontSize: '16px',
+                  fontWeight: 400,
+                  lineHeight: 1.8,
+                  color: '#FFFFFF',
+                  margin: '0 0 32px 0',
+                  textShadow: HERO_TEXT_GLOW
                 }}
               >
                 Where thoughtful architectural design becomes precisely manufactured reality in our dedicated facility in Gandhinagar, Gujarat.
@@ -348,10 +340,7 @@ export const FactoryInfrastructure: React.FC = () => {
             >
               <div style={{ overflow: 'hidden' }}>
                 <motion.div
-                  initial={reduce ? false : { y: '110%' }}
-                  whileInView={{ y: '0%' }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, ease: luxuryEase }}
+                  data-mask-slide=""
                 >
                   <span
                     style={{
@@ -370,10 +359,7 @@ export const FactoryInfrastructure: React.FC = () => {
                 </motion.div>
                 <div style={{ overflow: 'hidden' }}>
                   <motion.h2
-                    initial={reduce ? false : { y: '110%' }}
-                    whileInView={{ y: '0%' }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.8, delay: 0.1, ease: luxuryEase }}
+                    data-mask-slide="0.1"
                     style={{
                       fontFamily: 'var(--font-heading)',
                       fontSize: 'clamp(32px, 4.2vw, 56px)',
@@ -392,19 +378,19 @@ export const FactoryInfrastructure: React.FC = () => {
                 <motion.div
                   initial={reduce ? false : { scaleX: 0 }}
                   whileInView={{ scaleX: 1 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false }}
                   transition={{ duration: 0.8, ease: luxuryEase }}
                   style={{ width: '48px', height: '1px', backgroundColor: TOKENS.gold, marginBottom: '24px', transformOrigin: 'left' }}
                 />
                 <motion.p
                   initial={reduce ? false : { opacity: 0, y: 16 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false }}
                   transition={{ duration: 0.6, delay: 0.2, ease: luxuryEase }}
                   style={{
                     fontFamily: 'var(--font-body)',
                     fontSize: 'clamp(15px, 1.2vw, 18px)',
-                    color: TOKENS.textTaupe,
+                    color: TOKENS.textBody,
                     lineHeight: 1.7,
                     margin: 0,
                   }}
@@ -452,10 +438,7 @@ export const FactoryInfrastructure: React.FC = () => {
             <div style={{ marginBottom: 'clamp(50px, 7vw, 90px)' }}>
               <div style={{ overflow: 'hidden' }}>
                 <motion.span
-                  initial={reduce ? false : { y: '110%' }}
-                  whileInView={{ y: '0%' }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.6, ease: luxuryEase }}
+                  data-mask-slide=""
                   style={{ fontFamily: 'var(--font-body)', fontSize: '11.5px', fontWeight: 600, letterSpacing: '0.24em', textTransform: 'uppercase', color: TOKENS.bronze, display: 'block', marginBottom: '12px' }}
                 >
                   MACHINERY SETUP &amp; RIGOROUS PROCESS
@@ -463,10 +446,7 @@ export const FactoryInfrastructure: React.FC = () => {
               </div>
               <div style={{ overflow: 'hidden' }}>
                 <motion.h2
-                  initial={reduce ? false : { y: '110%' }}
-                  whileInView={{ y: '0%' }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.8, delay: 0.1, ease: luxuryEase }}
+                  data-mask-slide="0.1"
                   style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(36px, 4.8vw, 68px)', fontWeight: 300, color: TOKENS.textCocoa, letterSpacing: '-0.02em', margin: 0 }}
                 >
                   5 Automated Manufacturing Machines
@@ -475,7 +455,7 @@ export const FactoryInfrastructure: React.FC = () => {
               <motion.div
                 initial={reduce ? false : { scaleX: 0 }}
                 whileInView={{ scaleX: 1 }}
-                viewport={{ once: true }}
+                viewport={{ once: false }}
                 transition={{ duration: 0.8, delay: 0.2, ease: luxuryEase }}
                 style={{ width: '48px', height: '1px', backgroundColor: TOKENS.gold, marginTop: '24px', transformOrigin: 'left' }}
               />
@@ -517,21 +497,10 @@ export const FactoryInfrastructure: React.FC = () => {
                         <motion.div
                           initial={reduce ? false : { x: '0%' }}
                           whileInView={{ x: '100%' }}
-                          viewport={{ once: true }}
+                          viewport={{ once: false }}
                           transition={{ duration: 0.9, ease: luxuryEase }}
                           style={{ position: 'absolute', inset: 0, backgroundColor: TOKENS.bgCream, zIndex: 2 }}
                         />
-                        {/* Light sweep on hover */}
-                        {!reduce && isDesktop && (
-                          <motion.div
-                            initial={{ x: '-150%', y: '-150%', opacity: 0 }}
-                            whileHover={{ x: '150%', y: '150%', opacity: 0.2 }}
-                            transition={{ duration: 1, ease: 'linear' }}
-                            style={{
-                              position: 'absolute', inset: '-100%', background: 'linear-gradient(45deg, transparent 40%, rgba(255,255,255,1) 50%, transparent 60%)', zIndex: 3, pointerEvents: 'none'
-                            }}
-                          />
-                        )}
                       </div>
                     </div>
 
@@ -546,10 +515,7 @@ export const FactoryInfrastructure: React.FC = () => {
 
                       <div style={{ overflow: 'hidden', position: 'relative', zIndex: 1 }}>
                         <motion.h3
-                          initial={reduce ? false : { y: '110%' }}
-                          whileInView={{ y: '0%' }}
-                          viewport={{ once: true }}
-                          transition={{ duration: 0.6, ease: luxuryEase }}
+                          data-mask-slide=""
                           style={{ fontFamily: 'var(--font-heading)', fontSize: 'clamp(26px, 3vw, 38px)', fontWeight: 300, color: TOKENS.textCocoa, margin: '0 0 6px 0' }}
                         >
                           {item.title}
@@ -559,7 +525,7 @@ export const FactoryInfrastructure: React.FC = () => {
                       <motion.div
                         initial={reduce ? false : { opacity: 0, y: 16 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
+                        viewport={{ once: false }}
                         transition={{ duration: 0.6, delay: 0.1, ease: luxuryEase }}
                         style={{ fontFamily: 'var(--font-body)', fontSize: '13px', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', color: TOKENS.bronze, marginBottom: '14px', position: 'relative', zIndex: 1 }}
                       >
@@ -569,9 +535,9 @@ export const FactoryInfrastructure: React.FC = () => {
                       <motion.p
                         initial={reduce ? false : { opacity: 0, y: 16 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: true }}
+                        viewport={{ once: false }}
                         transition={{ duration: 0.6, delay: 0.2, ease: luxuryEase }}
-                        style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: TOKENS.textTaupe, lineHeight: 1.75, margin: '0 0 20px 0', position: 'relative', zIndex: 1 }}
+                        style={{ fontFamily: 'var(--font-body)', fontSize: '17px', color: TOKENS.textBody, lineHeight: 1.8, margin: '0 0 20px 0', position: 'relative', zIndex: 1 }}
                       >
                         {item.desc}
                       </motion.p>
@@ -583,18 +549,18 @@ export const FactoryInfrastructure: React.FC = () => {
                             key={sIdx}
                             initial={reduce ? false : { opacity: 0, x: -16 }}
                             whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: true }}
+                            viewport={{ once: false }}
                             transition={{ duration: 0.5, delay: 0.3 + (sIdx * 0.1), ease: luxuryEase }}
                             style={{ display: 'flex', alignItems: 'center', gap: '10px' }}
                           >
                             <motion.span
                               initial={reduce ? false : { scale: 0 }}
                               whileInView={{ scale: 1 }}
-                              viewport={{ once: true }}
+                              viewport={{ once: false }}
                               transition={{ duration: 0.4, delay: 0.3 + (sIdx * 0.1), type: 'spring' }}
                               style={{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: TOKENS.gold, flexShrink: 0 }}
                             />
-                            <span style={{ fontFamily: 'var(--font-body)', fontSize: '13.5px', color: TOKENS.textCocoa }}>
+                            <span style={{ fontFamily: 'var(--font-body)', fontSize: '15px', color: TOKENS.textCocoa }}>
                               {spec}
                             </span>
                           </motion.div>

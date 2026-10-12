@@ -234,7 +234,7 @@ export const ProjectCaseStudy: React.FC = () => {
             <motion.span
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               style={{
                 fontFamily: 'var(--font-body)',
                 fontSize: '11px',
@@ -252,7 +252,7 @@ export const ProjectCaseStudy: React.FC = () => {
             <motion.h2
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ delay: 0.1, duration: 0.7, ease: luxuryEase }}
               style={{
                 fontFamily: 'var(--font-heading)',
@@ -270,7 +270,7 @@ export const ProjectCaseStudy: React.FC = () => {
             <motion.p
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ delay: 0.2, duration: 0.7, ease: luxuryEase }}
               style={{
                 fontFamily: 'var(--font-body)',
@@ -305,7 +305,7 @@ export const ProjectCaseStudy: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: false, amount: 0.2 }}
               transition={{ duration: 0.7, ease: luxuryEase }}
               style={{
                 borderRadius: '8px',
@@ -345,7 +345,7 @@ export const ProjectCaseStudy: React.FC = () => {
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
+                viewport={{ once: false, amount: 0.2 }}
                 transition={{ duration: 0.7, ease: luxuryEase }}
                 style={{
                   borderRadius: '8px',
@@ -373,7 +373,7 @@ export const ProjectCaseStudy: React.FC = () => {
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
+                viewport={{ once: false, amount: 0.2 }}
                 transition={{ duration: 0.7, ease: luxuryEase }}
                 style={{ padding: 'clamp(10px, 2vw, 24px)' }}
               >
@@ -421,7 +421,7 @@ export const ProjectCaseStudy: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
+              viewport={{ once: false, amount: 0.2 }}
               transition={{ duration: 0.7, ease: luxuryEase }}
               style={{
                 borderRadius: '8px',
@@ -478,7 +478,7 @@ export const ProjectCaseStudy: React.FC = () => {
                   key={item.title}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.15 }}
+                  viewport={{ once: false, amount: 0.15 }}
                   transition={{ duration: 0.6, ease: luxuryEase }}
                   style={{
                     backgroundColor: '#FFFFFF',

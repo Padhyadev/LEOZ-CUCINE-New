@@ -4,7 +4,6 @@ import {
   useMotionValueEvent,
   useReducedMotion,
   useScroll,
-  useSpring,
   useTransform,
 } from 'framer-motion';
 import { Header } from '../components/common/Header';
@@ -23,11 +22,20 @@ import {
   Sparkles,
   Wrench,
 } from 'lucide-react';
+import {
+  BracketCorner,
+  BracketFrame,
+  EASE_OUT,
+  GoldRule,
+  MagneticLink,
+  MaskHeading,
+  Reveal,
+  SectionHead,
+  WarmImage,
+  revealProps,
+} from '../components/lux/LuxPrimitives';
 import './Home.css';
 import './ModularKitchens.css';
-
-/* Ease-out curve shared by every reveal on the page */
-const EASE_OUT = [0.22, 1, 0.36, 1];
 
 /* ==========================================================================
    CONTENT — client copy only
@@ -107,166 +115,6 @@ const kitchenFaqs = [
     a: 'The team will advise care based on the final surface and hardware selection.',
   },
 ];
-
-/* ==========================================================================
-   BUILDING BLOCKS
-   ========================================================================== */
-
-/* Fade-up on scroll; staggered via `delay`. Disabled for reduced motion. */
-const revealProps = (reduce: boolean | null, delay = 0) =>
-  ({
-    initial: reduce ? false : { opacity: 0, y: 24 },
-    whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true, amount: 0.2 },
-    transition: { duration: 0.6, ease: EASE_OUT, delay },
-  }) as const;
-
-const Reveal: React.FC<{ delay?: number; className?: string; children: React.ReactNode }> = ({
-  delay = 0,
-  className,
-  children,
-}) => (
-  <motion.div className={className} {...revealProps(useReducedMotion(), delay)}>
-    {children}
-  </motion.div>
-);
-
-/* 48px gold line that draws itself as it enters the viewport */
-const GoldRule: React.FC = () => {
-  const reduce = useReducedMotion();
-  return (
-    <motion.span
-      className="lz-rule"
-      aria-hidden="true"
-      initial={reduce ? false : { scaleX: 0 }}
-      whileInView={{ scaleX: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.25 }}
-    />
-  );
-};
-
-/* Heading text slides up from a clipped line. The visible outer line is
-   what gets observed — the hidden inner text never intersects on its own. */
-const maskVariants = {
-  hidden: { y: '105%' },
-  shown: { y: '0%', transition: { duration: 0.6, ease: EASE_OUT } },
-};
-
-const MaskHeading: React.FC<{ id?: string; className?: string; children: React.ReactNode }> = ({
-  id,
-  className = 'lz-h2',
-  children,
-}) => {
-  const reduce = useReducedMotion();
-  return (
-    <h2 className={className} id={id}>
-      <motion.span
-        className="lzk-mask"
-        initial={reduce ? 'shown' : 'hidden'}
-        whileInView="shown"
-        viewport={{ once: true, amount: 0.5 }}
-      >
-        <motion.span variants={maskVariants}>{children}</motion.span>
-      </motion.span>
-    </h2>
-  );
-};
-
-const SectionHead: React.FC<{ eyebrow?: string; title: React.ReactNode; id: string; center?: boolean }> = ({
-  eyebrow,
-  title,
-  id,
-  center = false,
-}) => (
-  <Reveal className={`lz-section-head ${center ? 'lz-section-head--center' : ''}`}>
-    {eyebrow && <span className="lz-eyebrow">{eyebrow}</span>}
-    <MaskHeading id={id}>{title}</MaskHeading>
-    <GoldRule />
-  </Reveal>
-);
-
-/* The logo's broken square frame */
-const BracketFrame: React.FC<{ className?: string }> = ({ className }) => (
-  <svg className={className} viewBox="0 0 100 100" preserveAspectRatio="none" fill="none" aria-hidden="true" focusable="false">
-    <path
-      d="M0 0H42M52 0H100V44M100 54V100H56M46 100H0V58M0 48V0"
-      stroke="currentColor"
-      strokeWidth="1"
-      vectorEffect="non-scaling-stroke"
-    />
-  </svg>
-);
-
-/* Single L-shaped corner from the same motif */
-const BracketCorner: React.FC<{ position: 'tl' | 'br' }> = ({ position }) => (
-  <svg className={`lz-bracket lz-bracket--${position}`} viewBox="0 0 100 100" fill="none" aria-hidden="true" focusable="false">
-    <path d="M1 100V1H100" stroke="currentColor" strokeWidth="2" vectorEffect="non-scaling-stroke" />
-  </svg>
-);
-
-/* Lazy image with a warm blur placeholder until it has loaded */
-const WarmImage: React.FC<{ src: string; alt: string; className?: string }> = ({ src, alt, className }) => {
-  const ref = useRef<HTMLImageElement>(null);
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    if (ref.current?.complete) setLoaded(true);
-  }, []);
-
-  return (
-    <div className={`lz-media ${className ?? ''}`}>
-      <img
-        ref={ref}
-        src={src}
-        alt={alt}
-        loading="lazy"
-        decoding="async"
-        onLoad={() => setLoaded(true)}
-        className={loaded ? 'is-loaded' : 'is-loading'}
-      />
-    </div>
-  );
-};
-
-/* Primary buttons drift up to 8px toward the cursor */
-const MagneticLink: React.FC<{
-  href: string;
-  className: string;
-  onClick: (e: React.MouseEvent<HTMLAnchorElement>) => void;
-  children: React.ReactNode;
-}> = ({ href, className, onClick, children }) => {
-  const reduce = useReducedMotion();
-  const x = useSpring(0, { stiffness: 260, damping: 18 });
-  const y = useSpring(0, { stiffness: 260, damping: 18 });
-  const clamp = (v: number) => Math.max(-8, Math.min(8, v));
-
-  const handleMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (reduce) return;
-    const r = e.currentTarget.getBoundingClientRect();
-    x.set(clamp((e.clientX - (r.left + r.width / 2)) * 0.2));
-    y.set(clamp((e.clientY - (r.top + r.height / 2)) * 0.35));
-  };
-
-  const reset = () => {
-    x.set(0);
-    y.set(0);
-  };
-
-  return (
-    <motion.a
-      href={href}
-      className={className}
-      onClick={onClick}
-      onMouseMove={handleMove}
-      onMouseLeave={reset}
-      onBlur={reset}
-      style={{ x, y }}
-    >
-      {children}
-    </motion.a>
-  );
-};
 
 /* ==========================================================================
    PAGE
@@ -375,10 +223,10 @@ export const ModularKitchens: React.FC = () => {
                   <span>Explore Kitchens</span>
                   <ArrowRight size={14} aria-hidden="true" />
                 </MagneticLink>
-                <a href="/talk-to-us" onClick={(e) => navigate(e, '/talk-to-us')} className="lz-btn lz-btn--secondary">
+                <MagneticLink href="/talk-to-us" onClick={(e) => navigate(e, '/talk-to-us')} className="lz-btn lz-btn--secondary">
                   <span>Schedule a Consultation</span>
                   <ArrowRight size={14} aria-hidden="true" />
-                </a>
+                </MagneticLink>
               </motion.div>
             </div>
           </div>
@@ -586,7 +434,7 @@ export const ModularKitchens: React.FC = () => {
                         className="lzk-vt__card"
                         initial={prefersReducedMotion ? false : { opacity: 0, x: side === 'left' ? -60 : 60 }}
                         whileInView={{ opacity: 1, x: 0 }}
-                        viewport={{ once: true, amount: 0.6 }}
+                        viewport={{ once: false, amount: 0.6 }}
                         transition={{ duration: 0.8, ease: EASE_OUT }}
                       >
                         <h3 className="lzk-vt__label">{step}</h3>

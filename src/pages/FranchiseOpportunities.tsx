@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { motion, useReducedMotion, useSpring, useInView, AnimatePresence } from 'framer-motion';
+import { useMagnetic } from '../lib/scroll';
+import { motion, useReducedMotion, useInView, AnimatePresence } from 'framer-motion';
 import { Header } from '../components/common/Header';
 import { Footer } from '../components/common/Footer';
 import { UniversalHero } from '../components/common/UniversalHero';
@@ -31,30 +32,14 @@ const MagneticButton = ({
   disabled?: boolean;
   type?: 'button' | 'submit';
 }) => {
-  const reduce = useReducedMotion();
-  const x = useSpring(0, { stiffness: 260, damping: 18 });
-  const y = useSpring(0, { stiffness: 260, damping: 18 });
-
-  const handleMouse = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (reduce || disabled) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    x.set((e.clientX - rect.left - rect.width / 2) * 0.15);
-    y.set((e.clientY - rect.top - rect.height / 2) * 0.15);
-  };
+  const ref = useRef<HTMLButtonElement>(null);
+  /* Shared GSAP magnetic drift (up to 8px) plus a soft press-in */
+  useMagnetic(ref, { press: true });
 
   return (
-    <motion.button
-      type={type}
-      className={className}
-      onClick={onClick}
-      onMouseMove={handleMouse}
-      onMouseLeave={() => { x.set(0); y.set(0); }}
-      style={{ x, y }}
-      disabled={disabled}
-      whileTap={reduce || disabled ? undefined : { scale: 0.97 }}
-    >
+    <button ref={ref} type={type} className={className} onClick={onClick} disabled={disabled}>
       {children}
-    </motion.button>
+    </button>
   );
 };
 
@@ -66,10 +51,7 @@ const SectionHead = ({ eyebrow, title, center }: { eyebrow: string; title: strin
       <div className="lz-f-mask">
         <motion.span
           className="lz-f-eyebrow"
-          initial={reduce ? false : { y: '110%' }}
-          whileInView={{ y: '0%' }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6, ease: EASE }}
+          data-mask-slide=""
         >
           {eyebrow}
         </motion.span>
@@ -78,7 +60,7 @@ const SectionHead = ({ eyebrow, title, center }: { eyebrow: string; title: strin
         className="lz-f-h2"
         initial={reduce ? false : { opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+        viewport={{ once: false }}
         transition={{ duration: 0.8, ease: EASE, delay: 0.08 }}
       >
         {title}
@@ -87,7 +69,7 @@ const SectionHead = ({ eyebrow, title, center }: { eyebrow: string; title: strin
         className={`lz-f-rule${center ? ' lz-f-rule--center' : ''}`}
         initial={reduce ? false : { scaleX: 0 }}
         whileInView={{ scaleX: 1 }}
-        viewport={{ once: true }}
+        viewport={{ once: false }}
         transition={{ duration: 0.8, ease: EASE }}
       />
     </div>
@@ -247,13 +229,13 @@ export const FranchiseOpportunities: React.FC = () => {
           mobileImage="/franchise-showroom-hero.png"
           imageAlt="LEOZ Luxury Showroom Kitchen and Wardrobe Consultation Space"
           imagePosition="center 50%"
-          eyebrow="LEOZ / FRANCHISE ENQUIRY"
           headline="An Invitation to Grow with LEOZ"
           supportingText="LEOZ Cucine is exploring the appointment of two franchise partners for its luxury kitchen and wardrobe brand. We welcome expressions of interest from entrepreneurs and design-industry professionals who share our appreciation for refined products and customer experience."
           ctaText="Express Franchise Interest"
           ctaHref="#franchise-form"
           onCtaClick={scrollToForm}
           brightness={0.88}
+          align="center"
         />
 
         {/* ================================================================
@@ -268,7 +250,7 @@ export const FranchiseOpportunities: React.FC = () => {
               <motion.div
                 initial={reduce ? false : { opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={{ once: false }}
                 transition={{ duration: 0.8, ease: EASE }}
               >
                 <p style={{ fontSize: '16px', lineHeight: 1.8, marginBottom: '32px', color: 'var(--text-taupe)' }}>
@@ -284,7 +266,7 @@ export const FranchiseOpportunities: React.FC = () => {
               <motion.div
                 initial={reduce ? false : { opacity: 0, scale: 0.96 }}
                 whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
+                viewport={{ once: false }}
                 transition={{ duration: 1, ease: EASE }}
                 className="lz-f-img-wrap"
                 style={{ aspectRatio: '4/3', position: 'relative' }}
@@ -307,7 +289,7 @@ export const FranchiseOpportunities: React.FC = () => {
               <motion.p
                 initial={reduce ? false : { opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={{ once: false }}
                 transition={{ duration: 0.8, ease: EASE }}
                 style={{ fontSize: '16px', lineHeight: 1.8, color: 'var(--text-taupe)' }}
               >
@@ -327,7 +309,7 @@ export const FranchiseOpportunities: React.FC = () => {
                   className="lz-f-profile"
                   initial={reduce ? false : { opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false }}
                   transition={{ duration: 0.6, delay: i * 0.1, ease: EASE }}
                 >
                   <Check className="lz-f-profile__check" size={22} color="var(--gold)" />
@@ -350,7 +332,7 @@ export const FranchiseOpportunities: React.FC = () => {
               <motion.p
                 initial={reduce ? false : { opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
+                viewport={{ once: false }}
                 transition={{ duration: 0.8, ease: EASE }}
                 style={{ fontSize: '16px', lineHeight: 1.8, color: 'var(--text-taupe)' }}
               >
@@ -373,7 +355,7 @@ export const FranchiseOpportunities: React.FC = () => {
               className="lz-f-form-card"
               initial={reduce ? false : { opacity: 0, y: 32 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: false }}
               transition={{ duration: 0.8, ease: EASE }}
             >
               <div className="lz-f-bracket lz-f-bracket--tl" />

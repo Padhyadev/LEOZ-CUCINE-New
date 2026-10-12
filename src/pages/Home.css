@@ -13,9 +13,12 @@
   --gold-light: #E0BC8A;
   --bronze: #8A6330;
   --text-cocoa: #3B2F25;
-  --text-taupe: #6B5A48;
-  --text-body: #3F3227;          /* Readable body copy (≈11:1 on ivory) */
-  --text-strong: #2A2018;        /* Headings */
+  --text-taupe: #3F3227;
+  /* darkened for readability (was #6B5A48) — same as body copy on Home */
+  --text-body: #3F3227;
+  /* Readable body copy (≈11:1 on ivory) */
+  --text-strong: #2A2018;
+  /* Headings */
   --line-gold: rgba(201, 154, 91, 0.35);
   --glass: rgba(250, 246, 239, 0.86);
   --shadow-card: 0 10px 30px rgba(138, 99, 48, 0.08);
@@ -59,10 +62,21 @@
   overflow-x: clip;
 }
 
-.lz-bg-ivory { background-color: var(--bg-ivory); }
-.lz-bg-cream { background-color: var(--bg-cream); }
-.lz-bg-white { background-color: #FFFFFF; }
-.lz-bg-sand  { background-color: var(--bg-sand); }
+.lz-bg-ivory {
+  background-color: var(--bg-ivory);
+}
+
+.lz-bg-cream {
+  background-color: var(--bg-cream);
+}
+
+.lz-bg-white {
+  background-color: #ffffff75;
+}
+
+.lz-bg-sand {
+  background-color: var(--bg-sand);
+}
 
 .lz-section-head {
   margin-bottom: clamp(40px, 5vw, 64px);
@@ -222,7 +236,7 @@
   overflow: hidden;
 }
 
-.lz-btn--shimmer > * {
+.lz-btn--shimmer>* {
   position: relative;
   z-index: 1;
 }
@@ -305,8 +319,10 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  /* `transform` is driven by the GSAP scroll system (reveal + parallax), so
+     hover zoom uses the independent `scale` property and the two compose. */
   transition:
-    transform 600ms var(--ease-out),
+    scale 1.2s var(--ease-out),
     filter 600ms var(--ease-out),
     opacity 600ms var(--ease-out);
 }
@@ -327,7 +343,7 @@
 }
 
 .lz-zoom:hover .lz-media img {
-  transform: scale(1.05);
+  scale: 1.05;
 }
 
 /* ---------- Logo bracket motif ---------- */
@@ -340,8 +356,16 @@
   pointer-events: none;
 }
 
-.lz-bracket--tl { top: 32px; left: 32px; }
-.lz-bracket--br { right: 32px; bottom: 32px; transform: rotate(180deg); }
+.lz-bracket--tl {
+  top: 32px;
+  left: 32px;
+}
+
+.lz-bracket--br {
+  right: 32px;
+  bottom: 32px;
+  transform: rotate(180deg);
+}
 
 /* ==========================================================================
    01 HERO
@@ -377,8 +401,13 @@
 }
 
 @keyframes lzKenBurns {
-  from { transform: scale(1); }
-  to   { transform: scale(1.06); }
+  from {
+    transform: scale(1);
+  }
+
+  to {
+    transform: scale(1.06);
+  }
 }
 
 .lz-hero__content {
@@ -389,28 +418,31 @@
   padding-bottom: 112px;
 }
 
-/* Text sits directly on the original video — no panel or overlay.
-   A soft ivory glow around the letters keeps them legible on any frame. */
+.lz-hero .lz-hero__content.lz-container {
+  max-width: 1480px;
+  margin-left: 0;
+  margin-right: auto;
+  padding-left: clamp(20px, 4.5vw, 64px);
+  padding-right: clamp(20px, 4vw, 48px);
+}
+
 .lz-hero__inner {
-  max-width: 840px;
+  max-width: 660px;
 }
 
-.lz-hero__inner .lz-eyebrow,
+
+.lz-hero .lz-h1,
 .lz-hero__inner .lz-h1,
-.lz-hero__inner .lz-lead {
-  text-shadow:
-    0 1px 2px rgba(250, 246, 239, 0.95),
-    0 0 18px rgba(250, 246, 239, 0.9),
-    0 0 36px rgba(250, 246, 239, 0.7);
-}
-
-.lz-hero__inner .lz-lead {
-  color: var(--text-strong);
+.lz-hero__inner .lz-lead,
+.lz-hero__inner .lz-hero__text,
+.lz-hero__inner .lz-eyebrow {
+  color: #FFFFFF;
+  text-shadow: none;
 }
 
 .lz-hero__inner .lz-rule {
   height: 2px;
-  background-color: var(--bronze);
+  background-color: var(--gold);
 }
 
 /* Hero CTAs: gold · black · gold, each swapping to the other colour on hover */
@@ -501,8 +533,13 @@
 }
 
 @keyframes lzScrollCue {
-  from { transform: translateY(0); }
-  to   { transform: translateY(64px); }
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(64px);
+  }
 }
 
 /* ==========================================================================
@@ -618,6 +655,34 @@
   transform: translateX(0);
 }
 
+/* Slow hover zoom on the collection photo (composes with the scroll transform) */
+.lz-collection:hover .lz-media img {
+  scale: 1.06;
+}
+
+/* EXPLORE underline draws in from the left on hover / keyboard focus */
+.lz-collection__explore {
+  position: relative;
+}
+
+.lz-collection__explore::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -4px;
+  height: 1px;
+  background-color: currentColor;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 600ms var(--ease-out) 150ms;
+}
+
+.lz-collection:hover .lz-collection__explore::after,
+.lz-collection:focus-visible .lz-collection__explore::after {
+  transform: scaleX(1);
+}
+
 @media (hover: none) {
   .lz-collection__explore {
     opacity: 1;
@@ -698,12 +763,28 @@
 }
 
 .lz-checklist li {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 24px;
   min-height: 80px;
   padding: 16px 0;
-  border-bottom: 1px solid var(--line-gold);
+  /* The border keeps its 1px of space; the visible divider is drawn by
+     ::after over it so it can animate (scaleX via --lz-line, useListReveal).
+     It rests at full width, so without JS it looks exactly the same. */
+  border-bottom: 1px solid transparent;
+}
+
+.lz-checklist li::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -1px;
+  height: 1px;
+  background-color: var(--line-gold);
+  transform: scaleX(var(--lz-line, 1));
+  transform-origin: left center;
 }
 
 .lz-check {
@@ -740,7 +821,7 @@
   text-align: center;
 }
 
-.lz-stat + .lz-stat {
+.lz-stat+.lz-stat {
   border-left: 1px solid rgba(201, 154, 91, 0.6);
 }
 
@@ -907,19 +988,19 @@
   translate: 0 -6px;
 }
 
-/* Outlined numeral that fills with gold on hover */
+/* Number in solid gold with subtle hover tone */
 .lz-jcard__num {
   font-family: var(--font-heading);
   font-size: clamp(48px, 4.4vw, 64px);
   font-weight: 400;
   line-height: 1;
-  color: transparent;
-  -webkit-text-stroke: 1px var(--gold);
+  color: var(--gold);
+  -webkit-text-stroke: 0;
   transition: color 400ms var(--ease-out);
 }
 
 .lz-jcard:hover .lz-jcard__num {
-  color: var(--gold);
+  color: var(--bronze);
 }
 
 .lz-jcard__rule {
@@ -1003,8 +1084,15 @@
   background-color: var(--gold);
 }
 
-.lz-pros__card::before { width: 56px; height: 1px; }
-.lz-pros__card::after  { width: 1px; height: 56px; }
+.lz-pros__card::before {
+  width: 56px;
+  height: 1px;
+}
+
+.lz-pros__card::after {
+  width: 1px;
+  height: 56px;
+}
 
 .lz-pros__card .lz-body {
   margin: 32px 0 40px;
@@ -1021,7 +1109,7 @@
   overflow: hidden;
 }
 
-.lz-final > .lz-media {
+.lz-final>.lz-media {
   position: absolute;
   inset: 0;
   border-radius: 0;
@@ -1031,12 +1119,10 @@
 .lz-final__veil {
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    ellipse at center,
-    rgba(20, 16, 12, 0.42) 0%,
-    rgba(20, 16, 12, 0.28) 60%,
-    rgba(20, 16, 12, 0.18) 100%
-  );
+  background: radial-gradient(ellipse at center,
+      rgba(20, 16, 12, 0.42) 0%,
+      rgba(20, 16, 12, 0.28) 60%,
+      rgba(20, 16, 12, 0.18) 100%);
 }
 
 /* Text sits directly on the image — no box */
@@ -1136,6 +1222,7 @@
 }
 
 @media (max-width: 767px) {
+
   .lz-home .lz-body,
   .lz-home .lz-lead {
     font-size: 16px !important;
@@ -1182,7 +1269,7 @@
     padding-block: 32px;
   }
 
-  .lz-stat + .lz-stat {
+  .lz-stat+.lz-stat {
     border-left: none;
   }
 
@@ -1204,6 +1291,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .lz-hero__kenburns,
   .lz-scroll__track::after {
     animation: none;
@@ -1218,6 +1306,6 @@
   .lz-card:hover,
   .lz-btn:hover,
   .lz-zoom:hover .lz-media img {
-    transform: none;
+    scale: none;
   }
 }

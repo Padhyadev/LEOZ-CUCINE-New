@@ -6,17 +6,6 @@
    spacing are tuned.
    ========================================================================== */
 
-/* ---------- Mask-reveal headings ---------- */
-.lux-mask {
-  display: block;
-  overflow: hidden;
-  padding-bottom: 0.08em;
-}
-
-.lux-mask > span {
-  display: block;
-}
-
 /* ---------- Light sweep across images on hover (passes once) ---------- */
 .lzw .lz-media::before {
   content: '';
@@ -159,7 +148,7 @@
 }
 
 .lzw-hero__inner {
-  max-width: 720px;
+  max-width: 600px;
 }
 
 /* No overlay on the photo: copy is white with a soft dark halo so it
@@ -170,9 +159,9 @@
 .lzw-hero__inner .lzw-hero__text {
   color: #FFFFFF;
   text-shadow:
-    0 1px 2px rgba(20, 16, 12, 0.75),
-    0 2px 12px rgba(20, 16, 12, 0.6),
-    0 0 32px rgba(20, 16, 12, 0.45);
+    0 1px 2px rgba(20, 16, 12, 0.9),
+    0 2px 12px rgba(20, 16, 12, 0.8),
+    0 0 32px rgba(20, 16, 12, 0.6);
 }
 
 .lzw-crumbs {
@@ -207,11 +196,11 @@
 }
 
 .lzw-h1 {
-  margin: 0;
+  margin: 0 0 24px 0;
   font-family: var(--font-heading);
-  font-size: clamp(38px, 5vw, 64px);
+  font-size: clamp(32px, 4vw, 56px);
   font-weight: 400;
-  line-height: 1.08;
+  line-height: 1.15;
   letter-spacing: -0.015em;
 }
 
@@ -220,12 +209,12 @@
 }
 
 .lzw-hero__text {
-  margin: 24px 0 40px;
-  max-width: 560px;
+  margin: 0 0 32px 0;
+  max-width: 600px;
   font-family: var(--font-body);
-  font-size: clamp(16.5px, 1.3vw, 18.5px);
+  font-size: 16px;
   font-weight: 400;
-  line-height: 1.75;
+  line-height: 1.8;
 }
 
 .lzw-hero .lz-btn {
@@ -629,12 +618,28 @@
 .lzw-hotspot.is-active .lzw-tip--start { transform: translate(-8px, 0); }
 .lzw-hotspot.is-active .lzw-tip--end { transform: translate(8px, 0); }
 
+/* Chips as an even two-column grid (equal widths, centred labels, an odd
+   last chip spans the row): always for "Inside the Wardrobe", and for every
+   chip list on tablet / mobile (see the 1023px block below). */
 .lzw-inside .lzw-chips {
-  justify-content: flex-start;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
   margin-top: 32px;
 }
 
+.lzw-inside .lzw-chips > li {
+  display: flex;
+}
+
+.lzw-inside .lzw-chips > li:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+}
+
 .lzw-inside .lzw-chip {
+  width: 100%;
+  justify-content: center;
+  text-align: center;
   cursor: pointer;
 }
 
@@ -880,6 +885,28 @@
    RESPONSIVE
    ========================================================================== */
 @media (max-width: 1023px) {
+  /* Every chip list: the same even two-column grid as "Inside the Wardrobe" */
+  .lzw-chips {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .lzw-chips > li {
+    display: flex;
+  }
+
+  .lzw-chips > li:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+
+  .lzw-chip {
+    width: 100%;
+    justify-content: center;
+    padding-inline: 12px;
+    text-align: center;
+  }
+
   .lzw-pillars {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     row-gap: 24px;
@@ -935,26 +962,13 @@
     font-size: 12px;
   }
 
-  /* Chips: even two-column grid instead of ragged wrapping */
+  /* Slightly tighter chips on phones */
   .lzw-chips {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 10px;
   }
 
-  .lzw-chips > li {
-    display: flex;
-  }
-
-  .lzw-chips > li:last-child:nth-child(odd) {
-    grid-column: 1 / -1;
-  }
-
   .lzw-chip {
-    width: 100%;
-    justify-content: center;
     padding: 10px 12px;
-    text-align: center;
   }
 
   .lzw-faq__panel .lz-body {

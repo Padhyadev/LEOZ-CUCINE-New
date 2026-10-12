@@ -1,90 +1,69 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, useReducedMotion, useSpring } from 'framer-motion';
+import { LineReveal, useDrawLine, useImageReveal, useMagnetic } from '../../lib/scroll';
 import './LuxPrimitives.css';
 
 /* ==========================================================================
    LEOZ light-warm design primitives
-   Shared building blocks for the redesigned pages: scroll reveals, gold
-   heading rule, mask-reveal headings, logo bracket motif, lazy warm images
-   and magnetic buttons. Styling lives in Home.css (.lz-*) plus the page CSS
-   (.lux-mask for the heading clip).
+   Shared building blocks for the redesigned pages. Scroll motion comes from
+   the GSAP scroll system (src/lib/scroll) — these components only describe
+   *what* reveals; timing and easing live in src/lib/scroll/config.ts.
+   Styling lives in Home.css (.lz-*) plus the page CSS.
    ========================================================================== */
 
-/* Ease-out curve shared by every reveal */
+/* Ease-out curve for the framer-motion effects that remain on the pages
+   (hero intros, hover states) — same curve as SCROLL_CONFIG.ease. */
 export const EASE_OUT = [0.22, 1, 0.36, 1];
 
-/* Fade-up on scroll; staggered via `delay`. Disabled for reduced motion. */
-export const revealProps = (reduce: boolean | null, delay = 0) =>
-  ({
-    initial: reduce ? false : { opacity: 0, y: 24 },
-    whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true, amount: 0.2 },
-    transition: { duration: 0.6, ease: EASE_OUT, delay },
-  }) as const;
+/* Marks an element for the global AutoReveal (fade-up, batched with its
+   neighbours so groups stagger automatically). Kept as a function so the
+   existing `{...revealProps(reduce, delay)}` spreads keep working; the
+   arguments are no longer needed — order within a group sets the stagger. */
+export const revealProps = (_reduce?: boolean | null, _delay?: number) => ({ 'data-reveal': '' }) as const;
 
+/* Block that fades up on scroll */
 export const Reveal: React.FC<{ delay?: number; className?: string; children: React.ReactNode }> = ({
-  delay = 0,
   className,
   children,
 }) => (
-  <motion.div className={className} {...revealProps(useReducedMotion(), delay)}>
+  <div className={className} data-reveal="">
     {children}
-  </motion.div>
+  </div>
 );
 
 /* 48px gold line that draws itself as it enters the viewport */
-export const GoldRule: React.FC = () => {
-  const reduce = useReducedMotion();
-  return (
-    <motion.span
-      className="lz-rule"
-      aria-hidden="true"
-      initial={reduce ? false : { scaleX: 0 }}
-      whileInView={{ scaleX: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.25 }}
-    />
-  );
+export const GoldRule: React.FC<{ delay?: number }> = ({ delay = 0.35 }) => {
+  const ref = useRef<HTMLSpanElement>(null);
+  useDrawLine(ref, { delay });
+  return <span ref={ref} className="lz-rule" aria-hidden="true" />;
 };
 
-/* Heading text slides up from a clipped line. The visible outer line is
-   what gets observed — the hidden inner text never intersects on its own. */
-const maskVariants = {
-  hidden: { y: '105%' },
-  shown: { y: '0%', transition: { duration: 0.6, ease: EASE_OUT } },
-};
-
+/* Heading whose lines slide up one by one from behind a mask */
 export const MaskHeading: React.FC<{ id?: string; className?: string; children: React.ReactNode }> = ({
   id,
   className = 'lz-h2',
   children,
-}) => {
-  const reduce = useReducedMotion();
-  return (
-    <h2 className={className} id={id}>
-      <motion.span
-        className="lux-mask"
-        initial={reduce ? 'shown' : 'hidden'}
-        whileInView="shown"
-        viewport={{ once: true, amount: 0.5 }}
-      >
-        <motion.span variants={maskVariants}>{children}</motion.span>
-      </motion.span>
-    </h2>
-  );
-};
+}) => (
+  <LineReveal as="h2" id={id} className={className} delay={0.1}>
+    {children}
+  </LineReveal>
+);
 
-export const SectionHead: React.FC<{ eyebrow?: string; title: React.ReactNode; id: string; center?: boolean }> = ({
+/* Eyebrow → heading lines → gold rule, in sequence */
+export const SectionHead: React.FC<{ eyebrow?: string; title: React.ReactNode; id?: string; center?: boolean }> = ({
   eyebrow,
   title,
   id,
   center = false,
 }) => (
-  <Reveal className={`lz-section-head ${center ? 'lz-section-head--center' : ''}`}>
-    {eyebrow && <span className="lz-eyebrow">{eyebrow}</span>}
+  <div className={`lz-section-head ${center ? 'lz-section-head--center' : ''}`}>
+    {eyebrow && (
+      <span className="lz-eyebrow" data-reveal="">
+        {eyebrow}
+      </span>
+    )}
     <MaskHeading id={id}>{title}</MaskHeading>
     <GoldRule />
-  </Reveal>
+  </div>
 );
 
 /* The logo's broken square frame */
@@ -106,24 +85,30 @@ export const BracketCorner: React.FC<{ position: 'tl' | 'br' }> = ({ position })
   </svg>
 );
 
-/* Lazy image with a warm blur placeholder until it has loaded */
-export const WarmImage: React.FC<{ src: string; alt: string; className?: string; children?: React.ReactNode }> = ({
-  src,
-  alt,
-  className,
-  children,
-}) => {
-  const ref = useRef<HTMLImageElement>(null);
+/* Lazy image in an overflow-hidden frame: warm blur placeholder until it
+   loads, then a clip/zoom reveal on scroll and gentle parallax on desktop. */
+export const WarmImage: React.FC<{
+  src: string;
+  alt: string;
+  className?: string;
+  parallax?: boolean;
+  /** 'enter-scale' for full-bleed section backgrounds (see useImageReveal) */
+  mode?: 'reveal' | 'enter-scale';
+  children?: React.ReactNode;
+}> = ({ src, alt, className, parallax = true, mode, children }) => {
+  const frameRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
   const [loaded, setLoaded] = useState(false);
+  useImageReveal(frameRef, { parallax, mode });
 
   useEffect(() => {
-    if (ref.current?.complete) setLoaded(true);
+    if (imgRef.current?.complete) setLoaded(true);
   }, []);
 
   return (
-    <div className={`lz-media ${className ?? ''}`}>
+    <div ref={frameRef} className={`lz-media ${className ?? ''}`}>
       <img
-        ref={ref}
+        ref={imgRef}
         src={src}
         alt={alt}
         loading="lazy"
@@ -136,41 +121,18 @@ export const WarmImage: React.FC<{ src: string; alt: string; className?: string;
   );
 };
 
-/* Primary buttons drift up to 8px toward the cursor */
+/* Link button that drifts up to 8px toward the cursor (useMagnetic) */
 export const MagneticLink: React.FC<{
   href: string;
   className: string;
   onClick: (e: React.MouseEvent<HTMLAnchorElement>) => void;
   children: React.ReactNode;
 }> = ({ href, className, onClick, children }) => {
-  const reduce = useReducedMotion();
-  const x = useSpring(0, { stiffness: 260, damping: 18 });
-  const y = useSpring(0, { stiffness: 260, damping: 18 });
-  const clamp = (v: number) => Math.max(-8, Math.min(8, v));
-
-  const handleMove = (e: React.MouseEvent<HTMLAnchorElement>) => {
-    if (reduce) return;
-    const r = e.currentTarget.getBoundingClientRect();
-    x.set(clamp((e.clientX - (r.left + r.width / 2)) * 0.2));
-    y.set(clamp((e.clientY - (r.top + r.height / 2)) * 0.35));
-  };
-
-  const reset = () => {
-    x.set(0);
-    y.set(0);
-  };
-
+  const ref = useRef<HTMLAnchorElement>(null);
+  useMagnetic(ref);
   return (
-    <motion.a
-      href={href}
-      className={className}
-      onClick={onClick}
-      onMouseMove={handleMove}
-      onMouseLeave={reset}
-      onBlur={reset}
-      style={{ x, y }}
-    >
+    <a ref={ref} href={href} className={className} onClick={onClick}>
       {children}
-    </motion.a>
+    </a>
   );
 };

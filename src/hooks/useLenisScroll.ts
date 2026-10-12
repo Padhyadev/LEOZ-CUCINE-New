@@ -1,15 +1,14 @@
-import { useLenisContext, LenisScrollState } from '../providers/LenisProvider';
+import { useSmoothScroll } from '../lib/scroll/SmoothScroll';
 
 /* ==========================================================================
    LEOZ CUCINE — useLenisScroll Hook
-   Provides access to Lenis scroll state for velocity-based cinematic effects.
+   Back-compat alias for the smooth-scroll context (lib/scroll/SmoothScroll).
+   `lenis` is null for reduced-motion visitors, who get native scrolling.
 
    Usage:
-     const { scrollY, velocity, progress } = useLenisScroll();
+     const { lenis, scrollTo } = useLenisScroll();
    ========================================================================== */
 
-export const useLenisScroll = (): LenisScrollState => {
-  return useLenisContext();
-};
+export const useLenisScroll = useSmoothScroll;
 
 export default useLenisScroll;

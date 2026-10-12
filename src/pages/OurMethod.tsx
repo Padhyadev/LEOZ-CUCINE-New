@@ -236,7 +236,7 @@ export const OurMethod: React.FC = () => {
             />
           </motion.div>
 
-          <div style={{ position: 'relative', zIndex: 10, maxWidth: '880px', color: '#FFFFFF' }}>
+          <div style={{ position: 'relative', zIndex: 10, maxWidth: '600px', color: '#FFFFFF' }}>
             <motion.div
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
@@ -268,13 +268,14 @@ export const OurMethod: React.FC = () => {
               transition={{ duration: 0.8, delay: 0.28, ease: luxuryEase }}
               style={{
                 fontFamily: 'var(--font-heading)',
-                fontSize: 'clamp(38px, 6vw, 84px)',
-                fontWeight: 300,
-                lineHeight: 1.08,
-                letterSpacing: '-0.02em',
+                fontSize: 'clamp(32px, 4vw, 56px)',
+                fontWeight: 400,
+                lineHeight: 1.15,
+                letterSpacing: '-0.015em',
                 color: '#FFFFFF',
-                margin: '0 0 18px 0',
-                textShadow: '0 3px 20px rgba(0,0,0,0.9), 0 1px 4px rgba(0,0,0,0.95)',
+                margin: '0 0 24px 0',
+                textShadow:
+                  '0 1px 2px rgba(20, 16, 12, 0.9), 0 2px 12px rgba(20, 16, 12, 0.8), 0 0 32px rgba(20, 16, 12, 0.6)',
               }}
             >
               From Vision to Reality.
@@ -286,13 +287,14 @@ export const OurMethod: React.FC = () => {
               transition={{ duration: 0.75, delay: 0.42, ease: luxuryEase }}
               style={{
                 fontFamily: 'var(--font-body)',
-                fontSize: 'clamp(14.5px, 1.2vw, 17.5px)',
-                fontWeight: 300,
-                lineHeight: 1.65,
-                color: '#ECEBE7',
-                maxWidth: '580px',
-                margin: '0 0 28px 0',
-                textShadow: '0 2px 12px rgba(0,0,0,0.9)',
+                fontSize: '16px',
+                fontWeight: 400,
+                lineHeight: 1.8,
+                color: '#FFFFFF',
+                maxWidth: '600px',
+                margin: '0 0 32px 0',
+                textShadow:
+                  '0 1px 2px rgba(20, 16, 12, 0.9), 0 2px 12px rgba(20, 16, 12, 0.8), 0 0 32px rgba(20, 16, 12, 0.6)',
               }}
             >
               A considered journey from consultation and design to precision manufacturing and installation.
@@ -448,7 +450,7 @@ export const OurMethod: React.FC = () => {
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true, amount: 0.2 }}
+                      viewport={{ once: false, amount: 0.2 }}
                       transition={{ duration: 0.6, ease: luxuryEase }}
                       style={{
                         order: isEven ? 1 : 2,
@@ -480,7 +482,7 @@ export const OurMethod: React.FC = () => {
                             fontWeight: 600,
                             letterSpacing: '0.2em',
                             textTransform: 'uppercase',
-                            color: '#8A725B',
+                            color: '#6B5434',
                           }}
                         >
                           {stage.subtitle}
@@ -505,7 +507,7 @@ export const OurMethod: React.FC = () => {
                           fontFamily: 'var(--font-body)',
                           fontSize: '15px',
                           fontWeight: 600,
-                          color: '#8A725B',
+                          color: '#6B5434',
                           lineHeight: 1.5,
                           margin: '0 0 14px 0',
                         }}
@@ -517,7 +519,7 @@ export const OurMethod: React.FC = () => {
                         style={{
                           fontFamily: 'var(--font-body)',
                           fontSize: '14.5px',
-                          color: '#66635D',
+                          color: '#3F3227',
                           lineHeight: 1.7,
                           marginBottom: '24px',
                         }}
@@ -563,7 +565,7 @@ export const OurMethod: React.FC = () => {
                     <motion.div
                       initial={{ opacity: 0, scale: 0.97 }}
                       whileInView={{ opacity: 1, scale: 1 }}
-                      viewport={{ once: true, amount: 0.2 }}
+                      viewport={{ once: false, amount: 0.2 }}
                       transition={{ duration: 0.6, ease: luxuryEase }}
                       style={{
                         order: isEven ? 2 : 1,
@@ -641,7 +643,7 @@ export const OurMethod: React.FC = () => {
                 fontWeight: 600,
                 letterSpacing: '0.24em',
                 textTransform: 'uppercase',
-                color: '#8A725B',
+                color: '#6B5434',
                 display: 'block',
                 marginBottom: '16px',
               }}

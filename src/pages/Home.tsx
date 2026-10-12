@@ -1,11 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {
-  motion,
-  useInView,
-  useReducedMotion,
-  useScroll,
-  useTransform,
-} from 'framer-motion';
+import { motion, useReducedMotion } from 'framer-motion';
 import heroVideo from '../assets/Leoz_hero_section.mp4';
 import heroPoster from '../assets/Leoz_hero_poster.webp';
 import { Header } from '../components/common/Header';
@@ -23,10 +17,28 @@ import {
   Ruler,
   Wrench,
 } from 'lucide-react';
+import {
+  BracketCorner,
+  BracketFrame,
+  GoldRule,
+  MagneticLink,
+  MaskHeading,
+  Reveal,
+  SectionHead,
+  WarmImage,
+  revealProps,
+} from '../components/lux/LuxPrimitives';
+import {
+  SCROLL_CONFIG,
+  formatCount,
+  useCountUp,
+  useHeroIntro,
+  useHeroScroll,
+  useListReveal,
+  useParallax,
+  useReveal,
+} from '../lib/scroll';
 import './Home.css';
-
-/* Ease-out curve shared by every reveal on the page */
-const EASE_OUT = [0.22, 1, 0.36, 1];
 
 /* ==========================================================================
    CONTENT
@@ -95,134 +107,21 @@ const journey = [
    SMALL BUILDING BLOCKS
    ========================================================================== */
 
-/* Fade-up on scroll; staggered via `delay`. Disabled for reduced motion. */
-const revealProps = (reduce: boolean | null, delay = 0) => {
-  return {
-    initial: reduce ? false : { opacity: 0, y: 24 },
-    whileInView: { opacity: 1, y: 0 },
-    viewport: { once: true, amount: 0.2 },
-    transition: { duration: 0.6, ease: EASE_OUT, delay },
-  } as const;
-};
-
-const Reveal: React.FC<{ delay?: number; className?: string; children: React.ReactNode }> = ({
-  delay = 0,
-  className,
-  children,
-}) => (
-  <motion.div className={className} {...revealProps(useReducedMotion(), delay)}>
-    {children}
-  </motion.div>
-);
-
-/* 48px gold line under each heading; draws in from the edge */
-const GoldRule: React.FC = () => {
-  const reduce = useReducedMotion();
-  return (
-    <motion.span
-      className="lz-rule"
-      aria-hidden="true"
-      initial={reduce ? false : { scaleX: 0 }}
-      whileInView={{ scaleX: 1 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.2 }}
-    />
-  );
-};
-
-const SectionHead: React.FC<{ eyebrow?: string; title: string; center?: boolean; id?: string }> = ({
-  eyebrow,
-  title,
-  center = false,
-  id,
-}) => (
-  <Reveal className={`lz-section-head ${center ? 'lz-section-head--center' : ''}`}>
-    {eyebrow && <span className="lz-eyebrow">{eyebrow}</span>}
-    <h2 className="lz-h2" id={id}>
-      {title}
-    </h2>
-    <GoldRule />
-  </Reveal>
-);
-
-/* The logo's broken square frame */
-const BracketFrame: React.FC<{ className?: string }> = ({ className }) => (
-  <svg className={className} viewBox="0 0 100 100" preserveAspectRatio="none" fill="none" aria-hidden="true" focusable="false">
-    <path
-      d="M0 0H42M52 0H100V44M100 54V100H56M46 100H0V58M0 48V0"
-      stroke="currentColor"
-      strokeWidth="1"
-      vectorEffect="non-scaling-stroke"
-    />
-  </svg>
-);
-
-/* Single L-shaped corner from the same motif, used in section corners */
-const BracketCorner: React.FC<{ position: 'tl' | 'br' }> = ({ position }) => (
-  <svg className={`lz-bracket lz-bracket--${position}`} viewBox="0 0 100 100" fill="none" aria-hidden="true" focusable="false">
-    <path d="M1 100V1H100" stroke="currentColor" strokeWidth="2" vectorEffect="non-scaling-stroke" />
-  </svg>
-);
-
-/* Lazy image with a warm blur placeholder until it has loaded */
-const WarmImage: React.FC<{ src: string; alt: string; className?: string }> = ({ src, alt, className }) => {
-  const ref = useRef<HTMLImageElement>(null);
-  const [loaded, setLoaded] = useState(false);
-
-  useEffect(() => {
-    if (ref.current?.complete) setLoaded(true);
-  }, []);
-
-  return (
-    <div className={`lz-media ${className ?? ''}`}>
-      <img
-        ref={ref}
-        src={src}
-        alt={alt}
-        loading="lazy"
-        decoding="async"
-        onLoad={() => setLoaded(true)}
-        className={loaded ? 'is-loaded' : 'is-loading'}
-      />
-    </div>
-  );
-};
-
-/* Counts up once when scrolled into view. The final value is rendered
-   invisibly underneath so the block never changes width while counting. */
+/* Counts up once when scrolled into view (useCountUp). The markup always
+   holds the final value, so it is what crawlers, no-JS and reduced-motion
+   visitors see; the invisible ghost copy keeps the width fixed while counting. */
 const CountUp: React.FC<{ to: number; suffix?: string }> = ({ to, suffix = '' }) => {
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.6 });
-  const reduce = useReducedMotion();
-  const [value, setValue] = useState(0);
-  const format = (n: number) => `${n.toLocaleString('en-IN')}${suffix}`;
-
-  useEffect(() => {
-    if (!inView) return;
-    if (reduce) {
-      setValue(to);
-      return;
-    }
-    let frame = 0;
-    const start = performance.now();
-    const duration = 1600;
-    const tick = (now: number) => {
-      const t = Math.min(1, (now - start) / duration);
-      setValue(Math.round(to * (1 - Math.pow(1 - t, 3))));
-      if (t < 1) frame = requestAnimationFrame(tick);
-    };
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, [inView, reduce, to]);
+  const liveRef = useRef<HTMLSpanElement>(null);
+  useCountUp(liveRef, { to, suffix });
 
   return (
-    <span ref={ref} className="lz-stat__value">
-      <span className="lz-sr-only">{format(to)}</span>
+    <span className="lz-stat__value">
+      <span className="lz-sr-only">{formatCount(to, suffix)}</span>
       <span className="lz-count__ghost" aria-hidden="true">
-        {format(to)}
+        {formatCount(to, suffix)}
       </span>
-      <span className="lz-count__live" aria-hidden="true">
-        {format(value)}
+      <span ref={liveRef} className="lz-count__live" aria-hidden="true">
+        {formatCount(to, suffix)}
       </span>
     </span>
   );
@@ -238,10 +137,36 @@ export const Home: React.FC = () => {
   const { lenis } = useLenisScroll();
 
   const heroRef = useRef<HTMLElement>(null);
+  const secondCollectionRef = useRef<HTMLDivElement>(null);
+  const whyListRef = useRef<HTMLUListElement>(null);
+  const prosImageRef = useRef<HTMLDivElement>(null);
+  const prosTextRef = useRef<HTMLDivElement>(null);
+  const prosCardRef = useRef<HTMLDivElement>(null);
+  const finalPanelRef = useRef<HTMLDivElement>(null);
 
-  // Gentle hero parallax
-  const { scrollYProgress: heroProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
-  const heroY = useTransform(heroProgress, [0, 1], [0, prefersReducedMotion ? 0 : 120]);
+  // Hero: intro plays once the preloader has lifted; scroll-away parallax
+  useHeroIntro(heroRef, { ready: !showPreloader });
+  useHeroScroll(heroRef);
+
+  // Collections: the second card sits lower and drifts at its own pace (desktop)
+  const { offsetY, driftY } = SCROLL_CONFIG.collections;
+  useParallax(secondCollectionRef, { fromY: offsetY + driftY / 2, toY: offsetY - driftY / 2 });
+
+  // Why LEOZ: items rise in sequence and each divider draws left → right
+  useListReveal(whyListRef, { items: ':scope > li', drawLines: true });
+
+  // For Design Professionals: split entrance, text panel drifts gently (desktop)
+  const slide = SCROLL_CONFIG.slide.distance;
+  const panelDrift = SCROLL_CONFIG.pros.panelDriftY;
+  useReveal(prosImageRef, { x: -slide });
+  useReveal(prosTextRef, { x: slide, delay: 0.1 });
+  useParallax(prosCardRef, { fromY: panelDrift / 2, toY: -panelDrift / 2 });
+
+  // Final CTA: paragraph and button follow the heading's line reveal
+  useReveal(finalPanelRef, {
+    targets: ':scope > .lz-lead, :scope > .lz-btn',
+    delay: SCROLL_CONFIG.finalCta.contentDelay,
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -266,13 +191,6 @@ export const Home: React.FC = () => {
     else target.scrollIntoView({ behavior: prefersReducedMotion ? 'auto' : 'smooth' });
   };
 
-  const heroReveal = (delay: number) =>
-    ({
-      initial: prefersReducedMotion ? false : { opacity: 0, y: 24 },
-      animate: { opacity: 1, y: 0 },
-      transition: { duration: 0.6, ease: EASE_OUT, delay },
-    }) as const;
-
   return (
     <div className="lz-home">
       {showPreloader && (
@@ -291,10 +209,10 @@ export const Home: React.FC = () => {
             01 HERO — LUXURY, CRAFTED AROUND YOU
             ========================================================================= */}
         <section id="hero" ref={heroRef} className="lz-hero" aria-labelledby="hero-title">
-          <motion.div className="lz-hero__media" style={{ y: heroY }} aria-hidden="true">
+          <div className="lz-hero__media" aria-hidden="true" data-hero-media="">
             <div className="lz-hero__kenburns">
               <video
-                src={heroVideo}
+                src="/Hero_section.mp4"
                 poster={heroPoster}
                 autoPlay={!prefersReducedMotion}
                 muted
@@ -304,31 +222,25 @@ export const Home: React.FC = () => {
                 tabIndex={-1}
               />
             </div>
-          </motion.div>
+          </div>
 
-          <div className="lz-hero__content lz-container">
+          <div className="lz-hero__content lz-container" data-hero-content="">
             <div className="lz-hero__inner">
-              <motion.span className="lz-eyebrow lz-hero__eyebrow" {...heroReveal(0.1)}>
+              {/* <span className="lz-eyebrow lz-hero__eyebrow" data-hero="eyebrow">
                 LEOZ / Bespoke Kitchens &amp; Wardrobes
-              </motion.span>
+              </span> */}
 
-              <motion.h1 id="hero-title" className="lz-h1" {...heroReveal(0.2)}>
+              <h1 id="hero-title" className="lz-h1" data-hero="title">
                 Luxury, Crafted Around You.
-              </motion.h1>
+              </h1>
 
-              <motion.span
-                className="lz-rule"
-                aria-hidden="true"
-                initial={prefersReducedMotion ? false : { scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.4 }}
-              />
+              <span className="lz-rule" aria-hidden="true" data-hero="rule" />
 
-              <motion.p className="lz-lead lz-hero__text" {...heroReveal(0.3)}>
+              <p className="lz-lead lz-hero__text" data-hero="text">
                 Discover luxury modular kitchens and bespoke wardrobes where refined design, intelligent functionality and meticulous craftsmanship come together. Designed to reflect your taste. Precision-made for the way you live.
-              </motion.p>
+              </p>
 
-              <motion.div className="lz-hero__ctas" {...heroReveal(0.4)}>
+              <div className="lz-hero__ctas" data-hero="ctas">
                 <a
                   href="/modular-kitchens"
                   onClick={(e) => navigate(e, '/modular-kitchens')}
@@ -349,11 +261,17 @@ export const Home: React.FC = () => {
                   <span>Book a Private Consultation</span>
                   <ArrowRight size={14} aria-hidden="true" />
                 </a>
-              </motion.div>
+              </div>
             </div>
           </div>
 
-          <button type="button" className="lz-scroll" onClick={scrollToWelcome} aria-label="Scroll to the next section">
+          <button
+            type="button"
+            className="lz-scroll"
+            onClick={scrollToWelcome}
+            aria-label="Scroll to the next section"
+            data-hero-indicator=""
+          >
             <span className="lz-scroll__track" aria-hidden="true" />
           </button>
         </section>
@@ -379,6 +297,7 @@ export const Home: React.FC = () => {
                 src="/i_am_leoz_perfect.jpg"
                 alt="I am Leoz — the LEOZ lion mascot in black and gold armour wearing the LEOZ emblem"
                 className="lz-media--mascot"
+                parallax={false}
               />
             </Reveal>
           </div>
@@ -399,24 +318,27 @@ export const Home: React.FC = () => {
             <div className="lz-collections">
               {collections.map((item, idx) => (
                 <Reveal key={item.title} delay={idx * 0.1}>
-                  <a
-                    href={item.path}
-                    onClick={(e) => navigate(e, item.path)}
-                    className="lz-collection lz-card lz-zoom"
-                  >
-                    <div style={{ position: 'relative' }}>
-                      <WarmImage src={item.image} alt={item.alt} />
-                      <span className="lz-collection__veil" aria-hidden="true" />
-                    </div>
-                    <div className="lz-collection__body">
-                      <h3 className="lz-h3">{item.title}</h3>
-                      <p className="lz-body">{item.desc}</p>
-                      <span className="lz-collection__explore">
-                        Explore
-                        <ArrowRight size={14} aria-hidden="true" />
-                      </span>
-                    </div>
-                  </a>
+                  {/* Wrapper carries the desktop offset/drift so it never fights the card's hover lift */}
+                  <div className="lz-collection__shift" ref={idx === 1 ? secondCollectionRef : undefined}>
+                    <a
+                      href={item.path}
+                      onClick={(e) => navigate(e, item.path)}
+                      className="lz-collection lz-card lz-zoom"
+                    >
+                      <div style={{ position: 'relative' }}>
+                        <WarmImage src={item.image} alt={item.alt} />
+                        <span className="lz-collection__veil" aria-hidden="true" />
+                      </div>
+                      <div className="lz-collection__body">
+                        <h3 className="lz-h3">{item.title}</h3>
+                        <p className="lz-body">{item.desc}</p>
+                        <span className="lz-collection__explore">
+                          Explore
+                          <ArrowRight size={14} aria-hidden="true" />
+                        </span>
+                      </div>
+                    </a>
+                  </div>
                 </Reveal>
               ))}
             </div>
@@ -464,7 +386,7 @@ export const Home: React.FC = () => {
               </Reveal>
             </div>
 
-            <ul className="lz-checklist">
+            <ul className="lz-checklist" ref={whyListRef}>
               {whyLeoz.map((item, idx) => (
                 <motion.li key={item} {...revealProps(prefersReducedMotion, idx * 0.08)}>
                   <span className="lz-check" aria-hidden="true">
@@ -516,30 +438,15 @@ export const Home: React.FC = () => {
           <div className="lz-container">
             <SectionHead title="The LEOZ Journey" id="journey-title" center />
 
-            {/* Journey cards: flip up in sequence, gold rule draws, outlined numeral fills */}
-            <ol className="lz-jcards" data-fx-skip>
+            <ol className="lz-jcards">
               {journey.map((step, idx) => (
-                <motion.li
-                  key={step}
-                  className="lz-jcard"
-                  initial={prefersReducedMotion ? false : { opacity: 0, rotateX: -75, y: 40 }}
-                  whileInView={{ opacity: 1, rotateX: 0, y: 0 }}
-                  viewport={{ once: true, amount: 0.4 }}
-                  transition={{ duration: 0.8, ease: EASE_OUT, delay: (idx % 4) * 0.12 }}
-                >
-                  <span className="lz-jcard__num" aria-hidden="true">
+                <li key={step} className="lz-jcard">
+                  <span className="lz-jcard__num">
                     {String(idx + 1).padStart(2, '0')}
                   </span>
-                  <motion.span
-                    className="lz-jcard__rule"
-                    aria-hidden="true"
-                    initial={prefersReducedMotion ? false : { scaleX: 0 }}
-                    whileInView={{ scaleX: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ duration: 0.7, ease: EASE_OUT, delay: (idx % 4) * 0.12 + 0.45 }}
-                  />
+                  <span className="lz-jcard__rule" aria-hidden="true" />
                   <h3 className="lz-jcard__label">{step}</h3>
-                </motion.li>
+                </li>
               ))}
             </ol>
           </div>
@@ -549,16 +456,18 @@ export const Home: React.FC = () => {
             08 FOR DESIGN PROFESSIONALS
             ========================================================================= */}
         <section className="lz-section lz-bg-ivory" aria-labelledby="pros-title">
+          {/* Split entrance (desktop): image from its side, text panel from the
+              other with a slight drift; mobile uses the standard fade-up */}
           <div className="lz-container lz-pros">
-            <Reveal className="lz-zoom">
+            <div className="lz-zoom" ref={prosImageRef}>
               <WarmImage
                 src="/Italian Marble.webp"
                 alt="Bright LEOZ kitchen with Italian marble surfaces, a long island and integrated lighting"
               />
-            </Reveal>
+            </div>
 
-            <Reveal delay={0.15}>
-              <div className="lz-pros__card">
+            <div ref={prosTextRef}>
+              <div className="lz-pros__card" ref={prosCardRef}>
                 <h2 className="lz-h2" id="pros-title">
                   For Design Professionals
                 </h2>
@@ -566,12 +475,12 @@ export const Home: React.FC = () => {
                 <p className="lz-body">
                   We work with architects, interior designers and premium residential developers to realise customised kitchen and wardrobe specifications. Our team supports technical coordination, material selection, controlled manufacturing and site installation for individual and multi-home requirements.
                 </p>
-                <a href="/contact" onClick={(e) => navigate(e, '/contact')} className="lz-btn lz-btn--secondary">
+                <MagneticLink href="/contact" onClick={(e) => navigate(e, '/contact')} className="lz-btn lz-btn--secondary">
                   <span>Partner With Us</span>
                   <ArrowRight size={14} aria-hidden="true" />
-                </a>
+                </MagneticLink>
               </div>
-            </Reveal>
+            </div>
           </div>
         </section>
 
@@ -579,17 +488,18 @@ export const Home: React.FC = () => {
             09 FINAL CALL TO ACTION — BEGIN YOUR LEOZ EXPERIENCE
             ========================================================================= */}
         <section className="lz-final" aria-labelledby="final-title">
+          {/* Background settles from a slow zoom as the section enters */}
           <WarmImage
             src="/U -Shape Layout.webp"
             alt="Warm-lit LEOZ U-shaped kitchen with soft grey cabinetry and a central island"
+            mode="enter-scale"
           />
           <div className="lz-final__veil" aria-hidden="true" />
 
           <div className="lz-container">
-            <Reveal className="lz-final__panel">
-              <h2 className="lz-h2" id="final-title">
-                Begin Your LEOZ Experience
-              </h2>
+            {/* Heading lines rise, then the paragraph and button follow */}
+            <div className="lz-final__panel" ref={finalPanelRef}>
+              <MaskHeading id="final-title">Begin Your LEOZ Experience</MaskHeading>
               <GoldRule />
               <p className="lz-lead">
                 Your next kitchen or wardrobe begins with a conversation. Share your vision and let our team develop a solution around your home, habits and aesthetic preferences.
@@ -602,7 +512,7 @@ export const Home: React.FC = () => {
                 <span>Book a Private Consultation</span>
                 <ArrowRight size={16} aria-hidden="true" />
               </a>
-            </Reveal>
+            </div>
           </div>
         </section>
       </main>

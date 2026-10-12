@@ -64,7 +64,7 @@ export const PrivacyPolicy: React.FC = () => {
               Privacy Policy
             </h1>
 
-            <p style={{ fontFamily: 'var(--font-family-sans)', fontSize: '13px', color: '#888', marginBottom: '32px' }}>
+            <p style={{ fontFamily: 'var(--font-family-sans)', fontSize: '13px', color: '#595959', marginBottom: '32px' }}>
               Last Revised: September 2026 • LEOZ Cucine Ahmedabad
             </p>
 
@@ -218,7 +218,7 @@ export const PrivacyPolicy: React.FC = () => {
                 borderTop: '1px solid #ECEAE5',
                 fontFamily: 'var(--font-family-sans)',
                 fontSize: '14px',
-                color: '#777',
+                color: '#595959',
                 lineHeight: '1.6',
               }}
             >

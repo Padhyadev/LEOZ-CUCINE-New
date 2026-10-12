@@ -11,7 +11,7 @@ export interface UniversalHeroProps {
   videoUrl?: string;
   imageAlt: string;
   imagePosition?: string;
-  eyebrow: string;
+  eyebrow?: string;
   headline: string | React.ReactNode;
   supportingText: string;
   ctaText?: string;
@@ -24,6 +24,8 @@ export interface UniversalHeroProps {
   };
   minHeight?: string;
   brightness?: number;
+  /** 'left' (default): text block bottom-left. 'center': text centred in the hero, like Contact. */
+  align?: 'left' | 'center';
 }
 
 export const UniversalHero: React.FC<UniversalHeroProps> = ({
@@ -41,7 +43,9 @@ export const UniversalHero: React.FC<UniversalHeroProps> = ({
   secondaryLink,
   minHeight = '90vh',
   brightness = 0.92,
+  align = 'left',
 }) => {
+  const centered = align === 'center';
   return (
     <section
       aria-label={`${typeof headline === 'string' ? headline : 'LEOZ'} Hero`}
@@ -51,7 +55,8 @@ export const UniversalHero: React.FC<UniversalHeroProps> = ({
         minHeight,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'flex-end',
+        justifyContent: centered ? 'center' : 'flex-end',
+        alignItems: centered ? 'center' : undefined,
         paddingTop: 'clamp(110px, 14vh, 180px)',
         paddingBottom: 'clamp(44px, 7vh, 88px)',
         paddingLeft: 'clamp(20px, 6vw, 100px)',
@@ -132,37 +137,40 @@ export const UniversalHero: React.FC<UniversalHeroProps> = ({
         style={{
           position: 'relative',
           zIndex: 10,
-          maxWidth: '780px',
+          maxWidth: centered ? '760px' : '600px',
           width: '100%',
           color: '#FFFFFF',
+          textAlign: centered ? 'center' : undefined,
         }}
       >
         {/* Eyebrow Label: LEOZ / [CATEGORY] */}
-        <motion.div
-          initial={{ opacity: 0, y: 14 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.65, delay: 0.15, ease: luxuryEase }}
-          style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '6px',
-            fontFamily: 'var(--font-body)',
-            fontSize: 'clamp(10px, 1vw, 11.5px)',
-            fontWeight: 600,
-            letterSpacing: '0.22em',
-            textTransform: 'uppercase',
-            color: '#D4AF37',
-            backgroundColor: 'rgba(10, 11, 10, 0.5)',
-            padding: '5px 12px',
-            borderRadius: '2px',
-            border: '1px solid rgba(212, 175, 55, 0.25)',
-            backdropFilter: 'blur(8px)',
-            marginBottom: '14px',
-            textShadow: '0 2px 8px rgba(0,0,0,0.85)',
-          }}
-        >
-          <span>{eyebrow}</span>
-        </motion.div>
+        {eyebrow && (
+          <motion.div
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.65, delay: 0.15, ease: luxuryEase }}
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              gap: '6px',
+              fontFamily: 'var(--font-body)',
+              fontSize: 'clamp(10px, 1vw, 11.5px)',
+              fontWeight: 600,
+              letterSpacing: '0.22em',
+              textTransform: 'uppercase',
+              color: '#D4AF37',
+              backgroundColor: 'rgba(10, 11, 10, 0.5)',
+              padding: '5px 12px',
+              borderRadius: '2px',
+              border: '1px solid rgba(212, 175, 55, 0.25)',
+              backdropFilter: 'blur(8px)',
+              marginBottom: '14px',
+              textShadow: '0 2px 8px rgba(0,0,0,0.85)',
+            }}
+          >
+            <span>{eyebrow}</span>
+          </motion.div>
+        )}
 
         {/* Balanced Display Headline */}
         <motion.h1
@@ -171,13 +179,14 @@ export const UniversalHero: React.FC<UniversalHeroProps> = ({
           transition={{ duration: 0.8, delay: 0.28, ease: luxuryEase }}
           style={{
             fontFamily: 'var(--font-heading)',
-            fontSize: 'clamp(28px, 4vw, 52px)',
+            fontSize: 'clamp(32px, 4vw, 56px)',
             fontWeight: 400,
             lineHeight: 1.15,
             letterSpacing: '-0.015em',
             color: '#FFFFFF',
-            margin: '0 0 14px 0',
-            textShadow: '0 3px 18px rgba(0,0,0,0.85), 0 1px 3px rgba(0,0,0,0.9)',
+            margin: '0 0 24px 0',
+            textShadow:
+              '0 1px 2px rgba(20, 16, 12, 0.9), 0 2px 12px rgba(20, 16, 12, 0.8), 0 0 32px rgba(20, 16, 12, 0.6)',
           }}
         >
           {headline}
@@ -190,13 +199,15 @@ export const UniversalHero: React.FC<UniversalHeroProps> = ({
           transition={{ duration: 0.75, delay: 0.42, ease: luxuryEase }}
           style={{
             fontFamily: 'var(--font-body)',
-            fontSize: 'clamp(13.5px, 1.1vw, 15.5px)',
+            fontSize: '16px',
             fontWeight: 400,
-            lineHeight: 1.6,
-            color: '#F0F0EC',
-            maxWidth: '560px',
-            margin: '0 0 24px 0',
-            textShadow: '0 2px 10px rgba(0,0,0,0.9)',
+            lineHeight: 1.8,
+            color: '#FFFFFF',
+            maxWidth: '600px',
+            margin: centered ? '0 auto 32px' : '0 0 32px 0',
+            textAlign: centered ? 'center' : undefined,
+            textShadow:
+              '0 1px 2px rgba(20, 16, 12, 0.9), 0 2px 12px rgba(20, 16, 12, 0.8), 0 0 32px rgba(20, 16, 12, 0.6)',
           }}
         >
           {supportingText}
@@ -211,6 +222,7 @@ export const UniversalHero: React.FC<UniversalHeroProps> = ({
             style={{
               display: 'flex',
               alignItems: 'center',
+              justifyContent: centered ? 'center' : undefined,
               gap: 'clamp(12px, 2vw, 24px)',
               flexWrap: 'wrap',
             }}

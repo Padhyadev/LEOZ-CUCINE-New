@@ -10,7 +10,7 @@
   --gold-light: #E0BC8A;
   --bronze: #8A6330;
   --text-cocoa: #3B2F25;
-  --text-taupe: #6B5A48;
+  --text-taupe: #3F3227; /* darkened for readability (was #6B5A48) — same as body copy on Home */
   --line-gold: rgba(201, 154, 91, 0.35);
 
   background-color: var(--bg-ivory);
@@ -32,7 +32,7 @@
 }
 .bg-ivory  { background-color: var(--bg-ivory); }
 .bg-cream  { background-color: var(--bg-cream); }
-.bg-white  { background-color: #FFFFFF; }
+.bg-white  { background-color: #ffffff75; }
 
 /* ── Typography ─────────────────────────────────────────────────────────── */
 .lz-f-eyebrow {

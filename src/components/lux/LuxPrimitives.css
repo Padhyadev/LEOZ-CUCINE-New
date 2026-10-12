@@ -1,10 +1,2 @@
-/* Clip line for MaskHeading — the heading text slides up inside it */
-.lux-mask {
-  display: block;
-  overflow: hidden;
-  padding-bottom: 0.08em;
-}
-
-.lux-mask > span {
-  display: block;
-}
+/* Heading line masks come from SplitText (see src/lib/scroll/scroll.css,
+   .lz-line-mask). This file is kept for primitive-specific styles. */

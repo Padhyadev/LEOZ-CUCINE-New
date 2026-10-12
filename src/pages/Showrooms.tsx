@@ -148,7 +148,7 @@ export const Showrooms: React.FC = () => {
                   fontWeight: 600,
                   letterSpacing: '0.24em',
                   textTransform: 'uppercase',
-                  color: '#8A725B',
+                  color: '#6B5434',
                   display: 'block',
                   marginBottom: '12px',
                 }}
@@ -170,7 +170,7 @@ export const Showrooms: React.FC = () => {
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '14.5px',
-                  color: '#66635D',
+                  color: '#3F3227',
                   maxWidth: '600px',
                   margin: '0 auto',
                   lineHeight: 1.6,
@@ -193,7 +193,7 @@ export const Showrooms: React.FC = () => {
                   key={loc.city}
                   initial={{ opacity: 0, y: 25 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.15 }}
+                  viewport={{ once: false, amount: 0.15 }}
                   transition={{ duration: 0.6, delay: idx * 0.1, ease: luxuryEase }}
                   style={{
                     backgroundColor: '#FFFFFF',
@@ -258,7 +258,7 @@ export const Showrooms: React.FC = () => {
                         fontFamily: 'var(--font-body)',
                         fontSize: '11px',
                         fontWeight: 600,
-                        color: '#8A725B',
+                        color: '#6B5434',
                         letterSpacing: '0.15em',
                         textTransform: 'uppercase',
                         display: 'block',
@@ -283,19 +283,19 @@ export const Showrooms: React.FC = () => {
                     {/* Address, Timings & Phone */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', marginBottom: '24px' }}>
                       <div style={{ display: 'flex', gap: '10px' }}>
-                        <MapPin size={16} style={{ color: '#8A725B', flexShrink: 0, marginTop: '3px' }} />
-                        <span style={{ fontSize: '13.5px', color: '#66635D', lineHeight: 1.5 }}>
+                        <MapPin size={16} style={{ color: '#6B5434', flexShrink: 0, marginTop: '3px' }} />
+                        <span style={{ fontSize: '13.5px', color: '#3F3227', lineHeight: 1.5 }}>
                           {loc.address}
                         </span>
                       </div>
                       <div style={{ display: 'flex', gap: '10px' }}>
-                        <Clock size={16} style={{ color: '#8A725B', flexShrink: 0, marginTop: '3px' }} />
-                        <span style={{ fontSize: '13px', color: '#66635D', lineHeight: 1.5 }}>
+                        <Clock size={16} style={{ color: '#6B5434', flexShrink: 0, marginTop: '3px' }} />
+                        <span style={{ fontSize: '13px', color: '#3F3227', lineHeight: 1.5 }}>
                           {loc.timings}
                         </span>
                       </div>
                       <div style={{ display: 'flex', gap: '10px' }}>
-                        <Phone size={16} style={{ color: '#8A725B', flexShrink: 0, marginTop: '3px' }} />
+                        <Phone size={16} style={{ color: '#6B5434', flexShrink: 0, marginTop: '3px' }} />
                         <a
                           href={`tel:${loc.phone.replace(/\s+/g, '')}`}
                           style={{ fontSize: '13.5px', color: '#262522', fontWeight: 600, textDecoration: 'none' }}
@@ -316,7 +316,7 @@ export const Showrooms: React.FC = () => {
                             border: '1px solid #D5CDBE',
                             borderRadius: '2px',
                             fontSize: '11px',
-                            color: '#66635D',
+                            color: '#3F3227',
                           }}
                         >
                           ✓ {f}
@@ -424,7 +424,7 @@ export const Showrooms: React.FC = () => {
                   fontWeight: 600,
                   letterSpacing: '0.24em',
                   textTransform: 'uppercase',
-                  color: '#8A725B',
+                  color: '#6B5434',
                   display: 'block',
                   marginBottom: '14px',
                 }}
@@ -446,7 +446,7 @@ export const Showrooms: React.FC = () => {
                 style={{
                   fontFamily: 'var(--font-body)',
                   fontSize: '15px',
-                  color: '#66635D',
+                  color: '#3F3227',
                   maxWidth: '680px',
                   margin: '0 auto',
                   lineHeight: 1.7,
@@ -469,7 +469,7 @@ export const Showrooms: React.FC = () => {
                   key={item.title}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.15 }}
+                  viewport={{ once: false, amount: 0.15 }}
                   transition={{ duration: 0.5, delay: idx * 0.07, ease: luxuryEase }}
                   style={{
                     backgroundColor: '#FFFFFF',
@@ -532,7 +532,7 @@ export const Showrooms: React.FC = () => {
                       style={{
                         fontFamily: 'var(--font-body)',
                         fontSize: '13px',
-                        color: '#66635D',
+                        color: '#3F3227',
                         lineHeight: 1.6,
                         margin: 0,
                       }}
@@ -573,7 +573,7 @@ export const Showrooms: React.FC = () => {
                 fontWeight: 600,
                 letterSpacing: '0.25em',
                 textTransform: 'uppercase',
-                color: '#8A725B',
+                color: '#6B5434',
                 display: 'block',
                 marginBottom: '16px',
               }}

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { AnimatePresence, motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion';
+import { useMagnetic } from '../lib/scroll';
+import { AnimatePresence, motion, useReducedMotion, useScroll, useTransform } from 'framer-motion';
 import { Header } from '../components/common/Header';
 import { Footer } from '../components/common/Footer';
 import { useDocumentMeta } from '../hooks/useDocumentMeta';
@@ -94,34 +95,19 @@ const REQUIRED: FieldName[] = ['name', 'mobile', 'email', 'projectLocation', 'pr
 
 /* Submit button that drifts up to 8px toward the cursor */
 const MagneticButton: React.FC<{ disabled: boolean; children: React.ReactNode }> = ({ disabled, children }) => {
-  const reduce = useReducedMotion();
-  const x = useSpring(0, { stiffness: 260, damping: 18 });
-  const y = useSpring(0, { stiffness: 260, damping: 18 });
-  const clamp = (v: number) => Math.max(-8, Math.min(8, v));
-
-  const reset = () => {
-    x.set(0);
-    y.set(0);
-  };
+  const ref = useRef<HTMLButtonElement>(null);
+  useMagnetic(ref);
 
   return (
-    <motion.button
+    <button
+      ref={ref}
       type="submit"
       className="lz-btn lz-btn--primary lz-btn--lg lz-btn--shimmer lzc-submit"
       disabled={disabled}
       aria-disabled={disabled}
-      onMouseMove={(e) => {
-        if (reduce || disabled) return;
-        const r = e.currentTarget.getBoundingClientRect();
-        x.set(clamp((e.clientX - (r.left + r.width / 2)) * 0.2));
-        y.set(clamp((e.clientY - (r.top + r.height / 2)) * 0.35));
-      }}
-      onMouseLeave={reset}
-      onBlur={reset}
-      style={{ x, y }}
     >
       {children}
-    </motion.button>
+    </button>
   );
 };
 
@@ -418,7 +404,7 @@ export const BookConsultation: React.FC = () => {
         <section ref={heroRef} className="lzc-hero" aria-labelledby="consult-hero-title">
           <motion.div className="lzc-hero__media" style={{ y: heroY }} aria-hidden="true">
             <div className="lzc-hero__kenburns">
-              <img src="/Italian Marble.webp" alt="" />
+              <img src="/talk_to_us.png" alt="" />
             </div>
           </motion.div>
 
@@ -468,7 +454,7 @@ export const BookConsultation: React.FC = () => {
                   aria-hidden="true"
                   initial={prefersReducedMotion ? false : { scaleX: 0 }}
                   whileInView={{ scaleX: 1 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: false }}
                   transition={{ duration: 0.6, ease: EASE_OUT, delay: 0.25 }}
                 />
               </Reveal>
@@ -484,7 +470,7 @@ export const BookConsultation: React.FC = () => {
                   aria-hidden="true"
                   initial={prefersReducedMotion ? false : { scaleY: 0 }}
                   whileInView={{ scaleY: 1 }}
-                  viewport={{ once: true, amount: 0.6 }}
+                  viewport={{ once: false, amount: 0.6 }}
                   transition={{ duration: 0.9, ease: EASE_OUT, delay: 0.2 }}
                 />
                 <ol className="lzc-steps__list">
