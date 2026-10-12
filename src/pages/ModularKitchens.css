@@ -386,16 +386,118 @@
 }
 
 /* ==========================================================================
-   KITCHEN DESIGN PROCESS (extends the shared .lz-journey timeline)
+   KITCHEN DESIGN PROCESS — vertical alternating timeline
    ========================================================================== */
-.lzk-process .lz-journey {
-  grid-template-columns: repeat(7, minmax(0, 1fr));
+.lzk-vt {
+  position: relative;
+  max-width: 920px;
+  margin: 0 auto;
 }
 
-.lzk-process .lz-journey__track,
-.lzk-process .lz-journey__progress {
-  left: calc(100% / 14);
-  right: calc(100% / 14);
+.lzk-vt__track,
+.lzk-vt__progress {
+  position: absolute;
+  top: 28px;
+  bottom: 28px;
+  left: 50%;
+  width: 1px;
+  margin-left: -0.5px;
+}
+
+.lzk-vt__track {
+  background-color: var(--line-gold);
+}
+
+.lzk-vt__progress {
+  background-color: var(--gold);
+  transform-origin: top center;
+}
+
+.lzk-vt__list {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(20px, 3vw, 36px);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Three columns: card | dot | card — each step fills one side */
+.lzk-vt__item {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 56px minmax(0, 1fr);
+  align-items: center;
+  column-gap: clamp(24px, 4vw, 48px);
+}
+
+.lzk-vt__dot {
+  grid-column: 2;
+  grid-row: 1;
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  font-family: var(--font-heading);
+  font-size: 20px;
+  font-weight: 300;
+  color: var(--bronze);
+  background-color: #FFFFFF;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  transition:
+    background-color 400ms var(--ease-out),
+    color 400ms var(--ease-out),
+    box-shadow 400ms var(--ease-out),
+    scale 400ms var(--ease-out);
+}
+
+.lzk-vt__item.is-active .lzk-vt__dot {
+  background-color: var(--gold);
+  color: var(--text-cocoa);
+  box-shadow: 0 0 0 8px rgba(201, 154, 91, 0.14), 0 6px 18px rgba(138, 99, 48, 0.18);
+  scale: 1.06;
+}
+
+.lzk-vt__card {
+  grid-row: 1;
+  padding: 20px 28px;
+  background-color: rgba(255, 255, 255, 0.72);
+  border: 1px solid var(--line-gold);
+  border-radius: 2px;
+  transition:
+    border-color 400ms var(--ease-out),
+    box-shadow 400ms var(--ease-out);
+}
+
+.lzk-vt__item--left .lzk-vt__card {
+  grid-column: 1;
+  text-align: right;
+  border-right: 2px solid var(--gold);
+}
+
+.lzk-vt__item--right .lzk-vt__card {
+  grid-column: 3;
+  text-align: left;
+  border-left: 2px solid var(--gold);
+}
+
+.lzk-vt__item.is-active .lzk-vt__card,
+.lzk-vt__card:hover {
+  border-color: var(--gold);
+  box-shadow: var(--shadow-card);
+}
+
+.lzk-vt__label {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: clamp(19px, 1.7vw, 23px);
+  font-weight: 400;
+  line-height: 1.35;
+  color: var(--text-strong);
 }
 
 /* ==========================================================================
@@ -501,18 +603,27 @@
     grid-template-columns: 1fr;
   }
 
-  .lzk-process .lz-journey {
-    grid-template-columns: 1fr;
-  }
-
-  .lzk-process .lz-journey__track,
-  .lzk-process .lz-journey__progress {
+  /* Timeline collapses to a single column with the line on the left */
+  .lzk-vt__track,
+  .lzk-vt__progress {
     left: 28px;
-    right: auto;
   }
 
-  .lzk-process .lz-step {
-    align-items: flex-start;
+  .lzk-vt__item {
+    grid-template-columns: 56px minmax(0, 1fr);
+    column-gap: 20px;
+  }
+
+  .lzk-vt__dot {
+    grid-column: 1;
+  }
+
+  .lzk-vt__item--left .lzk-vt__card,
+  .lzk-vt__item--right .lzk-vt__card {
+    grid-column: 2;
+    text-align: left;
+    border-right: 1px solid var(--line-gold);
+    border-left: 2px solid var(--gold);
   }
 }
 

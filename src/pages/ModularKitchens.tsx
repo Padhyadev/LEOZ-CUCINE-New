@@ -566,22 +566,34 @@ export const ModularKitchens: React.FC = () => {
           <div className="lz-container">
             <SectionHead title="Kitchen Design Process" id="process-title" center />
 
-            <div ref={processRef} className="lz-journey-wrap">
-              <span className="lz-journey__track" aria-hidden="true" />
-              <motion.span
-                className="lz-journey__progress"
-                aria-hidden="true"
-                style={{ '--p': processLine } as unknown as React.CSSProperties}
-              />
-              <ol className="lz-journey">
-                {kitchenProcessSteps.map((step, idx) => (
-                  <li key={step} className={`lz-step ${idx < activeSteps ? 'is-active' : ''}`}>
-                    <span className="lz-step__dot" aria-hidden="true">
-                      {String(idx + 1).padStart(2, '0')}
-                    </span>
-                    <h3 className="lz-step__label">{step}</h3>
-                  </li>
-                ))}
+            {/* Vertical timeline: centre line grows with scroll, steps alternate sides
+                and slide in from their own side (single left-aligned column on mobile) */}
+            <div ref={processRef} className="lzk-vt" data-fx-skip>
+              <span className="lzk-vt__track" aria-hidden="true" />
+              <motion.span className="lzk-vt__progress" aria-hidden="true" style={{ scaleY: processLine }} />
+              <ol className="lzk-vt__list">
+                {kitchenProcessSteps.map((step, idx) => {
+                  const side = idx % 2 === 0 ? 'left' : 'right';
+                  return (
+                    <li
+                      key={step}
+                      className={`lzk-vt__item lzk-vt__item--${side} ${idx < activeSteps ? 'is-active' : ''}`}
+                    >
+                      <span className="lzk-vt__dot" aria-hidden="true">
+                        {String(idx + 1).padStart(2, '0')}
+                      </span>
+                      <motion.div
+                        className="lzk-vt__card"
+                        initial={prefersReducedMotion ? false : { opacity: 0, x: side === 'left' ? -60 : 60 }}
+                        whileInView={{ opacity: 1, x: 0 }}
+                        viewport={{ once: true, amount: 0.6 }}
+                        transition={{ duration: 0.8, ease: EASE_OUT }}
+                      >
+                        <h3 className="lzk-vt__label">{step}</h3>
+                      </motion.div>
+                    </li>
+                  );
+                })}
               </ol>
             </div>
           </div>

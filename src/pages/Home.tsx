@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import {
   motion,
   useInView,
-  useMotionValueEvent,
   useReducedMotion,
   useScroll,
   useTransform,
@@ -239,25 +238,10 @@ export const Home: React.FC = () => {
   const { lenis } = useLenisScroll();
 
   const heroRef = useRef<HTMLElement>(null);
-  const journeyRef = useRef<HTMLDivElement>(null);
-  const [activeSteps, setActiveSteps] = useState(0);
 
   // Gentle hero parallax
   const { scrollYProgress: heroProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
   const heroY = useTransform(heroProgress, [0, 1], [0, prefersReducedMotion ? 0 : 120]);
-
-  // Journey line draws with scroll; steps fill in sequence
-  const { scrollYProgress: journeyProgress } = useScroll({ target: journeyRef, offset: ['start 0.8', 'end 0.55'] });
-  const journeyLine = useTransform(journeyProgress, (v) => (prefersReducedMotion ? 1 : v));
-
-  useMotionValueEvent(journeyProgress, 'change', (v) => {
-    if (prefersReducedMotion) return;
-    setActiveSteps(v <= 0 ? 0 : Math.min(journey.length, Math.floor(v * (journey.length - 1) + 0.001) + 1));
-  });
-
-  useEffect(() => {
-    if (prefersReducedMotion) setActiveSteps(journey.length);
-  }, [prefersReducedMotion]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -532,24 +516,32 @@ export const Home: React.FC = () => {
           <div className="lz-container">
             <SectionHead title="The LEOZ Journey" id="journey-title" center />
 
-            <div ref={journeyRef} className="lz-journey-wrap">
-              <span className="lz-journey__track" aria-hidden="true" />
-              <motion.span
-                className="lz-journey__progress"
-                aria-hidden="true"
-                style={{ '--p': journeyLine } as unknown as React.CSSProperties}
-              />
-              <ol className="lz-journey">
-                {journey.map((step, idx) => (
-                  <li key={step} className={`lz-step ${idx < activeSteps ? 'is-active' : ''}`}>
-                    <span className="lz-step__dot" aria-hidden="true">
-                      {String(idx + 1).padStart(2, '0')}
-                    </span>
-                    <h3 className="lz-step__label">{step}</h3>
-                  </li>
-                ))}
-              </ol>
-            </div>
+            {/* Journey cards: flip up in sequence, gold rule draws, outlined numeral fills */}
+            <ol className="lz-jcards" data-fx-skip>
+              {journey.map((step, idx) => (
+                <motion.li
+                  key={step}
+                  className="lz-jcard"
+                  initial={prefersReducedMotion ? false : { opacity: 0, rotateX: -75, y: 40 }}
+                  whileInView={{ opacity: 1, rotateX: 0, y: 0 }}
+                  viewport={{ once: true, amount: 0.4 }}
+                  transition={{ duration: 0.8, ease: EASE_OUT, delay: (idx % 4) * 0.12 }}
+                >
+                  <span className="lz-jcard__num" aria-hidden="true">
+                    {String(idx + 1).padStart(2, '0')}
+                  </span>
+                  <motion.span
+                    className="lz-jcard__rule"
+                    aria-hidden="true"
+                    initial={prefersReducedMotion ? false : { scaleX: 0 }}
+                    whileInView={{ scaleX: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.7, ease: EASE_OUT, delay: (idx % 4) * 0.12 + 0.45 }}
+                  />
+                  <h3 className="lz-jcard__label">{step}</h3>
+                </motion.li>
+              ))}
+            </ol>
           </div>
         </section>
 
