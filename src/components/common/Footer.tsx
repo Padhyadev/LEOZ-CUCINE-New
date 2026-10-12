@@ -140,6 +140,7 @@ export const Footer: React.FC = () => {
           {/* Column 1: Brand, tagline & social */}
           <div className="lz-footer__col--brand">
             <Logo variant="light" showTagline={false} />
+            <span className="lz-footer__brandline">Luxury Kitchen and Wardrobes</span>
             <p
               className="lz-footer__tagline"
               style={{ fontFamily: 'var(--font-body)', fontSize: '14px', lineHeight: 1.65 }}
