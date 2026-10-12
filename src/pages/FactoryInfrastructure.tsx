@@ -46,7 +46,7 @@ const AdvantageCard = ({ num, title, desc, reduce, isDesktop }: any) => {
       initial={reduce ? false : { opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      transition={{ 
+      transition={{
         default: { duration: 0.6, ease: luxuryEase },
         rotateX: { type: 'spring', stiffness: 300, damping: 30 },
         rotateY: { type: 'spring', stiffness: 300, damping: 30 }
@@ -197,7 +197,7 @@ export const FactoryInfrastructure: React.FC = () => {
   /* ── Page effects ──────────────────────────────────────────────────────── */
   const { scrollYProgress } = useScroll();
   const scaleY = useSpring(scrollYProgress, { stiffness: 100, damping: 30, restDelta: 0.001 });
-  
+
   const [mousePos, setMousePos] = useState({ x: -1000, y: -1000 });
   const handleMouseMove = (e: React.MouseEvent) => {
     if (!isDesktop || reduce) return;
@@ -206,7 +206,7 @@ export const FactoryInfrastructure: React.FC = () => {
 
   return (
     <div onMouseMove={handleMouseMove} style={{ backgroundColor: TOKENS.bgIvory, color: TOKENS.textCocoa, minHeight: '100vh', overflowX: 'hidden' }}>
-      
+
       {/* Soft spotlight overlay */}
       {isDesktop && !reduce && (
         <div style={{ position: 'fixed', inset: 0, pointerEvents: 'none', zIndex: 50, overflow: 'hidden' }}>
@@ -415,20 +415,20 @@ export const FactoryInfrastructure: React.FC = () => {
 
               {/* 3 Core Pillars */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-                <AdvantageCard 
+                <AdvantageCard
                   num="01" reduce={reduce} isDesktop={isDesktop}
-                  title="Better Finish" 
-                  desc="Dual-blade scoring panel saws and hot-melt edge banders guarantee 100% chip-free surfaces and invisible hairline joints." 
+                  title="Better Finish"
+                  desc="Dual-blade scoring panel saws and hot-melt edge banders guarantee 100% chip-free surfaces and invisible hairline joints."
                 />
-                <AdvantageCard 
+                <AdvantageCard
                   num="02" reduce={reduce} isDesktop={isDesktop}
-                  title="Better Alignment" 
-                  desc="Multi-spindle boring machines drill with zero manual error, producing silky-smooth drawer motion and razor-sharp shadow gaps." 
+                  title="Better Alignment"
+                  desc="Multi-spindle boring machines drill with zero manual error, producing silky-smooth drawer motion and razor-sharp shadow gaps."
                 />
-                <AdvantageCard 
+                <AdvantageCard
                   num="03" reduce={reduce} isDesktop={isDesktop}
-                  title="Better Durability" 
-                  desc="150-ton hydraulic cold-press bonding and airtight moisture-barrier sealing prevent bubbling and peeling for decades." 
+                  title="Better Durability"
+                  desc="150-ton hydraulic cold-press bonding and airtight moisture-barrier sealing prevent bubbling and peeling for decades."
                 />
               </div>
             </div>
@@ -503,7 +503,7 @@ export const FactoryInfrastructure: React.FC = () => {
                     <div style={{ order: !isDesktop ? 1 : (idx % 2 === 0 ? 1 : 2), position: 'relative' }}>
                       {/* Offset bracket frame */}
                       <div style={{ position: 'absolute', inset: '16px -16px -16px 16px', border: `1px solid ${TOKENS.gold}`, opacity: 0.1, zIndex: 0, borderRadius: '2px' }} />
-                      
+
                       <div style={{ position: 'relative', width: '100%', aspectRatio: '16/10', overflow: 'hidden', backgroundColor: TOKENS.bgCream, boxShadow: '0 20px 40px rgba(138,99,48,0.1)', borderRadius: '2px' }}>
                         <motion.img
                           src={item.image}
