@@ -935,6 +935,28 @@
     font-size: 12px;
   }
 
+  /* Chips: even two-column grid instead of ragged wrapping */
+  .lzw-chips {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  .lzw-chips > li {
+    display: flex;
+  }
+
+  .lzw-chips > li:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+
+  .lzw-chip {
+    width: 100%;
+    justify-content: center;
+    padding: 10px 12px;
+    text-align: center;
+  }
+
   .lzw-faq__panel .lz-body {
     padding-right: 0;
   }

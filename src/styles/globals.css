@@ -258,17 +258,28 @@ h4,
 }
 
 /* ==========================================================================
-   BODY-COPY ALIGNMENT — site-wide left aligned editorial standard
+   BODY-COPY ALIGNMENT — site-wide justified editorial standard
+   hyphens: auto relies on <html lang="en"> to keep justified spacing even.
    ========================================================================== */
+p,
 #main-content p {
-  text-align: left;
+  text-align: justify;
+  -webkit-hyphens: auto;
+  hyphens: auto;
   text-wrap: pretty;
   word-spacing: normal;
   letter-spacing: normal;
 }
 
-#main-content p.hero-description {
-  text-align: left;
+/* Pages without #main-content: paragraphs inside deliberately centered
+   blocks keep their parent's alignment instead of being justified. */
+[style*="text-align"] p,
+.lz-radio-card p,
+.lz-stepper-label p,
+.lz-f-hero__content p,
+.lz-f-guide__step p,
+.lz-f-success p {
+  text-align: inherit;
 }
 
 /* ==========================================================================
