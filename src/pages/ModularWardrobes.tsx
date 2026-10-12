@@ -386,7 +386,10 @@ export const ModularWardrobes: React.FC = () => {
         <section ref={heroRef} className="lzw-hero" aria-labelledby="wardrobes-hero-title">
           <motion.div className="lzw-hero__media" style={{ y: heroY }} aria-hidden="true">
             <div className="lzw-hero__kenburns">
-              <img src="/Master Walk-In Dressing Suite.webp" alt="" />
+              <picture>
+                <source srcSet="/Wardrop_Hero_New.webp" type="image/webp" />
+                <img src="/Wardrop_Hero_New.png" alt="LEOZ bespoke luxury modular wardrobe dressing suite" />
+              </picture>
             </div>
           </motion.div>
           <GoldDust />
@@ -411,7 +414,7 @@ export const ModularWardrobes: React.FC = () => {
                 Bespoke wardrobes composed around your space, belongings and personal style. Discover a refined balance of organisation, beauty and everyday ease.
               </motion.p>
 
-              <motion.div {...heroReveal(0.35)}>
+              <motion.div {...heroReveal(0.35)} style={{ display: 'flex', justifyContent: 'center' }}>
                 <MagneticLink
                   href="#wardrobe-types"
                   onClick={(e) => handleAnchor(e, 'wardrobe-types')}

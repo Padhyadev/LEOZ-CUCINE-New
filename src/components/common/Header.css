@@ -263,15 +263,27 @@
   transition: color 250ms ease, transform 250ms ease;
 }
 
-.lz-drawer__link:hover,
+/* Only the single active route link is styled gold and selected */
 .lz-drawer__link.is-active {
   color: var(--gold);
 }
 
-.lz-drawer__link:hover svg,
 .lz-drawer__link.is-active svg {
   color: var(--gold);
   transform: translateX(4px);
+}
+
+/* Subtle mouse hover on desktop without faking selection */
+@media (hover: hover) and (pointer: fine) {
+  .lz-drawer__link:not(.is-active):hover {
+    color: #FFFFFF;
+    opacity: 0.9;
+  }
+
+  .lz-drawer__link:not(.is-active):hover svg {
+    color: rgba(255, 255, 255, 0.7);
+    transform: translateX(2px);
+  }
 }
 
 /* ---------- Focus (keyboard) ---------- */

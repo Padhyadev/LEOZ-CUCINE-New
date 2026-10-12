@@ -227,7 +227,7 @@ export const FactoryInfrastructure: React.FC = () => {
           style={{
             position: 'relative',
             width: '100%',
-            minHeight: '90vh',
+            minHeight: 'max(640px, 100svh)',
             display: 'flex',
             alignItems: 'center',
             paddingTop: 'clamp(120px, 16vh, 200px)',
@@ -244,15 +244,15 @@ export const FactoryInfrastructure: React.FC = () => {
             style={{ position: 'absolute', inset: 0, zIndex: 1, overflow: 'hidden' }}
           >
             <picture style={{ width: '100%', height: '100%', display: 'block' }}>
-              <source media="(max-width: 768px)" srcSet={factoryAssets.hero.mobile} />
+              <source srcSet="/Factory_hero_new.webp" type="image/webp" />
               <img
-                src={factoryAssets.hero.desktop}
+                src="/Factory_hero_new.png"
                 alt="LEOZ 20,000 Sq. Ft. Manufacturing Plant in Gujarat"
                 style={{
                   width: '100%',
                   height: '100%',
                   objectFit: 'cover',
-                  objectPosition: factoryAssets.hero.objectPosition || 'center center',
+                  objectPosition: 'center center',
                 }}
               />
             </picture>
@@ -260,18 +260,21 @@ export const FactoryInfrastructure: React.FC = () => {
 
           </motion.div>
 
-          <div style={{ position: 'relative', zIndex: 10, maxWidth: '1440px', width: '100%', margin: '0 auto' }}>
+          <div style={{ position: 'relative', zIndex: 10, maxWidth: '1440px', width: '100%', margin: '0 auto', textAlign: 'center', display: 'flex', justifyContent: 'center' }}>
             <motion.div
-              initial={reduce ? false : { opacity: 0, x: -32 }}
-              animate={{ opacity: 1, x: 0 }}
+              initial={reduce ? false : { opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: luxuryEase }}
               style={{
-                maxWidth: '600px',
+                maxWidth: '680px',
                 padding: 'clamp(32px, 5vw, 48px) 0',
+                margin: '0 auto',
+                textAlign: 'center',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
               }}
             >
-
-
               <motion.h1
                 initial={reduce ? false : { opacity: 0, y: 24 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -284,13 +287,27 @@ export const FactoryInfrastructure: React.FC = () => {
                   letterSpacing: '-0.015em',
                   color: '#FFFFFF',
                   margin: '0 0 24px 0',
+                  textAlign: 'center',
                   textShadow: HERO_TEXT_GLOW
                 }}
               >
-                Precision Behind{' '}
-                <br />
-                Every Detail.
+                Precision Behind Every Detail.
               </motion.h1>
+
+              <motion.span
+                className="lz-rule lz-rule--center"
+                aria-hidden="true"
+                initial={reduce ? false : { scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.6, ease: luxuryEase, delay: 0.4 }}
+                style={{
+                  display: 'block',
+                  width: '48px',
+                  height: '2px',
+                  backgroundColor: TOKENS.gold,
+                  margin: '0 auto 32px',
+                }}
+              />
 
               <motion.p
                 initial={reduce ? false : { opacity: 0, y: 20 }}
@@ -302,7 +319,9 @@ export const FactoryInfrastructure: React.FC = () => {
                   fontWeight: 400,
                   lineHeight: 1.8,
                   color: '#FFFFFF',
-                  margin: '0 0 32px 0',
+                  margin: '0 auto 32px',
+                  maxWidth: '640px',
+                  textAlign: 'center',
                   textShadow: HERO_TEXT_GLOW
                 }}
               >

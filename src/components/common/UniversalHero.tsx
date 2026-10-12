@@ -41,7 +41,7 @@ export const UniversalHero: React.FC<UniversalHeroProps> = ({
   ctaHref,
   onCtaClick,
   secondaryLink,
-  minHeight = '90vh',
+  minHeight = 'max(640px, 100svh)',
   brightness = 0.92,
   align = 'left',
 }) => {

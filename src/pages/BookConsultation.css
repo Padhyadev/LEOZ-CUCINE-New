@@ -16,8 +16,8 @@
 .lzc-hero {
   position: relative;
   display: flex;
-  align-items: flex-end;
-  min-height: clamp(440px, 58vh, 620px);
+  align-items: center;
+  min-height: max(640px, 100svh);
   overflow: hidden;
   background-color: var(--bg-cream);
 }
@@ -34,6 +34,7 @@
   will-change: transform;
 }
 
+.lzc-hero__kenburns picture,
 .lzc-hero__kenburns img {
   display: block;
   width: 100%;
@@ -51,7 +52,12 @@
 }
 
 .lzc-hero__inner {
-  max-width: 600px;
+  max-width: 680px;
+  margin: 0 auto;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 /* No overlay on the photo: white copy with a soft dark halo */
@@ -104,19 +110,22 @@
   font-weight: 400;
   line-height: 1.15;
   letter-spacing: -0.015em;
+  text-align: center;
 }
 
 .lzc-hero__inner .lz-rule {
   height: 2px;
+  margin: 0 auto 32px;
 }
 
 .lzc-hero__text {
-  margin: 0 0 32px 0;
-  max-width: 600px;
+  margin: 0 auto 32px;
+  max-width: 640px;
   font-family: var(--font-body);
   font-size: 16px;
   font-weight: 400;
   line-height: 1.8;
+  text-align: center;
 }
 
 /* ==========================================================================

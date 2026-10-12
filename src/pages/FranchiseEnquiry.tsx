@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useMagnetic } from '../lib/scroll';
-import { motion, useReducedMotion, useInView, AnimatePresence } from 'framer-motion';
+import { motion, useReducedMotion, useInView, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { Header } from '../components/common/Header';
 import { Footer } from '../components/common/Footer';
-import { UniversalHero } from '../components/common/UniversalHero';
+import { useDocumentMeta } from '../hooks/useDocumentMeta';
 import { images } from '../assets/images';
 import { submitEnquiryForm } from '../lib/submitEnquiryForm';
 import {
@@ -13,7 +13,9 @@ import {
   Check,
   ChevronDown,
   ChevronRight,
+  ArrowRight,
 } from 'lucide-react';
+import './Home.css';
 import './FranchiseEnquiry.css';
 
 /* ── Constants ──────────────────────────────────────────────────────────── */
@@ -100,6 +102,21 @@ const SpotlightWrap = ({ children, className }: { children: React.ReactNode; cla
 
 export const FranchiseEnquiry: React.FC = () => {
   const reduce = useReducedMotion();
+  const heroRef = useRef<HTMLElement>(null);
+  const { scrollYProgress: heroProgress } = useScroll({ target: heroRef, offset: ['start start', 'end start'] });
+  const heroY = useTransform(heroProgress, [0, 1], [0, reduce ? 0 : 120]);
+
+  useDocumentMeta(
+    'Franchise Enquiry | LEOZ Cucine — Luxury Modular Kitchens & Wardrobes',
+    'Submit an expression of interest to partner with LEOZ Cucine for luxury modular kitchens and bespoke wardrobes. In-house precision manufacturing in Gujarat.'
+  );
+
+  const heroReveal = (delay: number) =>
+    ({
+      initial: reduce ? false : { opacity: 0, y: 24 },
+      animate: { opacity: 1, y: 0 },
+      transition: { duration: 0.8, ease: EASE, delay },
+    }) as const;
 
   /* ── Form state ───────────────────────────────────────────────────────── */
   const [formData, setFormData] = useState({
@@ -225,19 +242,80 @@ export const FranchiseEnquiry: React.FC = () => {
         {/* ================================================================
             01 HERO — An Invitation to Grow with LEOZ
             ================================================================ */}
-        <UniversalHero
-          image="/franchise-showroom-hero.png"
-          mobileImage="/franchise-showroom-hero.png"
-          imageAlt="LEOZ Luxury Showroom Kitchen and Wardrobe Consultation Space"
-          imagePosition="center 50%"
-          eyebrow="LEOZ / FRANCHISE ENQUIRY"
-          headline="An Invitation to Grow with LEOZ"
-          supportingText="LEOZ Cucine is exploring the appointment of two franchise partners for its luxury kitchen and wardrobe brand. We welcome expressions of interest from entrepreneurs and design-industry professionals who share our appreciation for refined products and customer experience."
-          ctaText="Express Franchise Interest"
-          ctaHref="#franchise-form"
-          onCtaClick={scrollToForm}
-          brightness={0.88}
-        />
+        {/* ================================================================
+            01 HERO — An Invitation to Grow with LEOZ
+            ================================================================ */}
+        <section ref={heroRef} className="lz-f-hero" aria-labelledby="franchise-hero-title">
+          <motion.div className="lz-f-hero__media" style={{ y: heroY }} aria-hidden="true">
+            <div className="lz-f-hero__kenburns">
+              <picture>
+                <source srcSet="/franchise_Hero_New.webp" type="image/webp" />
+                <img
+                  src="/franchise_Hero_New.png"
+                  alt="LEOZ Luxury Showroom Kitchen and Wardrobe Consultation Space"
+                />
+              </picture>
+            </div>
+          </motion.div>
+          <div className="lz-f-hero__overlay" aria-hidden="true" />
+
+          {/* Floating gold dust particles */}
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div
+              key={i}
+              className="lz-f-dust"
+              style={{
+                left: `${(i * 13 + 7) % 95}%`,
+                top: `${(i * 17 + 12) % 85}%`,
+                animationDelay: `${i * 0.7}s`,
+              }}
+              aria-hidden="true"
+            />
+          ))}
+
+          <div className="lz-f-hero__content lz-container">
+            <div className="lz-f-hero__inner">
+              <motion.h1
+                id="franchise-hero-title"
+                className="lz-f-hero__title"
+                {...heroReveal(0.15)}
+              >
+                An Invitation to Grow with LEOZ
+              </motion.h1>
+
+              <motion.span
+                className="lz-rule lz-rule--center"
+                aria-hidden="true"
+                initial={reduce ? false : { scaleX: 0 }}
+                animate={{ scaleX: 1 }}
+                transition={{ duration: 0.6, ease: EASE, delay: 0.3 }}
+              />
+
+              <motion.p className="lz-f-hero__text" {...heroReveal(0.25)}>
+                LEOZ Cucine is exploring the appointment of two franchise partners for its luxury kitchen and wardrobe brand. We welcome expressions of interest from entrepreneurs and design-industry professionals who share our appreciation for refined products and customer experience.
+              </motion.p>
+
+              <motion.div className="lz-f-hero__ctas" {...heroReveal(0.35)}>
+                <MagneticButton
+                  className="lz-btn lz-btn--primary"
+                  onClick={scrollToForm}
+                >
+                  <span>Express Franchise Interest</span>
+                  <ArrowRight size={14} aria-hidden="true" />
+                </MagneticButton>
+              </motion.div>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            className="lz-scroll"
+            onClick={scrollToForm}
+            aria-label="Scroll to franchise details"
+          >
+            <span className="lz-scroll__track" aria-hidden="true" />
+          </button>
+        </section>
 
         {/* ================================================================
             02 THE OPPORTUNITY

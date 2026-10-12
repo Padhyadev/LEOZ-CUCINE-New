@@ -29,8 +29,8 @@ export const kitchenAssets = {
   hero: {
     id: 'kitchen-hero',
     category: 'kitchen' as const,
-    desktop: '/Gloss Finish.webp',
-    mobile: '/Gloss Finish.webp',
+    desktop: '/kitchen_hero_New.png',
+    mobile: '/kitchen_hero_New.webp',
     alt: 'LEOZ Luxury Contemporary Modular Kitchen Island and Architecture',
     objectPosition: 'center 45%',
     section: 'Modular Kitchens Hero & Homepage Hero',
@@ -131,8 +131,8 @@ export const wardrobeAssets = {
   hero: {
     id: 'wardrobe-hero',
     category: 'wardrobe' as const,
-    desktop: wardrobeDressingImg,
-    mobile: wardrobeDressingImg,
+    desktop: '/Wardrop_Hero_New.png',
+    mobile: '/Wardrop_Hero_New.webp',
     alt: 'Master Walk-In Dressing Suite with Velvet Drawers and Sensor LED',
     objectPosition: 'center 40%',
     section: 'Modular Wardrobes Hero',
@@ -219,8 +219,8 @@ export const factoryAssets = {
   hero: {
     id: 'factory-hero',
     category: 'factory' as const,
-    desktop: '/factory.webp',
-    mobile: '/factory_mobile.webp',
+    desktop: '/Factory_hero_new.png',
+    mobile: '/Factory_hero_new.webp',
     alt: 'LEOZ 20,000 Sq. Ft. Precision Manufacturing Plant in Gandhinagar, Gujarat',
     objectPosition: 'center center',
     section: 'Factory & Craftsmanship Hero',
@@ -308,9 +308,9 @@ export const showroomAssets = {
 /* Backwards compatibility bundle */
 export const images = {
   hero: kitchenAssets.hero.desktop,
-  aboutHero: '/about.webp',
-  contactHero: kitchenOpusImg,
-  franchiseHero: showroomAssets.flagship.desktop,
+  aboutHero: '/About_New_Hero.png',
+  contactHero: '/contact-hero_New.png',
+  franchiseHero: '/franchise_Hero_New.png',
   modularKitchenHero: kitchenAssets.hero.desktop,
   modularPhilosophy: '/Metal Accents.webp',
   modularWardrobeHero: wardrobeAssets.hero.desktop,
@@ -318,7 +318,7 @@ export const images = {
   brandDetail: showroomAssets.materialsArchive.desktop,
   kitchenCategory: kitchenAssets.categoryCard.desktop,
   wardrobeCategory: wardrobeAssets.categoryCard.desktop,
-  consultationBg: kitchenOpusImg,
+  consultationBg: '/talk_to_us_Hero_New.png',
 
   wardrobeTypes: {
     sliding: wardrobeAssets.slidingSystem.desktop,

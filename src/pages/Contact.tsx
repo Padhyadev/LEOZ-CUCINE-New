@@ -327,7 +327,10 @@ export const Contact: React.FC = () => {
         {/* 01 HERO */}
         <section className="lz-contact-hero">
           <div className="lz-contact-hero__bg">
-            <img src="/contact_hero.png" alt="LEOZ Cucine Luxury Showroom" />
+            <picture>
+              <source srcSet="/contact-hero_New.webp" type="image/webp" />
+              <img src="/contact-hero_New.png" alt="LEOZ Cucine Luxury Showroom" />
+            </picture>
           </div>
           <div className="lz-contact-hero__overlay" />
           

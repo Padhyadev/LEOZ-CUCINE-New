@@ -157,8 +157,8 @@ export const About: React.FC = () => {
         <section className="lz-about-hero">
           <div className="lz-about-hero__bg">
             <picture>
-              <source srcSet="/About_banner.webp" type="image/webp" />
-              <img src="/About_banner.png" alt="LEOZ Cucine luxury kitchen and bespoke craftsmanship" />
+              <source srcSet="/About_New_Hero.webp" type="image/webp" />
+              <img src="/About_New_Hero.png" alt="LEOZ Cucine luxury kitchen and bespoke craftsmanship" />
             </picture>
           </div>
           <div className="lz-about-hero__overlay" />

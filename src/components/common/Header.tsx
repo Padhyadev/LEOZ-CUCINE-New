@@ -130,9 +130,15 @@ export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showH
     };
   }, [isMobileMenuOpen]);
 
-  // Close menus on route change
+  // Current active route path
+  const [currentPath, setCurrentPath] = useState(() =>
+    typeof window !== 'undefined' ? window.location.pathname : '/'
+  );
+
+  // Close menus and update active path on route change
   useEffect(() => {
     const handleRouteChange = () => {
+      setCurrentPath(window.location.pathname);
       setIsMobileMenuOpen(false);
     };
     window.addEventListener('popstate', handleRouteChange);
@@ -207,12 +213,18 @@ export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showH
     }
   };
 
+  const isRouteActive = (curr: string, target: string) => {
+    if (curr === target) return true;
+    if (target === '/factory' && (curr === '/infrastructure' || curr === '/factory-infrastructure')) return true;
+    if (target === '/franchise-opportunities' && curr === '/franchise-enquiry') return true;
+    return false;
+  };
+
   const handleMobileNavClick = (e: React.MouseEvent<HTMLAnchorElement>, path: string) => {
+    setCurrentPath(path);
     setIsMobileMenuOpen(false);
     handleNavClick(e, path);
   };
-
-  const currentPath = typeof window !== 'undefined' ? window.location.pathname : '/';
 
   const navLinks = [
     { label: 'Kitchens', path: '/modular-kitchens' },
@@ -253,7 +265,7 @@ export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showH
         {/* CENTER / NAVIGATION (DESKTOP) */}
         <nav aria-label="Desktop Primary Navigation" className="lz-nav">
           {navLinks.map((item) => {
-            const isActive = currentPath === item.path;
+            const isActive = isRouteActive(currentPath, item.path);
             return (
               <a
                 key={item.label}
@@ -358,7 +370,7 @@ export const Header: React.FC<HeaderProps> = ({ isPreloaderActive = false, showH
             {/* Mobile Vertical Menu Links */}
             <nav aria-label="Mobile Navigation List" className="lz-drawer__nav">
               {navLinks.map((item, idx) => {
-                const isActive = currentPath === item.path;
+                const isActive = isRouteActive(currentPath, item.path);
                 return (
                   <motion.a
                     key={item.label}

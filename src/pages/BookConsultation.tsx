@@ -404,7 +404,10 @@ export const BookConsultation: React.FC = () => {
         <section ref={heroRef} className="lzc-hero" aria-labelledby="consult-hero-title">
           <motion.div className="lzc-hero__media" style={{ y: heroY }} aria-hidden="true">
             <div className="lzc-hero__kenburns">
-              <img src="/talk_to_us.png" alt="" />
+              <picture>
+                <source srcSet="/talk_to_us_Hero_New.webp" type="image/webp" />
+                <img src="/talk_to_us_Hero_New.png" alt="LEOZ bespoke luxury consultation lounge" />
+              </picture>
             </div>
           </motion.div>
 
