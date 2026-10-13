@@ -291,9 +291,8 @@ export const Home: React.FC = () => {
             <Reveal delay={0.15} className="lz-offset lz-zoom">
               <BracketFrame className="lz-offset__frame" />
               <WarmImage
-                src="/i_am_leoz_perfect.jpg"
-                alt="I am Leoz — the LEOZ lion mascot in black and gold armour wearing the LEOZ emblem"
-                className="lz-media--mascot"
+                src="/kitchen_opus.webp"
+                alt="LEOZ luxury penthouse kitchen with Calacatta marble waterfall island and bespoke cabinetry"
                 parallax={false}
               />
             </Reveal>
