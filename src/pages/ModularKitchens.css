@@ -684,3 +684,52 @@
     display: none;
   }
 }
+
+/* Hero copy position — matches the Home hero: left-aligned, vertically centred */
+.lzk-hero .lzk-hero__content.lz-container {
+  max-width: 1480px;
+  margin-left: 0;
+  margin-right: auto;
+  padding-left: clamp(20px, 4.5vw, 64px);
+  padding-right: clamp(20px, 4vw, 48px);
+}
+
+.lzk-hero .lzk-hero__inner {
+  max-width: 660px;
+  margin: 0;
+  text-align: left;
+  align-items: flex-start;
+}
+
+.lzk-hero .lzk-h1,
+.lzk-hero .lzk-hero__text {
+  text-align: left;
+}
+
+.lzk-hero .lzk-hero__text {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.lzk-hero .lzk-hero__inner .lz-rule {
+  margin: 0 0 32px;
+}
+
+.lzk-hero .lzk-hero__ctas {
+  justify-content: flex-start;
+}
+
+@media (max-width: 767px) {
+  .lzk-hero .lzk-hero__content.lz-container {
+    padding-bottom: 88px;
+  }
+}
+
+/* Hero overlay — flat 20% black over the photo, same on every inner-page hero */
+.lzk-hero__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}

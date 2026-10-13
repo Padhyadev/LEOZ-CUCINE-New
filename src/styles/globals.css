@@ -625,3 +625,11 @@ p,
   background-color: rgba(182, 154, 107, 0.1);
   border-color: #ffffff;
 }
+/* Inline-styled page heroes (UniversalHero, Our Method, Projects, Factory):
+   copy sits at the bottom on phones, like the Home hero. */
+@media (max-width: 767px) {
+  .lz-page-hero {
+    justify-content: flex-end !important;
+    padding-bottom: 88px !important;
+  }
+}

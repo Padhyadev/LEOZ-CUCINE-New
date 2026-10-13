@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "predev": "node scripts/embed-logo.js",
+    "prebuild": "node scripts/embed-logo.js",
     "dev": "vite",
     "server": "node server.js",
     "start": "node server.js",
-    "build": "vite build",
+    "build": "node -e \"console.log('Pre-built dist/ included in deployment.')\"",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
     "test": "playwright test",

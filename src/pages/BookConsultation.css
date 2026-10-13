@@ -766,3 +766,54 @@ textarea.lzc-control {
     animation: none;
   }
 }
+
+/* Hero copy position — matches the Home hero: left-aligned, vertically centred */
+.lzc-hero .lzc-hero__content.lz-container {
+  max-width: 1480px;
+  margin-left: 0;
+  margin-right: auto;
+  padding-top: 136px;
+  padding-bottom: 112px;
+  padding-left: clamp(20px, 4.5vw, 64px);
+  padding-right: clamp(20px, 4vw, 48px);
+}
+
+.lzc-hero .lzc-hero__inner {
+  max-width: 660px;
+  margin: 0;
+  text-align: left;
+  align-items: flex-start;
+}
+
+.lzc-hero .lzc-h1,
+.lzc-hero .lzc-hero__text {
+  text-align: left;
+}
+
+.lzc-hero .lzc-hero__text {
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.lzc-hero .lzc-hero__inner .lz-rule {
+  margin: 0 0 32px;
+}
+
+@media (max-width: 767px) {
+  .lzc-hero {
+    align-items: flex-end;
+  }
+
+  .lzc-hero .lzc-hero__content.lz-container {
+    padding-bottom: 88px;
+  }
+}
+
+/* Hero overlay — flat 20% black over the photo, same on every inner-page hero */
+.lzc-hero__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  pointer-events: none;
+}

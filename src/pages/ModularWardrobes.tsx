@@ -414,7 +414,7 @@ export const ModularWardrobes: React.FC = () => {
                 Bespoke wardrobes composed around your space, belongings and personal style. Discover a refined balance of organisation, beauty and everyday ease.
               </motion.p>
 
-              <motion.div {...heroReveal(0.35)} style={{ display: 'flex', justifyContent: 'center' }}>
+              <motion.div {...heroReveal(0.35)} style={{ display: 'flex', justifyContent: 'flex-start' }}>
                 <MagneticLink
                   href="#wardrobe-types"
                   onClick={(e) => handleAnchor(e, 'wardrobe-types')}

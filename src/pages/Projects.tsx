@@ -268,17 +268,18 @@ export const Projects: React.FC = () => {
             ========================================================================= */}
         <section
           aria-label="LEOZ Projects Hero"
+          className="lz-page-hero"
           style={{
             position: 'relative',
             width: '100%',
-            minHeight: '85vh',
+            minHeight: 'max(640px, 100svh)',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'flex-end',
-            paddingTop: 'clamp(110px, 14vh, 180px)',
-            paddingBottom: 'clamp(44px, 7vh, 88px)',
-            paddingLeft: 'clamp(20px, 6vw, 100px)',
-            paddingRight: 'clamp(20px, 6vw, 100px)',
+            justifyContent: 'center',
+            paddingTop: '136px',
+            paddingBottom: '112px',
+            paddingLeft: 'clamp(20px, 4.5vw, 64px)',
+            paddingRight: 'clamp(20px, 4vw, 48px)',
             overflow: 'hidden',
           }}
         >
@@ -297,13 +298,12 @@ export const Projects: React.FC = () => {
               style={{
                 position: 'absolute',
                 inset: 0,
-                background:
-                  'linear-gradient(180deg, rgba(20, 21, 19, 0.45) 0%, rgba(20, 21, 19, 0.25) 30%, rgba(20, 21, 19, 0.72) 70%, rgba(20, 21, 19, 0.94) 100%)',
+                background: 'rgba(0, 0, 0, 0.2)',
               }}
             />
           </motion.div>
 
-          <div style={{ position: 'relative', zIndex: 10, maxWidth: '600px', color: '#FFFFFF' }}>
+          <div style={{ position: 'relative', zIndex: 10, maxWidth: '660px', color: '#FFFFFF' }}>
             <motion.div
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}

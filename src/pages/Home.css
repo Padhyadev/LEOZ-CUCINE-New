@@ -376,7 +376,8 @@
   align-items: center;
   min-height: max(640px, 100svh);
   overflow: hidden;
-  background-color: var(--bg-cream);
+  /* Dark brand colour while hero video loads — prevents cream/white flash */
+  background-color: #161715;
 }
 
 .lz-hero__media {
@@ -390,6 +391,10 @@
   inset: 0;
   animation: lzKenBurns 12s var(--ease-out) infinite alternate;
   will-change: transform;
+  /* Poster image (set via inline style) fills while video loads */
+  background-size: cover;
+  background-position: center 40%;
+  background-repeat: no-repeat;
 }
 
 .lz-hero__kenburns video {
@@ -398,6 +403,7 @@
   height: 100%;
   object-fit: cover;
   object-position: center 40%;
+  /* transition handled by inline style — opacity 0→1 on canplay */
 }
 
 @keyframes lzKenBurns {

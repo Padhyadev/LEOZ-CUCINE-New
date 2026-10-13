@@ -224,16 +224,18 @@ export const FactoryInfrastructure: React.FC = () => {
             ========================================================================= */}
         <section
           aria-label="Factory Hero"
+          className="lz-page-hero"
           style={{
             position: 'relative',
             width: '100%',
             minHeight: 'max(640px, 100svh)',
             display: 'flex',
-            alignItems: 'center',
-            paddingTop: 'clamp(120px, 16vh, 200px)',
-            paddingBottom: 'clamp(48px, 8vh, 100px)',
-            paddingLeft: 'clamp(20px, 6vw, 100px)',
-            paddingRight: 'clamp(20px, 6vw, 100px)',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            paddingTop: '136px',
+            paddingBottom: '112px',
+            paddingLeft: 'clamp(20px, 4.5vw, 64px)',
+            paddingRight: 'clamp(20px, 4vw, 48px)',
             overflow: 'hidden',
           }}
         >
@@ -256,23 +258,23 @@ export const FactoryInfrastructure: React.FC = () => {
                 }}
               />
             </picture>
+            <div style={{ position: 'absolute', inset: 0, background: 'rgba(0, 0, 0, 0.2)', pointerEvents: 'none' }} />
 
 
           </motion.div>
 
-          <div style={{ position: 'relative', zIndex: 10, maxWidth: '1440px', width: '100%', margin: '0 auto', textAlign: 'center', display: 'flex', justifyContent: 'center' }}>
+          <div style={{ position: 'relative', zIndex: 10, width: '100%', display: 'flex', justifyContent: 'flex-start' }}>
             <motion.div
               initial={reduce ? false : { opacity: 0, y: 24 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, ease: luxuryEase }}
               style={{
-                maxWidth: '680px',
-                padding: 'clamp(32px, 5vw, 48px) 0',
-                margin: '0 auto',
-                textAlign: 'center',
+                maxWidth: '660px',
+                margin: 0,
+                textAlign: 'left',
                 display: 'flex',
                 flexDirection: 'column',
-                alignItems: 'center',
+                alignItems: 'flex-start',
               }}
             >
               <motion.h1
@@ -287,7 +289,7 @@ export const FactoryInfrastructure: React.FC = () => {
                   letterSpacing: '-0.015em',
                   color: '#FFFFFF',
                   margin: '0 0 24px 0',
-                  textAlign: 'center',
+                  textAlign: 'left',
                   textShadow: HERO_TEXT_GLOW
                 }}
               >
@@ -295,7 +297,7 @@ export const FactoryInfrastructure: React.FC = () => {
               </motion.h1>
 
               <motion.span
-                className="lz-rule lz-rule--center"
+                className="lz-rule"
                 aria-hidden="true"
                 initial={reduce ? false : { scaleX: 0 }}
                 animate={{ scaleX: 1 }}
@@ -305,7 +307,7 @@ export const FactoryInfrastructure: React.FC = () => {
                   width: '48px',
                   height: '2px',
                   backgroundColor: TOKENS.gold,
-                  margin: '0 auto 32px',
+                  margin: '0 0 32px',
                 }}
               />
 
@@ -319,9 +321,9 @@ export const FactoryInfrastructure: React.FC = () => {
                   fontWeight: 400,
                   lineHeight: 1.8,
                   color: '#FFFFFF',
-                  margin: '0 auto 32px',
+                  margin: '0 0 32px',
                   maxWidth: '640px',
-                  textAlign: 'center',
+                  textAlign: 'left',
                   textShadow: HERO_TEXT_GLOW
                 }}
               >

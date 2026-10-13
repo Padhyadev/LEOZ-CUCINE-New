@@ -154,7 +154,7 @@ export const About: React.FC = () => {
       
       <main>
         {/* 01 HERO */}
-        <section className="lz-about-hero">
+        <section className="lz-about-hero lz-about-hero--top">
           <div className="lz-about-hero__bg">
             <picture>
               <source srcSet="/About_New_Hero.webp" type="image/webp" />

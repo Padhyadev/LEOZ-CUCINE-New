@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useReducedMotion } from 'framer-motion';
-import heroVideo from '../assets/Leoz_hero_section.mp4';
-import heroPoster from '../assets/Leoz_hero_poster.webp';
 import { Header } from '../components/common/Header';
 import { Footer } from '../components/common/Footer';
 import { Preloader, checkShouldRunPreloader, markPreloaderSeen } from '../components/common/Preloader';
@@ -213,7 +211,6 @@ export const Home: React.FC = () => {
             <div className="lz-hero__kenburns">
               <video
                 src="/Hero_section.mp4"
-                poster={heroPoster}
                 autoPlay={!prefersReducedMotion}
                 muted
                 loop

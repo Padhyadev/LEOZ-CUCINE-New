@@ -482,3 +482,39 @@
     padding: 32px 24px;
   }
 }
+
+/* Top hero copy position — matches the Home hero: left-aligned, vertically centred */
+.lz-about-hero--top {
+  justify-content: flex-start;
+  padding: 136px clamp(20px, 4vw, 48px) 112px clamp(20px, 4.5vw, 64px);
+}
+
+.lz-about-hero--top .lz-about-container {
+  max-width: 1480px;
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.lz-about-hero--top .lz-about-hero__content {
+  max-width: 660px;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+  align-items: flex-start;
+}
+
+@media (max-width: 767px) {
+  .lz-about-hero--top {
+    align-items: flex-end;
+    padding-bottom: 88px;
+  }
+
+  .lz-about-hero--top .lz-about-hero__content {
+    padding: 0;
+  }
+}
+
+/* Hero overlay — flat 20% black over the photo, same on every inner-page hero */
+.lz-about-hero--top .lz-about-hero__overlay {
+  background: rgba(0, 0, 0, 0.2);
+}

@@ -192,17 +192,18 @@ export const OurMethod: React.FC = () => {
             ========================================================================= */}
         <section
           aria-label="Our Method Hero"
+          className="lz-page-hero"
           style={{
             position: 'relative',
             width: '100%',
-            minHeight: '85vh',
+            minHeight: 'max(640px, 100svh)',
             display: 'flex',
             flexDirection: 'column',
-            justifyContent: 'flex-end',
-            paddingTop: 'clamp(110px, 14vh, 180px)',
-            paddingBottom: 'clamp(44px, 7vh, 88px)',
-            paddingLeft: 'clamp(20px, 6vw, 100px)',
-            paddingRight: 'clamp(20px, 6vw, 100px)',
+            justifyContent: 'center',
+            paddingTop: '136px',
+            paddingBottom: '112px',
+            paddingLeft: 'clamp(20px, 4.5vw, 64px)',
+            paddingRight: 'clamp(20px, 4vw, 48px)',
             overflow: 'hidden',
           }}
         >
@@ -221,22 +222,12 @@ export const OurMethod: React.FC = () => {
               style={{
                 position: 'absolute',
                 inset: 0,
-                background:
-                  'linear-gradient(180deg, rgba(14, 15, 13, 0.45) 0%, rgba(14, 15, 13, 0.25) 30%, rgba(14, 15, 13, 0.78) 70%, rgba(14, 15, 13, 0.95) 100%)',
-              }}
-            />
-            <div
-              style={{
-                position: 'absolute',
-                inset: 0,
-                background:
-                  'radial-gradient(circle at 20% 75%, rgba(10, 11, 10, 0.8) 0%, rgba(10, 11, 10, 0.35) 50%, transparent 75%)',
-                pointerEvents: 'none',
+                background: 'rgba(0, 0, 0, 0.2)',
               }}
             />
           </motion.div>
 
-          <div style={{ position: 'relative', zIndex: 10, maxWidth: '600px', color: '#FFFFFF' }}>
+          <div style={{ position: 'relative', zIndex: 10, maxWidth: '660px', color: '#FFFFFF' }}>
             <motion.div
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}

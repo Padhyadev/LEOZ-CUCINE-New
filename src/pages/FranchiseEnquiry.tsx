@@ -284,7 +284,7 @@ export const FranchiseEnquiry: React.FC = () => {
               </motion.h1>
 
               <motion.span
-                className="lz-rule lz-rule--center"
+                className="lz-rule"
                 aria-hidden="true"
                 initial={reduce ? false : { scaleX: 0 }}
                 animate={{ scaleX: 1 }}

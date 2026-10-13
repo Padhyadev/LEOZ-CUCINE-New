@@ -24,7 +24,7 @@ export interface UniversalHeroProps {
   };
   minHeight?: string;
   brightness?: number;
-  /** 'left' (default): text block bottom-left. 'center': text centred in the hero, like Contact. */
+  /** 'left' (default): text left-aligned and vertically centred, like the Home hero. 'center': text centred in the hero, like Contact. */
   align?: 'left' | 'center';
 }
 
@@ -48,6 +48,7 @@ export const UniversalHero: React.FC<UniversalHeroProps> = ({
   const centered = align === 'center';
   return (
     <section
+      className={centered ? undefined : 'lz-page-hero'}
       aria-label={`${typeof headline === 'string' ? headline : 'LEOZ'} Hero`}
       style={{
         position: 'relative',
@@ -55,12 +56,12 @@ export const UniversalHero: React.FC<UniversalHeroProps> = ({
         minHeight,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: centered ? 'center' : 'flex-end',
+        justifyContent: 'center',
         alignItems: centered ? 'center' : undefined,
-        paddingTop: 'clamp(110px, 14vh, 180px)',
-        paddingBottom: 'clamp(44px, 7vh, 88px)',
-        paddingLeft: 'clamp(20px, 6vw, 100px)',
-        paddingRight: 'clamp(20px, 6vw, 100px)',
+        paddingTop: centered ? 'clamp(110px, 14vh, 180px)' : '136px',
+        paddingBottom: centered ? 'clamp(44px, 7vh, 88px)' : '112px',
+        paddingLeft: centered ? 'clamp(20px, 6vw, 100px)' : 'clamp(20px, 4.5vw, 64px)',
+        paddingRight: centered ? 'clamp(20px, 6vw, 100px)' : 'clamp(20px, 4vw, 48px)',
         overflow: 'hidden',
         backgroundColor: '#1E201D',
       }}
@@ -126,8 +127,7 @@ export const UniversalHero: React.FC<UniversalHeroProps> = ({
           style={{
             position: 'absolute',
             inset: 0,
-            background:
-              'linear-gradient(180deg, rgba(20, 21, 19, 0.45) 0%, rgba(20, 21, 19, 0.25) 30%, rgba(20, 21, 19, 0.72) 70%, rgba(20, 21, 19, 0.94) 100%)',
+            background: 'rgba(0, 0, 0, 0.2)',
           }}
         />
       </motion.div>
@@ -137,7 +137,7 @@ export const UniversalHero: React.FC<UniversalHeroProps> = ({
         style={{
           position: 'relative',
           zIndex: 10,
-          maxWidth: centered ? '760px' : '600px',
+          maxWidth: centered ? '760px' : '660px',
           width: '100%',
           color: '#FFFFFF',
           textAlign: centered ? 'center' : undefined,
