@@ -1,7 +1,15 @@
 /**
  * make-deploy-zip.cjs
- * Creates Hostinger-Deploy.zip with pre-built dist/ + server files.
+ * Builds dist/ and creates Hostinger-Deploy.zip (dist/ + Express server) for
+ * Hostinger's Node.js deployments.
  * Run: node scripts/make-deploy-zip.cjs
+ *
+ * Hostinger rejects the upload with "Unsupported framework or invalid project
+ * structure" when it cannot read package.json at the zip root. Two things
+ * caused that before: a UTF-8 BOM in package.json (written by PowerShell) and
+ * backslash paths in the zip (.NET ZipFile on Windows). This script writes
+ * package.json from Node (no BOM), zips with Windows' bsdtar (forward slashes)
+ * and checks both in the finished zip.
  */
 const fs = require('fs');
 const path = require('path');
@@ -10,12 +18,21 @@ const { execSync } = require('child_process');
 const ROOT = path.join(__dirname, '..');
 const TEMP = path.join(ROOT, 'deploy-temp');
 const ZIP  = path.join(ROOT, 'Hostinger-Deploy.zip');
+// Windows' own tar (bsdtar) can write .zip; Git Bash's GNU tar cannot.
+const TAR  = path.join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'tar.exe');
 
-// ── 1. Clean temp ──────────────────────────────────────────────────────────
+const run = (cmd, cwd = ROOT) => execSync(cmd, { cwd, stdio: 'inherit' });
+
+// ── 1. Fresh production build ──────────────────────────────────────────────
+console.log('Building dist/ ...');
+run('node scripts/embed-logo.js');
+run('npx vite build');
+
+// ── 2. Clean temp ──────────────────────────────────────────────────────────
 if (fs.existsSync(TEMP)) fs.rmSync(TEMP, { recursive: true, force: true });
 fs.mkdirSync(TEMP, { recursive: true });
 
-// ── 2. Helper: recursive copy ──────────────────────────────────────────────
+// ── 3. Helper: recursive copy ──────────────────────────────────────────────
 function copyDir(src, dest) {
   fs.mkdirSync(dest, { recursive: true });
   for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
@@ -26,52 +43,42 @@ function copyDir(src, dest) {
   }
 }
 
-// ── 3. Copy pre-built dist/ ────────────────────────────────────────────────
-console.log('Copying dist/ ...');
+// ── 4. Copy dist/, data/, server.js, .env ──────────────────────────────────
+console.log('Copying files ...');
 copyDir(path.join(ROOT, 'dist'), path.join(TEMP, 'dist'));
-
-// ── 4. Copy data/ ──────────────────────────────────────────────────────────
-console.log('Copying data/ ...');
 copyDir(path.join(ROOT, 'data'), path.join(TEMP, 'data'));
-
-// ── 5. Copy server.js + .env + package-lock ────────────────────────────────
-console.log('Copying root files ...');
-fs.copyFileSync(path.join(ROOT, 'server.js'),          path.join(TEMP, 'server.js'));
-fs.copyFileSync(path.join(ROOT, 'package-lock.json'),  path.join(TEMP, 'package-lock.json'));
+fs.copyFileSync(path.join(ROOT, 'server.js'), path.join(TEMP, 'server.js'));
 if (fs.existsSync(path.join(ROOT, '.env'))) {
   fs.copyFileSync(path.join(ROOT, '.env'), path.join(TEMP, '.env'));
 }
 
-// ── 6. Write clean package.json for Hostinger ─────────────────────────────
-// Keep ALL dependencies so npm install works and Hostinger detects Express.
-// Build script is a no-op (dist/ is already pre-built and shipped).
-// No prebuild/predev hooks (scripts/ folder not needed on server).
-const originalPkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8'));
+// ── 5. Write a clean package.json for Hostinger ───────────────────────────
+// Runtime dependencies only, so Hostinger detects an Express app rather than
+// a Vite site (vite in devDependencies makes it try to build and serve dist/
+// statically, which drops the /api routes). Build is a no-op: dist/ ships
+// pre-built.
+const originalPkg = JSON.parse(fs.readFileSync(path.join(ROOT, 'package.json'), 'utf8').replace(/^\uFEFF/, ''));
 const deployPkg = {
   name:    originalPkg.name,
   private: true,
   version: originalPkg.version,
   type:    originalPkg.type,
+  main:    'server.js',
+  engines: { node: '>=18' },
   scripts: {
     build: 'node -e "console.log(\'dist/ pre-built and included.\')"',
     start: 'node server.js',
   },
-  dependencies:    originalPkg.dependencies,
-  devDependencies: originalPkg.devDependencies,
+  dependencies: originalPkg.dependencies,
 };
-fs.writeFileSync(
-  path.join(TEMP, 'package.json'),
-  JSON.stringify(deployPkg, null, 2),
-  'utf8'
-);
+fs.writeFileSync(path.join(TEMP, 'package.json'), JSON.stringify(deployPkg, null, 2) + '\n', 'utf8');
 
-// ── 7. Verify critical files ───────────────────────────────────────────────
-const checks = [
-  'dist/index.html',
-  'server.js',
-  'package.json',
-  '.env',
-];
+// Lock file that matches the trimmed package.json (npm ci fails on a mismatch).
+console.log('Generating package-lock.json ...');
+run('npm install --package-lock-only --ignore-scripts --no-audit --no-fund', TEMP);
+
+// ── 6. Verify critical files ───────────────────────────────────────────────
+const checks = ['dist/index.html', 'server.js', 'package.json', 'package-lock.json', '.env'];
 console.log('\n── Verification ──────────────────────────');
 let allOk = true;
 for (const f of checks) {
@@ -79,32 +86,28 @@ for (const f of checks) {
   console.log(`  ${ok ? '✅' : '❌'} ${f}`);
   if (!ok) allOk = false;
 }
-
-// Count total files
-let total = 0;
-function countFiles(dir) {
-  for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
-    if (e.isDirectory()) countFiles(path.join(dir, e.name));
-    else total++;
-  }
-}
-countFiles(TEMP);
-console.log(`  📦 Total files: ${total}`);
-
 if (!allOk) { console.error('\nAborted: missing critical files.'); process.exit(1); }
 
-// ── 8. Zip using PowerShell ────────────────────────────────────────────────
+// ── 7. Zip (files at the zip root, forward-slash paths) ────────────────────
 if (fs.existsSync(ZIP)) fs.rmSync(ZIP);
 console.log('\nCreating zip ...');
-execSync(
-  `powershell -Command "Add-Type -Assembly System.IO.Compression.FileSystem; [System.IO.Compression.ZipFile]::CreateFromDirectory('${TEMP}', '${ZIP}')"`,
-  { stdio: 'inherit' }
-);
+const entries = fs.readdirSync(TEMP).map((e) => `"${e}"`).join(' ');
+run(`"${TAR}" -a -c -f "${ZIP}" ${entries}`, TEMP);
 
-// ── 9. Verify zip contains Logo.tsx equivalent (dist/index.html) ───────────
+// ── 8. Check the zip Hostinger will read ───────────────────────────────────
+const listing = execSync(`"${TAR}" -t -f "${ZIP}"`, { encoding: 'utf8' }).split(/\r?\n/).filter(Boolean);
+const problems = [];
+if (!listing.includes('package.json')) problems.push('package.json is not at the zip root');
+if (!listing.includes('dist/index.html')) problems.push('dist/index.html missing');
+if (listing.some((n) => n.includes('\\'))) problems.push('backslash paths in zip');
+const zippedPkg = execSync(`"${TAR}" -x -O -f "${ZIP}" package.json`);
+if (zippedPkg[0] === 0xef && zippedPkg[1] === 0xbb && zippedPkg[2] === 0xbf) problems.push('package.json has a BOM');
+try { JSON.parse(zippedPkg.toString('utf8')); } catch { problems.push('package.json is not valid JSON'); }
+if (problems.length) { console.error('\n❌ Zip check failed:\n  - ' + problems.join('\n  - ')); process.exit(1); }
+
 const sizeMB = (fs.statSync(ZIP).size / 1024 / 1024).toFixed(2);
-console.log(`\n✅ Hostinger-Deploy.zip created: ${sizeMB} MB`);
+console.log(`\n✅ Hostinger-Deploy.zip created: ${sizeMB} MB, ${listing.length} entries`);
 
-// ── 10. Cleanup ────────────────────────────────────────────────────────────
+// ── 9. Cleanup ─────────────────────────────────────────────────────────────
 fs.rmSync(TEMP, { recursive: true, force: true });
 console.log('Temp folder cleaned.\nDone!');

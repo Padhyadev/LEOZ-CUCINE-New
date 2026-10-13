@@ -210,7 +210,7 @@ export const Home: React.FC = () => {
           <div className="lz-hero__media" aria-hidden="true" data-hero-media="">
             <div className="lz-hero__kenburns">
               <video
-                src="/Hero_section.mp4"
+                src="/erasio_Hero_section_video.mp4"
                 autoPlay={!prefersReducedMotion}
                 muted
                 loop
