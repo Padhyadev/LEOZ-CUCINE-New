@@ -2,7 +2,8 @@
  * make-deploy-zip.cjs
  * Builds dist/ and creates Hostinger-Deploy.zip (dist/ + Express server) for
  * Hostinger's Node.js deployments.
- * Run: node scripts/make-deploy-zip.cjs
+ * Run: node scripts/make-deploy-zip.cjs              (without .env)
+ *      node scripts/make-deploy-zip.cjs --with-env   (also ships .env)
  *
  * Hostinger rejects the upload with "Unsupported framework or invalid project
  * structure" when it cannot read package.json at the zip root. Two things
@@ -20,6 +21,9 @@ const TEMP = path.join(ROOT, 'deploy-temp');
 const ZIP  = path.join(ROOT, 'Hostinger-Deploy.zip');
 // Windows' own tar (bsdtar) can write .zip; Git Bash's GNU tar cannot.
 const TAR  = path.join(process.env.SystemRoot || 'C:\\Windows', 'System32', 'tar.exe');
+
+// .env holds secrets, so it is only shipped when asked for: --with-env
+const WITH_ENV = process.argv.includes('--with-env');
 
 const run = (cmd, cwd = ROOT) => execSync(cmd, { cwd, stdio: 'inherit' });
 
@@ -43,12 +47,12 @@ function copyDir(src, dest) {
   }
 }
 
-// ── 4. Copy dist/, data/, server.js, .env ──────────────────────────────────
+// ── 4. Copy dist/, data/, server.js (+ .env with --with-env) ──────────────
 console.log('Copying files ...');
 copyDir(path.join(ROOT, 'dist'), path.join(TEMP, 'dist'));
 copyDir(path.join(ROOT, 'data'), path.join(TEMP, 'data'));
 fs.copyFileSync(path.join(ROOT, 'server.js'), path.join(TEMP, 'server.js'));
-if (fs.existsSync(path.join(ROOT, '.env'))) {
+if (WITH_ENV) {
   fs.copyFileSync(path.join(ROOT, '.env'), path.join(TEMP, '.env'));
 }
 
@@ -78,7 +82,7 @@ console.log('Generating package-lock.json ...');
 run('npm install --package-lock-only --ignore-scripts --no-audit --no-fund', TEMP);
 
 // ── 6. Verify critical files ───────────────────────────────────────────────
-const checks = ['dist/index.html', 'server.js', 'package.json', 'package-lock.json', '.env'];
+const checks = ['dist/index.html', 'server.js', 'package.json', 'package-lock.json', ...(WITH_ENV ? ['.env'] : [])];
 console.log('\n── Verification ──────────────────────────');
 let allOk = true;
 for (const f of checks) {
@@ -107,6 +111,7 @@ if (problems.length) { console.error('\n❌ Zip check failed:\n  - ' + problems.
 
 const sizeMB = (fs.statSync(ZIP).size / 1024 / 1024).toFixed(2);
 console.log(`\n✅ Hostinger-Deploy.zip created: ${sizeMB} MB, ${listing.length} entries`);
+console.log(WITH_ENV ? '  .env included' : '  .env NOT included (rerun with --with-env to ship it)');
 
 // ── 9. Cleanup ─────────────────────────────────────────────────────────────
 fs.rmSync(TEMP, { recursive: true, force: true });
