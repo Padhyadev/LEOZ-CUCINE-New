@@ -87,7 +87,7 @@ const stats: Stat[] = [
   { count: 20, suffix: '+', label: 'years of specialist leadership experience' },
   { count: 20000, label: 'sq. ft. manufacturing facility' },
   { text: 'Fully', label: 'customised kitchens and wardrobes' },
-  { text: 'Gujarat', label: 'Based in', labelFirst: true },
+  { text: 'Ahmedabad', label: 'Based in', labelFirst: true },
 ];
 
 const journey = [
