@@ -284,14 +284,30 @@ app.post('/api/enquiry', async (req, res) => {
     const { formType, ...data } = req.body;
     const refId = 'LEOZ-' + Date.now();
 
-    const fullName = String(data.fullName || data.name || '').slice(0, 100);
-    const phone = String(data.phone || data.mobile || '').slice(0, 30);
-    const email = String(data.email || '').slice(0, 100);
-    const city = String(data.city || '').slice(0, 100);
-    const projectType = String(data.projectType || '').slice(0, 100);
-    const consultationMode = String(data.consultationMode || '').slice(0, 100);
-    const investmentBudget = String(data.investmentBudget || '').slice(0, 100);
+    const fullName = String(data.fullName || data.name || '').trim().slice(0, 100);
+    const phone = String(data.phone || data.mobile || '').trim().replace(/\D/g, '');
+    const email = String(data.email || '').trim().slice(0, 100);
+    const city = String(data.city || '').trim().slice(0, 100);
+    const projectType = String(data.projectType || '').trim().slice(0, 100);
+    const consultationMode = String(data.consultationMode || '').trim().slice(0, 100);
+    const investmentBudget = String(data.investmentBudget || '').trim().slice(0, 100);
     const message = String(data.message || '').slice(0, 1000);
+
+    // Strict validation: Name must contain only letters (a-z, A-Z) and spaces
+    if (!fullName || !/^[a-zA-Z\s]+$/.test(fullName) || fullName.length < 2) {
+      return res.status(400).json({
+        success: false,
+        error: 'Name must contain only alphabetic characters (a-z, A-Z) and be at least 2 characters.',
+      });
+    }
+
+    // Strict validation: Mobile number must be exactly 10 digits (no 9 digits, no 11 digits)
+    if (!/^\d{10}$/.test(phone)) {
+      return res.status(400).json({
+        success: false,
+        error: 'Mobile number must be exactly 10 digits.',
+      });
+    }
 
     const enquiryRecord = {
       reference_id: refId,

@@ -64,12 +64,13 @@ const getFieldError = (name: FieldName, data: FormData): string => {
   switch (name) {
     case 'name':
       if (!data.name.trim()) return 'Please enter your name.';
+      if (!/^[a-zA-Z\s]+$/.test(data.name.trim())) return 'Name can only contain alphabets (a-z, A-Z).';
       if (data.name.trim().length < 2) return 'Please enter a valid full name.';
       return '';
     case 'mobile': {
       const cleanPhone = data.mobile.replace(/\D/g, '');
       if (!data.mobile.trim()) return 'Please enter your preferred contact number.';
-      if (cleanPhone.length < 10) return 'Please enter a valid 10-digit mobile number.';
+      if (!/^\d{10}$/.test(cleanPhone)) return 'Mobile number must be exactly 10 digits.';
       return '';
     }
     case 'email':
@@ -241,8 +242,12 @@ export const BookConsultation: React.FC = () => {
   };
 
   const updateField = (name: FieldName, rawValue: string) => {
-    // Existing mobile sanitising: digits, +, spaces and dashes, max 15 chars
-    const value = name === 'mobile' ? rawValue.replace(/[^\d+\s-]/g, '').slice(0, 15) : rawValue;
+    let value = rawValue;
+    if (name === 'name') {
+      value = rawValue.replace(/[^a-zA-Z\s]/g, '');
+    } else if (name === 'mobile') {
+      value = rawValue.replace(/\D/g, '').slice(0, 10);
+    }
     const next = { ...formData, [name]: value };
     setFormData(next);
     // Live validation once a field has been visited
@@ -314,7 +319,7 @@ export const BookConsultation: React.FC = () => {
     name: FieldName,
     label: string,
     placeholder: string,
-    options: { type?: string; inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode']; autoComplete?: string; required?: boolean; optional?: boolean; textarea?: boolean; span?: boolean; delay?: number } = {}
+    options: { type?: string; inputMode?: React.HTMLAttributes<HTMLInputElement>['inputMode']; autoComplete?: string; required?: boolean; optional?: boolean; textarea?: boolean; span?: boolean; delay?: number; maxLength?: number } = {}
   ) => {
     const value = formData[name];
     const error = errors[name];
@@ -359,6 +364,7 @@ export const BookConsultation: React.FC = () => {
               type={options.type ?? 'text'}
               inputMode={options.inputMode}
               autoComplete={options.autoComplete}
+              maxLength={options.maxLength}
               className="lzc-control"
               placeholder={placeholder}
               value={value}
@@ -559,6 +565,7 @@ export const BookConsultation: React.FC = () => {
                           inputMode: 'numeric',
                           autoComplete: 'tel',
                           required: true,
+                          maxLength: 10,
                           delay: 0.08,
                         })}
                         {renderField('email', 'Email Address', 'Your email', {

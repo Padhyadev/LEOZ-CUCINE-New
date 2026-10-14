@@ -148,11 +148,18 @@ const EnquiryForm = () => {
 
   const validate = () => {
     const errs: Record<string, string> = {};
-    if (!formData.fullName.trim()) errs.fullName = 'Please enter your full name.';
+    if (!formData.fullName.trim()) {
+      errs.fullName = 'Please enter your full name.';
+    } else if (!/^[a-zA-Z\s]+$/.test(formData.fullName.trim())) {
+      errs.fullName = 'Name can only contain alphabets (a-z, A-Z).';
+    } else if (formData.fullName.trim().length < 2) {
+      errs.fullName = 'Name must be at least 2 characters.';
+    }
+
     if (!formData.phone.trim()) {
       errs.phone = 'Please enter your mobile number.';
-    } else if (formData.phone.replace(/\D/g, '').length < 10) {
-      errs.phone = 'Please enter a valid 10-digit mobile number.';
+    } else if (!/^\d{10}$/.test(formData.phone.trim())) {
+      errs.phone = 'Mobile number must be exactly 10 digits.';
     }
     if (!formData.email.trim()) {
       errs.email = 'Please enter your email address.';
@@ -224,17 +231,17 @@ const EnquiryForm = () => {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '0 32px' }}>
           
           <motion.div className="lz-input-group" initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false }} transition={{ delay: 0.1 }}>
-            <input id="f_name" type="text" className={`lz-input ${errors.fullName ? 'error shake' : ''}`} placeholder=" " value={formData.fullName} onChange={e => { setFormData({...formData, fullName: e.target.value}); if(errors.fullName) setErrors({...errors, fullName: ''}); }} />
+            <input id="f_name" type="text" className={`lz-input ${errors.fullName ? 'error shake' : ''}`} placeholder=" " value={formData.fullName} onChange={e => { const sanitized = e.target.value.replace(/[^a-zA-Z\s]/g, ''); setFormData({...formData, fullName: sanitized}); if(errors.fullName) setErrors({...errors, fullName: ''}); }} />
             <label htmlFor="f_name" className="lz-label">Your name</label>
             <div className="lz-input-line" />
-            {errors.fullName ? <span className="lz-error-text">{errors.fullName}</span> : (formData.fullName.trim() && <Check size={14} color="var(--gold)" style={{ position: 'absolute', right: '16px', top: '24px' }} />)}
+            {errors.fullName ? <span className="lz-error-text">{errors.fullName}</span> : (formData.fullName.trim().length >= 2 && /^[a-zA-Z\s]+$/.test(formData.fullName.trim()) && <Check size={14} color="var(--gold)" style={{ position: 'absolute', right: '16px', top: '24px' }} />)}
           </motion.div>
 
           <motion.div className="lz-input-group" initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false }} transition={{ delay: 0.15 }}>
-            <input id="f_phone" type="tel" inputMode="numeric" className={`lz-input ${errors.phone ? 'error shake' : ''}`} placeholder=" " value={formData.phone} onChange={e => { setFormData({...formData, phone: e.target.value}); if(errors.phone) setErrors({...errors, phone: ''}); }} />
+            <input id="f_phone" type="tel" inputMode="numeric" maxLength={10} className={`lz-input ${errors.phone ? 'error shake' : ''}`} placeholder=" " value={formData.phone} onChange={e => { const sanitized = e.target.value.replace(/\D/g, '').slice(0, 10); setFormData({...formData, phone: sanitized}); if(errors.phone) setErrors({...errors, phone: ''}); }} />
             <label htmlFor="f_phone" className="lz-label">Preferred contact number</label>
             <div className="lz-input-line" />
-            {errors.phone ? <span className="lz-error-text">{errors.phone}</span> : (formData.phone.replace(/\D/g, '').length >= 10 && <Check size={14} color="var(--gold)" style={{ position: 'absolute', right: '16px', top: '24px' }} />)}
+            {errors.phone ? <span className="lz-error-text">{errors.phone}</span> : (formData.phone.trim().length === 10 && <Check size={14} color="var(--gold)" style={{ position: 'absolute', right: '16px', top: '24px' }} />)}
           </motion.div>
 
           <motion.div className="lz-input-group" initial={reduce ? false : { opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: false }} transition={{ delay: 0.2 }}>

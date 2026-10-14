@@ -141,11 +141,18 @@ export const FranchiseEnquiry: React.FC = () => {
   /* ── Validation ───────────────────────────────────────────────────────── */
   const validateForm = () => {
     const errs: Record<string, string> = {};
-    if (!formData.fullName.trim()) errs.fullName = 'Please enter your full name.';
+    if (!formData.fullName.trim()) {
+      errs.fullName = 'Please enter your full name.';
+    } else if (!/^[a-zA-Z\s]+$/.test(formData.fullName.trim())) {
+      errs.fullName = 'Name can only contain alphabets (a-z, A-Z).';
+    } else if (formData.fullName.trim().length < 2) {
+      errs.fullName = 'Name must be at least 2 characters.';
+    }
+
     if (!formData.mobile.trim()) {
       errs.mobile = 'Please enter your mobile number.';
-    } else if (formData.mobile.replace(/\D/g, '').length < 10) {
-      errs.mobile = 'Please enter a valid 10-digit mobile number.';
+    } else if (!/^\d{10}$/.test(formData.mobile.trim())) {
+      errs.mobile = 'Mobile number must be exactly 10 digits.';
     }
     if (!formData.email.trim()) {
       errs.email = 'Please enter your email address.';
@@ -162,8 +169,14 @@ export const FranchiseEnquiry: React.FC = () => {
   /* ── Input handling ───────────────────────────────────────────────────── */
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
+    if (name === 'fullName') {
+      const sanitized = value.replace(/[^a-zA-Z\s]/g, '');
+      setFormData(prev => ({ ...prev, [name]: sanitized }));
+      if (errors.fullName) setErrors(prev => ({ ...prev, fullName: '' }));
+      return;
+    }
     if (name === 'mobile') {
-      const sanitized = value.replace(/[^\d+\s-]/g, '').slice(0, 15);
+      const sanitized = value.replace(/\D/g, '').slice(0, 10);
       setFormData(prev => ({ ...prev, [name]: sanitized }));
       if (errors.mobile) setErrors(prev => ({ ...prev, mobile: '' }));
       return;
@@ -493,13 +506,13 @@ export const FranchiseEnquiry: React.FC = () => {
                         <div className="lz-f-input-line" />
                         {errors.fullName
                           ? <span id="err_name" className="lz-f-error">{errors.fullName}</span>
-                          : (formData.fullName.trim() && <Check size={14} color="var(--gold)" style={{ position: 'absolute', right: 16, top: 22 }} />)}
+                          : (formData.fullName.trim().length >= 2 && /^[a-zA-Z\s]+$/.test(formData.fullName.trim()) && <Check size={14} color="var(--gold)" style={{ position: 'absolute', right: 16, top: 22 }} />)}
                       </div>
 
                       {/* Mobile Number */}
                       <div className="lz-f-field">
                         <input
-                          id="f_mobile" type="tel" name="mobile" inputMode="numeric"
+                          id="f_mobile" type="tel" name="mobile" inputMode="numeric" maxLength={10}
                           className={`lz-f-input ${errors.mobile ? 'error shake' : ''}`}
                           placeholder=" " value={formData.mobile}
                           onChange={handleInputChange}
@@ -510,7 +523,7 @@ export const FranchiseEnquiry: React.FC = () => {
                         <div className="lz-f-input-line" />
                         {errors.mobile
                           ? <span id="err_mobile" className="lz-f-error">{errors.mobile}</span>
-                          : (formData.mobile.replace(/\D/g, '').length >= 10 && <Check size={14} color="var(--gold)" style={{ position: 'absolute', right: 16, top: 22 }} />)}
+                          : (formData.mobile.trim().length === 10 && <Check size={14} color="var(--gold)" style={{ position: 'absolute', right: 16, top: 22 }} />)}
                       </div>
 
                       {/* Email */}
