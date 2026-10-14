@@ -200,10 +200,11 @@ const sendEnquiryEmails = async (data) => {
   // 2. Send Elegant Professional Confirmation Email to the Client / Sender
   if (senderEmail && senderEmail.includes('@')) {
     const senderMailOptions = {
-      from: `"${displayName}" <${process.env.SMTP_USER || 'info@leozcucine.com'}>`,
+      from: `"${displayName}" <${process.env.SMTP_USER || 'vmgami333@gmail.com'}>`,
       to: senderEmail,
-      replyTo: 'info@leozcucine.com',
+      replyTo: adminEmailList[0] || 'info@leozcucine.com',
       subject: `Enquiry Confirmation: Leoz Cucine [Reference: ${data.reference_id}]`,
+      text: `Dear ${data.full_name || 'Valued Client'},\n\nThank you for contacting Leoz Cucine. We have received your consultation request and assigned reference number ${data.reference_id} to your enquiry.\n\nOur design and architectural team is reviewing your requirements and will connect with you shortly.\n\nWarm regards,\nClient Experience Team\nLeoz Cucine`,
       html: `
         <!DOCTYPE html>
         <html>
